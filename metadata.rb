@@ -1,0 +1,7 @@
+name 'compliance'
+maintainer 'Chef Software, Inc.'
+maintainer_email 'srenatus@chef.io'
+license 'apache2'
+description 'Installs/Configures compliance'
+long_description 'Installs/Configures compliance'
+version '0.1.0'
