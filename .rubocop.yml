@@ -1,0 +1,4 @@
+AllCops:
+  Exclude:
+    - libraries/server_api.rb
+    - libraries/report.rb # WIP

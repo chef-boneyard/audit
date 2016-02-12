@@ -28,14 +28,15 @@ class ComplianceProfile < Chef::Resource
     end
 
     converge_by 'fetch and execute compliance profile' do
-      path = construct_url
+      url = construct_url
+      Chef::Config[:ssl_verify_mode] = :verify_none
+
       rest = Chef::ServerAPI.new
-      tf = rest.binmode_streaming_request(path)
+      tf = rest.binmode_streaming_request(url)
 
       inspec = ::Inspec::Runner.new('report' => true)
       inspec.add_tests([tf.path])
-      exitcode = inspec.run
-      # puts "inspec run exited with #{exitcode}"
+      inspec.run
 
       tf.unlink
 
@@ -44,32 +45,33 @@ class ComplianceProfile < Chef::Resource
     end
   end
 
+  # rubocop:disable all
   def construct_url
-    # defaults
-    pname = profile
-    if pname.include?('/')
-      owner, pname = pname.split('/')
-    else
-      owner ||= 'base'
-    end
+    o, p = normalize_owner_profile
 
     if token # does this work?!
       username = token
       password = nil
     end
 
-    if server # get directly from compliance
+    if server && server.is_a?(URI) # get directly from compliance
       # optional overrides
       server.user = username if username
       server.password = password if password
       server.port = port if port
-
-      server.path = "/owners/#{owner}/compliance/#{pname}/tar"
+      server.path = server.path + "/owners/#{o}/compliance/#{p}/tar"
       server
     else # stream through chef-server
       chef = Chef::Config[:chef_server_url]
-      URI.parse("#{chef}/gate/compliance/owners/#{owner}/compliance/#{pname}/tar")
+      URI.parse("#{chef}/gate/compliance/owners/#{o}/compliance/#{p}/tar")
+    end
+  end
+
+  def normalize_owner_profile
+    if profile.include?('/')
+      profile.split('/')
+    else
+      [owner || 'base', profile]
     end
   end
 end
-
