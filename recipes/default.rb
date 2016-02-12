@@ -16,3 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+compliance_profile 'linux' do
+  owner 'base'
+  server URI.parse('http://192.168.33.1:2134')
+  token 'foo' # NOTE(sr) currently ignored
+  action :execute
+end
+
+compliance_report 'chef-server'
