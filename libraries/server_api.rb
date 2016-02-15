@@ -12,12 +12,14 @@ class Chef
       method, url, headers, data = apply_request_middleware(method, url, headers, data)
 
       response, rest_request, return_value = send_http_request(method, url, headers, data) do |http_response|
-        puts http_response
         if http_response.kind_of?(Net::HTTPSuccess)
           tempfile = binmode_stream_to_tempfile(url, http_response)
           tempfile.close
         end
       end
+
+      return nil if response.kind_of?(Net::HTTPRedirection)
+      response.error! unless response.kind_of?(Net::HTTPSuccess)
 
       tempfile
     end
