@@ -34,7 +34,7 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url(::File.join("/owners", node_owner.to_s, "report"))
+      url = construct_url(::File.join("/owners", node_owner.to_s, "inspec"))
       puts "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
@@ -55,7 +55,7 @@ class ComplianceReport < Chef::Resource
     profiles.each do |prof|
       o, p = prof.first.normalize_owner_profile # XXX why .first?
       report[p] = ::JSON.parse(::File.read(prof.first.get_report))
-      ownermap[p] = o
+      ownermap[o] = p
     end
 
     [report, ownermap]

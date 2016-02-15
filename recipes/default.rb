@@ -22,11 +22,11 @@ compliance_profile 'linux' do
   # token 'foo' # NOTE(sr) currently ignored
 
   # NB cannot try "no server parameter => use chefserver" with TK
-  server URI.parse('https://chef.compliance.test/compliance/')
+  server URI.parse('https://chef.compliance.test/compliance/') # <-- important trailing slash :(
   action [:fetch, :execute]
 end
 
 compliance_report 'chef-server' do
-  server URI.parse('https://chef.compliance.test/compliance/')
+  server URI.parse('https://chef.compliance.test/compliance')
   node_owner 'admin'
 end
