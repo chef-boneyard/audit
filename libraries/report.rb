@@ -19,7 +19,7 @@ class ComplianceReport < Chef::Resource
 
   # who owns the node?
   # maybe only required for on-the-fly added nodes?
-  property :node_owner, String
+  property :node_owner, String, required: true
 
   default_action :execute
 
@@ -34,7 +34,8 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url("report")
+      url = construct_url(::File.join("/owners", node_owner.to_s, "report"))
+      puts "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
     end

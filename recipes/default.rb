@@ -28,4 +28,5 @@ end
 
 compliance_report 'chef-server' do
   server URI.parse('https://chef.compliance.test/compliance/')
+  node_owner 'admin'
 end
