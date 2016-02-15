@@ -1,7 +1,7 @@
 require 'uri'
 
 # hack because we need binmode on the tempfile
-module Chef
+class Chef
   class ServerAPI
     def binmode_streaming_request(path, headers = {}, &block)
       url = create_url(path)

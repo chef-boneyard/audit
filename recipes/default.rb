@@ -18,9 +18,14 @@
 
 compliance_profile 'linux' do
   owner 'base'
-  server URI.parse('http://192.168.33.1:2134')
-  token 'foo' # NOTE(sr) currently ignored
-  action :execute
+  # server URI.parse('http://192.168.33.1:2134')
+  # token 'foo' # NOTE(sr) currently ignored
+
+  # NB cannot try "no server parameter => use chefserver" with TK
+  server URI.parse('https://chef.compliance.test/compliance/')
+  action [:fetch, :execute]
 end
 
-compliance_report 'chef-server'
+compliance_report 'chef-server' do
+  server URI.parse('https://chef.compliance.test/compliance/')
+end
