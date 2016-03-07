@@ -34,7 +34,7 @@ class ComplianceProfile < Chef::Resource
 
     converge_by 'fetch compliance profile' do
       o, p = normalize_owner_profile
-      url = construct_url("owners/#{o}/compliance/#{p}/tar")
+      url = construct_url("organizations/#{org}/owners/#{o}/compliance/#{p}/tar")
       # puts "url = #{url}"
 
       Chef::Config[:verify_api_cert] = false
@@ -103,5 +103,9 @@ class ComplianceProfile < Chef::Resource
   def get_report
     o, p = normalize_owner_profile
     ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{owner}_#{profile}_report.json")
+  end
+
+  def org
+    Chef::Config[:chef_server_url].split('/').last
   end
 end

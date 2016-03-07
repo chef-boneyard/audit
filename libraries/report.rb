@@ -34,7 +34,7 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url(::File.join("/owners", node_owner.to_s, "inspec"))
+      url = construct_url(::File.join("/organizations", org, "owners", node_owner.to_s, "inspec"))
       puts "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
@@ -72,5 +72,9 @@ class ComplianceReport < Chef::Resource
       },
       environment: environment || n.environment,
     }
+  end
+
+  def org
+    Chef::Config[:chef_server_url].split('/').last
   end
 end
