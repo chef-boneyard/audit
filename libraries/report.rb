@@ -35,7 +35,7 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:ssl_verify_mode] = :verify_none
 
       url = construct_url(::File.join("/organizations", org, "owners", node_owner.to_s, "inspec"))
-      puts "url: #{url}"
+      Chef::Log.debug "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
     end

@@ -27,6 +27,7 @@ class ComplianceProfile < Chef::Resource
   action :fetch do
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
+        version '0.15.0'
         compile_time true
       end
       require 'inspec'

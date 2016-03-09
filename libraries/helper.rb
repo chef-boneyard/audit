@@ -1,6 +1,8 @@
 module ComplianceHelpers
   # rubocop:disable all
   def construct_url(url)
+    url.sub!(%r{^/}, '') # sanitize input
+
     if token # does this work?!
       username = token
       password = nil
@@ -15,9 +17,9 @@ module ComplianceHelpers
       server.path = server.path + url if url
       server
     else # stream through chef-server
-      chef = Chef::Config[:chef_server_url]
-      u = "#{chef}/compliance/" +  url if url
-      URI.parse(u)
+      chef = URI(Chef::Config[:chef_server_url])
+      chef.path = "/compliance/" + url if url
+      chef
     end
   end
 end
