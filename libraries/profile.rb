@@ -70,16 +70,16 @@ class ComplianceProfile < Chef::Resource
 
       ## TODO: flesh out inspec's report CLI interface,
       ##       make this an execute[inspec check ...]
-      inspec = ::Inspec::Runner.new('report' => true)
-      inspec.add_tests([path])
+      runner = ::Inspec::Runner.new('report' => true)
+      runner.add_target(path, {})
       begin
-        inspec.run
+        runner.run
       rescue Chef::Exceptions::ValidationFailed => e # XXX weird exception
         # log "INSPEC #{e}"
       end
 
       file report_file do
-        content inspec.report.to_json
+        content runner.report.to_json
         sensitive true
       end
     end
