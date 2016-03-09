@@ -4,7 +4,6 @@ driver:
   network:
     - ["private_network", {ip: '192.168.33.202'}]
 
-
 provisioner:
   name: chef_zero
 
@@ -20,5 +19,5 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[compliance::default]
+      - recipe[audit::default]
     attributes:

@@ -1,8 +1,9 @@
-name 'compliance'
+name 'audit'
 maintainer 'Chef Software, Inc.'
 maintainer_email 'srenatus@chef.io'
-license 'apache2'
-description d = 'Allows for fetching and executing compliance profiles, and '\
-                'reporting its results'
-long_description d
-version '0.1.0'
+license 'Apache 2.0'
+description 'Allows for fetching and executing compliance profiles, and '\
+            'reporting its results'
+issues_url 'https://github.com/chef/audit-cookbook/issues'
+source_url 'https://github.com/chef/audit-cookbook'
+version '0.1.6'
