@@ -17,10 +17,6 @@ class ComplianceReport < Chef::Resource
   property :node, String #, default: node.name
   property :environment, String #, default: node.environment
 
-  # who owns the node?
-  # maybe only required for on-the-fly added nodes?
-  property :node_owner, String, required: true
-
   default_action :execute
 
   action :execute do
@@ -34,7 +30,7 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url(::File.join("/organizations", org, "owners", node_owner.to_s, "inspec"))
+      url = construct_url(::File.join("/organizations", org, "inspec"))
       Chef::Log.debug "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)

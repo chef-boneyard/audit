@@ -29,6 +29,4 @@ node['audit']['profiles'].each do |owner_profile, enabled|
 end
 
 # report the results
-compliance_report 'chef-server' do
-  node_owner 'admin' # XXX learn to do without
-end if node['audit']['profiles'].values.any?
+compliance_report 'chef-server' if node['audit']['profiles'].values.any?
