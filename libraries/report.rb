@@ -41,17 +41,17 @@ class ComplianceReport < Chef::Resource
   def profiles
     run_context.resource_collection.select do |r|
       r.is_a?(ComplianceProfile)
-    end
+    end.flatten
   end
 
   def compound_report(*profiles)
     report = {}
     ownermap = {}
 
-    profiles.each do |prof|
-      o, p = prof.first.normalize_owner_profile # XXX why .first?
-      report[p] = ::JSON.parse(::File.read(prof.first.get_report))
-      ownermap[o] = p
+    profiles.flatten.each do |prof|
+      o, p = prof.normalize_owner_profile
+      report[p] = ::JSON.parse(::File.read(prof.get_report))
+      ownermap[p] = o
     end
 
     [report, ownermap]
