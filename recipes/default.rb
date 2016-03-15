@@ -16,17 +16,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-compliance_profile 'linux' do
-  owner 'base'
-  # server URI.parse('http://192.168.33.1:2134')
-  # token 'foo' # NOTE(sr) currently ignored
+# fetch and execute all requested profiles
+node['audit']['profiles'].each do |owner_profile, enabled|
+  if enabled
+    o, p = owner_profile.split('/')
 
-  # NB cannot try "no server parameter => use chefserver" with TK
-  server URI.parse('https://chef.compliance.test/compliance/') # <-- important trailing slash :(
-  action [:fetch, :execute]
+    compliance_profile p do
+      owner o
+      action [:fetch, :execute]
+    end
+  end
 end
 
-compliance_report 'chef-server' do
-  server URI.parse('https://chef.compliance.test/compliance')
-  node_owner 'admin'
-end
+# report the results
+compliance_report 'chef-server' if node['audit']['profiles'].values.any?

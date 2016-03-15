@@ -17,10 +17,6 @@ class ComplianceReport < Chef::Resource
   property :node, String #, default: node.name
   property :environment, String #, default: node.environment
 
-  # who owns the node?
-  # maybe only required for on-the-fly added nodes?
-  property :node_owner, String, required: true
-
   default_action :execute
 
   action :execute do
@@ -34,8 +30,8 @@ class ComplianceReport < Chef::Resource
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url(::File.join("/organizations", org, "owners", node_owner.to_s, "inspec"))
-      puts "url: #{url}"
+      url = construct_url(::File.join("/organizations", org, "inspec"))
+      Chef::Log.debug "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
     end
@@ -45,17 +41,17 @@ class ComplianceReport < Chef::Resource
   def profiles
     run_context.resource_collection.select do |r|
       r.is_a?(ComplianceProfile)
-    end
+    end.flatten
   end
 
   def compound_report(*profiles)
     report = {}
     ownermap = {}
 
-    profiles.each do |prof|
-      o, p = prof.first.normalize_owner_profile # XXX why .first?
-      report[p] = ::JSON.parse(::File.read(prof.first.get_report))
-      ownermap[o] = p
+    profiles.flatten.each do |prof|
+      o, p = prof.normalize_owner_profile
+      report[p] = ::JSON.parse(::File.read(prof.get_report))
+      ownermap[p] = o
     end
 
     [report, ownermap]

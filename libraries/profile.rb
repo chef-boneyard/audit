@@ -22,20 +22,29 @@ class ComplianceProfile < Chef::Resource
   # e.g. for running profiles from disk (coming from some other source)
   property :path, String
 
+  inspec_version = '0.15.0'
+
   default_action :execute
 
   action :fetch do
+
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
+        version inspec_version
         compile_time true
       end
+
       require 'inspec'
+
+      unless Inspec::VERSION == inspec_version
+        Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+          "remove old versions (/opt/chef/embedded/bin/gem uninstall inspec)."
+      end
     end
 
     converge_by 'fetch compliance profile' do
       o, p = normalize_owner_profile
       url = construct_url("organizations/#{org}/owners/#{o}/compliance/#{p}/tar")
-      # puts "url = #{url}"
 
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
@@ -58,9 +67,16 @@ class ComplianceProfile < Chef::Resource
     # ensure it's there, if if the profile wasn't fetched using these resources
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
+        version inspec_version
         compile_time true
       end
+
       require 'inspec'
+
+      unless Inspec::VERSION == inspec_version
+        Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+          "remove old versions (/opt/chef/embedded/bin/gem uninstall inspec)."
+      end
     end
 
     converge_by 'execute compliance profile' do
