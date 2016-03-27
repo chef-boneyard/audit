@@ -1,0 +1,9 @@
+---
+language: ruby
+cache: bundler
+
+rvm:
+- 2.1.3
+bundler_args: "--without integration"
+gemfile:
+- Gemfile
