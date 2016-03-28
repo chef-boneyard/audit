@@ -94,6 +94,18 @@ control "blog-1" do
 end
 ```
 
+or even simplified to:
+
+```
+control "blog-1" do                        
+  title 'SSH should be listening on port 22'
+  describe port(22) do
+    it { should be_listening }
+  end
+end
+```
+
+
 Please let us know if you have any [issues](https://github.com/chef/audit-cookbook/issues), we are happy to help.
 
 ## License
