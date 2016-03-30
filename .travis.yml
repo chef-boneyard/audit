@@ -2,8 +2,14 @@
 language: ruby
 cache: bundler
 
-rvm:
-- 2.1.3
-bundler_args: "--without integration"
-gemfile:
-- Gemfile
+# necessary for docker to work
+sudo: required
+dist: trusty
+services:
+  - docker
+
+matrix:
+  include:
+    - rvm: 2.2
+      bundler_args: "--without integration"
+      script: bundle exec rake

@@ -35,3 +35,11 @@ desc 'Find notes in code'
 task :notes do
   puts `egrep --exclude=Rakefile --exclude=*.log -n -r -i '(TODO|FIXME|OPTIMIZE)' .`
 end
+
+namespace :test do
+  task :integration do
+    concurrency = ENV['CONCURRENCY'] || 1
+    path = File.join(File.dirname(__FILE__), 'test', 'integration')
+    sh('sh', '-c', "bundle exec kitchen test -c #{concurrency}")
+  end
+end
