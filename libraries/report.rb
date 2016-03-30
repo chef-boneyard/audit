@@ -1,4 +1,5 @@
-# `compliance_report` custom resource to run Chef Compliance profiles and 
+# encoding: utf-8
+# `compliance_report` custom resource to run Chef Compliance profiles and
 # send reports to Chef Compliance
 class ComplianceReport < Chef::Resource
   include ComplianceHelpers
@@ -14,8 +15,8 @@ class ComplianceReport < Chef::Resource
   property :token, String
 
   # to override the node this report is reported for
-  property :node, String #, default: node.name
-  property :environment, String #, default: node.environment
+  property :node, String # default: node.name
+  property :environment, String # default: node.environment
 
   default_action :execute
 
@@ -23,14 +24,14 @@ class ComplianceReport < Chef::Resource
     converge_by "report compliance profiles' results" do
       reports, ownermap = compound_report(profiles)
 
-      blob = get_node
+      blob = node_info
       blob[:reports] = reports
       blob[:profiles] = ownermap
 
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
 
-      url = construct_url(::File.join("/organizations", org, "inspec"))
+      url = construct_url(::File.join('/organizations', org, 'inspec'))
       Chef::Log.debug "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       rest.post(url, blob)
@@ -50,14 +51,14 @@ class ComplianceReport < Chef::Resource
 
     profiles.flatten.each do |prof|
       o, p = prof.normalize_owner_profile
-      report[p] = ::JSON.parse(::File.read(prof.get_report))
+      report[p] = ::JSON.parse(::File.read(prof.report_path))
       ownermap[p] = o
     end
 
     [report, ownermap]
   end
 
-  def get_node
+  def node_info
     n = run_context.node
     {
       node: n.name,

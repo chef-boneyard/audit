@@ -1,3 +1,4 @@
+# encoding: utf-8
 #
 # Cookbook Name:: compliance
 # Recipe:: default
@@ -16,15 +17,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# fetch and execute all requested profiles
+# iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, enabled|
-  if enabled
-    o, p = owner_profile.split('/')
+  next unless enabled
+  o, p = owner_profile.split('/')
 
-    compliance_profile p do
-      owner o
-      action [:fetch, :execute]
-    end
+  compliance_profile p do
+    owner o
+    action [:fetch, :execute]
   end
 end
 

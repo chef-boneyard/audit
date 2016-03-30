@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'chef',       '>= 12.0'
+gem 'chef', '>= 12.0'
 
 group :style do
   gem 'foodcritic', '~> 6.0'
