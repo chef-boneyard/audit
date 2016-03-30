@@ -1,3 +1,6 @@
+# encoding: utf-8
+
+# This helps to construct compliance urls
 module ComplianceHelpers
   # rubocop:disable all
   def construct_url(url)
@@ -18,7 +21,7 @@ module ComplianceHelpers
       server
     else # stream through chef-server
       chef = URI(Chef::Config[:chef_server_url])
-      chef.path = "/compliance/" + url if url
+      chef.path = '/compliance/' + url if url
       chef
     end
   end

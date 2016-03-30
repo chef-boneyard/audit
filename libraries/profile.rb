@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'tempfile'
 require 'uri'
 
@@ -27,7 +28,6 @@ class ComplianceProfile < Chef::Resource
   default_action :execute
 
   action :fetch do
-
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
         version inspec_version
@@ -38,12 +38,13 @@ class ComplianceProfile < Chef::Resource
 
       unless Inspec::VERSION == inspec_version
         Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-          "remove old versions (/opt/chef/embedded/bin/gem uninstall inspec)."
+          'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
       end
     end
 
     converge_by 'fetch compliance profile' do
       o, p = normalize_owner_profile
+      Chef::Log.info "Fetch compliance profile #{o}/#{p}"
       url = construct_url("organizations/#{org}/owners/#{o}/compliance/#{p}/tar")
 
       Chef::Config[:verify_api_cert] = false
@@ -55,7 +56,7 @@ class ComplianceProfile < Chef::Resource
       # don't delete temp file on GC
       ObjectSpace.undefine_finalizer(tf)
 
-      path = get_path
+      path = tar_path
       directory(::Pathname.new(path).dirname.to_s).run_action(:create)
 
       ::File.rename(tf.path, path)
@@ -75,23 +76,26 @@ class ComplianceProfile < Chef::Resource
 
       unless Inspec::VERSION == inspec_version
         Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-          "remove old versions (/opt/chef/embedded/bin/gem uninstall inspec)."
+          'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
       end
     end
 
     converge_by 'execute compliance profile' do
-      reports = {}
-      path = get_path
-      report_file = get_report
+      path = tar_path
+      report_file = report_path
 
-      ## TODO: flesh out inspec's report CLI interface,
-      ##       make this an execute[inspec check ...]
+      o, p = normalize_owner_profile
+      Chef::Log.info "Execute compliance profile #{o}/#{p}"
+
+      # TODO: flesh out inspec's report CLI interface,
+      #       make this an execute[inspec check ...]
       runner = ::Inspec::Runner.new('report' => true)
       runner.add_target(path, {})
       begin
         runner.run
-      rescue Chef::Exceptions::ValidationFailed => e # XXX weird exception
-        # log "INSPEC #{e}"
+      # TODO: weird exception, do we need that handling?
+      rescue Chef::Exceptions::ValidationFailed => e
+        log "INSPEC #{e}"
       end
 
       file report_file do
@@ -109,16 +113,15 @@ class ComplianceProfile < Chef::Resource
     end
   end
 
-  def get_path
+  def tar_path
     return path if path
-
     o, p = normalize_owner_profile
-    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{owner}_#{profile}.tgz")
+    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}.tgz")
   end
 
-  def get_report
+  def report_path
     o, p = normalize_owner_profile
-    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{owner}_#{profile}_report.json")
+    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}_report.json")
   end
 
   def org
