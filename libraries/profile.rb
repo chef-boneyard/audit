@@ -44,6 +44,7 @@ class ComplianceProfile < Chef::Resource
 
     converge_by 'fetch compliance profile' do
       o, p = normalize_owner_profile
+      Chef::Log.info "Fetch compliance profile #{o}/#{p}"
       url = construct_url("organizations/#{org}/owners/#{o}/compliance/#{p}/tar")
 
       Chef::Config[:verify_api_cert] = false
@@ -82,6 +83,9 @@ class ComplianceProfile < Chef::Resource
     converge_by 'execute compliance profile' do
       path = tar_path
       report_file = report_path
+
+      o, p = normalize_owner_profile
+      Chef::Log.info "Execute compliance profile #{o}/#{p}"
 
       # TODO: flesh out inspec's report CLI interface,
       #       make this an execute[inspec check ...]
