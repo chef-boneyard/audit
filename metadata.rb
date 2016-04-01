@@ -5,6 +5,8 @@ maintainer_email 'srenatus@chef.io'
 license 'Apache 2.0'
 description 'Allows for fetching and executing compliance profiles, and '\
             'reporting its results'
-issues_url 'https://github.com/chef-cookbooks/audit/issues'
-source_url 'https://github.com/chef-cookbooks/audit'
-version '0.3.0'
+
+source_url 'https://github.com/chef-cookbooks/audit' if defined?(:source_url)
+issues_url 'https://github.com/chef-cookbooks/audit/issues' if defined?(:issues_url)
+
+version '0.3.1'

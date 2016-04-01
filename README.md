@@ -41,17 +41,15 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 ### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via within the `profiles` attributes. Add the following configuration to run the `base/ssh` and `base/linux` profiles for the node:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example, to run the `base/ssh` and `base/linux` profiles, you can define the attribute in a JSON-based role or environment file like this:
 
 ```json
-{
   "audit": {
     "profiles": {
       "base/ssh": true,
       "base/linux": true
     }
   }
-}
 ```
 
 ## How does it relate to Chef Audit Mode
