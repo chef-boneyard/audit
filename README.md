@@ -30,14 +30,14 @@ The `audit` cookbook is available at [Chef Supermarket](https://supermarket.chef
 If you want to upload the cookbook from git, use the following commands:
 
 ```
-mkdir cookbooks
-cd cookbooks
-git clone git@github.com:chef-cookbooks/audit.git audit
+mkdir chef-cookbooks
+cd chef-cookbooks
+git clone https://github.com/chef-cookbooks/audit
 cd ..
 knife cookbook upload audit -o ./chef-cookbooks
 ```
 
-Please ensure that `cookbooks` is the parent directory of `audit` cookbook.
+Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 ### Configure node
 
