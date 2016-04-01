@@ -7,4 +7,4 @@ description 'Allows for fetching and executing compliance profiles, and '\
             'reporting its results'
 issues_url 'https://github.com/chef-cookbooks/audit/issues'
 source_url 'https://github.com/chef-cookbooks/audit'
-version '0.3.0'
+version '0.3.1'
