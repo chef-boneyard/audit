@@ -1,6 +1,7 @@
 # encoding: utf-8
 require 'tempfile'
 require 'uri'
+require 'fileutils'
 
 # `compliance_profile` custom resource to collect and run Chef Compliance
 # profiles
@@ -59,8 +60,7 @@ class ComplianceProfile < Chef::Resource
       path = tar_path
       directory(::Pathname.new(path).dirname.to_s).run_action(:create)
 
-      ::File.rename(tf.path, path)
-      # tf.unlink
+      FileUtils.move(tf.path, path)
     end
   end
 
