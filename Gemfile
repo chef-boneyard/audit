@@ -19,3 +19,7 @@ group :integration do
   gem 'kitchen-dokken'
   gem 'kitchen-inspec', '~> 0.9'
 end
+
+group :release do
+  gem 'stove'
+end
