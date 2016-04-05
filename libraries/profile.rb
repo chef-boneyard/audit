@@ -1,11 +1,12 @@
 # encoding: utf-8
 require 'tempfile'
 require 'uri'
+require 'net/https'
 require 'fileutils'
 
 # `compliance_profile` custom resource to collect and run Chef Compliance
 # profiles
-class ComplianceProfile < Chef::Resource
+class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   include ComplianceHelpers
   use_automatic_resource_name
 
@@ -15,8 +16,6 @@ class ComplianceProfile < Chef::Resource
   # to use a chef-compliance server that is _not_ "colocated" with chef-server
   property :server, URI
   property :port, Integer
-  property :username, String
-  property :password, String
   property :token, String
   # TODO(sr) it might be nice to default to settings from attributes
 
@@ -44,19 +43,35 @@ class ComplianceProfile < Chef::Resource
     converge_by 'fetch compliance profile' do
       o, p = normalize_owner_profile
       Chef::Log.info "Fetch compliance profile #{o}/#{p}"
-      url = construct_url("organizations/#{org}/owners/#{o}/compliance/#{p}/tar")
 
-      Chef::Config[:verify_api_cert] = false
-      Chef::Config[:ssl_verify_mode] = :verify_none
+      path = tar_path
+      directory(::Pathname.new(path).dirname.to_s).run_action(:create)
 
-      rest = Chef::ServerAPI.new(url, Chef::Config)
       begin
-        tf = rest.binmode_streaming_request(url)
-        # don't delete temp file on GC
-        ObjectSpace.undefine_finalizer(tf)
+        if token # go direct
+          reqpath ="owners/#{o}/compliance/#{p}/tar"
+          url = construct_url(reqpath, server)
+          puts "URL: #{url}"
 
-        path = tar_path
-        directory(::Pathname.new(path).dirname.to_s).run_action(:create)
+          tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
+          tf.binmode
+          Net::HTTP.start(url.host, url.port) do |http|
+            http.use_ssl = url.scheme == 'https'
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
+
+            resp = http.get(url.path, 'Authorization' => "Bearer #{token}")
+            tf.write(resp.body)
+          end
+          tf.flush
+        else # go through Chef::ServerAPI
+          reqpath ="organizations/#{org}/owners/#{o}/compliance/#{p}/tar"
+          url = construct_url(reqpath)
+          Chef::Config[:verify_api_cert] = false # FIXME
+          Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
+
+          rest = Chef::ServerAPI.new(url, Chef::Config)
+          tf = rest.binmode_streaming_request(url)
+        end
 
         FileUtils.move(tf.path, path)
       rescue Net::HTTPServerException => e

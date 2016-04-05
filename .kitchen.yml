@@ -61,5 +61,9 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[audit::default]
+      - recipe[test::default]
     attributes:
+      audit:
+        profiles:
+          base/ssh: true
+          base/linux: true

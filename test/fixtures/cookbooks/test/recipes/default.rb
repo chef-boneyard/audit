@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: compliance
+# Cookbook Name:: test
 # Recipe:: default
 #
 # Copyright 2016 Chef Software, Inc.
@@ -16,9 +16,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-token = node[:audit][:api_token]
-server = node[:audit][:server]
+token = ENV['COMPLIANCE_TOKEN']
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, enabled|
@@ -27,7 +25,7 @@ node['audit']['profiles'].each do |owner_profile, enabled|
 
   compliance_profile p do
     owner o
-    server server
+    server URI.parse(ENV['COMPLIANCE_API'])
     token token
     action [:fetch, :execute]
   end
@@ -35,8 +33,8 @@ end
 
 # report the results
 compliance_report 'chef-server' do
-  server server
+  server URI.parse(ENV['COMPLIANCE_API'])
   token token
-  variant node['audit']['variant']
-  owner node['audit']['owner']
+  variant :compliance
+  owner 'admin'
 end if node['audit']['profiles'].values.any?
