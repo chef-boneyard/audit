@@ -3,19 +3,12 @@
 # This helps to construct compliance urls
 module ComplianceHelpers
   # rubocop:disable all
-  def construct_url(url)
+  def construct_url(url, server = nil)
     url.sub!(%r{^/}, '') # sanitize input
-
-    if token # does this work?!
-      username = token
-      password = nil
-    end
 
     if server && server.is_a?(URI) # get directly from compliance
       puts "self: #{self.inspect}"
       # optional overrides
-      server.user = username if username
-      server.password = password if password
       server.port = port if port
       server.path = server.path + url if url
       server
