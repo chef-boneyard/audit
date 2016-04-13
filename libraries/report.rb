@@ -32,13 +32,14 @@ class ComplianceReport < Chef::Resource
       o = return_or_guess_owner
 
       if token
-        if variant == 'compliance'
-          url = construct_url(::File.join('/owners', o, 'inspec'), server)
-        elsif variant == 'chef'
-          url = construct_url(::File.join('/chef/organizations', o, 'inspec'), server)
-        else
-          raise "Provided unknown variant: #{variant}"
-        end
+        url = case variant
+              when 'compliance'
+                construct_url(::File.join('/owners', o, 'inspec'), server)
+              when 'chef'
+                construct_url(::File.join('/chef/organizations', o, 'inspec'), server)
+              else
+                fail "Provided unknown variant: #{variant}"
+              end
         req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
         req.body = blob.to_json
 

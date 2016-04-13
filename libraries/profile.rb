@@ -6,7 +6,7 @@ require 'fileutils'
 
 # `compliance_profile` custom resource to collect and run Chef Compliance
 # profiles
-class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
+class ComplianceProfile < Chef::Resource
   include ComplianceHelpers
   use_automatic_resource_name
 
