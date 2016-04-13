@@ -59,11 +59,30 @@ platforms:
     pid_one_command: /bin/systemd
 
 suites:
-  - name: default
+  - name: default # chef-server
     run_list:
-      - recipe[test::default]
+      - recipe[audit::default]
     attributes:
       audit:
-        profiles:
+        profiles: &profiles
           base/ssh: true
           base/linux: true
+  - name: compliance # compliance api with chef token
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        variant: chef
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_CHEF_TOKEN'] %>
+        profiles: *profiles
+  - name: compliance-pure # compliance api with compliance token
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        variant: compliance
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_TOKEN'] %>
+        owner: admin
+        profiles: *profiles

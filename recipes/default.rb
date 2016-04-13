@@ -17,8 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-token = node[:audit][:api_token]
-server = node[:audit][:server]
+token = node['audit']['api_token']
+server = node['audit']['server']
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, enabled|
@@ -37,6 +37,6 @@ end
 compliance_report 'chef-server' do
   server server
   token token
-  variant node['audit']['variant']
   owner node['audit']['owner']
+  variant node['audit']['variant']
 end if node['audit']['profiles'].values.any?
