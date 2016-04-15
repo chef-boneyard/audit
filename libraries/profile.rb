@@ -37,10 +37,8 @@ class ComplianceProfile < Chef::Resource
 
       require 'inspec'
 
-      unless Inspec::VERSION == inspec_version
-        Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-          'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
-      end
+      Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+        'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).' if Inspec::VERSION != inspec_version
     end
 
     converge_by 'fetch compliance profile' do
@@ -52,15 +50,25 @@ class ComplianceProfile < Chef::Resource
       Chef::Config[:ssl_verify_mode] = :verify_none
 
       rest = Chef::ServerAPI.new(url, Chef::Config)
-      tf = rest.binmode_streaming_request(url)
+      begin
+        tf = rest.binmode_streaming_request(url)
+        # don't delete temp file on GC
+        ObjectSpace.undefine_finalizer(tf)
 
-      # don't delete temp file on GC
-      ObjectSpace.undefine_finalizer(tf)
+        path = tar_path
+        directory(::Pathname.new(path).dirname.to_s).run_action(:create)
 
-      path = tar_path
-      directory(::Pathname.new(path).dirname.to_s).run_action(:create)
-
-      FileUtils.move(tf.path, path)
+        FileUtils.move(tf.path, path)
+      rescue Net::HTTPServerException => e
+        case e.message
+        when /401/
+          Chef::Log.error "#{e} Possible time/date issue on the client."
+        when /403/
+          Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
+        end
+        Chef::Log.error 'Profile NOT downloaded. Will use cached version if available.'
+        raise e if run_context.node.audit.raise_if_unreachable
+      end
     end
   end
 
@@ -74,14 +82,19 @@ class ComplianceProfile < Chef::Resource
 
       require 'inspec'
 
-      unless Inspec::VERSION == inspec_version
-        Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-          'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
-      end
+      Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+        'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).' if Inspec::VERSION != inspec_version
     end
 
     converge_by 'execute compliance profile' do
       path = tar_path
+
+      unless ::File.exist?(path)
+        Chef::Log.warn "No such file: #{path}"
+        raise "Aborting since profile is not present here: #{path}" if run_context.node.audit.raise_if_not_present
+        return
+      end
+
       report_file = report_path
 
       o, p = normalize_owner_profile

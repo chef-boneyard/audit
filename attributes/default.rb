@@ -17,3 +17,10 @@
 #
 
 default['audit']['profiles'] = {}
+
+# raise exception if Compliance API endpoint is unreachable
+# while fetching profiles or posting report
+default['audit']['raise_if_unreachable'] = false
+
+# raise exception if no profile is present on node
+default['audit']['raise_if_not_present'] = true
