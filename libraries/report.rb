@@ -34,7 +34,18 @@ class ComplianceReport < Chef::Resource
       url = construct_url(::File.join('/organizations', org, 'inspec'))
       # Chef::Log.debug "url: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
-      rest.post(url, blob)
+      begin
+        rest.post(url, blob)
+      rescue Net::HTTPServerException => e
+        case e.message
+        when /401/
+          Chef::Log.error "#{e} Possible time/date issue on the client."
+        when /403/
+          Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
+        end
+        Chef::Log.error 'Report NOT saved to server.'
+        raise e if run_context.node.audit.raise_if_unreachable
+      end
     end
   end
 
@@ -50,6 +61,7 @@ class ComplianceReport < Chef::Resource
     ownermap = {}
 
     profiles.flatten.each do |prof|
+      next unless ::File.exist?(prof.report_path)
       o, p = prof.normalize_owner_profile
       report[p] = ::JSON.parse(::File.read(prof.report_path))
       ownermap[p] = o

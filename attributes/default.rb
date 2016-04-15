@@ -17,3 +17,10 @@
 #
 
 default['audit']['profiles'] = {}
+
+# raise exception if Compliance API endpoint is unreachable
+# while fetching profiles or posting report
+default['audit']['raise_if_unreachable'] = false
+
+# fail converge if downloaded profile is not present
+default['audit']['fail_if_not_present'] = false
