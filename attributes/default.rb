@@ -22,5 +22,5 @@ default['audit']['profiles'] = {}
 # while fetching profiles or posting report
 default['audit']['raise_if_unreachable'] = false
 
-# raise exception if no profile is present on node
-default['audit']['raise_if_not_present'] = true
+# fail converge if downloaded profile is not present
+default['audit']['fail_if_not_present'] = false

@@ -91,7 +91,7 @@ class ComplianceProfile < Chef::Resource
 
       unless ::File.exist?(path)
         Chef::Log.warn "No such file: #{path}"
-        raise "Aborting since profile is not present here: #{path}" if run_context.node.audit.raise_if_not_present
+        fail "Aborting since profile is not present here: #{path}" if run_context.node.audit.fail_if_not_present
         return
       end
 

@@ -61,6 +61,7 @@ class ComplianceReport < Chef::Resource
     ownermap = {}
 
     profiles.flatten.each do |prof|
+      next unless ::File.exist?(prof.report_path)
       o, p = prof.normalize_owner_profile
       report[p] = ::JSON.parse(::File.read(prof.report_path))
       ownermap[p] = o
