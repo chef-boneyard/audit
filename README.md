@@ -1,4 +1,6 @@
-# audit
+# audit cookbook
+[![Cookbook Version](http://img.shields.io/cookbook/v/audit.svg)][cookbook] [![Build Status](http://img.shields.io/travis/chef-cookbooks/audit.svg)][travis]
+
 
 The `audit` cookbook allows you to run Chef Compliance profiles as part of a Chef Client run. It downloads configured profiles from Chef Compliance and reports audit runs to Chef Compliance.
 
@@ -126,3 +128,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+[cookbook]: https://supermarket.chef.io/cookbooks/audit
+[travis]: http://travis-ci.org/chef-cookbooks/audit
