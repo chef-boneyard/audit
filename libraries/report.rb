@@ -26,6 +26,8 @@ class ComplianceReport < Chef::Resource
 
       blob = node_info
       blob[:reports] = reports
+      total_failed = 0
+      blob[:reports].each { |k, _| total_failed += blob[:reports][k]['summary']['failure_count'].to_i }
       blob[:profiles] = ownermap
 
       Chef::Config[:verify_api_cert] = false
@@ -46,6 +48,7 @@ class ComplianceReport < Chef::Resource
         Chef::Log.error 'Report NOT saved to server.'
         raise e if run_context.node.audit.raise_if_unreachable
       end
+      fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && run_context.node.audit.fail_if_any_audits_failed
     end
   end
 
