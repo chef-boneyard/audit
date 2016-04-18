@@ -47,43 +47,36 @@ class ComplianceProfile < Chef::Resource
       path = tar_path
       directory(::Pathname.new(path).dirname.to_s).run_action(:create)
 
-      begin
-        if token # go direct
-          reqpath ="owners/#{o}/compliance/#{p}/tar"
-          url = construct_url(reqpath, server)
-          puts "URL: #{url}"
+      if token # go direct
+        reqpath ="owners/#{o}/compliance/#{p}/tar"
+        url = construct_url(reqpath, server)
+        puts "URL: #{url}"
 
-          tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
-          tf.binmode
-          Net::HTTP.start(url.host, url.port) do |http|
-            http.use_ssl = url.scheme == 'https'
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
+        tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
+        tf.binmode
+        Net::HTTP.start(url.host, url.port) do |http|
+          http.use_ssl = url.scheme == 'https'
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
 
-            resp = http.get(url.path, 'Authorization' => "Bearer #{token}")
-            tf.write(resp.body)
+          resp = with_http_rescue do
+            http.get(url.path, 'Authorization' => "Bearer #{token}")
           end
-          tf.flush
-        else # go through Chef::ServerAPI
-          reqpath ="organizations/#{org}/owners/#{o}/compliance/#{p}/tar"
-          url = construct_url(reqpath)
-          Chef::Config[:verify_api_cert] = false # FIXME
-          Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
-
-          rest = Chef::ServerAPI.new(url, Chef::Config)
-          tf = rest.binmode_streaming_request(url)
+          tf.write(resp.body)
         end
+        tf.flush
+      else # go through Chef::ServerAPI
+        reqpath ="organizations/#{org}/owners/#{o}/compliance/#{p}/tar"
+        url = construct_url(reqpath)
+        Chef::Config[:verify_api_cert] = false # FIXME
+        Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
 
-        FileUtils.move(tf.path, path)
-      rescue Net::HTTPServerException => e
-        case e.message
-        when /401/
-          Chef::Log.error "#{e} Possible time/date issue on the client."
-        when /403/
-          Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
+        rest = Chef::ServerAPI.new(url, Chef::Config)
+        tf = with_http_rescue do
+          rest.binmode_streaming_request(url)
         end
-        Chef::Log.error 'Profile NOT downloaded. Will use cached version if available.'
-        raise e if run_context.node.audit.raise_if_unreachable
       end
+
+      FileUtils.move(tf.path, path)
     end
   end
 

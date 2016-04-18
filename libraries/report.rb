@@ -47,17 +47,8 @@ class ComplianceReport < Chef::Resource
           http.use_ssl = url.scheme == 'https'
           http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
 
-          begin
+          with_http_rescue do
             http.request(req)
-          rescue Net::HTTPServerException => e
-            case e.message
-            when /401/
-              Chef::Log.error "#{e} Possible time/date issue on the client."
-            when /403/
-              Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
-            end
-            Chef::Log.error 'Report NOT saved to server.'
-            raise e if run_context.node.audit.raise_if_unreachable
           end
         end
       else
@@ -67,17 +58,8 @@ class ComplianceReport < Chef::Resource
         url = construct_url(::File.join('/organizations', o, 'inspec'))
         rest = Chef::ServerAPI.new(url, Chef::Config)
 
-        begin
+        with_http_rescue do
           rest.post(url, blob)
-        rescue Net::HTTPServerException => e
-          case e.message
-          when /401/
-            Chef::Log.error "#{e} Possible time/date issue on the client."
-          when /403/
-            Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
-          end
-          Chef::Log.error 'Report NOT saved to server.'
-          raise e if run_context.node.audit.raise_if_unreachable
         end
       end
       fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && run_context.node.audit.fail_if_any_audits_failed
