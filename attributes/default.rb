@@ -24,3 +24,6 @@ default['audit']['raise_if_unreachable'] = false
 
 # fail converge if downloaded profile is not present
 default['audit']['fail_if_not_present'] = false
+
+# fail converge after posting report if any audits have failed
+default['audit']['fail_if_any_audits_failed'] = false
