@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-token = node['audit']['api_token']
+token = node['audit']['token']
 server = node['audit']['server']
 
 # iterate over all selected profiles
