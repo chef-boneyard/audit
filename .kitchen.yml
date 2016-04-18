@@ -74,7 +74,7 @@ suites:
       audit:
         variant: chef
         server: <%= ENV['COMPLIANCE_API'] %>
-        token: <%= ENV['COMPLIANCE_CHEF_TOKEN'] %>
+        token: <%= ENV['COMPLIANCE_CHEF_ACCESSTOKEN'] %>
         profiles: *profiles
   - name: compliance-pure # compliance api with compliance token
     run_list:
@@ -83,6 +83,6 @@ suites:
       audit:
         variant: compliance
         server: <%= ENV['COMPLIANCE_API'] %>
-        token: <%= ENV['COMPLIANCE_TOKEN'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         owner: admin
         profiles: *profiles
