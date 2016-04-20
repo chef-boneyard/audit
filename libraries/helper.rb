@@ -17,6 +17,7 @@ module ComplianceHelpers
     end
   end
 
+  #rubocop:disable all
   def with_http_rescue(&block)
     begin
       return yield
