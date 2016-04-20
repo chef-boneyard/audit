@@ -24,7 +24,7 @@ class ComplianceProfile < Chef::Resource
   # e.g. for running profiles from disk (coming from some other source)
   property :path, String
 
-  inspec_version = '0.15.0'
+  inspec_version = '0.19.1'
 
   default_action :execute
 
