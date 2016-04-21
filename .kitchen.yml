@@ -1,7 +1,7 @@
 ---
 driver:
   name: dokken
-  chef_version: 12.5.1
+  chef_version: 12.7.2
   privileged: true # because Docker and SystemD/Upstart
 
 transport:
@@ -59,7 +59,30 @@ platforms:
     pid_one_command: /bin/systemd
 
 suites:
-  - name: default
+  - name: default # chef-server
     run_list:
       - recipe[audit::default]
     attributes:
+      audit:
+        profiles: &profiles
+          base/ssh: true
+          base/linux: true
+  - name: compliance # compliance api with chef token
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        variant: chef
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_CHEF_ACCESSTOKEN'] %>
+        profiles: *profiles
+  - name: compliance-pure # compliance api with compliance token
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        variant: compliance
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        owner: admin
+        profiles: *profiles

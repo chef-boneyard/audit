@@ -10,13 +10,11 @@ class ComplianceReport < Chef::Resource
   # to use a chef-compliance server that is _not_ "colocated" with chef-server
   property :server, URI
   property :port, Integer
-  property :username, String
-  property :password, String
   property :token, String
+  property :variant, String, default: 'chef' # 'chef', 'compliance'
 
-  # to override the node this report is reported for
-  property :node, String # default: node.name
   property :environment, String # default: node.environment
+  property :owner, String
 
   default_action :execute
 
@@ -30,23 +28,39 @@ class ComplianceReport < Chef::Resource
       blob[:reports].each { |k, _| total_failed += blob[:reports][k]['summary']['failure_count'].to_i }
       blob[:profiles] = ownermap
 
-      Chef::Config[:verify_api_cert] = false
-      Chef::Config[:ssl_verify_mode] = :verify_none
+      # resolve owner
+      o = return_or_guess_owner
 
-      url = construct_url(::File.join('/organizations', org, 'inspec'))
-      # Chef::Log.debug "url: #{url}"
-      rest = Chef::ServerAPI.new(url, Chef::Config)
-      begin
-        rest.post(url, blob)
-      rescue Net::HTTPServerException => e
-        case e.message
-        when /401/
-          Chef::Log.error "#{e} Possible time/date issue on the client."
-        when /403/
-          Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
+      if token
+        url = case variant
+              when 'compliance'
+                construct_url(::File.join('/owners', o, 'inspec'), server)
+              when 'chef'
+                construct_url(::File.join('/chef/organizations', o, 'inspec'), server)
+              else
+                fail "Provided unknown variant: #{variant}"
+              end
+        req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
+        req.body = blob.to_json
+
+        Net::HTTP.start(url.host, url.port) do |http|
+          http.use_ssl = url.scheme == 'https'
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
+
+          with_http_rescue do
+            http.request(req)
+          end
         end
-        Chef::Log.error 'Report NOT saved to server.'
-        raise e if run_context.node.audit.raise_if_unreachable
+      else
+        Chef::Config[:verify_api_cert] = false
+        Chef::Config[:ssl_verify_mode] = :verify_none
+
+        url = construct_url(::File.join('/organizations', o, 'inspec'))
+        rest = Chef::ServerAPI.new(url, Chef::Config)
+
+        with_http_rescue do
+          rest.post(url, blob)
+        end
       end
       fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && run_context.node.audit.fail_if_any_audits_failed
     end
@@ -86,7 +100,7 @@ class ComplianceReport < Chef::Resource
     }
   end
 
-  def org
-    Chef::Config[:chef_server_url].split('/').last
+  def return_or_guess_owner
+    owner || Chef::Config[:chef_server_url].split('/').last
   end
 end
