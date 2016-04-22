@@ -1,6 +1,10 @@
 # audit cookbook
 [![Cookbook Version](http://img.shields.io/cookbook/v/audit.svg)][cookbook] [![Build Status](http://img.shields.io/travis/chef-cookbooks/audit.svg)][travis]
 
+## Requirements
+
+### Chef
+- Chef Client >=12.5.1
 
 The `audit` cookbook allows you to run Chef Compliance profiles as part of a Chef Client run. It downloads configured profiles from Chef Compliance and reports audit runs to Chef Compliance.
 
