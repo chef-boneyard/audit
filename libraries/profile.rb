@@ -23,7 +23,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   # e.g. for running profiles from disk (coming from some other source)
   property :path, String
 
-  inspec_version = '0.19.1'
+  inspec_version = '0.19.3'
 
   default_action :execute
 
