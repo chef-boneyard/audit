@@ -29,6 +29,7 @@ node['audit']['profiles'].each do |owner_profile, enabled|
     owner o
     server server
     token token
+    inspec_version node['audit']['inspec_version']
     action [:fetch, :execute]
   end
 end
