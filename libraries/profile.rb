@@ -17,27 +17,25 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :server, URI
   property :port, Integer
   property :token, String
+  property :inspec_version, String, default: 'latest'
   # TODO(sr) it might be nice to default to settings from attributes
 
   # alternative to (owner, profile)-addressing for profiles,
   # e.g. for running profiles from disk (coming from some other source)
   property :path, String
 
-  inspec_version = '0.19.3'
-
   default_action :execute
 
   action :fetch do
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
-        version inspec_version
+        version inspec_version if inspec_version != 'latest'
         compile_time true
+        action :install
       end
 
       require 'inspec'
-
-      Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-        'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).' if Inspec::VERSION != inspec_version
+      check_inspec
     end
 
     converge_by 'fetch compliance profile' do
@@ -84,14 +82,12 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
     # ensure it's there, if if the profile wasn't fetched using these resources
     converge_by 'install/update inspec' do
       chef_gem 'inspec' do
-        version inspec_version
+        version inspec_version if inspec_version != 'latest'
         compile_time true
       end
 
       require 'inspec'
-
-      Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
-        'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).' if Inspec::VERSION != inspec_version
+      check_inspec
     end
 
     converge_by 'execute compliance profile' do
@@ -123,6 +119,15 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         content runner.report.to_json
         sensitive true
       end
+    end
+  end
+
+  def check_inspec
+    if Inspec::VERSION != inspec_version && inspec_version !='latest'
+      Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+        'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
+    else
+      Chef::Log.warn "Using inspec version: (#{Inspec::VERSION})"
     end
   end
 

@@ -31,3 +31,6 @@ default['audit']['fail_if_not_present'] = false
 
 # fail converge after posting report if any audits have failed
 default['audit']['fail_if_any_audits_failed'] = false
+
+# inspec gem version to install(e.g. '0.19.3') or 'latest'
+default['audit']['inspec_version'] = 'latest'
