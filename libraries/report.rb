@@ -8,13 +8,13 @@ class ComplianceReport < Chef::Resource
   property :name, String, name_property: true
 
   # to use a chef-compliance server that is _not_ "colocated" with chef-server
-  property :server, URI
+  property :server, [URI, nil]
   property :port, Integer
-  property :token, String
+  property :token, [String, nil]
   property :variant, String, default: 'chef' # 'chef', 'compliance'
 
   property :environment, String # default: node.environment
-  property :owner, String
+  property :owner, [String, nil]
 
   default_action :execute
 

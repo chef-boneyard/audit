@@ -14,9 +14,9 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :owner, String, required: true
 
   # to use a chef-compliance server that is _not_ "colocated" with chef-server
-  property :server, URI
+  property :server, [URI, nil]
   property :port, Integer
-  property :token, String
+  property :token, [String, nil]
   property :inspec_version, String, default: 'latest'
   # TODO(sr) it might be nice to default to settings from attributes
 
@@ -74,7 +74,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         end
       end
 
-      FileUtils.move(tf.path, path)
+      FileUtils.move(tf.path, path) unless tf.nil?
     end
   end
 
