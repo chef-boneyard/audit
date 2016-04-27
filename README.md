@@ -109,6 +109,37 @@ control "blog-1" do
 end
 ```
 
+## Interval Settings
+
+If you have long running audit profiles that you don't wish to execute on every chef-client run,
+you can use the interval recipe instead of the default recipe in your runlist, and set the
+following attributes:
+
+```
+default['audit']['interval']['enabled'] = false
+default['audit']['interval']['time'] = 1440
+```
+
+The time attribute is in minutes.
+
+You can enable the interval and set the interval time, along with your desired profiles,
+ in an environment or role like this:
+
+```json
+
+  "audit": {
+    "profiles": {
+      "base/ssh": true,
+      "base/linux": true
+    },
+    "interval": {
+      "enabled": "true",
+      "time": 1440
+    }
+  }
+
+```
+
 
 Please let us know if you have any [issues](https://github.com/chef-cookbooks/audit/issues), we are happy to help.
 
