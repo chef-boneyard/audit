@@ -40,7 +40,7 @@ describe 'audit::default' do
       runner.converge(described_recipe)
     end
 
-    it 'runs the compliance_profile' do
+    it 'fetches and executes compliance_profile[myprofile]' do
       expect(chef_run).to fetch_compliance_profile('myprofile').with(
           owner: 'admin',
           server: nil,
@@ -61,10 +61,16 @@ describe 'audit::default' do
         )
     end
 
+    it 'skips compliance_profile[ssh]' do
+      expect(chef_run).to_not fetch_compliance_profile('ssh')
+      expect(chef_run).to_not execute_compliance_profile('ssh')
+    end
+
     it 'converges successfully' do
       expect{chef_run}.to_not raise_error
     end
   end
+
 
   context 'When invalid profile is passed' do
     let(:chef_run) do
