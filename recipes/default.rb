@@ -23,8 +23,8 @@ server = node['audit']['server']
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, enabled|
   next unless enabled
-  fail "Invalid profile name '#{owner_profile}'. "+
-       "Must contain /, e.g. 'john/ssh'" if owner_profile !~ /\//
+  fail "Invalid profile name '#{owner_profile}'. "\
+       "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
   o, p = owner_profile.split('/')
 
   compliance_profile p do

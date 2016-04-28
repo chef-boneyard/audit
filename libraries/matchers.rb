@@ -1,3 +1,4 @@
+# encoding: utf-8
 
 # used by ChefSpec
 if defined?(ChefSpec)
