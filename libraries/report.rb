@@ -43,10 +43,10 @@ class ComplianceReport < Chef::Resource
         req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
         req.body = blob.to_json
 
-        Net::HTTP.start(url.host, url.port) do |http|
-          http.use_ssl = url.scheme == 'https'
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
-
+        opts = { use_ssl: url.scheme == 'https',
+                 verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
+        }
+        Net::HTTP.start(url.host, url.port, opts) do |http|
           with_http_rescue do
             http.request(req)
           end

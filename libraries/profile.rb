@@ -52,10 +52,11 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
         tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
         tf.binmode
-        Net::HTTP.start(url.host, url.port) do |http|
-          http.use_ssl = url.scheme == 'https'
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE # FIXME
 
+        opts = { use_ssl: url.scheme == 'https',
+                 verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
+        }
+        Net::HTTP.start(url.host, url.port, opts) do |http|
           resp = with_http_rescue do
             http.get(url.path, 'Authorization' => "Bearer #{token}")
           end
