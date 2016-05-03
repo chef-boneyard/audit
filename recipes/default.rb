@@ -23,6 +23,8 @@ server = node['audit']['server']
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, enabled|
   next unless enabled
+  fail "Invalid profile name '#{owner_profile}'. "\
+       "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
   o, p = owner_profile.split('/')
 
   compliance_profile p do
@@ -36,8 +38,9 @@ end
 
 # report the results
 compliance_report 'chef-server' do
+  owner node['audit']['owner']
   server server
   token token
-  owner node['audit']['owner']
   variant node['audit']['variant']
+  action :execute
 end if node['audit']['profiles'].values.any?
