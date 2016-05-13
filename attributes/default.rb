@@ -33,4 +33,4 @@ default['audit']['fail_if_not_present'] = false
 default['audit']['fail_if_any_audits_failed'] = false
 
 # inspec gem version to install(e.g. '0.19.3') or 'latest'
-default['audit']['inspec_version'] = 'latest'
+default['audit']['inspec_version'] = '0.20.1'
