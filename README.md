@@ -51,6 +51,7 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 
 ```json
   "audit": {
+    "inspec_version": "0.22.0",
     "profiles": {
       "base/ssh": true,
       "base/linux": true
