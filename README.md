@@ -13,9 +13,10 @@ The `audit` cookbook allows you to run Chef Compliance profiles as part of a Che
 Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
 
 | Chef Compliance version    | InSpec version             |
-|---------------------------------------------------------|
-| Less or equal to 1.1.23    | 0.20.1                     |
-| Greater than 1.1.23        | Greater or equal to 0.21.0 |
+|----------------------------|----------------------------| 
+| Less or equal to 1.1.23    | 0.20.1                     | 
+| Greater than 1.1.23        | Greater or equal to 0.21.0 | 
+
 
 You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
 
