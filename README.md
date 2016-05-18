@@ -8,6 +8,18 @@
 
 The `audit` cookbook allows you to run Chef Compliance profiles as part of a Chef Client run. It downloads configured profiles from Chef Compliance and reports audit runs to Chef Compliance.
 
+### Chef Compliance and InSpec
+
+Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
+
+| Chef Compliance version    | InSpec version             |
+|----------------------------|----------------------------| 
+| Less or equal to 1.1.23    | 0.20.1                     | 
+| Greater than 1.1.23        | Greater or equal to 0.21.0 | 
+
+
+You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
+
 ## Overview
 
 The `audit` requires at least **Chef Compliance 1.0** and the **Chef Server extensions for Compliance**. The architecture looks as following:
@@ -51,6 +63,7 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 
 ```json
   "audit": {
+    "inspec_version": "0.22.0",
     "profiles": {
       "base/ssh": true,
       "base/linux": true
