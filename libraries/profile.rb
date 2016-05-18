@@ -107,7 +107,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       # TODO: flesh out inspec's report CLI interface,
       #       make this an execute[inspec check ...]
-      runner = ::Inspec::Runner.new('report' => true)
+      runner = ::Inspec::Runner.new('report' => true, 'format' => 'json-min')
       runner.add_target(path, {})
       begin
         runner.run
