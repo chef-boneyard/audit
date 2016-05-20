@@ -32,6 +32,7 @@ node['audit']['profiles'].each do |owner_profile, enabled|
     server server
     token token
     inspec_version node['audit']['inspec_version']
+    quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
     action [:fetch, :execute]
   end
 end
@@ -42,5 +43,6 @@ compliance_report 'chef-server' do
   server server
   token token
   variant node['audit']['variant']
+  quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?
