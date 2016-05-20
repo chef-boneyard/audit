@@ -36,6 +36,8 @@ describe 'audit::default' do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
       runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true,
                                                'base/ssh' => false }
+      runner.node.set['audit']['inspec_version'] = 'latest'
+      runner.node.set['audit']['quiet'] = true
       runner.converge(described_recipe)
     end
 
@@ -51,12 +53,14 @@ describe 'audit::default' do
         server: nil,
         token: nil,
         inspec_version: 'latest',
+        quiet: true,
       )
       expect(chef_run).to execute_compliance_report('chef-server').with(
         owner: nil,
         server: nil,
         token: nil,
         variant: 'chef',
+        quiet: true,
       )
     end
 

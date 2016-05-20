@@ -12,6 +12,7 @@ class ComplianceReport < Chef::Resource
   property :port, Integer
   property :token, [String, nil]
   property :variant, String, default: 'chef' # 'chef', 'compliance'
+  property :quiet, [TrueClass, FalseClass], default: true
 
   property :environment, String # default: node.environment
   property :owner, [String, nil]
@@ -25,7 +26,10 @@ class ComplianceReport < Chef::Resource
       blob = node_info
       blob[:reports] = reports
       total_failed = 0
-      blob[:reports].each { |k, _| total_failed += blob[:reports][k]['summary']['failure_count'].to_i }
+      blob[:reports].each do |k, _|
+        Chef::Log.info "Summary for #{k} #{blob[:reports][k]['summary'].to_json}" if quiet
+        total_failed += blob[:reports][k]['summary']['failure_count'].to_i
+      end
       blob[:profiles] = ownermap
 
       # resolve owner

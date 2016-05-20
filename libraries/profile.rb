@@ -18,6 +18,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :port, Integer
   property :token, [String, nil]
   property :inspec_version, String, default: 'latest'
+  property :quiet, [TrueClass, FalseClass], default: true
   # TODO(sr) it might be nice to default to settings from attributes
 
   # alternative to (owner, profile)-addressing for profiles,
@@ -107,7 +108,8 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       # TODO: flesh out inspec's report CLI interface,
       #       make this an execute[inspec check ...]
-      runner = ::Inspec::Runner.new('report' => true, 'format' => 'json-min')
+      output = quiet ? ::File::NULL : $stdout
+      runner = ::Inspec::Runner.new('report' => true, 'format' => 'json-min', 'output' => output)
       runner.add_target(path, {})
       begin
         runner.run
