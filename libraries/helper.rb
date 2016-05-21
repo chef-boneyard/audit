@@ -22,13 +22,15 @@ module ComplianceHelpers
     begin
       return yield
     rescue Net::HTTPServerException => e
-      case e.message
+      case e.response.code
       when /401/
-        Chef::Log.error "#{e} Possible time/date issue on the client."
+        Chef::Log.error "Possible time/date issue on the client."
       when /403/
-        Chef::Log.error "#{e} Possible offline Compliance Server or chef_gate auth issue."
+        Chef::Log.error "Possible offline Compliance Server or chef_gate auth issue."
+      when /404/
+        Chef::Log.error "Object does not exist on remote server."
       end
-      Chef::Log.error 'Profile NOT downloaded. Will use cached version if available.'
+      Chef::Log.error e.message
       raise e if run_context.node.audit.raise_if_unreachable
     end
   end
