@@ -35,8 +35,8 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         action :install
       end
 
-      # load the supermarket plugin
       require 'inspec'
+      # load the supermarket plugin
       require 'bundles/inspec-supermarket/api'
       require 'bundles/inspec-supermarket/target'
       check_inspec
