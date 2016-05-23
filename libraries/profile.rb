@@ -83,8 +83,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
           rest.binmode_streaming_request(url)
         end
       end
-
-      FileUtils.move(tf.path, path) unless tf.nil?
+      FileUtils.cp(tf.path, path) unless tf.nil? # mv replaced due to Errno::EACCES:
     end
   end
 
@@ -156,12 +155,24 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   def tar_path
     return path if path
     o, p = normalize_owner_profile
-    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}.tgz")
+    case node['platform']
+    when 'windows'
+      windows_path = Chef::Config[:file_cache_path].tr('\\', '/')
+      ::File.join(windows_path, 'compliance', "#{o}_#{p}.tgz")
+    else
+      ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}.tgz")
+    end
   end
 
   def report_path
     o, p = normalize_owner_profile
-    ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}_report.json")
+    case node['platform']
+    when 'windows'
+      windows_path = Chef::Config[:file_cache_path].tr('\\', '/')
+      ::File.join(windows_path, 'compliance', "#{o}_#{p}_report.json")
+    else
+      ::File.join(Chef::Config[:file_cache_path], 'compliance', "#{o}_#{p}_report.json")
+    end
   end
 
   def org
