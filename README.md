@@ -61,13 +61,32 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example, to run the `base/ssh` and `base/linux` profiles, you can define the attribute in a JSON-based role or environment file like this:
 
-```json
-  "audit": {
-    "inspec_version": "0.22.0",
-    "profiles": {
-      "base/ssh": true,
-      "base/linux": true
-    }
+```ruby
+  audit = {
+    "inspec_version" => "0.22.0",
+    "profiles" => {
+      # org / profile name
+      'base/linux' => true,
+      'brewinc/ssh-hardening' => {
+        # where inspec will fetch from
+        'source' => 'supermarket://hardening/ssh-hardening',
+        'key' => 'value',
+      },
+      # Windows path
+      'brewinc/win2012_audit' => {
+        # filesystem path
+        'source' => 'E:/profiles/win2012_audit',
+      },
+      'brewinc/tmp_compliance_profile' => {
+        # github
+        'source' => 'https://github.com/nathenharvey/tmp_compliance_profile',
+      },
+      # disable profile
+      'brewinc/tmp_compliance_profile-master' => {
+        'source' => '/tmp/tmp_compliance_profile-master',
+        'disabled' => true,
+      },
+    },
   }
 ```
 
@@ -100,7 +119,7 @@ can be re-written in InSpec as follows:
 
 ```
 # rename `control_group` to `control` and use a unique identifier
-control "blog-1" do                        
+control "blog-1" do
   title 'Check SSH Port'  # add the title from `control_group`
   # rename the old `control` to `describe`
   describe 'SSH' do
@@ -114,7 +133,7 @@ end
 or even simplified to:
 
 ```
-control "blog-1" do                        
+control "blog-1" do
   title 'SSH should be listening on port 22'
   describe port(22) do
     it { should be_listening }
