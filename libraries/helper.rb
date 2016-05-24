@@ -4,8 +4,9 @@
 module ComplianceHelpers
   def construct_url(url, server = nil)
     url.sub!(%r{^/}, '') # sanitize input
-    server.path = '/api'
+
     if server && server.is_a?(URI) # get directly from compliance
+      server.path = '/api/'
       # optional overrides
       server.port = port if port
       server.path = server.path + url if url
