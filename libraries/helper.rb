@@ -6,6 +6,7 @@ module ComplianceHelpers
     url.sub!(%r{^/}, '') # sanitize input
 
     if server && server.is_a?(URI) # get directly from compliance
+      server.path = '/api/'
       # optional overrides
       server.port = port if port
       server.path = server.path + url if url
