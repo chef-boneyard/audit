@@ -60,7 +60,7 @@ The second scenario support a direct connection with Chef Compliance and support
 
 ```ruby
   audit = {
-    "inspec_version" => "0.22.0",
+    "inspec_version" => "0.22.1",
   }
 ```
 
@@ -91,7 +91,7 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 
 ```ruby
 audit = {
-  "inspec_version" => "0.22.0",
+  "inspec_version" => "0.22.1",
   "profiles" => {
     # org / profile name from Chef Compliance
     'base/linux' => true,
@@ -132,6 +132,18 @@ If you want the audit cookbook directly report to Chef Compliance, set the `serv
 audit: {
   server: 'https://compliance-fqdn/api/',
   token: 'eyJ........................YQ',
+  profiles: {
+    'base/windows'    => true,
+  },
+}
+```
+
+It is also possible to use a `refresh_token` instead of an access token:
+
+```ruby
+audit: {
+  server: 'https://compliance-fqdn/api/',
+  refresh_token: '5/4T...g==',
   profiles: {
     'base/windows'    => true,
   },

@@ -35,4 +35,11 @@ module ComplianceHelpers
       raise e if run_context.node.audit.raise_if_unreachable
     end
   end
+
+  # exchanges a refresh token into an access token
+  def retrieve_access_token(server, refresh_token)
+    success, msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
+    # TODO we return always the access token, without proper error handling
+    access_token
+  end
 end

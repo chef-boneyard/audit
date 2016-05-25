@@ -11,6 +11,7 @@ class ComplianceReport < Chef::Resource
   property :server, [String, URI, nil]
   property :port, Integer
   property :token, [String, nil]
+  property :refresh_token, [String, nil]
   property :quiet, [TrueClass, FalseClass], default: true
 
   property :environment, String # default: node.environment
@@ -33,6 +34,9 @@ class ComplianceReport < Chef::Resource
 
       # resolve owner
       o = return_or_guess_owner
+
+      # retrieve access token if a refresh token is set
+      token = retrieve_access_token if refresh_token
 
       if token # go direct
         url = construct_url(server, ::File.join('/owners', o, 'inspec'))

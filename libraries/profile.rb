@@ -17,6 +17,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :server, [String, URI, nil]
   property :port, Integer
   property :token, [String, nil]
+  property :refresh_token, [String, nil]
   property :inspec_version, String, default: 'latest'
   property :quiet, [TrueClass, FalseClass], default: true
   # TODO(sr) it might be nice to default to settings from attributes
@@ -39,6 +40,10 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       # load the supermarket plugin
       require 'bundles/inspec-supermarket/api'
       require 'bundles/inspec-supermarket/target'
+
+      # load the compliance api plugin
+      require 'bundles/inspec-compliance/api'
+
       check_inspec
     end
 
@@ -53,6 +58,9 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       Chef::Log.info "Fetch compliance profile #{o}/#{p}"
 
       path = tar_path
+
+      # retrieve access token if a refresh token is set
+      token = retrieve_access_token if refresh_token
 
       if token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
