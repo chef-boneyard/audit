@@ -21,5 +21,6 @@ group :integration do
 end
 
 group :release do
+  gem 'github_changelog_generator', '~> 1'
   gem 'stove'
 end
