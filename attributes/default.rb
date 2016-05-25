@@ -18,7 +18,6 @@
 
 default['audit']['server'] = nil
 default['audit']['token'] = nil
-default['audit']['variant'] = 'chef'
 default['audit']['owner'] = nil
 default['audit']['quiet'] = nil
 default['audit']['profiles'] = {}

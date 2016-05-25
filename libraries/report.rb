@@ -7,11 +7,10 @@ class ComplianceReport < Chef::Resource
 
   property :name, String, name_property: true
 
-  # to use a chef-compliance server that is _not_ "colocated" with chef-server
-  property :server, [URI, nil]
+  # to use a chef-compliance server that is used with chef-server integration
+  property :server, [String, URI, nil]
   property :port, Integer
   property :token, [String, nil]
-  property :variant, String, default: 'chef' # 'chef', 'compliance'
   property :quiet, [TrueClass, FalseClass], default: true
 
   property :environment, String # default: node.environment
@@ -35,15 +34,8 @@ class ComplianceReport < Chef::Resource
       # resolve owner
       o = return_or_guess_owner
 
-      if token
-        url = case variant
-              when 'compliance'
-                construct_url(::File.join('/owners', o, 'inspec'), server)
-              when 'chef'
-                construct_url(::File.join('/chef/organizations', o, 'inspec'), server)
-              else
-                fail "Provided unknown variant: #{variant}"
-              end
+      if token # go direct
+        url = construct_url(server, ::File.join('/owners', o, 'inspec'))
         req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
         req.body = blob.to_json
 
@@ -55,13 +47,12 @@ class ComplianceReport < Chef::Resource
             http.request(req)
           end
         end
-      else
+      else # go through Chef::ServerAPI
         Chef::Config[:verify_api_cert] = false
         Chef::Config[:ssl_verify_mode] = :verify_none
 
-        url = construct_url(::File.join('/organizations', o, 'inspec'))
+        url = construct_url(base_chef_server_url + '/compliance/', ::File.join('organizations', o, 'inspec'))
         rest = Chef::ServerAPI.new(url, Chef::Config)
-
         with_http_rescue do
           rest.post(url, blob)
         end

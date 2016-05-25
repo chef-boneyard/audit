@@ -2,19 +2,20 @@
 
 # This helps to construct compliance urls
 module ComplianceHelpers
-  def construct_url(url, server = nil)
-    url.sub!(%r{^/}, '') # sanitize input
+  # returns the base url of the chef server
+  # Chef::Config[:chef_server_url] may be https://chef.compliance.test/organizations/brewinc
+  # returns 'https://chef.compliance.test'
+  def base_chef_server_url
+    cs = URI(Chef::Config[:chef_server_url])
+    cs.path = ''
+    cs.to_s
+  end
 
-    if server && server.is_a?(URI) # get directly from compliance
-      # optional overrides
-      server.port = port if port
-      server.path = server.path + url if url
-      server
-    else # stream through chef-server
-      chef = URI(Chef::Config[:chef_server_url])
-      chef.path = '/compliance/' + url if url
-      chef
-    end
+  def construct_url(server, path)
+    path.sub!(%r{^/}, '') # sanitize input
+    server = URI(server)
+    server.path = server.path + path if path
+    server
   end
 
   #rubocop:disable all

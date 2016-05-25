@@ -59,7 +59,6 @@ describe 'audit::default' do
         owner: nil,
         server: nil,
         token: nil,
-        variant: 'chef',
         quiet: true,
       )
     end
