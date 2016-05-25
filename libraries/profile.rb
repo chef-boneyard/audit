@@ -13,10 +13,11 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :profile, String, name_property: true
   property :owner, String, required: true
 
-  # to use a chef-compliance server that is _not_ "colocated" with chef-server
-  property :server, [URI, nil]
+  # to use a chef-compliance server that is used with chef-server integration
+  property :server, [String, URI, nil]
   property :port, Integer
   property :token, [String, nil]
+  property :refresh_token, [String, nil]
   property :inspec_version, String, default: 'latest'
   property :quiet, [TrueClass, FalseClass], default: true
   # TODO(sr) it might be nice to default to settings from attributes
@@ -39,6 +40,10 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       # load the supermarket plugin
       require 'bundles/inspec-supermarket/api'
       require 'bundles/inspec-supermarket/target'
+
+      # load the compliance api plugin
+      require 'bundles/inspec-compliance/api'
+
       check_inspec
     end
 
@@ -54,10 +59,12 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       path = tar_path
 
+      # retrieve access token if a refresh token is set
+      token = retrieve_access_token if refresh_token
+
       if token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
-        url = construct_url(reqpath, server)
-        puts "URL: #{url}"
+        url = construct_url(server, reqpath)
 
         tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
         tf.binmode
@@ -74,7 +81,8 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         tf.flush
       else # go through Chef::ServerAPI
         reqpath ="organizations/#{org}/owners/#{o}/compliance/#{p}/tar"
-        url = construct_url(reqpath)
+        url = construct_url(base_chef_server_url + '/compliance/', reqpath)
+
         Chef::Config[:verify_api_cert] = false # FIXME
         Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
 

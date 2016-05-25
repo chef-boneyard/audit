@@ -2,19 +2,20 @@
 
 # This helps to construct compliance urls
 module ComplianceHelpers
-  def construct_url(url, server = nil)
-    url.sub!(%r{^/}, '') # sanitize input
+  # returns the base url of the chef server
+  # Chef::Config[:chef_server_url] may be https://chef.compliance.test/organizations/brewinc
+  # returns 'https://chef.compliance.test'
+  def base_chef_server_url
+    cs = URI(Chef::Config[:chef_server_url])
+    cs.path = ''
+    cs.to_s
+  end
 
-    if server && server.is_a?(URI) # get directly from compliance
-      # optional overrides
-      server.port = port if port
-      server.path = server.path + url if url
-      server
-    else # stream through chef-server
-      chef = URI(Chef::Config[:chef_server_url])
-      chef.path = '/compliance/' + url if url
-      chef
-    end
+  def construct_url(server, path)
+    path.sub!(%r{^/}, '') # sanitize input
+    server = URI(server)
+    server.path = server.path + path if path
+    server
   end
 
   #rubocop:disable all
@@ -33,5 +34,12 @@ module ComplianceHelpers
       Chef::Log.error e.message
       raise e if run_context.node.audit.raise_if_unreachable
     end
+  end
+
+  # exchanges a refresh token into an access token
+  def retrieve_access_token(server, refresh_token)
+    success, msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
+    # TODO we return always the access token, without proper error handling
+    access_token
   end
 end

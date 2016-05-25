@@ -22,7 +22,11 @@ You can see all publicly available InSpec versions [here](https://rubygems.org/g
 
 ## Overview
 
-The `audit` requires at least **Chef Compliance 1.0** and the **Chef Server extensions for Compliance**. The architecture looks as following:
+The `audit` support two scenarios:
+
+### Chef Server Integration
+
+The first scenario requires at least **Chef Compliance 1.0** and the **Chef Server extensions for Compliance**. The architecture looks as following:
 
 ```
  ┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐
@@ -36,6 +40,30 @@ The `audit` requires at least **Chef Compliance 1.0** and the **Chef Server exte
  │                      │    │                      │    │                      │
  └──────────────────────┘    └──────────────────────┘    └──────────────────────┘
 ```
+
+### Chef Compliance
+
+The second scenario support a direct connection with Chef Compliance and support chef-solo mode as well.
+
+```
+ ┌──────────────────────┐                                ┌──────────────────────┐
+ │     Chef Client      │                                │   Chef Compliance    │
+ │                      │                                │                      │
+ │ ┌──────────────────┐ │                                │                      │
+ │ │                  │◀┼────────────────────────────────│  Profiles            │
+ │ │  audit cookbook  │ │                                │                      │
+ │ │                  │─┼───────────────────────────────▶│  Reports             │
+ │ └──────────────────┘ │                                │                      │
+ │                      │                                │                      │
+ └──────────────────────┘                                └──────────────────────┘
+```
+
+```ruby
+  audit = {
+    "inspec_version" => "0.22.1",
+  }
+```
+
 
 ## Usage
 
@@ -62,32 +90,64 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example, to run the `base/ssh` and `base/linux` profiles, you can define the attribute in a JSON-based role or environment file like this:
 
 ```ruby
-  audit = {
-    "inspec_version" => "0.22.0",
-    "profiles" => {
-      # org / profile name
-      'base/linux' => true,
-      'brewinc/ssh-hardening' => {
-        # where inspec will fetch from
-        'source' => 'supermarket://hardening/ssh-hardening',
-        'key' => 'value',
-      },
-      # Windows path
-      'brewinc/win2012_audit' => {
-        # filesystem path
-        'source' => 'E:/profiles/win2012_audit',
-      },
-      'brewinc/tmp_compliance_profile' => {
-        # github
-        'source' => 'https://github.com/nathenharvey/tmp_compliance_profile',
-      },
-      # disable profile
-      'brewinc/tmp_compliance_profile-master' => {
-        'source' => '/tmp/tmp_compliance_profile-master',
-        'disabled' => true,
-      },
+audit = {
+  "inspec_version" => "0.22.1",
+  "profiles" => {
+    # org / profile name from Chef Compliance
+    'base/linux' => true,
+    # supermarket url
+    'brewinc/ssh-hardening' => {
+      # location where inspec will fetch the profile from
+      'source' => 'supermarket://hardening/ssh-hardening',
+      'key' => 'value',
     },
-  }
+    # local Windows path
+    'brewinc/win2012_audit' => {
+      # filesystem path
+      'source' => 'E:/profiles/win2012_audit',
+    },
+    # github url
+    'brewinc/tmp_compliance_profile' => {
+      'source' => 'https://github.com/nathenharvey/tmp_compliance_profile',
+    },
+    # disable profile
+    'brewinc/tmp_compliance_profile-master' => {
+      'source' => '/tmp/tmp_compliance_profile-master',
+      'disabled' => true,
+    },
+  },
+}
+```
+
+#### Direct reporting to Chef Compliance
+
+If you want the audit cookbook directly report to Chef Compliance, set the `server` and the `token` attribute.
+
+ * `server` - url of Chef Compliance server with `/api`
+ * `token` - access token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
+
+ If those attributes are missing, the audit cookbook expects the Chef Server integration to be available.
+
+```ruby
+audit: {
+  server: 'https://compliance-fqdn/api/',
+  token: 'eyJ........................YQ',
+  profiles: {
+    'base/windows'    => true,
+  },
+}
+```
+
+It is also possible to use a `refresh_token` instead of an access token:
+
+```ruby
+audit: {
+  server: 'https://compliance-fqdn/api/',
+  refresh_token: '5/4T...g==',
+  profiles: {
+    'base/windows'    => true,
+  },
+}
 ```
 
 ## How does it relate to Chef Audit Mode

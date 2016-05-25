@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# These two attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 token = node['audit']['token']
 server = node['audit']['server']
 
@@ -33,6 +34,7 @@ node['audit']['profiles'].each do |owner_profile, value|
        "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
   o, p = owner_profile.split('/').last(2)
 
+  # execute profile
   compliance_profile p do
     owner o
     server server
@@ -49,7 +51,6 @@ compliance_report 'chef-server' do
   owner node['audit']['owner']
   server server
   token token
-  variant node['audit']['variant']
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?
