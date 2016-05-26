@@ -1,0 +1,30 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+- name: bento/centos-7.2
+- name: bento/ubuntu-14.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[os-hardening]
+      - recipe[ssh-hardening]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        owner: admin
+        profiles:
+          base/linux: true
+          brewinc/ssh-hardening:
+            source: supermarket://hardening/ssh-hardening

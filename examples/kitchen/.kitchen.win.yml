@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+- name: windows-2012r2
+
+suites:
+  - name: windows
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        owner: admin
+        profiles:
+          base/windows: true
