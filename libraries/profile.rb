@@ -60,9 +60,10 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       path = tar_path
 
       # retrieve access token if a refresh token is set
-      token = retrieve_access_token if refresh_token
+      access_token = token
+      access_token = retrieve_access_token unless refresh_token.nil?
 
-      if token # go direct
+      if access_token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
         url = construct_url(server, reqpath)
 
