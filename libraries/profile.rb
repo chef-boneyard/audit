@@ -94,7 +94,16 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
           rest.binmode_streaming_request(url)
         end
       end
-      FileUtils.cp(tf.path, path) unless tf.nil? # mv replaced due to Errno::EACCES:
+
+      case node['platform']
+      when 'windows'
+        # mv replaced due to Errno::EACCES:
+        # https://bugs.ruby-lang.org/issues/10865
+        FileUtils.cp(tf.path, path) unless tf.nil?
+      else
+        FileUtils.mv(tf.path, path) unless tf.nil?
+      end
+
     end
   end
 
