@@ -43,6 +43,7 @@ class ComplianceReport < Chef::Resource
         url = construct_url(server, ::File.join('/owners', o, 'inspec'))
         req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
         req.body = blob.to_json
+        Chef::Log.info "Report to: #{url}"
 
         opts = { use_ssl: url.scheme == 'https',
                  verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
@@ -57,6 +58,8 @@ class ComplianceReport < Chef::Resource
         Chef::Config[:ssl_verify_mode] = :verify_none
 
         url = construct_url(base_chef_server_url + '/compliance/', ::File.join('organizations', o, 'inspec'))
+        Chef::Log.info "Report to: #{url}"
+
         rest = Chef::ServerAPI.new(url, Chef::Config)
         with_http_rescue do
           rest.post(url, blob)

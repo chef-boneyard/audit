@@ -66,6 +66,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       if access_token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
         url = construct_url(server, reqpath)
+        Chef::Log.info "Load profile from: #{url}"
 
         tf = Tempfile.new('foo', Dir.tmpdir, 'wb+')
         tf.binmode
@@ -83,6 +84,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       else # go through Chef::ServerAPI
         reqpath ="organizations/#{org}/owners/#{o}/compliance/#{p}/tar"
         url = construct_url(base_chef_server_url + '/compliance/', reqpath)
+        Chef::Log.info "Load profile from: #{url}"
 
         Chef::Config[:verify_api_cert] = false # FIXME
         Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
