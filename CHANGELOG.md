@@ -1,15 +1,21 @@
 # Change Log
 
-## [0.9.0](https://github.com/chef-cookbooks/audit/tree/0.9.0) (2016-05-25)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.0...0.9.0)
+## [v0.9.1](https://github.com/chef-cookbooks/audit/tree/v0.9.1) (2016-05-26)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.0...v0.9.1)
 
 **Implemented enhancements:**
 
 - Report to Chef Compliance directly [\#45](https://github.com/chef-cookbooks/audit/issues/45)
+- test-kitchen example for Chef Compliance direct reporting [\#57](https://github.com/chef-cookbooks/audit/pull/57) ([chris-rock](https://github.com/chris-rock))
+
+**Fixed bugs:**
+
+- changed access token handling [\#56](https://github.com/chef-cookbooks/audit/pull/56) ([cjohannsen81](https://github.com/cjohannsen81))
 
 **Closed issues:**
 
 - Reports are not displayed in Chef Compliance [\#52](https://github.com/chef-cookbooks/audit/issues/52)
+- Cookbook issue with Windows path [\#48](https://github.com/chef-cookbooks/audit/issues/48)
 
 ## [v0.9.0](https://github.com/chef-cookbooks/audit/tree/v0.9.0) (2016-05-25)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.8.0...v0.9.0)
