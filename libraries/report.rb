@@ -61,7 +61,7 @@ class ComplianceReport < Chef::Resource
         Chef::Log.info "Report to: #{url}"
 
         rest = Chef::ServerAPI.new(url, Chef::Config)
-          rest.post(url, blob)
+        rest.post(url, blob)
       end
       fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && run_context.node.audit.fail_if_any_audits_failed
     end

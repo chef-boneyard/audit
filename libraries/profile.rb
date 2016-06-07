@@ -90,7 +90,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
 
         rest = Chef::ServerAPI.new(url, Chef::Config)
-          rest.binmode_streaming_request(url)
+        rest.binmode_streaming_request(url)
       end
 
       case node['platform']
