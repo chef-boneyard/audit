@@ -36,8 +36,10 @@ module ComplianceHelpers
   def with_http_rescue(&block)
     begin
       response = yield
-      # handle non 200 error codes, they are not raised as Net::HTTPServerException
-      handle_http_error_code(response.code) if response.code.to_i >= 300
+      if response.respond_to?(:code)
+        # handle non 200 error codes, they are not raised as Net::HTTPServerException
+        handle_http_error_code(response.code) if response.code.to_i >= 300
+      end
       return response
     rescue Net::HTTPServerException => e
       handle_http_error_code(e.response.code)
@@ -46,7 +48,7 @@ module ComplianceHelpers
 
   # exchanges a refresh token into an access token
   def retrieve_access_token(server, refresh_token)
-    success, msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
+    _success, _msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
     # TODO we return always the access token, without proper error handling
     access_token
   end
