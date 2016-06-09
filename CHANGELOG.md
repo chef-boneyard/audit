@@ -1,10 +1,18 @@
 # Change Log
 
-## [0.11.0](https://github.com/chef-cookbooks/audit/tree/0.11.0) (2016-06-09)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.10.0...0.11.0)
+## [0.12.0](https://github.com/chef-cookbooks/audit/tree/0.12.0) (2016-06-09)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.11.0...0.12.0)
 
 **Merged pull requests:**
 
+- adding with\_http\_rescue method call back in [\#61](https://github.com/chef-cookbooks/audit/pull/61) ([jeremymv2](https://github.com/jeremymv2))
+
+## [v0.11.0](https://github.com/chef-cookbooks/audit/tree/v0.11.0) (2016-06-09)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.10.0...v0.11.0)
+
+**Merged pull requests:**
+
+- Release 0.11.0 [\#60](https://github.com/chef-cookbooks/audit/pull/60) ([smurawski](https://github.com/smurawski))
 - http\_rescue not required with tempfile [\#59](https://github.com/chef-cookbooks/audit/pull/59) ([Anirudh-Gupta](https://github.com/Anirudh-Gupta))
 
 ## [v0.10.0](https://github.com/chef-cookbooks/audit/tree/v0.10.0) (2016-06-01)
