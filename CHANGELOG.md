@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.11.0](https://github.com/chef-cookbooks/audit/tree/0.11.0) (2016-06-09)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.10.0...0.11.0)
+
+**Merged pull requests:**
+
+- http\_rescue not required with tempfile [\#59](https://github.com/chef-cookbooks/audit/pull/59) ([Anirudh-Gupta](https://github.com/Anirudh-Gupta))
+
+## [v0.10.0](https://github.com/chef-cookbooks/audit/tree/v0.10.0) (2016-06-01)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.1...v0.10.0)
+
+**Implemented enhancements:**
+
+- handle auth error [\#58](https://github.com/chef-cookbooks/audit/pull/58) ([chris-rock](https://github.com/chris-rock))
+
 ## [v0.9.1](https://github.com/chef-cookbooks/audit/tree/v0.9.1) (2016-05-26)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.0...v0.9.1)
 
@@ -16,6 +30,10 @@
 
 - Reports are not displayed in Chef Compliance [\#52](https://github.com/chef-cookbooks/audit/issues/52)
 - Cookbook issue with Windows path [\#48](https://github.com/chef-cookbooks/audit/issues/48)
+
+**Merged pull requests:**
+
+- add changelog [\#55](https://github.com/chef-cookbooks/audit/pull/55) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.9.0](https://github.com/chef-cookbooks/audit/tree/v0.9.0) (2016-05-25)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.8.0...v0.9.0)
