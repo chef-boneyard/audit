@@ -38,13 +38,14 @@ class ComplianceReport < Chef::Resource
 
       # retrieve access token if a refresh token is set
       access_token = token
-      access_token = retrieve_access_token unless refresh_token.nil?
+      access_token = retrieve_access_token(server, refresh_token) unless refresh_token.nil?
       raise_if_unreachable = run_context.node.audit.raise_if_unreachable if run_context.node.audit
 
       case collector
       when 'chef-visibility'
         Collector::ChefVisibility.new(entity_uuid, run_id, blob).send_report
       when 'chef-compliance'
+        access_token = retrieve_access_token(server, refresh_token) unless refresh_token.nil?
         if access_token && server
           url = construct_url(server, ::File.join('/owners', o, 'inspec'))
           Collector::ChefCompliance.new(url, blob, token, raise_if_unreachable).send_report
