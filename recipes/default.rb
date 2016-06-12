@@ -17,9 +17,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# These two attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
-token = node['audit']['token']
+# These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 server = node['audit']['server']
+token = node['audit']['token']
+# Alternatively, specify a refresh_token (used to retrieve token)
+refresh_token = node['audit']['refresh_token']
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, value|
@@ -39,6 +41,7 @@ node['audit']['profiles'].each do |owner_profile, value|
     owner o
     server server
     token token
+    refresh_token refresh_token
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
@@ -51,6 +54,7 @@ compliance_report 'chef-server' do
   owner node['audit']['owner']
   server server
   token token
+  refresh_token refresh_token
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?

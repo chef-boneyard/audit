@@ -12,7 +12,9 @@ module ComplianceHelpers
   end
 
   def construct_url(server, path)
-    path.sub!(%r{^/}, '') # sanitize input
+    # sanitize inputs
+    server+='/' unless server =~ %r{/\z}
+    path.sub!(%r{^/}, '')
     server = URI(server)
     server.path = server.path + path if path
     server
@@ -27,7 +29,7 @@ module ComplianceHelpers
     when /404/
       Chef::Log.error 'Object does not exist on remote server.'
     end
-    msg = 'Could not fetch the profile. Verify the authentication (e.g. token) is set properly'
+    msg = 'Verify the authentication (e.g. token) is set properly'
     Chef::Log.error msg
     fail msg if run_context.node.audit.raise_if_unreachable
   end
@@ -47,8 +49,8 @@ module ComplianceHelpers
   end
 
   # exchanges a refresh token into an access token
-  def retrieve_access_token(server, refresh_token)
-    _success, _msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
+  def retrieve_access_token(server_url, refresh_token, insecure = true)
+    _success, _msg, access_token = Compliance::API.post_refresh_token(server_url, refresh_token, insecure)
     # TODO we return always the access token, without proper error handling
     access_token
   end

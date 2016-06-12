@@ -31,6 +31,31 @@ describe 'audit::default' do
     end
   end
 
+  context 'When server and refresh_token are specified' do
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new do |node|
+        node.set['audit']['profiles'] = { 'admin/myprofile' => true }
+        node.set['audit']['server'] = 'https://my.compliance.test/api'
+        node.set['audit']['refresh_token'] = 'abcdefg'
+      end.converge(described_recipe)
+    end
+
+    it 'fetches and executes compliance_profile[myprofile]' do
+      expect(chef_run).to fetch_compliance_profile('myprofile').with(
+        server: 'https://my.compliance.test/api',
+        refresh_token: 'abcdefg',
+      )
+      expect(chef_run).to execute_compliance_profile('myprofile').with(
+        server: 'https://my.compliance.test/api',
+        refresh_token: 'abcdefg',
+      )
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
   context 'When two profiles are specified' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')

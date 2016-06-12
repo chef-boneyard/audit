@@ -37,11 +37,11 @@ class ComplianceReport < Chef::Resource
 
       # retrieve access token if a refresh token is set
       access_token = token
-      access_token = retrieve_access_token unless refresh_token.nil?
+      access_token = retrieve_access_token(server, refresh_token) unless refresh_token.nil?
 
       if access_token # go direct
         url = construct_url(server, ::File.join('/owners', o, 'inspec'))
-        req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
+        req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{access_token}" })
         req.body = blob.to_json
         Chef::Log.info "Report to: #{url}"
 
