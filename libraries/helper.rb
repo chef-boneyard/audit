@@ -13,7 +13,7 @@ module ComplianceHelpers
 
   def construct_url(server, path)
     # sanitize inputs
-    server+='/' unless server =~ %r{/\z}
+    server << '/' unless server =~ %r{/\z}
     path.sub!(%r{^/}, '')
     server = URI(server)
     server.path = server.path + path if path
