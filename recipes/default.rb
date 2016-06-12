@@ -20,7 +20,7 @@
 # These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 server = node['audit']['server']
 token = node['audit']['token']
-# Alternatively, specify a refresh_token (used to retrieve token)
+# Alternatively, specify a refresh_token and it will be used to retrieve an access token
 refresh_token = node['audit']['refresh_token']
 
 # iterate over all selected profiles
