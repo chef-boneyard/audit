@@ -151,7 +151,7 @@ If you want the audit cookbook to directly report to Chef Compliance, set the `c
 ```ruby
 audit: {
   collector: 'chef-compliance',
-  server: 'https://compliance-fqdn/api/',
+  server: 'https://compliance-fqdn/api',
   token: 'eyJ........................YQ',
   profiles: {
     'base/windows'    => true,
@@ -164,7 +164,7 @@ It is also possible to use a `refresh_token` instead of an access token:
 ```ruby
 audit: {
   collector: 'chef-compliance',
-  server: 'https://compliance-fqdn/api/',
+  server: 'https://compliance-fqdn/api',
   refresh_token: '5/4T...g==',
   profiles: {
     'base/windows'    => true,
