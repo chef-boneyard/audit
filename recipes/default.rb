@@ -21,10 +21,13 @@
 token = node['audit']['token']
 server = node['audit']['server']
 interval_seconds = 0 # always run this by default, unless interval is defined
-unless node['audit']['interval'].nil?
+unless node['audit']['interval'].nil? && !node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
-    if node['audit']['interval']['enabled']
 end
+Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
+compliance_cache_directory = ::File.join(Chef::Config[:file_cache_path], 'compliance')
+
+directory compliance_cache_directory
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, value|
