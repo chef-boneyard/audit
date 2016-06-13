@@ -26,7 +26,7 @@ The `audit` support two scenarios:
 
 ### Chef Server Integration
 
-The first scenario requires at least **Chef Compliance 1.0** and the **Chef Server extensions for Compliance**. The architecture looks as following:
+The first scenario requires at least **Chef Compliance 1.0** and the **[Chef Server extensions for Compliance](https://docs.chef.io/integrate_compliance_chef_server.html)**. The architecture looks as following:
 
 ```
  ┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐
@@ -58,20 +58,13 @@ The second scenario support a direct connection with Chef Compliance and support
  └──────────────────────┘                                └──────────────────────┘
 ```
 
-```ruby
-  audit = {
-    "inspec_version" => "0.22.1",
-  }
-```
-
-
 ## Usage
 
 The audit cookbook needs to be configured for each node where the `chef-client` runs. The `audit` cookbook can be reused for all nodes, all node-specific configuration is done via Chef attributes.
 
 ### Upload cookbook to Chef Server
 
-The `audit` cookbook is available at [Chef Supermarket](https://supermarket.chef.io/cookbooks/audit). This allows you to reuse the existing workflow.
+The `audit` cookbook is available at [Chef Supermarket](https://supermarket.chef.io/cookbooks/audit). This allows you to reuse your existing workflow for managing cookbooks in your runlist.
 
 If you want to upload the cookbook from git, use the following commands:
 
@@ -87,11 +80,10 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 ### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example, to run the `base/ssh` and `base/linux` profiles, you can define the attribute in a JSON-based role or environment file like this:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attribute in a JSON-based role or environment file like this:
 
 ```ruby
 audit = {
-  "inspec_version" => "0.22.1",
   "profiles" => {
     # org / profile name from Chef Compliance
     'base/linux' => true,
@@ -116,6 +108,17 @@ audit = {
       'disabled' => true,
     },
   },
+}
+```
+
+You can also configure in a policyfile like this:
+
+```ruby
+default['audit'] = {
+  profiles: {
+    'base/linux' => true,
+    'base/ssh' => true
+  }
 }
 ```
 
@@ -150,7 +153,7 @@ audit: {
 }
 ```
 
-## How does it relate to Chef Audit Mode
+## Relationship with Chef Audit Mode
 
 The following tables compares the [Chef Client audit mode](https://docs.chef.io/ctl_chef_client.html#run-in-audit-mode) with this `audit` cookbook.
 
@@ -161,7 +164,9 @@ The following tables compares the [Chef Client audit mode](https://docs.chef.io/
 | Execute InSpec Compliance Profiles       | No         | Yes            |
 | Execute tests embedded in Chef recipes   | Yes        | No             |
 
-### How to migrate from audit mode to audit cookbook:
+Eventually the `audit` cookbook will replace audit mode. The only drawback is that you will not be able to execute tests in Chef recipes, but since you will be running these tests in production, you will want to have a straightforward, consistent process by which you include these tests throughout your development lifecycle. Within Chef Compliance, this is a profile.
+
+### Migrating from audit mode to audit cookbook:
 
 We will improve the migration and help to ease the process and to reuse existing audit mode test as much as possible. At this point of time, an existing audit-mode test like:
 
@@ -204,12 +209,11 @@ end
 ## Interval Settings
 
 If you have long running audit profiles that you don't wish to execute on every chef-client run,
-you can use the interval recipe instead of the default recipe in your runlist, and set the
-following attributes:
+you can enable an interval:
 
 ```
-default['audit']['interval']['enabled'] = false
-default['audit']['interval']['time'] = 1440
+default['audit']['interval']['enabled'] = true
+default['audit']['interval']['time'] = 1440 # once a day, the default value
 ```
 
 The time attribute is in minutes.
@@ -225,7 +229,7 @@ You can enable the interval and set the interval time, along with your desired p
       "base/linux": true
     },
     "interval": {
-      "enabled": "true",
+      "enabled": true,
       "time": 1440
     }
   }

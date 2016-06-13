@@ -20,6 +20,11 @@
 # These two attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 token = node['audit']['token']
 server = node['audit']['server']
+interval_seconds = 0 # always run this by default, unless interval is defined
+unless node['audit']['interval'].nil?
+  interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
+    if node['audit']['interval']['enabled']
+end
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, value|
@@ -34,6 +39,11 @@ node['audit']['profiles'].each do |owner_profile, value|
        "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
   o, p = owner_profile.split('/').last(2)
 
+  # file that can be used for interval triggering
+  file "#{compliance_cache_directory}/#{p}" do
+    action :nothing
+  end
+
   # execute profile
   compliance_profile p do
     owner o
@@ -42,7 +52,9 @@ node['audit']['profiles'].each do |owner_profile, value|
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
+    only_if { profile_overdue_to_run(p, interval_seconds) }
     action [:fetch, :execute]
+    notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :immediately
   end
 end
 
