@@ -40,3 +40,6 @@ default['audit']['inspec_version'] = '0.22.1'
 default['audit']['interval']['enabled'] = false
 # by default run compliance once a day
 default['audit']['interval']['time'] = 1440
+
+# quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
+default['audit']['quiet'] = true
