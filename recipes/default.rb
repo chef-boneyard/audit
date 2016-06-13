@@ -54,7 +54,7 @@ node['audit']['profiles'].each do |owner_profile, value|
     token token
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
-    quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
+    quiet node['audit']['quiet']
     only_if { profile_overdue_to_run(p, interval_seconds) }
     action [:fetch, :execute]
     notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :immediately
@@ -66,6 +66,6 @@ compliance_report 'chef-server' do
   owner node['audit']['owner']
   server server
   token token
-  quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
+  quiet node['audit']['quiet']
   action :execute
 end if node['audit']['profiles'].values.any?
