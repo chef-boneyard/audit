@@ -21,7 +21,7 @@
 token = node['audit']['token']
 server = node['audit']['server']
 interval_seconds = 0 # always run this by default, unless interval is defined
-unless node['audit']['interval'].nil? && !node['audit']['interval']['enabled']
+if !node['audit']['interval'].nil? && node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
 end
 Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
@@ -55,7 +55,7 @@ node['audit']['profiles'].each do |owner_profile, value|
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
     quiet node['audit']['quiet']
-    only_if { profile_overdue_to_run(p, interval_seconds) }
+    only_if { profile_overdue_to_run?(p, interval_seconds) }
     action [:fetch, :execute]
     notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :immediately
   end
