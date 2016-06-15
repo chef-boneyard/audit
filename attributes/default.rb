@@ -25,6 +25,8 @@ default['audit']['server'] = nil
 default['audit']['token'] = nil
 # refresh_token needed for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
+# if self-signed certificates are used
+default['audit']['insecure'] = nil
 # owner needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['owner'] = nil
 default['audit']['quiet'] = nil

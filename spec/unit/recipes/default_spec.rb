@@ -37,6 +37,7 @@ describe 'audit::default' do
         node.set['audit']['profiles'] = { 'admin/myprofile' => true }
         node.set['audit']['server'] = 'https://my.compliance.test/api'
         node.set['audit']['refresh_token'] = 'abcdefg'
+        node.set['audit']['insecure'] = true
       end.converge(described_recipe)
     end
 
@@ -44,10 +45,12 @@ describe 'audit::default' do
       expect(chef_run).to fetch_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
         refresh_token: 'abcdefg',
+        insecure: true,
       )
       expect(chef_run).to execute_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
         refresh_token: 'abcdefg',
+        insecure: true,
       )
     end
 

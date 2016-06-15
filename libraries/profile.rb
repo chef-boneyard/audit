@@ -18,6 +18,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :port, Integer
   property :token, [String, nil]
   property :refresh_token, [String, nil]
+  property :insecure, [TrueClass, FalseClass], default: false
   property :inspec_version, String, default: 'latest'
   property :formatter, ['json', 'json-min'], default: 'json-min'
   property :quiet, [TrueClass, FalseClass], default: true
@@ -63,7 +64,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       # retrieve access token if a refresh token is set
       access_token = token
-      access_token = retrieve_access_token(server, refresh_token) unless refresh_token.nil?
+      access_token = retrieve_access_token(server, refresh_token, insecure) unless refresh_token.nil?
 
       if access_token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
