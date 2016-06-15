@@ -35,3 +35,11 @@ default['audit']['fail_if_any_audits_failed'] = false
 
 # inspec gem version to install(e.g. '0.22.1') or 'latest'
 default['audit']['inspec_version'] = '0.22.1'
+
+# by default run audit every time
+default['audit']['interval']['enabled'] = false
+# by default run compliance once a day
+default['audit']['interval']['time'] = 1440
+
+# quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
+default['audit']['quiet'] = true

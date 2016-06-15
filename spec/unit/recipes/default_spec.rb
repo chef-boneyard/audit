@@ -137,4 +137,26 @@ describe 'audit::default' do
       expect { chef_run }.to_not raise_error
     end
   end
+
+  context 'when set to run on an interval and not due to run' do
+    before(:each) do
+      allow_any_instance_of(Chef::Resource).to receive(:profile_overdue_to_run?).and_return(false)
+    end
+
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true }
+      runner.node.set['audit']['interval']['enabled'] = true
+      runner.converge(described_recipe)
+    end
+
+    it 'does not fetch or execute on compliance profile' do
+      expect(chef_run).to_not fetch_compliance_profile('myprofile')
+      expect(chef_run).to_not execute_compliance_profile('myprofile')
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
 end
