@@ -19,6 +19,7 @@
 default['audit']['server'] = nil
 default['audit']['token'] = nil
 default['audit']['refresh_token'] = nil
+default['audit']['insecure'] = nil
 default['audit']['owner'] = nil
 default['audit']['quiet'] = nil
 default['audit']['profiles'] = {}

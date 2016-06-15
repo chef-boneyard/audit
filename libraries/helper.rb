@@ -49,7 +49,7 @@ module ComplianceHelpers
   end
 
   # exchanges a refresh token into an access token
-  def retrieve_access_token(server_url, refresh_token, insecure = true)
+  def retrieve_access_token(server_url, refresh_token, insecure)
     _success, _msg, access_token = Compliance::API.post_refresh_token(server_url, refresh_token, insecure)
     # TODO we return always the access token, without proper error handling
     access_token

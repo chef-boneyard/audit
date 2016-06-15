@@ -138,7 +138,8 @@ audit: {
 }
 ```
 
-It is also possible to use a `refresh_token` instead of an access token:
+It is also possible to use a `refresh_token` instead of an access token.
+ * `insecure` - toggles use of https when retrieving access token. default value is `false`
 
 ```ruby
 audit: {
