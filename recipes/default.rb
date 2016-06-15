@@ -64,6 +64,7 @@ node['audit']['profiles'].each do |owner_profile, value|
     server server
     token token
     refresh_token refresh_token
+    insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
@@ -80,6 +81,7 @@ compliance_report 'chef-server' do
   collector report_collector
   token token
   refresh_token refresh_token
+  insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?
