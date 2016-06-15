@@ -139,9 +139,8 @@ describe 'audit::default' do
   end
 
   context 'when set to run on an interval and not due to run' do
-    before do
-      allow_any_instance_of(Chef::Node).to receive(:profile_overdue_to_run?).and_return(false)
-      allow_any_instance_of(Chef::Recipe).to receive(:profile_overdue_to_run?).and_return(false)
+    before(:each) do
+      allow_any_instance_of(Chef::Resource).to receive(:profile_overdue_to_run?).and_return(false)
     end
 
     let(:chef_run) do
@@ -151,12 +150,9 @@ describe 'audit::default' do
       runner.converge(described_recipe)
     end
 
-    it 'does not fetch, execute, or report on compliance profile' do
+    it 'does not fetch or execute on compliance profile' do
       expect(chef_run).to_not fetch_compliance_profile('myprofile')
-
       expect(chef_run).to_not execute_compliance_profile('myprofile')
-
-      expect(chef_run).to_not execute_compliance_report('chef-server')
     end
 
     it 'converges successfully' do
