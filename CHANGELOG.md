@@ -1,7 +1,7 @@
 # Change Log
 
-## [0.13.0](https://github.com/chef-cookbooks/audit/tree/0.13.0) (2016-06-22)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...0.13.0)
+## [v0.13.0](https://github.com/chef-cookbooks/audit/tree/v0.13.0) (2016-06-22)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...v0.13.0)
 
 **Implemented enhancements:**
 
