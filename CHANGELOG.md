@@ -1,10 +1,22 @@
 # Change Log
 
-## [0.12.0](https://github.com/chef-cookbooks/audit/tree/0.12.0) (2016-06-09)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.11.0...0.12.0)
+## [0.13.0](https://github.com/chef-cookbooks/audit/tree/0.13.0) (2016-06-22)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...0.13.0)
+
+**Implemented enhancements:**
+
+- audit cookbook should not report a converge [\#23](https://github.com/chef-cookbooks/audit/issues/23)
 
 **Merged pull requests:**
 
+- Merged interval functionality into default.rb recipe, updated documentation, gave quiet default [\#64](https://github.com/chef-cookbooks/audit/pull/64) ([mhedgpeth](https://github.com/mhedgpeth))
+
+## [v0.12.0](https://github.com/chef-cookbooks/audit/tree/v0.12.0) (2016-06-09)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.11.0...v0.12.0)
+
+**Merged pull requests:**
+
+- Release 0.12.0 [\#62](https://github.com/chef-cookbooks/audit/pull/62) ([smurawski](https://github.com/smurawski))
 - adding with\_http\_rescue method call back in [\#61](https://github.com/chef-cookbooks/audit/pull/61) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.11.0](https://github.com/chef-cookbooks/audit/tree/v0.11.0) (2016-06-09)
