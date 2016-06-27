@@ -1,7 +1,14 @@
 # Change Log
 
-## [0.13.0](https://github.com/chef-cookbooks/audit/tree/0.13.0) (2016-06-22)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...0.13.0)
+## [v0.13.1](https://github.com/chef-cookbooks/audit/tree/v0.13.1) (2016-06-27)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.13.0...v0.13.1)
+
+**Merged pull requests:**
+
+- Standardized node access to classic way [\#68](https://github.com/chef-cookbooks/audit/pull/68) ([mhedgpeth](https://github.com/mhedgpeth))
+
+## [v0.13.0](https://github.com/chef-cookbooks/audit/tree/v0.13.0) (2016-06-22)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...v0.13.0)
 
 **Implemented enhancements:**
 
