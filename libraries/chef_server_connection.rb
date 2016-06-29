@@ -8,7 +8,7 @@ module Audit
     def initialize(server, org)
       @server = server
       @org = org
-      puts "Creating chef server connection for server #{@server} and org #{@org}"
+      Chef::Log.debug "Creating chef server connection for server #{@server} and org #{@org}"
     end
 
     def fetch(profile)
@@ -19,6 +19,7 @@ module Audit
       Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
       rest = Chef::ServerAPI.new(url, Chef::Config)
       tf = ::Audit::HttpProcessor.with_http_rescue do
+        Chef::Log.debug "Requesting profile from #{url}"
         rest.binmode_streaming_request(url)
       end
       tf
@@ -26,7 +27,6 @@ module Audit
 
     def construct_url(server, path)
       path.sub!(%r{^/}, '') # sanitize input
-      puts 'Using server ' + server
       server = URI(server)
       server.path = server.path + path if path
       server
@@ -41,6 +41,7 @@ module Audit
 
       rest = Chef::ServerAPI.new(url, Chef::Config)
       ::Audit::HttpProcessor.with_http_rescue do
+        Chef::Log.debug "Posting to #{url} results: #{report_results}"
         rest.post(url, report_results)
       end
     end
