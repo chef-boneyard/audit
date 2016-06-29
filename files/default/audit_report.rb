@@ -28,7 +28,7 @@ class Chef
         @audit_scheduler ||= ::Audit::AuditScheduler.new(node['audit']['interval']['enabled'], node['audit']['interval']['time'])
       end
 
-      def report_results
+      def initialize_report_results
         value = {
                   node: node['name'],
                   os: {
