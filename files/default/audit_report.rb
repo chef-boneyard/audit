@@ -16,8 +16,10 @@ class Chef
         end
         compliance_profiles.each do |profile|
           json = profile.execute
-          report_results[:reports][profile.name] = ::JSON.parse(json)
-          # TODO: count up and log results
+          profile_results = ::JSON.parse(json)
+          Chef::Log.warn "Result of running #{profile}: #{profile_results['failure_count']}/#{profile_results['example_count']} failed,"\
+            " #{profile_results['skip_count']} skipped."
+          report_results[:reports][profile.name] = profile_results
         end
         report_results[:profile] = Hash[compliance_profiles.map { |profile| [profile.owner, profile.name] }.flatten]
         server_connection.report_results(report_results)
@@ -35,8 +37,8 @@ class Chef
                              family: node['platform'],
                            },
                            environment: node['environment'],
-                           reports: { },
-                           profile: { },
+                           reports: {},
+                           profile: {},
                          }
         Chef::Log.debug "Initialized report results on node #{report_results['node']} and environment #{report_results['environment']}"
         report_results
