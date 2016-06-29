@@ -1,78 +1,37 @@
 ---
 driver:
-  name: dokken
+  name: vagrant
   chef_version: 12.7.2
-  privileged: true # because Docker and SystemD/Upstart
-
-transport:
-  name: dokken
 
 provisioner:
-  name: dokken
+  name: chef_zero
 
 verifier:
   name: inspec
   sudo: false
 
 platforms:
-- name: ubuntu-12.04
-  driver:
-    image: ubuntu:12.04
-- name: ubuntu-14.04
-  driver:
-    image: ubuntu:14.04
-- name: ubuntu-15.10
-  driver:
-    image: ubuntu:15.10
-    pid_one_command: /bin/systemd
-- name: centos-6.6
-  driver:
-    image: centos:6.6
-- name: centos-6.7
-  driver:
-    image: centos:6.7
-    intermediate_instructions:
-      - RUN yum install -y initscripts
-- name: centos-7
-  driver:
-    image: centos:7
-    pid_one_command: /usr/lib/systemd/systemd
-- name: oracle-6.6
-  driver:
-    image: oraclelinux:6.6
-- name: oracle-6.7
-  driver:
-    image: oraclelinux:6.7
-- name: oracle-7.1
-  driver:
-    image: oraclelinux:7.1
-    pid_one_command: /usr/lib/systemd/systemd
-- name: debian-7
-  driver:
-    image: debian:7
-    intermediate_instructions:
-    - RUN /usr/bin/apt-get update
-    - RUN /usr/bin/apt-get install -y procps
-- name: debian-8
-  driver:
-    image: debian:8
-    pid_one_command: /bin/systemd
+- name: centos-7.2
 
 suites:
-  - name: default # compliance reporting via chef-server
-    run_list:
-      - recipe[audit::default]
-    attributes:
-      audit:
-        profiles: &profiles
-          base/ssh: true
-          base/linux: true
-  - name: compliance # compliance direct reporting
-    run_list:
-      - recipe[audit::default]
-    attributes:
-      audit:
-        server: <%= ENV['COMPLIANCE_API'] %>
-        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
-        owner: admin
-        profiles: *profiles
+#   - name: default # compliance reporting via chef-server
+#     run_list:
+#       - recipe[audit::default]
+#     attributes:
+#       audit:
+#         server: <%= ENV['CHEF_SERVER_URL'] %>
+#         profiles: &profiles
+#           base/ssh: true
+#           base/linux: true
+ - name: default # compliance direct reporting
+   run_list:
+     - recipe[audit::default]
+   attributes:
+     audit: 
+       server: <%= ENV['COMPLIANCE_API'] %>
+       token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+       owner: admin
+       profiles: &profiles
+         base/ssh: true
+         base/linux: true
+#       profiles: *profiles

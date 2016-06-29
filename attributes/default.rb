@@ -23,16 +23,6 @@ default['audit']['owner'] = nil
 default['audit']['quiet'] = nil
 default['audit']['profiles'] = {}
 
-# raise exception if Compliance API endpoint is unreachable
-# while fetching profiles or posting report
-default['audit']['raise_if_unreachable'] = true
-
-# fail converge if downloaded profile is not present
-default['audit']['fail_if_not_present'] = false
-
-# fail converge after posting report if any audits have failed
-default['audit']['fail_if_any_audits_failed'] = false
-
 # inspec gem version to install(e.g. '0.22.1') or 'latest'
 default['audit']['inspec_version'] = '0.22.1'
 
@@ -40,6 +30,3 @@ default['audit']['inspec_version'] = '0.22.1'
 default['audit']['interval']['enabled'] = false
 # by default run compliance once a day
 default['audit']['interval']['time'] = 1440
-
-# quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
-default['audit']['quiet'] = true
