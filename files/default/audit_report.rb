@@ -20,7 +20,7 @@ class Chef
           report_results[:reports][profile.name] = profile.execute
         end
         report_results[:profile] = Hash[compliance_profiles.map { |profile| [profile.owner, profile.name] }.flatten]
-        server_connection.report_results(report_results)
+        server_connection.report report_results
         audit_scheduler.record_completed_run
       end
 
