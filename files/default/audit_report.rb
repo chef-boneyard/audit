@@ -19,7 +19,7 @@ class Chef
           report_results[:reports][profile.name] = ::JSON.parse(json)
           # TODO: count up and log results
         end
-        report_results[:profile] = Hash[compliance_profiles.map {|profile| [profile.owner, profile.name] }.flatten]
+        report_results[:profile] = Hash[compliance_profiles.map { |profile| [profile.owner, profile.name] }.flatten]
         server_connection.report_results(report_results)
       end
 
@@ -31,11 +31,12 @@ class Chef
         report_results = {
                            node: node['name'],
                            os: {
-                             # arch: os[:arch],
                              release: node['platform_version'],
                              family: node['platform'],
                            },
                            environment: node['environment'],
+                           reports: { },
+                           profile: { },
                          }
         Chef::Log.debug "Initialized report results on node #{report_results['node']} and environment #{report_results['environment']}"
       end
