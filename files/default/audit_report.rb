@@ -80,7 +80,8 @@ class Chef
             "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
           owner, name = owner_profile.split('/').last(2)
           platform_windows = node['platform'] == 'windows'
-          profiles.push ::Audit::ComplianceProfile.new(owner, name, enabled, path, server_connection, platform_windows)
+          quiet = node['audit']['quiet']
+          profiles.push ::Audit::ComplianceProfile.new(owner, name, enabled, path, server_connection, platform_windows, quiet)
         end
         profiles
       end

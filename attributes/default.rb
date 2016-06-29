@@ -16,11 +16,17 @@
 # limitations under the License.
 #
 
+# Compliance server if you want to report directly to it
 default['audit']['server'] = nil
+# Compliance token for accessing compliance, used only when reporting directly to compliance
 default['audit']['token'] = nil
+# Compliance refresh token, used when reporting directly to the compliance server
 default['audit']['refresh_token'] = nil
+# The owner of the scanned node when reporting directly to the compliance server
 default['audit']['owner'] = nil
-default['audit']['quiet'] = nil
+# Whether to silence report results
+default['audit']['quiet'] = false
+# The profiles to scan
 default['audit']['profiles'] = {}
 
 # inspec gem version to install(e.g. '0.22.1') or 'latest'

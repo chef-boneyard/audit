@@ -7,13 +7,14 @@ module Audit
     attr_reader :owner, :name, :enabled, :connection
     attr_accessor :path
 
-    def initialize(owner, name, enabled, path, connection, platform_windows)
+    def initialize(owner, name, enabled, path, connection, platform_windows, quiet)
       @owner = owner
       @name = name
       @enabled = enabled
       @path = path
       @connection = connection
       @platform_windows = platform_windows
+      @quiet = quiet
     end
 
     def platform_windows?
@@ -75,7 +76,7 @@ module Audit
       Chef::Log.info "Executing: #{path}"
       # TODO: flesh out inspec's report CLI interface,
       #       make this an execute[inspec check ...]
-      output = quiet ? ::File::NULL : $stdout
+      output = @quiet ? ::File::NULL : $stdout
       runner = ::Inspec::Runner.new('report' => true, 'format' => 'json-min', 'output' => output)
       runner.add_target(path, {})
       begin
