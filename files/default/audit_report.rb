@@ -29,13 +29,15 @@ class Chef
       end
 
       def initialize_report_results
+        environment = node['environment']
+        environment = '_default' if environment.nil?
         value = {
                   node: Chef::Config[:node_name],
                   os: {
                     release: node['platform_version'],
                     family: node['platform'],
                   },
-                  environment: node['environment'],
+                  environment: environment,
                   reports: {},
                   profile: {},
                 }
