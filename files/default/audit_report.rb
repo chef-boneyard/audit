@@ -19,7 +19,7 @@ class Chef
         compliance_profiles.each do |profile|
           report_results[:reports][profile.name] = profile.execute
         end
-        report_results[:profile] = Hash[compliance_profiles.map { |profile| [profile.owner, profile.name] }.flatten]
+        report_results[:profile] = profile_owners_by_profile
         server_connection.report report_results
         audit_scheduler.record_completed_run
       end
@@ -67,6 +67,14 @@ class Chef
 
       def compliance_profiles
         @compliance_profiles ||= initialize_compliance_profiles 
+      end
+
+      def profile_owners_by_profile
+        owners_by_profile = {}
+        compliance_profiles.each do |profile|
+          owners_by_profile[profile.name] = profile.owner
+        end
+        owners_by_profile
       end
 
       def initialize_compliance_profiles
