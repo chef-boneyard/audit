@@ -68,7 +68,7 @@ module Audit
                verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
       }
       Net::HTTP.start(url.host, url.port, opts) do |http|
-        with_http_rescue do
+        ::Audit::HttpProcessor.with_http_rescue do
           http.request(req)
         end
       end

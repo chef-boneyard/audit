@@ -40,7 +40,7 @@ module Audit
       Chef::Log.info "Report to: #{url}"
 
       rest = Chef::ServerAPI.new(url, Chef::Config)
-      with_http_rescue do
+      ::Audit::HttpProcessor.with_http_rescue do
         rest.post(url, report_results)
       end
     end
