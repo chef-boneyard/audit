@@ -39,6 +39,7 @@ class Chef
                            profile: { },
                          }
         Chef::Log.debug "Initialized report results on node #{report_results['node']} and environment #{report_results['environment']}"
+        report_results
       end
 
       def inspec_version
