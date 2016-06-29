@@ -24,6 +24,10 @@ module Audit
       false
     end
 
+    def record_completed_run
+      FileUtils.touch schedule_file
+    end
+
     def should_run_on_schedule?
       @interval_enabled
     end

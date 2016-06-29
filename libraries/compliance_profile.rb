@@ -85,7 +85,11 @@ module Audit
       rescue Chef::Exceptions::ValidationFailed => e
         log "INSPEC #{e}"
       end
-      runner.report.to_json
+      report = ::JSON.parse(runner.report.to_json)
+      summary = report['summary']
+      Chef::Log.warn "Result of running #{self}: #{summary['failure_count']}/#{summary['example_count']} failed,"\
+            " #{summary['skip_count']} skipped."
+      report
     end
   end
 end

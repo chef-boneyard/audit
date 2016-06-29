@@ -11,37 +11,36 @@ class Chef
 
         ensure_inspec_installed
         report_results = initialize_report_results
+        # fetch first so dependencies can be used
         compliance_profiles.each do |profile|
           profile.fetch
         end
+        # add results of executed profiles to final report results
         compliance_profiles.each do |profile|
-          json = profile.execute
-          profile_results = ::JSON.parse(json)
-          Chef::Log.warn "Result of running #{profile}: #{profile_results['failure_count']}/#{profile_results['example_count']} failed,"\
-            " #{profile_results['skip_count']} skipped."
-          report_results[:reports][profile.name] = profile_results
+          report_results[:reports][profile.name] = profile.execute
         end
         report_results[:profile] = Hash[compliance_profiles.map { |profile| [profile.owner, profile.name] }.flatten]
         server_connection.report_results(report_results)
+        audit_scheduler.record_completed_run
       end
 
       def audit_scheduler
         @audit_scheduler ||= ::Audit::AuditScheduler.new(node['audit']['interval']['enabled'], node['audit']['interval']['time'])
       end
 
-      def initialize_report_results
-        report_results = {
-                           node: node['name'],
-                           os: {
-                             release: node['platform_version'],
-                             family: node['platform'],
-                           },
-                           environment: node['environment'],
-                           reports: {},
-                           profile: {},
-                         }
-        Chef::Log.debug "Initialized report results on node #{report_results['node']} and environment #{report_results['environment']}"
-        report_results
+      def report_results
+        value = {
+                  node: node['name'],
+                  os: {
+                    release: node['platform_version'],
+                    family: node['platform'],
+                  },
+                  environment: node['environment'],
+                  reports: {},
+                  profile: {},
+                }
+        Chef::Log.debug "Initialized report results on node #{value['node']} and environment #{value['environment']}"
+        value
       end
 
       def inspec_version
