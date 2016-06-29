@@ -7,12 +7,17 @@ module Audit
     attr_reader :owner, :name, :enabled, :connection
     attr_accessor :path
 
-    def initialize(owner, name, enabled, path, connection)
+    def initialize(owner, name, enabled, path, connection, platform_windows)
       @owner = owner
       @name = name
       @enabled = enabled
       @path = path
       @connection = connection
+      @platform_windows = platform_windows
+    end
+
+    def platform_windows?
+      @platform_windows
     end
 
     def full_name
@@ -46,8 +51,7 @@ module Audit
     def move_profile_to_cache(file)
       path = tar_path
       Chef::Log.debug "Moving downloaded #{self} to cache destination: #{path}"
-      case node['platform']
-      when 'windows'
+      if platform_windows?
         # mv replaced due to Errno::EACCES:
         # https://bugs.ruby-lang.org/issues/10865
         FileUtils.cp(file.path, path) unless file.nil?

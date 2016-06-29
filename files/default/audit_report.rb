@@ -79,7 +79,8 @@ class Chef
           fail "Invalid profile name '#{owner_profile}'. "\
             "Must contain /, e.g. 'john/ssh'" if owner_profile !~ %r{\/}
           owner, name = owner_profile.split('/').last(2)
-          profiles.push ::Audit::ComplianceProfile.new(owner, name, enabled, path, server_connection)
+          platform_windows = node['platform'] == 'windows'
+          profiles.push ::Audit::ComplianceProfile.new(owner, name, enabled, path, server_connection, platform_windows)
         end
         profiles
       end
