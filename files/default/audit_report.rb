@@ -30,7 +30,7 @@ class Chef
 
       def initialize_report_results
         value = {
-                  node: node['name'],
+                  node: Chef::Config[:node_name],
                   os: {
                     release: node['platform_version'],
                     family: node['platform'],
