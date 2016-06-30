@@ -12,9 +12,8 @@ class Chef
         ensure_inspec_installed
         report_results = initialize_report_results
         # fetch first so dependencies can be used
-        compliance_profiles.each do |profile|
-          profile.fetch
-        end
+        compliance_profiles.each(&:fetch)
+
         # add results of executed profiles to final report results
         compliance_profiles.each do |profile|
           report_results[:reports][profile.name] = profile.execute
@@ -29,8 +28,8 @@ class Chef
       end
 
       def initialize_report_results
-        # environment = node['environment']
-        environment = '_default' # if environment.nil?
+        environment = node['environment']
+        environment = '_default' if environment.nil?
         value = {
                   node: node['fqdn'],
                   os: {
@@ -50,7 +49,7 @@ class Chef
       end
 
       def ensure_inspec_installed
-        Chef::Log.debug "Ensuring inspec #{inspec_version} is installed" 
+        Chef::Log.debug "Ensuring inspec #{inspec_version} is installed"
         require 'inspec'
         # load the supermarket plugin
         require 'bundles/inspec-supermarket/api'
@@ -68,7 +67,7 @@ class Chef
       end
 
       def compliance_profiles
-        @compliance_profiles ||= initialize_compliance_profiles 
+        @compliance_profiles ||= initialize_compliance_profiles
       end
 
       def profile_owners_by_profile
@@ -112,17 +111,13 @@ class Chef
           org = parse_org(server) if org.nil?
           ::Audit::ComplianceServerConnection.new(server, org, token, node['audit']['refresh_token'])
         else
-          server = chef_server_url if server.nil?
+          server = Chef::Config[:chef_server_url] if server.nil?
           org = parse_org(server)
           base_server = server
           base_server.slice!("/organizations/#{org}")
           Chef::Log.info "Connecting to chef server #{server}"
           ::Audit::ChefServerConnection.new(base_server, org)
         end
-      end
-
-      def chef_server_url
-        Chef::Config[:chef_server_url]
       end
 
       def parse_org(url)

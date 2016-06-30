@@ -7,6 +7,7 @@ module Audit
     attr_reader :owner, :name, :enabled, :connection
     attr_accessor :path
 
+    # rubocop:disable ParameterLists
     def initialize(owner, name, enabled, path, connection, platform_windows, quiet)
       @owner = owner
       @name = name
@@ -66,20 +67,16 @@ module Audit
       supported_schemes = %w{http https supermarket compliance chefserver}
       if !supported_schemes.include?(URI(path).scheme) && !::File.exist?(path)
         Chef::Log.warn "No such path! Skipping: #{path}"
-        fail "Aborting since profile is not present here: #{path}" if run_context.node.audit.fail_if_not_present
-        return
+        fail "Aborting since profile is not present here: #{path}"
       end
       Chef::Log.info "Executing: #{path}"
-      # TODO: flesh out inspec's report CLI interface,
-      #       make this an execute[inspec check ...]
       output = @quiet ? ::File::NULL : $stdout
       runner = ::Inspec::Runner.new('report' => true, 'format' => 'json-min', 'output' => output)
       runner.add_target(path, {})
       begin
         runner.run
-      # TODO: weird exception, do we need that handling?
       rescue Chef::Exceptions::ValidationFailed => e
-        log "INSPEC #{e}"
+        log "INSPEC Validation Failed: #{e}"
       end
       report = ::JSON.parse(runner.report.to_json)
       summary = report['summary']
