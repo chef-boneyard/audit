@@ -62,10 +62,6 @@ module Audit
     end
 
     def execute
-      puts 'PATH:'
-      puts path
-      puts 'TAR:'
-      puts tar_path
       path ||= tar_path
       supported_schemes = %w{http https supermarket compliance chefserver}
       if !supported_schemes.include?(URI(path).scheme) && !::File.exist?(path)
