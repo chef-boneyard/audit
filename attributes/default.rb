@@ -16,22 +16,18 @@
 # limitations under the License.
 #
 
+# Compliance server if you want to report directly to it
 default['audit']['server'] = nil
+# Compliance token for accessing compliance, used only when reporting directly to compliance
 default['audit']['token'] = nil
+# Compliance refresh token, used when reporting directly to the compliance server
 default['audit']['refresh_token'] = nil
+# The owner of the scanned node when reporting directly to the compliance server
 default['audit']['owner'] = nil
-default['audit']['quiet'] = nil
+# Whether to silence report results
+default['audit']['quiet'] = false
+# The profiles to scan
 default['audit']['profiles'] = {}
-
-# raise exception if Compliance API endpoint is unreachable
-# while fetching profiles or posting report
-default['audit']['raise_if_unreachable'] = true
-
-# fail converge if downloaded profile is not present
-default['audit']['fail_if_not_present'] = false
-
-# fail converge after posting report if any audits have failed
-default['audit']['fail_if_any_audits_failed'] = false
 
 # inspec gem version to install(e.g. '0.22.1') or 'latest'
 default['audit']['inspec_version'] = '0.22.1'
@@ -40,6 +36,3 @@ default['audit']['inspec_version'] = '0.22.1'
 default['audit']['interval']['enabled'] = false
 # by default run compliance once a day
 default['audit']['interval']['time'] = 1440
-
-# quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
-default['audit']['quiet'] = true

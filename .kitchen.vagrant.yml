@@ -1,0 +1,37 @@
+---
+driver:
+  name: vagrant
+  chef_version: 12.7.2
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+  sudo: false
+
+platforms:
+- name: centos-7.2
+
+suites:
+#   - name: default # compliance reporting via chef-server
+#     run_list:
+#       - recipe[audit::default]
+#     attributes:
+#       audit:
+#         server: <%= ENV['CHEF_SERVER_URL'] %>
+#         profiles: &profiles
+#           base/ssh: true
+#           base/linux: true
+ - name: default # compliance direct reporting
+   run_list:
+     - recipe[audit::default]
+   attributes:
+     audit: 
+       server: <%= ENV['COMPLIANCE_API'] %>
+       token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+       owner: admin
+       profiles: &profiles
+         base/ssh: true
+         base/linux: true
+#       profiles: *profiles

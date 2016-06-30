@@ -29,134 +29,25 @@ describe 'audit::default' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
-  end
 
-  context 'When two profiles are specified' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true,
-                                               'base/ssh' => false }
-      runner.node.set['audit']['inspec_version'] = 'latest'
-      runner.node.set['audit']['quiet'] = true
-      runner.converge(described_recipe)
+    it 'updates inspec to the appropriate version' do
+      expect(chef_run).to install_chef_gem('inspec').with(version: '0.22.1')
     end
 
-    it 'fetches and executes compliance_profile[myprofile]' do
-      expect(chef_run).to fetch_compliance_profile('myprofile').with(
-        owner: 'admin',
-        server: nil,
-        token: nil,
-        inspec_version: 'latest',
-      )
-      expect(chef_run).to execute_compliance_profile('myprofile').with(
-        owner: 'admin',
-        server: nil,
-        token: nil,
-        inspec_version: 'latest',
-        quiet: true,
-      )
-      expect(chef_run).to execute_compliance_report('chef-server').with(
-        owner: nil,
-        server: nil,
-        token: nil,
-        quiet: true,
-      )
+    it 'creates a compliance cache directory' do
+      expect(chef_run).to create_directory(::File.join(Chef::Config[:file_cache_path], 'compliance'))
     end
 
-    it 'skips compliance_profile[ssh]' do
-      expect(chef_run).to_not fetch_compliance_profile('ssh')
-      expect(chef_run).to_not execute_compliance_profile('ssh')
+    it 'creates a handlers directory' do
+      expect(chef_run).to create_directory(::File.join(Chef::Config[:file_cache_path], 'handler'))
     end
 
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
-
-  context 'When invalid profile is passed' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'myprofile' => true }
-      runner.converge(described_recipe)
+    it 'puts the handler in the handlers directory' do
+      expect(chef_run).to create_cookbook_file(::File.join(Chef::Config[:file_cache_path], 'handler', 'audit_report.rb'))
     end
 
-    it 'does raise an error' do
-      expect { chef_run }.to raise_error("Invalid profile name 'myprofile'. Must contain /, e.g. 'john/ssh'")
-    end
-  end
-
-  context 'When specifying profiles with alternate sources' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = {
-        'base/linux' => true,
-        'base/apache' => false,
-        'brewinc/ssh-hardening' => {
-          'source' => 'supermarket://hardening/ssh-hardening',
-        },
-        'brewinc/tmp_compliance_profile' => {
-          'source' => 'https://github.com/nathenharvey/tmp_compliance_profile',
-        },
-        'brewinc/tmp_compliance_profile-master' => {
-          'source' => '/tmp/tmp_compliance_profile-master',
-        },
-        'exampleorg/myprofile' => {
-          'disabled' => true,
-        },
-      }
-      runner.converge(described_recipe)
-    end
-    it 'executes base/linux in backward compatible mode' do
-      expect(chef_run).to execute_compliance_profile('linux').with(
-        path: nil,
-      )
-    end
-    it 'executes brewinc/ssh-hardening from supermarket' do
-      expect(chef_run).to execute_compliance_profile('ssh-hardening').with(
-        path: 'supermarket://hardening/ssh-hardening',
-      )
-    end
-    it 'executes brewinc/tmp_compliance_profile from github' do
-      expect(chef_run).to execute_compliance_profile('tmp_compliance_profile').with(
-        path: 'https://github.com/nathenharvey/tmp_compliance_profile',
-      )
-    end
-    it 'executes brewinc/tmp_compliance_profile-master from filesystem' do
-      expect(chef_run).to execute_compliance_profile('tmp_compliance_profile-master').with(
-        path: '/tmp/tmp_compliance_profile-master',
-      )
-    end
-    it 'does not execute disabled exampleorg/myprofile' do
-      expect(chef_run).to_not execute_compliance_profile('myprofile')
-    end
-    it 'executes execute_compliance_report[chef-server]' do
-      expect(chef_run).to execute_compliance_report('chef-server')
-    end
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
-
-  context 'when set to run on an interval and not due to run' do
-    before(:each) do
-      allow_any_instance_of(Chef::Resource).to receive(:profile_overdue_to_run?).and_return(false)
-    end
-
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true }
-      runner.node.set['audit']['interval']['enabled'] = true
-      runner.converge(described_recipe)
-    end
-
-    it 'does not fetch or execute on compliance profile' do
-      expect(chef_run).to_not fetch_compliance_profile('myprofile')
-      expect(chef_run).to_not execute_compliance_profile('myprofile')
-    end
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
+    it 'sets up the chef_handler to run' do
+      expect(chef_run).to enable_chef_handler('Chef::Handler::AuditReport')
     end
   end
 end

@@ -10,3 +10,5 @@ source_url 'https://github.com/chef-cookbooks/audit' if defined?(:source_url)
 issues_url 'https://github.com/chef-cookbooks/audit/issues' if defined?(:issues_url)
 
 version '0.13.1'
+
+depends 'chef_handler'
