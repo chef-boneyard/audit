@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'uri'
 
 # This helps to construct compliance urls
 module ComplianceHelpers
@@ -51,5 +52,33 @@ module ComplianceHelpers
     _success, _msg, access_token = Compliance::API.post_refresh_token(url, refresh_token, options['insecure'])
     # TODO we return always the access token, without proper error handling
     access_token
+  end
+
+  # Returns the uuid for the current converge
+  def run_id
+    if (run_context && run_context.events && run_context.events.subscribers.is_a?(Array))
+      run_context.events.subscribers.each { |sub|
+        if (sub.class == Chef::DataCollector::Reporter &&
+            defined?(sub.run_status) &&
+            defined?(sub.run_status.run_id))
+          return sub.run_status.run_id
+        end
+      }
+      ''
+    else
+      ''
+    end
+  end
+
+  # Returns the node's uuid
+  def entity_uuid
+    if (defined?(Chef) &&
+        defined?(Chef::DataCollector) &&
+        defined?(Chef::DataCollector::Messages) &&
+        defined?(Chef::DataCollector::Messages.node_uuid))
+      Chef::DataCollector::Messages.node_uuid
+    else
+      ''
+    end
   end
 end

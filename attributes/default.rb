@@ -16,9 +16,16 @@
 # limitations under the License.
 #
 
+# collector possible values: chef-visibility, chef-compliance, chef-server
+# chef-visibility requires inspec version 0.17.1 or above
+default['audit']['collector'] = 'chef-server'
+# server needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['server'] = nil
+# token needed for the 'chef-compliance' collector
 default['audit']['token'] = nil
+# refresh_token needed for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
+# owner needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['owner'] = nil
 default['audit']['quiet'] = nil
 default['audit']['profiles'] = {}
@@ -34,7 +41,7 @@ default['audit']['fail_if_not_present'] = false
 default['audit']['fail_if_any_audits_failed'] = false
 
 # inspec gem version to install(e.g. '0.22.1') or 'latest'
-default['audit']['inspec_version'] = '0.22.1'
+default['audit']['inspec_version'] = '0.27.1'
 
 # by default run audit every time
 default['audit']['interval']['enabled'] = false

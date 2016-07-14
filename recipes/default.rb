@@ -20,14 +20,20 @@
 # These two attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 token = node['audit']['token']
 server = node['audit']['server']
+report_collector = node['audit']['collector']
 interval_seconds = 0 # always run this by default, unless interval is defined
 if !node['audit']['interval'].nil? && node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
 end
 Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
-compliance_cache_directory = ::File.join(Chef::Config[:file_cache_path], 'compliance')
 
-directory compliance_cache_directory
+# set the inspec report format based on collector
+formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
+
+compliance_cache_directory = ::File.join(Chef::Config[:file_cache_path], 'compliance')
+directory compliance_cache_directory do
+  action :create
+end
 
 # iterate over all selected profiles
 node['audit']['profiles'].each do |owner_profile, value|
@@ -50,6 +56,7 @@ node['audit']['profiles'].each do |owner_profile, value|
   # execute profile
   compliance_profile p do
     owner o
+    formatter formatter
     server server
     token token
     path path unless path.nil?
@@ -65,6 +72,7 @@ end
 compliance_report 'chef-server' do
   owner node['audit']['owner']
   server server
+  collector report_collector
   token token
   quiet node['audit']['quiet']
   action :execute

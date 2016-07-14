@@ -13,6 +13,7 @@ class ComplianceReport < Chef::Resource
   property :token, [String, nil]
   property :refresh_token, [String, nil]
   property :quiet, [TrueClass, FalseClass], default: true
+  property :collector, ['chef-visibility', 'chef-compliance', 'chef-server'], default: 'chef-server'
 
   property :environment, String # default: node.environment
   property :owner, [String, nil]
@@ -39,32 +40,27 @@ class ComplianceReport < Chef::Resource
       access_token = token
       access_token = retrieve_access_token unless refresh_token.nil?
 
-      if access_token # go direct
-        url = construct_url(server, ::File.join('/owners', o, 'inspec'))
-        req = Net::HTTP::Post.new(url, { 'Authorization' => "Bearer #{token}" })
-        req.body = blob.to_json
-        Chef::Log.info "Report to: #{url}"
-
-        opts = { use_ssl: url.scheme == 'https',
-                 verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
-        }
-        Net::HTTP.start(url.host, url.port, opts) do |http|
-          with_http_rescue do
-            http.request(req)
-          end
+      case collector
+      when 'chef-visibility'
+        Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name, blob).send_report
+      when 'chef-compliance'
+        if access_token && server
+          url = construct_url(server, ::File.join('/owners', o, 'inspec'))
+          Collector::ChefCompliance.new(url, blob, token).send_report
+        else
+          Chef::Log.warn "'server' and 'token' properties required by inspec report collector '#{collector}'. Skipping..."
         end
-      else # go through Chef::ServerAPI
-        Chef::Config[:verify_api_cert] = false
-        Chef::Config[:ssl_verify_mode] = :verify_none
-
-        url = construct_url(base_chef_server_url + '/compliance/', ::File.join('organizations', o, 'inspec'))
-        Chef::Log.info "Report to: #{url}"
-
-        rest = Chef::ServerAPI.new(url, Chef::Config)
-        with_http_rescue do
-          rest.post(url, blob)
+      when 'chef-server'
+        if server
+          url = construct_url(server + '/compliance/', ::File.join('organizations', o, 'inspec'))
+          Collector::ChefServer.new(url, blob).send_report
+        else
+          Chef::Log.warn "'server' property required by inspec report collector '#{collector}'. Skipping..."
         end
+      else
+        Chef::Log.warn "#{collector} is not a supported inspec report collector"
       end
+
       fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && node['audit']['fail_if_any_audits_failed']
     end
   end
