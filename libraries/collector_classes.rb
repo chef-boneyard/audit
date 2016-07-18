@@ -47,11 +47,11 @@ class Collector
     # Returns a complince status string based on the passed/failed/skipped controls
     def compliance_status(counts)
       if counts['failed'] > 0
-        return 'uncompliant'
+        return 'failed'
       elsif counts['total'] == counts['skipped']
         return 'skipped'
       else
-        return 'compliant'
+        return 'passed'
       end
     end
 
@@ -130,9 +130,9 @@ class Collector
       final_report['event_action'] = 'exec'
       final_report['compliance_summary'] = {}
       final_report['compliance_summary']['controls_count'] = count_controls(final_report['profiles'])
-      final_report['compliance_summary']['compliance'] = compliance_status(final_report['compliance_summary']['controls_count'])
-      final_report['compliance_summary']['end_time'] = Time.now.utc.iso8601
-      final_report['compliance_summary']['name'] = @node_name
+      final_report['compliance_summary']['status'] = compliance_status(final_report['compliance_summary']['controls_count'])
+      final_report['compliance_summary']['end_time'] = DateTime.now.iso8601
+      final_report['compliance_summary']['node_name'] = @node_name
       final_report['entity_uuid'] = @entity_uuid
       final_report['run_id'] = @run_id
 
