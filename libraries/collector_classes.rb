@@ -18,11 +18,6 @@ class Collector
       @node_name = node_name
       @blob = blob
     end
-    def send_report
-      send_inspec_report
-    end
-
-    private
 
     # Transforms this hash:
     # {'a1'=>{'a2'=>'a3'},'b1'=>{'b2'=>'b3'}}
@@ -38,10 +33,12 @@ class Collector
     # of the results has a status different than 'passed'
     def control_status(results)
       return unless results.is_a?(Array)
+      status = 'passed'
       results.each do |result|
-        return result['status'] unless result['status'] == 'passed'
+        return 'failed' if result['status'] == 'failed'
+        status = 'skipped' if result['status'] == 'skipped'
       end
-      return 'passed'
+      return status
     end
 
     # Returns a complince status string based on the passed/failed/skipped controls
@@ -107,10 +104,11 @@ class Collector
     end
 
     # Return a json string containing the inspec report to be sent to the data_collector
-    def enrich_report(reports)
+    def enriched_report
+      return nil unless @blob.is_a?(Hash) && @blob[:reports].is_a?(Hash)
       final_report = {}
       # strip the report to leave only the profiles
-      final_report['profiles'] = reports.map do |name, content|
+      final_report['profiles'] = @blob[:reports].map do |name, content|
         content['profiles'].values.first if content.is_a?(Hash) &&
                                             content['profiles'].is_a?(Hash) &&
                                             content['profiles'].values.is_a?(Array)
@@ -146,7 +144,12 @@ class Collector
     end
 
     # Method used in order to send the inspec report to the data_collector server
-    def send_inspec_report
+    def send_report
+      json_report = enriched_report
+      unless json_report
+        Chef::Log.warn 'Something went wrong, enriched_report can\'t be nil'
+        return false
+      end
       if (defined?(Chef) &&
           defined?(Chef::Config) &&
           Chef::Config[:data_collector] &&
@@ -154,7 +157,6 @@ class Collector
           Chef::Config[:data_collector][:server_url])
 
         dc = Chef::Config[:data_collector]
-        json_report = enrich_report(@blob[:reports])
         headers = { 'Content-Type' => 'application/json' }
         unless dc[:token].nil?
           headers['x-data-collector-token'] = dc[:token]
@@ -165,14 +167,14 @@ class Collector
           Chef::Log.debug("send_inspec_report: POSTing the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
-          true
+          return true
         rescue => e
           Chef::Log.error "send_inspec_report: POSTing to #{dc[:server_url]} returned: #{e.message}"
-          false
+          return false
         end
       else
         Chef::Log.warn 'data_collector.token and data_collector.server_url must be defined in client.rb!'
-        false
+        return false
       end
     end
   end
