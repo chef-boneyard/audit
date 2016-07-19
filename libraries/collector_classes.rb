@@ -43,9 +43,12 @@ class Collector
 
     # Returns a complince status string based on the passed/failed/skipped controls
     def compliance_status(counts)
-      if counts['failed'] > 0
+      return 'unknown' unless counts.is_a?(Hash) &&
+                              counts['failed'].is_a?(Hash) &&
+                              counts['skipped'].is_a?(Hash)
+      if counts['failed']['total'] > 0
         return 'failed'
-      elsif counts['total'] == counts['skipped']
+      elsif counts['total'] == counts['skipped']['total']
         return 'skipped'
       else
         return 'passed'
@@ -73,12 +76,18 @@ class Collector
     def count_controls(profiles)
       count = {
         'total' => 0,
-        'successful' => 0,
-        'skipped' => 0,
-        'failed' => 0,
-        'minor' => 0,
-        'major' => 0,
-        'critical' => 0
+        'passed' => {
+          'total' => 0
+        },
+        'skipped' => {
+          'total' => 0
+        },
+        'failed' => {
+          'total' => 0,
+          'minor' => 0,
+          'major' => 0,
+          'critical' => 0
+        }
       }
       return count unless profiles.is_a?(Array)
       profiles.each do |profile|
@@ -88,14 +97,14 @@ class Collector
             # ensure all impacts are float
             control['impact'] = control['impact'].to_f
             case control_status(control['results'])
-            when "passed"
-              count['successful'] += 1;
-            when "skipped"
-              count['skipped'] += 1;
-            when "failed"
-              count['failed'] += 1;
+            when 'passed'
+              count['passed']['total'] += 1;
+            when 'skipped'
+              count['skipped']['total'] += 1;
+            when 'failed'
+              count['failed']['total'] += 1;
               criticality = impact_to_s(control['impact'])
-              count[criticality] += 1 unless criticality.nil?
+              count['failed'][criticality] += 1 unless criticality.nil?
             end
           end
         end
@@ -126,20 +135,19 @@ class Collector
       # add some additional fields to ease report parsing
       final_report['event_type'] = 'inspec'
       final_report['event_action'] = 'exec'
-      final_report['compliance_summary'] = {}
-      final_report['compliance_summary']['controls_count'] = count_controls(final_report['profiles'])
-      final_report['compliance_summary']['status'] = compliance_status(final_report['compliance_summary']['controls_count'])
+      final_report['compliance_summary'] = count_controls(final_report['profiles'])
+      final_report['compliance_summary']['status'] = compliance_status(final_report['compliance_summary'])
       final_report['compliance_summary']['end_time'] = DateTime.now.iso8601
       final_report['compliance_summary']['node_name'] = @node_name
       final_report['entity_uuid'] = @entity_uuid
       final_report['run_id'] = @run_id
 
       ### might be needed unless we use entity_uuid in 95-node-state-filter.conf
-      #    final_report['organization_name'] = "chef_solo"
-      #    final_report['source_fqdn'] = "localhost"
-      #    final_report['node_name'] = "chef-client.solo"
+      #    final_report['organization_name'] = 'chef_solo'
+      #    final_report['source_fqdn'] = 'localhost'
+      #    final_report['node_name'] = 'chef-client.solo'
 
-      Chef::Log.info "Compliance Controls Count #{final_report['compliance_summary']['controls_count']}"
+      Chef::Log.info "Compliance Summary #{final_report['compliance_summary']}"
       final_report.to_json
     end
 
