@@ -327,4 +327,12 @@ describe 'Collector::ChefVisibility methods' do
     allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
     expect(@viz.enriched_report).to eq(@enriched_report_expected)
   end
+
+  it 'is not sending report when entity_uuid is missing' do
+    entity_uuid = nil
+    run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
+    node_name = 'chef-client.solo'
+    viz2 = Collector::ChefVisibility.new(entity_uuid, run_id, node_name, {})
+    expect(viz2.send_report).to eq(false)
+  end
 end

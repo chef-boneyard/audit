@@ -56,9 +56,9 @@ module ComplianceHelpers
 
   # Returns the uuid for the current converge
   def run_id
-    return '' unless run_context &&
-                     run_context.events &&
-                     run_context.events.subscribers.is_a?(Array)
+    return unless run_context &&
+                  run_context.events &&
+                  run_context.events.subscribers.is_a?(Array)
     run_context.events.subscribers.each do |sub|
       if (sub.class == Chef::DataCollector::Reporter &&
           defined?(sub.run_status) &&
@@ -66,7 +66,7 @@ module ComplianceHelpers
         return sub.run_status.run_id
       end
     end
-    return ''
+    return nil
   end
 
   # Returns the node's uuid
@@ -76,8 +76,6 @@ module ComplianceHelpers
         defined?(Chef::DataCollector::Messages) &&
         defined?(Chef::DataCollector::Messages.node_uuid))
       return Chef::DataCollector::Messages.node_uuid
-    else
-      return ''
     end
   end
 end

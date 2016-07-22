@@ -141,18 +141,16 @@ class Collector
       final_report['compliance_summary']['node_name'] = @node_name
       final_report['entity_uuid'] = @entity_uuid
       final_report['run_id'] = @run_id
-
-      ### might be needed unless we use entity_uuid in 95-node-state-filter.conf
-      #    final_report['organization_name'] = 'chef_solo'
-      #    final_report['source_fqdn'] = 'localhost'
-      #    final_report['node_name'] = 'chef-client.solo'
-
       Chef::Log.info "Compliance Summary #{final_report['compliance_summary']}"
       final_report.to_json
     end
 
     # Method used in order to send the inspec report to the data_collector server
     def send_report
+      unless @entity_uuid && @run_id
+        Chef::Log.warn "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report..."
+        return false
+      end
       json_report = enriched_report
       unless json_report
         Chef::Log.warn 'Something went wrong, enriched_report can\'t be nil'
