@@ -9,13 +9,11 @@ class Collector
   class ChefVisibility
     @entity_uuid = nil
     @run_id = nil
-    @node_name = nil
     @blob = []
 
-    def initialize(entity_uuid, run_id, node_name, blob)
+    def initialize(entity_uuid, run_id, blob)
       @entity_uuid = entity_uuid
       @run_id = run_id
-      @node_name = node_name
       @blob = blob
     end
 
@@ -116,11 +114,18 @@ class Collector
     def enriched_report
       return nil unless @blob.is_a?(Hash) && @blob[:reports].is_a?(Hash)
       final_report = {}
+      node_name = @blob[:node]
+      total_duration = 0
+      inspec_version = 'unknown'
       # strip the report to leave only the profiles
       final_report['profiles'] = @blob[:reports].map do |name, content|
-        content['profiles'].values.first if content.is_a?(Hash) &&
-                                            content['profiles'].is_a?(Hash) &&
-                                            content['profiles'].values.is_a?(Array)
+        if content.is_a?(Hash) &&
+            content['profiles'].is_a?(Hash) &&
+            content['profiles'].values.is_a?(Array)
+          inspec_version = content['version']
+          total_duration += content['summary']['duration'] if content['summary'].is_a?(Hash)
+          content['profiles'].values.first
+        end
       end
 
       # remove nil profiles if any
@@ -137,8 +142,10 @@ class Collector
       final_report['event_action'] = 'exec'
       final_report['compliance_summary'] = count_controls(final_report['profiles'])
       final_report['compliance_summary']['status'] = compliance_status(final_report['compliance_summary'])
+      final_report['compliance_summary']['node_name'] = node_name
       final_report['compliance_summary']['end_time'] = DateTime.now.iso8601
-      final_report['compliance_summary']['node_name'] = @node_name
+      final_report['compliance_summary']['duration'] = total_duration
+      final_report['compliance_summary']['inspec_version'] = inspec_version
       final_report['entity_uuid'] = @entity_uuid
       final_report['run_id'] = @run_id
       Chef::Log.info "Compliance Summary #{final_report['compliance_summary']}"

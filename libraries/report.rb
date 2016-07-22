@@ -42,7 +42,7 @@ class ComplianceReport < Chef::Resource
 
       case collector
       when 'chef-visibility'
-        Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name, blob).send_report
+        Collector::ChefVisibility.new(entity_uuid, run_id, blob).send_report
       when 'chef-compliance'
         if access_token && server
           url = construct_url(server, ::File.join('/owners', o, 'inspec'))
