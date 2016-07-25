@@ -60,10 +60,8 @@ module ComplianceHelpers
                   run_context.events &&
                   run_context.events.subscribers.is_a?(Array)
     run_context.events.subscribers.each do |sub|
-      if (sub.class == Chef::DataCollector::Reporter &&
-          defined?(sub.run_status) &&
-          defined?(sub.run_status.run_id))
-        return sub.run_status.run_id
+      if (sub.class == Chef::ResourceReporter && defined?(sub.run_id))
+        return sub.run_id
       end
     end
     return nil
