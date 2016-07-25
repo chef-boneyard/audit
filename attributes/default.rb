@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-# collector possible values: chef-visibility, chef-compliance, chef-server
-# chef-visibility requires inspec version 0.17.1 or above
+# collector possible values: chef-server, chef-compliance, chef-visibility
+# chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
 # server needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['server'] = nil
