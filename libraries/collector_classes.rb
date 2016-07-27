@@ -6,7 +6,7 @@ class Collector
   #
   # Used to send inspec reports to Chef Visibility via the data_collector service
   #
-  class ChefVisibility
+  class ChefVisibility # rubocop:disable Metrics/ClassLength
     @entity_uuid = nil
     @run_id = nil
     @blob = []
@@ -22,8 +22,8 @@ class Collector
     # in this array:
     # [{'id'=>'a1','a2'=>'a3'},{'id'=>'b1','b2'=>'b3'}]
     def hash_to_array(hash)
-      return unless hash.is_a?(Hash);
-      hash.each { |k,v| v['id'] = k }
+      return unless hash.is_a?(Hash)
+      hash.each { |k, v| v['id'] = k }
       hash.values
     end
 
@@ -36,7 +36,7 @@ class Collector
         return 'failed' if result['status'] == 'failed'
         status = 'skipped' if result['status'] == 'skipped'
       end
-      return status
+      status
     end
 
     # Returns a complince status string based on the passed/failed/skipped controls
@@ -45,22 +45,22 @@ class Collector
                               counts['failed'].is_a?(Hash) &&
                               counts['skipped'].is_a?(Hash)
       if counts['failed']['total'] > 0
-        return 'failed'
+        'failed'
       elsif counts['total'] == counts['skipped']['total']
-        return 'skipped'
+        'skipped'
       else
-        return 'passed'
+        'passed'
       end
     end
 
     # Returns a string with the control criticality based on the impact value
     def impact_to_s(impact)
       if impact < 0.4
-        return 'minor';
+        'minor'
       elsif impact < 0.7
-        return 'major';
+        'major'
       else
-        return 'critical';
+        'critical'
       end
     end
 
@@ -75,35 +75,35 @@ class Collector
       count = {
         'total' => 0,
         'passed' => {
-          'total' => 0
+          'total' => 0,
         },
         'skipped' => {
-          'total' => 0
+          'total' => 0,
         },
         'failed' => {
           'total' => 0,
           'minor' => 0,
           'major' => 0,
-          'critical' => 0
-        }
+          'critical' => 0,
+        },
       }
       return count unless profiles.is_a?(Array)
+
       profiles.each do |profile|
-        if profile && profile['controls'].is_a?(Array)
-          profile['controls'].each do |control|
-            count['total'] += 1;
-            # ensure all impacts are float
-            control['impact'] = control['impact'].to_f
-            case control_status(control['results'])
-            when 'passed'
-              count['passed']['total'] += 1;
-            when 'skipped'
-              count['skipped']['total'] += 1;
-            when 'failed'
-              count['failed']['total'] += 1;
-              criticality = impact_to_s(control['impact'])
-              count['failed'][criticality] += 1 unless criticality.nil?
-            end
+        next unless profile && profile['controls'].is_a?(Array)
+        profile['controls'].each do |control|
+          count['total'] += 1
+          # ensure all impacts are float
+          control['impact'] = control['impact'].to_f
+          case control_status(control['results'])
+          when 'passed'
+            count['passed']['total'] += 1
+          when 'skipped'
+            count['skipped']['total'] += 1
+          when 'failed'
+            count['failed']['total'] += 1
+            criticality = impact_to_s(control['impact'])
+            count['failed'][criticality] += 1 unless criticality.nil?
           end
         end
       end
@@ -111,25 +111,24 @@ class Collector
     end
 
     # Return a json string containing the inspec report to be sent to the data_collector
-    def enriched_report
+    def enriched_report # rubocop:disable Metrics/AbcSize
       return nil unless @blob.is_a?(Hash) && @blob[:reports].is_a?(Hash)
       final_report = {}
-      node_name = @blob[:node]
+      node_name = @blob[:node] # ~FC001, ~FC019, ~FC039
       total_duration = 0
       inspec_version = 'unknown'
       # strip the report to leave only the profiles
-      final_report['profiles'] = @blob[:reports].map do |name, content|
-        if content.is_a?(Hash) &&
-            content['profiles'].is_a?(Hash) &&
-            content['profiles'].values.is_a?(Array)
-          inspec_version = content['version']
-          total_duration += content['summary']['duration'] if content['summary'].is_a?(Hash)
-          content['profiles'].values.first
-        end
+      final_report['profiles'] = @blob[:reports].map do |_name, content|
+        next unless content.is_a?(Hash) &&
+                    content['profiles'].is_a?(Hash) &&
+                    content['profiles'].values.is_a?(Array)
+        inspec_version = content['version']
+        total_duration += content['summary']['duration'] if content['summary'].is_a?(Hash)
+        content['profiles'].values.first
       end
 
       # remove nil profiles if any
-      final_report['profiles'].select!{ |p| p }
+      final_report['profiles'].select! { |p| p }
 
       # using hash_to_array to remove non-static keys
       final_report['profiles'].each do |profile|
@@ -153,7 +152,7 @@ class Collector
     end
 
     # Method used in order to send the inspec report to the data_collector server
-    def send_report
+    def send_report # rubocop:disable PerceivedComplexity, Metrics/CyclomaticComplexity
       unless @entity_uuid && @run_id
         Chef::Log.warn "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report..."
         return false
@@ -163,11 +162,11 @@ class Collector
         Chef::Log.warn 'Something went wrong, enriched_report can\'t be nil'
         return false
       end
-      if (defined?(Chef) &&
-          defined?(Chef::Config) &&
-          Chef::Config[:data_collector] &&
-          Chef::Config[:data_collector][:token] &&
-          Chef::Config[:data_collector][:server_url])
+      if defined?(Chef) &&
+         defined?(Chef::Config) &&
+         Chef::Config[:data_collector] &&
+         Chef::Config[:data_collector][:token] &&
+         Chef::Config[:data_collector][:server_url]
 
         dc = Chef::Config[:data_collector]
         headers = { 'Content-Type' => 'application/json' }
@@ -192,12 +191,12 @@ class Collector
     end
   end
 
-
   #
   # Used to send inspec reports to a Chef Complinace server via Chef Server
   #
   class ChefServer
     include ComplianceHelpers
+
     @url = nil
     @blob = nil
 
@@ -205,6 +204,7 @@ class Collector
       @url = url
       @blob = blob
     end
+
     def send_report
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
@@ -216,12 +216,12 @@ class Collector
     end
   end
 
-
   #
   # Used to send inspec reports to a Chef Complinace server
   #
   class ChefCompliance
     include ComplianceHelpers
+
     @url = nil
     @blob = nil
 
@@ -230,6 +230,7 @@ class Collector
       @blob = blob
       @token = token
     end
+
     def send_report
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
       req.body = blob.to_json

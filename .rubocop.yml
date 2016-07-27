@@ -4,6 +4,7 @@ AllCops:
   - Gemfile
   - Rakefile
   - 'test/**/*'
+  - 'spec/**/*'
   - 'vendor/**/*'
 Documentation:
   Enabled: false
