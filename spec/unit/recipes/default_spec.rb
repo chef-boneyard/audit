@@ -34,10 +34,10 @@ describe 'audit::default' do
   context 'When two profiles are specified' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true,
+      runner.node.override['audit']['profiles'] = { 'admin/myprofile' => true,
                                                'base/ssh' => false }
-      runner.node.set['audit']['inspec_version'] = 'latest'
-      runner.node.set['audit']['quiet'] = true
+      runner.node.override['audit']['inspec_version'] = 'latest'
+      runner.node.override['audit']['quiet'] = true
       runner.converge(described_recipe)
     end
 
@@ -76,7 +76,7 @@ describe 'audit::default' do
   context 'When invalid profile is passed' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'myprofile' => true }
+      runner.node.override['audit']['profiles'] = { 'myprofile' => true }
       runner.converge(described_recipe)
     end
 
@@ -88,7 +88,7 @@ describe 'audit::default' do
   context 'When specifying profiles with alternate sources' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = {
+      runner.node.override['audit']['profiles'] = {
         'base/linux' => true,
         'base/apache' => false,
         'brewinc/ssh-hardening' => {
@@ -145,8 +145,8 @@ describe 'audit::default' do
 
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
-      runner.node.set['audit']['profiles'] = { 'admin/myprofile' => true }
-      runner.node.set['audit']['interval']['enabled'] = true
+      runner.node.override['audit']['profiles'] = { 'admin/myprofile' => true }
+      runner.node.override['audit']['interval']['enabled'] = true
       runner.converge(described_recipe)
     end
 

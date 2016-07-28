@@ -22,41 +22,59 @@ You can see all publicly available InSpec versions [here](https://rubygems.org/g
 
 ## Overview
 
-The `audit` support two scenarios:
+The `audit` support three scenarios:
 
 ### Chef Server Integration
 
 The first scenario requires at least **Chef Compliance 1.0** and the **[Chef Server extensions for Compliance](https://docs.chef.io/integrate_compliance_chef_server.html)**. The architecture looks as following:
 
 ```
- ┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐
- │     Chef Client      │    │     Chef Server      │    │   Chef Compliance    │
- │                      │    │                      │    │                      │
- │ ┌──────────────────┐ │    │                      │    │                      │
- │ │                  │◀┼────┼──────────────────────┼────│  Profiles            │
- │ │  audit cookbook  │ │    │                      │    │                      │
- │ │                  │─┼────┼──────────────────────┼───▶│  Reports             │
- │ └──────────────────┘ │    │                      │    │                      │
- │                      │    │                      │    │                      │
- └──────────────────────┘    └──────────────────────┘    └──────────────────────┘
+ ┌──────────────────────┐    ┌──────────────────────┐    ┌─────────────────────┐
+ │     Chef Client      │    │     Chef Server      │    │   Chef Compliance   │
+ │                      │    │                      │    │                     │
+ │ ┌──────────────────┐ │    │                      │    │                     │
+ │ │                  │◀┼────┼──────────────────────┼────│  Profiles           │
+ │ │  audit cookbook  │ │    │                      │    │                     │
+ │ │                  │─┼────┼──────────────────────┼───▶│  Reports            │
+ │ └──────────────────┘ │    │                      │    │                     │
+ │                      │    │                      │    │                     │
+ └──────────────────────┘    └──────────────────────┘    └─────────────────────┘
 ```
 
-### Chef Compliance
+### Chef Compliance Integration
 
-The second scenario support a direct connection with Chef Compliance and support chef-solo mode as well.
+The second scenario supports a direct connection with Chef Compliance. It also supports chef-solo mode.
 
 ```
- ┌──────────────────────┐                                ┌──────────────────────┐
- │     Chef Client      │                                │   Chef Compliance    │
- │                      │                                │                      │
- │ ┌──────────────────┐ │                                │                      │
- │ │                  │◀┼────────────────────────────────│  Profiles            │
- │ │  audit cookbook  │ │                                │                      │
- │ │                  │─┼───────────────────────────────▶│  Reports             │
- │ └──────────────────┘ │                                │                      │
- │                      │                                │                      │
- └──────────────────────┘                                └──────────────────────┘
+ ┌──────────────────────┐                                ┌─────────────────────┐
+ │     Chef Client      │                                │   Chef Compliance   │
+ │                      │                                │                     │
+ │ ┌──────────────────┐ │                                │                     │
+ │ │                  │◀┼────────────────────────────────│  Profiles           │
+ │ │  audit cookbook  │ │                                │                     │
+ │ │                  │─┼───────────────────────────────▶│  Reports            │
+ │ └──────────────────┘ │                                │                     │
+ │                      │                                │                     │
+ └──────────────────────┘                                └─────────────────────┘
 ```
+
+### Chef Visibility Integration
+
+The third scenario supports direct reporting to Chef Visibility. It also supports chef-solo mode.
+
+```
+ ┌──────────────────────┐                                ┌─────────────────────┐
+ │     Chef Client      │     ┌───────────────────────┐  │   Chef Visibility   │
+ │                      │  ┌──│ Profiles(Supermarket, │  │                     │
+ │ ┌──────────────────┐ │  │  │ Github, local, etc)   │  │                     │
+ │ │                  │◀┼──┘  └───────────────────────┘  │                     │
+ │ │  audit cookbook  │ │                                │                     │
+ │ │                  │─┼───────────────────────────────▶│  Reports            │
+ │ └──────────────────┘ │                                │                     │
+ │                      │                                │                     │
+ └──────────────────────┘                                └─────────────────────┘
+```
+
 
 ## Usage
 
@@ -124,15 +142,15 @@ default['audit'] = {
 
 #### Direct reporting to Chef Compliance
 
-If you want the audit cookbook directly report to Chef Compliance, set the `server` and the `token` attribute.
+If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server` and the `token` attribute.
 
+ * `collector` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
  * `token` - access token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
 
- If those attributes are missing, the audit cookbook expects the Chef Server integration to be available.
-
 ```ruby
 audit: {
+  collector: 'chef-compliance',
   server: 'https://compliance-fqdn/api/',
   token: 'eyJ........................YQ',
   profiles: {
@@ -145,11 +163,29 @@ It is also possible to use a `refresh_token` instead of an access token:
 
 ```ruby
 audit: {
+  collector: 'chef-compliance',
   server: 'https://compliance-fqdn/api/',
   refresh_token: '5/4T...g==',
   profiles: {
     'base/windows'    => true,
   },
+}
+```
+
+
+#### Direct reporting to Chef Visibility
+
+If you want the audit cookbook to directly report to Chef Visibility, set the `collector` attribute to 'chef-visibility'.
+This method is sending the report to `data_collector.server_url`, defined in `client.rb`. It require `inspec` version `0.27.1` or greater.
+
+```ruby
+audit: {
+  collector: 'chef-visibility',
+  profiles: {
+    'brewinc/tmp_compliance_profile' => {
+      'source' => 'https://github.com/nathenharvey/tmp_compliance_profile'
+    }
+  }
 }
 ```
 
