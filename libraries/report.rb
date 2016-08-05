@@ -51,11 +51,12 @@ class ComplianceReport < Chef::Resource
           Chef::Log.warn "'server' and 'token' properties required by inspec report collector '#{collector}'. Skipping..."
         end
       when 'chef-server'
-        if server
-          url = construct_url(server + '/compliance/', ::File.join('organizations', o, 'inspec'))
+        chef_url = server || base_chef_server_url
+        if chef_url
+          url = construct_url(chef_url + '/compliance/', ::File.join('organizations', o, 'inspec'))
           Collector::ChefServer.new(url, blob).send_report
         else
-          Chef::Log.warn "'server' property required by inspec report collector '#{collector}'. Skipping..."
+          Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{collector}'. Skipping..."
         end
       else
         Chef::Log.warn "#{collector} is not a supported inspec report collector"
