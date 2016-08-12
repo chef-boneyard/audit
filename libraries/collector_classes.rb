@@ -233,7 +233,7 @@ class Collector
 
     def send_report
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
-      req.body = blob.to_json
+      req.body = @blob.to_json
       Chef::Log.info "Report to: #{@url}"
 
       opts = { use_ssl: @url.scheme == 'https',
