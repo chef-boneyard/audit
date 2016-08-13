@@ -39,6 +39,7 @@ class ComplianceReport < Chef::Resource
       # retrieve access token if a refresh token is set
       access_token = token
       access_token = retrieve_access_token unless refresh_token.nil?
+      raise_if_unreachable = run_context.node.audit.raise_if_unreachable if run_context.node.audit
 
       case collector
       when 'chef-visibility'
@@ -46,7 +47,7 @@ class ComplianceReport < Chef::Resource
       when 'chef-compliance'
         if access_token && server
           url = construct_url(server, ::File.join('/owners', o, 'inspec'))
-          Collector::ChefCompliance.new(url, blob, token).send_report
+          Collector::ChefCompliance.new(url, blob, token, raise_if_unreachable).send_report
         else
           Chef::Log.warn "'server' and 'token' properties required by inspec report collector '#{collector}'. Skipping..."
         end

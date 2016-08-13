@@ -225,10 +225,11 @@ class Collector
     @url = nil
     @blob = nil
 
-    def initialize(url, blob, token)
+    def initialize(url, blob, token, raise_if_unreachable)
       @url = url
       @blob = blob
       @token = token
+      @raise_if_unreachable = raise_if_unreachable
     end
 
     def send_report
