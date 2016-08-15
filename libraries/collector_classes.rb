@@ -225,15 +225,16 @@ class Collector
     @url = nil
     @blob = nil
 
-    def initialize(url, blob, token)
+    def initialize(url, blob, token, raise_if_unreachable)
       @url = url
       @blob = blob
       @token = token
+      @raise_if_unreachable = raise_if_unreachable
     end
 
     def send_report
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
-      req.body = blob.to_json
+      req.body = @blob.to_json
       Chef::Log.info "Report to: #{@url}"
 
       opts = { use_ssl: @url.scheme == 'https',

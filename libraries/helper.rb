@@ -30,7 +30,7 @@ module ComplianceHelpers
     end
     msg = 'Could not fetch the profile. Verify the authentication (e.g. token) is set properly'
     Chef::Log.error msg
-    fail msg if run_context.node.audit.raise_if_unreachable
+    fail msg if @raise_if_unreachable
   end
 
   #rubocop:disable all
