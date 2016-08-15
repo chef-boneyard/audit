@@ -18,6 +18,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
   property :port, Integer
   property :token, [String, nil]
   property :refresh_token, [String, nil]
+  property :insecure, [TrueClass, FalseClass], default: false
   property :inspec_version, String, default: 'latest'
   property :formatter, ['json', 'json-min'], default: 'json-min'
   property :quiet, [TrueClass, FalseClass], default: true
@@ -44,6 +45,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       # load the compliance api plugin
       require 'bundles/inspec-compliance/api'
+      require 'bundles/inspec-compliance/http'
 
       check_inspec
     end
@@ -62,7 +64,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
 
       # retrieve access token if a refresh token is set
       access_token = token
-      access_token = retrieve_access_token unless refresh_token.nil?
+      access_token = retrieve_access_token(server, refresh_token, insecure) unless refresh_token.nil?
 
       if access_token # go direct
         reqpath ="owners/#{o}/compliance/#{p}/tar"
@@ -77,7 +79,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
         }
         Net::HTTP.start(url.host, url.port, opts) do |http|
           resp = with_http_rescue do
-            http.get(url.path, 'Authorization' => "Bearer #{token}")
+            http.get(url.path, 'Authorization' => "Bearer #{access_token}")
           end
           tf.write(resp.body)
         end

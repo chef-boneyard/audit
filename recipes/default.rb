@@ -17,15 +17,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# These two attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
-token = node['audit']['token']
-server = node['audit']['server']
 report_collector = node['audit']['collector']
+
+# These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
+server = node['audit']['server']
+token = node['audit']['token']
+# Alternatively, specify a refresh_token and it will be used to retrieve an access token
+refresh_token = node['audit']['refresh_token']
+
 interval_seconds = 0 # always run this by default, unless interval is defined
 if !node['audit']['interval'].nil? && node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
+  Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
 end
-Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
 
 # set the inspec report format based on collector
 formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
@@ -59,9 +63,11 @@ node['audit']['profiles'].each do |owner_profile, value|
     formatter formatter
     server server
     token token
+    refresh_token refresh_token
+    insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
     path path unless path.nil?
     inspec_version node['audit']['inspec_version']
-    quiet node['audit']['quiet']
+    quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
     only_if { profile_overdue_to_run?(p, interval_seconds) }
     action [:fetch, :execute]
     notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :immediately
@@ -74,6 +80,8 @@ compliance_report 'chef-server' do
   server server
   collector report_collector
   token token
-  quiet node['audit']['quiet']
+  refresh_token refresh_token
+  insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
+  quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?
