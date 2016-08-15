@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.14.1](https://github.com/chef-cookbooks/audit/tree/v0.14.1) (2016-08-15)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.0...v0.14.1)
+
+**Merged pull requests:**
+
+- ChefCompliance collector fix [\#75](https://github.com/chef-cookbooks/audit/pull/75) ([alexpop](https://github.com/alexpop))
+- Update changelog generator task to be native rake task [\#74](https://github.com/chef-cookbooks/audit/pull/74) ([brentm5](https://github.com/brentm5))
+
 ## [v0.14.0](https://github.com/chef-cookbooks/audit/tree/v0.14.0) (2016-08-12)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.13.1...v0.14.0)
 
