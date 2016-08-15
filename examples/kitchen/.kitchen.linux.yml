@@ -21,6 +21,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
+        collector: 'chef-compliance'
         server: <%= ENV['COMPLIANCE_API'] %>
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         owner: admin
