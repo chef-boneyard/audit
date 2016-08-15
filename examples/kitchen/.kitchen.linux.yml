@@ -24,6 +24,8 @@ suites:
         collector: 'chef-compliance'
         server: <%= ENV['COMPLIANCE_API'] %>
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        refresh_token:  <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>
+        insecure: true
         owner: admin
         profiles:
           base/linux: true

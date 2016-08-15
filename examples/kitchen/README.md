@@ -7,6 +7,14 @@ export COMPLIANCE_API='https://compliance.test/api/'
 export COMPLIANCE_ACCESSTOKEN='eyJh..GTA'
 ```
 
+If you want to use the refresh token, use the following settings:
+
+```
+export COMPLIANCE_API='https://compliance.test/api'
+export COMPLIANCE_REFRESHTOKEN='40/YUP...mA==''
+```
+
+
 ## Converge Linux
 
 ```
