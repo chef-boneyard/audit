@@ -176,7 +176,8 @@ class Collector
         end
 
         begin
-          Chef::Log.debug("send_inspec_report: POSTing the following message to #{dc[:server_url]}: #{json_report}")
+          Chef::Log.info "Report to Chef Visibility: #{dc[:server_url]}"
+          Chef::Log.debug("POSTing the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
           return true
@@ -208,7 +209,7 @@ class Collector
     def send_report
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
-      Chef::Log.info "Report to: #{@url}"
+      Chef::Log.info "Report to Chef Server: #{@url}"
       rest = Chef::ServerAPI.new(@url, Chef::Config)
       with_http_rescue do
         rest.post(@url, @blob)
@@ -235,7 +236,7 @@ class Collector
     def send_report
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
       req.body = @blob.to_json
-      Chef::Log.info "Report to: #{@url}"
+      Chef::Log.info "Report to Chef Compliance: #{@url}"
 
       opts = { use_ssl: @url.scheme == 'https',
         verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
