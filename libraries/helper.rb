@@ -30,7 +30,7 @@ module ComplianceHelpers
     when /404/
       Chef::Log.error 'Object does not exist on remote server.'
     end
-    msg = 'Verify the authentication (e.g. token) is set properly'
+    msg = "Received HTTP error #{code}. Please verify the authentication (e.g. token) is set properly."
     Chef::Log.error msg
     fail msg if @raise_if_unreachable
   end

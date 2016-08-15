@@ -28,8 +28,8 @@ refresh_token = node['audit']['refresh_token']
 interval_seconds = 0 # always run this by default, unless interval is defined
 if !node['audit']['interval'].nil? && node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
+  Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
 end
-Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
 
 # set the inspec report format based on collector
 formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
