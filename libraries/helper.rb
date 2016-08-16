@@ -32,7 +32,7 @@ module ComplianceHelpers
     end
     msg = "Received HTTP error #{code}. Please verify the authentication (e.g. token) is set properly."
     Chef::Log.error msg
-    fail msg if @raise_if_unreachable
+    raise msg if @raise_if_unreachable
   end
 
   #rubocop:disable all

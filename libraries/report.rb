@@ -64,7 +64,7 @@ class ComplianceReport < Chef::Resource
         Chef::Log.warn "#{collector} is not a supported inspec report collector"
       end
 
-      fail "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && node['audit']['fail_if_any_audits_failed']
+      raise "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && node['audit']['fail_if_any_audits_failed']
     end
   end
 
