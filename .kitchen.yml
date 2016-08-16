@@ -1,7 +1,6 @@
 ---
 driver:
   name: dokken
-  chef_version: 12.7.2
   privileged: true # because Docker and SystemD/Upstart
 
 transport:
