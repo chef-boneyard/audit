@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.14.2](https://github.com/chef-cookbooks/audit/tree/v0.14.2) (2016-08-16)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.1...v0.14.2)
+
+**Closed issues:**
+
+- Changelog documentation Diff Link error [\#66](https://github.com/chef-cookbooks/audit/issues/66)
+- we not use inspec progress formatter [\#11](https://github.com/chef-cookbooks/audit/issues/11)
+
+**Merged pull requests:**
+
+- Fix compliance direct communitcation [\#80](https://github.com/chef-cookbooks/audit/pull/80) ([chris-rock](https://github.com/chris-rock))
+- restrict travis branch testing to master [\#79](https://github.com/chef-cookbooks/audit/pull/79) ([chris-rock](https://github.com/chris-rock))
+- use new collector attribute in examples [\#78](https://github.com/chef-cookbooks/audit/pull/78) ([chris-rock](https://github.com/chris-rock))
+- improve info logging to see which reporter is used [\#77](https://github.com/chef-cookbooks/audit/pull/77) ([chris-rock](https://github.com/chris-rock))
+- update metadata.rb [\#76](https://github.com/chef-cookbooks/audit/pull/76) ([chris-rock](https://github.com/chris-rock))
+
 ## [v0.14.1](https://github.com/chef-cookbooks/audit/tree/v0.14.1) (2016-08-15)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.0...v0.14.1)
 
