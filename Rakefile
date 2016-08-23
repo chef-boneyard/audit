@@ -1,48 +1,71 @@
 #!/usr/bin/env rake
 
-# Import other external rake tasks
-Dir.glob('tasks/*.rake').each { |r| import r }
+# Style tests. cookstyle (rubocop) and Foodcritic
+namespace :style do
+  begin
+    require 'cookstyle'
+    require 'rubocop/rake_task'
 
-require 'foodcritic'
-require 'rake/clean'
-require 'rspec/core/rake_task'
-require 'rubocop/rake_task'
+    desc 'Run Ruby style checks'
+    RuboCop::RakeTask.new(:ruby)
+  rescue LoadError => e
+    puts ">>> Gem load error: #{e}, omitting style:ruby" unless ENV['CI']
+  end
 
-CLEAN.include %w(.kitchen/ coverage/ doc/)
-CLOBBER.include %w(Berksfile.lock Gemfile.lock .yardoc/)
+  begin
+    require 'foodcritic'
 
-# Default tasks to run when executing `rake`
-task default: %w(lint)
-
-# Style tests. Rubocop and Foodcritic
-namespace :lint do
-  desc 'Run Ruby style checks'
-  RuboCop::RakeTask.new(:ruby)
-
-  desc 'Run Chef style checks'
-  FoodCritic::Rake::LintTask.new(:chef) do |t|
-    t.options = { fail_tags: ['any'] }
+    desc 'Run Chef style checks'
+    FoodCritic::Rake::LintTask.new(:chef) do |t|
+      t.options = {
+        fail_tags: ['any'],
+        progress: true
+      }
+    end
+  rescue LoadError
+    puts ">>> Gem load error: #{e}, omitting style:chef" unless ENV['CI']
   end
 end
 
 desc 'Run all style checks'
-task lint: ['lint:chef', 'lint:ruby']
+task style: ['style:chef', 'style:ruby']
 
-# Rspec and ChefSpec
-desc 'Run ChefSpec examples'
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.verbose = false
+# ChefSpec
+begin
+  require 'rspec/core/rake_task'
+
+  desc 'Run ChefSpec examples'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError => e
+  puts ">>> Gem load error: #{e}, omitting spec" unless ENV['CI']
 end
 
-desc 'Find notes in code'
-task :notes do
-  puts `egrep --exclude=Rakefile --exclude=*.log -n -r -i '(TODO|FIXME|OPTIMIZE)' .`
-end
+# Integration tests. Kitchen.ci
+namespace :integration do
+  begin
+    require 'kitchen/rake_tasks'
 
-namespace :test do
-  task :integration do
-    concurrency = ENV['CONCURRENCY'] || 1
-    path = File.join(File.dirname(__FILE__), 'test', 'integration')
-    sh('sh', '-c', "bundle exec kitchen test -c #{concurrency}")
+    desc 'Run kitchen integration tests'
+    Kitchen::RakeTasks.new
+  rescue LoadError => e
+    puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
+  rescue Kitchen::UserError => e
+    puts ">>> Test Kitchen error: #{e}" unless ENV['CI']
+  rescue Kitchen::UserError => e
+    puts ">>> Test Kitchen error: #{e}" unless ENV['CI']
   end
 end
+
+namespace :supermarket do
+  begin
+    require 'stove/rake_task'
+
+    desc 'Publish cookbook to Supermarket with Stove'
+    Stove::RakeTask.new
+  rescue LoadError => e
+    puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
+  end
+end
+
+# Default
+task default: %w(style spec)

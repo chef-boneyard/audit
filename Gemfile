@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'chef', '>= 12.0'
+gem 'chef', '>= 12.5.1'
 
 group :style do
-  gem 'foodcritic', '~> 6.0'
-  gem 'rubocop', '~> 0.36.0'
+  gem 'foodcritic', '~> 7.0'
+  gem 'cookstyle'
 end
 
 group :test do

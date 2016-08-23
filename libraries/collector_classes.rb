@@ -6,7 +6,7 @@ class Collector
   #
   # Used to send inspec reports to Chef Visibility via the data_collector service
   #
-  class ChefVisibility # rubocop:disable Metrics/ClassLength
+  class ChefVisibility
     @entity_uuid = nil
     @run_id = nil
     @blob = []
@@ -111,7 +111,7 @@ class Collector
     end
 
     # Return a json string containing the inspec report to be sent to the data_collector
-    def enriched_report # rubocop:disable Metrics/AbcSize
+    def enriched_report
       return nil unless @blob.is_a?(Hash) && @blob[:reports].is_a?(Hash)
       final_report = {}
       node_name = @blob[:node] # ~FC001, ~FC019, ~FC039
@@ -152,7 +152,7 @@ class Collector
     end
 
     # Method used in order to send the inspec report to the data_collector server
-    def send_report # rubocop:disable PerceivedComplexity, Metrics/CyclomaticComplexity
+    def send_report
       unless @entity_uuid && @run_id
         Chef::Log.warn "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report..."
         return false

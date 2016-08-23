@@ -6,7 +6,7 @@ require 'fileutils'
 
 # `compliance_profile` custom resource to collect and run Chef Compliance
 # profiles
-class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
+class ComplianceProfile < Chef::Resource
   include ComplianceHelpers
   use_automatic_resource_name
 
@@ -133,7 +133,7 @@ class ComplianceProfile < Chef::Resource # rubocop:disable Metrics/ClassLength
       supported_schemes = %w{http https supermarket compliance chefserver}
       if !supported_schemes.include?(URI(path).scheme) && !::File.exist?(path)
         Chef::Log.warn "No such path! Skipping: #{path}"
-        fail "Aborting since profile is not present here: #{path}" if run_context.node['audit']['fail_if_not_present']
+        raise "Aborting since profile is not present here: #{path}" if run_context.node['audit']['fail_if_not_present']
         return
       end
 
