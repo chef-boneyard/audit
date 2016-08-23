@@ -17,29 +17,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# ensure inspec is available
+include_recipe 'audit::_inspec'
+
+# read selected reporter
 report_collector = node['audit']['collector']
 
 # These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 server = node['audit']['server']
-token = node['audit']['token']
-# Alternatively, specify a refresh_token and it will be used to retrieve an access token
-refresh_token = node['audit']['refresh_token']
 
+ruby_block 'exchange_refresh_token' do
+  block do
+    # Alternatively, specify a refresh_token and it will be used to retrieve an access token
+    refresh_token = node['audit']['refresh_token']
+    if report_collector == 'chef-compliance' && !refresh_token.nil?
+      token = retrieve_access_token(server, refresh_token, node['audit']['insecure'])
+      node.override['audit']['token'] = token
+    end
+  end
+  action :run
+end
+
+# set the inspec report format based on collector
+formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
+
+# handle intervals
 interval_seconds = 0 # always run this by default, unless interval is defined
 if !node['audit']['interval'].nil? && node['audit']['interval']['enabled']
   interval_seconds = node['audit']['interval']['time'] * 60 # seconds in interval
   Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
 end
 
-# set the inspec report format based on collector
-formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
-
+# ensure profile cache directory is available
 compliance_cache_directory = ::File.join(Chef::Config[:file_cache_path], 'compliance')
 directory compliance_cache_directory do
   action :create
 end
 
-# iterate over all selected profiles
+# iterate over all selected profiles and download them
 node['audit']['profiles'].each do |owner_profile, value|
   case value
   when Hash
@@ -62,11 +77,9 @@ node['audit']['profiles'].each do |owner_profile, value|
     owner o
     formatter formatter
     server server
-    token token
-    refresh_token refresh_token
+    token lazy { node['audit']['token'] }
     insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
     path path unless path.nil?
-    inspec_version node['audit']['inspec_version']
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
     only_if { profile_overdue_to_run?(p, interval_seconds) }
     action [:fetch, :execute]
@@ -75,12 +88,11 @@ node['audit']['profiles'].each do |owner_profile, value|
 end
 
 # report the results
-compliance_report 'chef-server' do
+compliance_report report_collector do
   owner node['audit']['owner']
   server server
   collector report_collector
-  token token
-  refresh_token refresh_token
+  token lazy { node['audit']['token'] }
   insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
