@@ -27,6 +27,10 @@ suites:
         refresh_token:  <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>
         insecure: true
         owner: admin
+        # fail converge if downloaded profile is not present
+        fail_if_not_present: true
+        # fail converge after posting report if any audits have failed
+        fail_if_any_audits_failed: false
         profiles:
           base/linux: true
           brewinc/ssh-hardening:
