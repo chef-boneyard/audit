@@ -1,5 +1,8 @@
 #!/usr/bin/env rake
 
+# Import other external rake tasks
+Dir.glob('tasks/*.rake').each { |r| import r }
+
 # Style tests. cookstyle (rubocop) and Foodcritic
 namespace :style do
   begin

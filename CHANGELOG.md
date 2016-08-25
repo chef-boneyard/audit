@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.14.3](https://github.com/chef-cookbooks/audit/tree/v0.14.3) (2016-08-26)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.2...v0.14.3)
+
+**Merged pull requests:**
+
+- improve compliance refresh token handling [\#85](https://github.com/chef-cookbooks/audit/pull/85) ([chris-rock](https://github.com/chris-rock))
+- Minor fixes and changes [\#84](https://github.com/chef-cookbooks/audit/pull/84) ([tas50](https://github.com/tas50))
+
 ## [v0.14.2](https://github.com/chef-cookbooks/audit/tree/v0.14.2) (2016-08-16)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.1...v0.14.2)
 
