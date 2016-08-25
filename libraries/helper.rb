@@ -45,15 +45,9 @@ module ComplianceHelpers
       end
       return response
     rescue Net::HTTPServerException => e
+      Chef::Log.error e
       handle_http_error_code(e.response.code)
     end
-  end
-
-  # exchanges a refresh token into an access token
-  def retrieve_access_token(server_url, refresh_token, insecure)
-    _success, _msg, access_token = Compliance::API.post_refresh_token(server_url, refresh_token, insecure)
-    # TODO we return always the access token, without proper error handling
-    return access_token
   end
 
   # Returns the uuid for the current converge

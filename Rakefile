@@ -29,6 +29,7 @@ end
 
 desc 'Run all style checks'
 task style: ['style:chef', 'style:ruby']
+task lint: ['style']
 
 # ChefSpec
 begin

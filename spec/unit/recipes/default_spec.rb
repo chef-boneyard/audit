@@ -34,6 +34,7 @@ describe 'audit::default' do
   context 'When server and refresh_token are specified' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new do |node|
+        node.set['audit']['collector'] = 'chef-compliance'
         node.set['audit']['profiles'] = { 'admin/myprofile' => true }
         node.set['audit']['server'] = 'https://my.compliance.test/api'
         node.set['audit']['refresh_token'] = 'abcdefg'
@@ -44,12 +45,10 @@ describe 'audit::default' do
     it 'fetches and executes compliance_profile[myprofile]' do
       expect(chef_run).to fetch_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
-        refresh_token: 'abcdefg',
         insecure: true,
       )
       expect(chef_run).to execute_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
-        refresh_token: 'abcdefg',
         insecure: true,
       )
     end
@@ -74,13 +73,11 @@ describe 'audit::default' do
         owner: 'admin',
         server: nil,
         token: nil,
-        inspec_version: 'latest',
       )
       expect(chef_run).to execute_compliance_profile('myprofile').with(
         owner: 'admin',
         server: nil,
         token: nil,
-        inspec_version: 'latest',
         quiet: true,
       )
       expect(chef_run).to execute_compliance_report('chef-server').with(
