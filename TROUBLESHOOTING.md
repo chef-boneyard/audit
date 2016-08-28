@@ -33,3 +33,15 @@ Additionally, the chef_gate log will contain a similar message:
 2016-08-28_15:01:34.88702 [GIN] 2016/08/28 - 15:01:34 | 401 |   13.650403ms | 192.168.200.102 |   POST    /compliance/organizations/brewinc/inspec
 2016-08-28_15:01:34.88704 Error #01: Authentication failed. Please check your system's clock.
 ```
+
+**401 Token and Refresh Token Authentication**
+
+In the event of a malformed or unset token, the Chef Compliance server will log the token error:
+```
+==> /var/log/chef-compliance/core/current <==
+2016-08-28_20:41:46.17496 20:41:46.174 ERR => Token authentication: %!(EXTRA *errors.errorString=malformed JWS, only 1 segments)
+2016-08-28_20:41:46.17498 [GIN] 2016/08/28 - 20:41:46 | 401 |      53.824µs | 192.168.200.102 |   GET     /owners/base/compliance/linux/tar
+
+==> /var/log/chef-compliance/nginx/compliance.access.log <==
+192.168.200.102 - - [28/Aug/2016:21:23:46 +0000] "GET /api/owners/base/compliance/linux/tar HTTP/1.1" 401 0 "-" "Ruby"
+```
