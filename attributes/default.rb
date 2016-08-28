@@ -19,9 +19,10 @@
 # collector possible values: chef-server, chef-compliance, chef-visibility
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
-# server needed for the 'chef-compliance' and 'chef-server' collectors
+# server and token are only needed for the 'chef-compliance' collector
 default['audit']['server'] = nil
-# token needed for the 'chef-compliance' collector
+# choose between token and refresh_token
+# the token, needed for the 'chef-compliance' collector
 default['audit']['token'] = nil
 # refresh_token needed for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
