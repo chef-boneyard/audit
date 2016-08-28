@@ -273,6 +273,9 @@ You can enable the interval and set the interval time, along with your desired p
 
 ```
 
+## Troubleshooting
+
+Please refer to TROUBLESHOOTING.md.
 
 Please let us know if you have any [issues](https://github.com/chef-cookbooks/audit/issues), we are happy to help.
 
