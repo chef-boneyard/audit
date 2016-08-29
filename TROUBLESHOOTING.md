@@ -4,7 +4,7 @@
 
 **401, 403 Unauthorized - bad clock**
 
-Occasionally, the system date/time will drift between client and server.  If this drift is greate than a couple of minutes, the Chef Server will throw a 401 Aunauthorized and the request will not be forwarded to the Compliance server.
+Occasionally, the system date/time will drift between client and server.  If this drift is greater than a couple of minutes, the Chef Server will throw a 401 unauthorized and the request will not be forwarded to the Compliance server.
 
 On the Chef Server you can see this in the following logs:
 ```

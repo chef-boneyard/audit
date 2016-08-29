@@ -24,7 +24,7 @@ module ComplianceHelpers
   def handle_http_error_code(code)
     case code
     when /401|403/
-      Chef::Log.error 'auth issue: see audit cookbook TROUBLESHOOTING.md'
+      Chef::Log.error 'Auth issue: see audit cookbook TROUBLESHOOTING.md'
     when /404/
       Chef::Log.error 'Object does not exist on remote server.'
     end
