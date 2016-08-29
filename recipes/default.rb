@@ -33,6 +33,8 @@ ruby_block 'exchange_refresh_token' do
     if report_collector == 'chef-compliance' && !refresh_token.nil?
       token = retrieve_access_token(server, refresh_token, node['audit']['insecure'])
       node.override['audit']['token'] = token
+    else
+      Chef::Log.info("Token Exchange not necessary, using #{report_collector} audit.collector instead.")
     end
   end
   action :run
