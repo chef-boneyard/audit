@@ -23,14 +23,12 @@ module ComplianceHelpers
 
   def handle_http_error_code(code)
     case code
-    when /401/
-      Chef::Log.error 'Possible time/date issue on the client.'
-    when /403/
-      Chef::Log.error 'Possible offline Compliance Server or chef_gate auth issue.'
+    when /401|403/
+      Chef::Log.error 'Auth issue: see audit cookbook TROUBLESHOOTING.md'
     when /404/
       Chef::Log.error 'Object does not exist on remote server.'
     end
-    msg = "Received HTTP error #{code}. Please verify the authentication (e.g. token) is set properly."
+    msg = "Received HTTP error #{code}"
     Chef::Log.error msg
     raise msg if @raise_if_unreachable
   end
