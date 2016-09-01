@@ -60,7 +60,7 @@ class Audit
             url = construct_url(server, reqpath)
             Chef::Log.info "Load profile from: #{url}"
 
-            tf = Tempfile.new('foo', Dir.tmpdir, :binmode => true)
+            tf = Tempfile.new('foo', Dir.tmpdir, binmode: true)
 
             opts = { use_ssl: url.scheme == 'https',
                      verify_mode: OpenSSL::SSL::VERIFY_NONE, # FIXME
