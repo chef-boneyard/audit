@@ -19,15 +19,16 @@
 # collector possible values: chef-server, chef-compliance, chef-visibility
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
-# server and token are only needed for the 'chef-compliance' collector
+
+# Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
+# server format example: 'https://comp-server.example.com/api'
 default['audit']['server'] = nil
-# choose between token and refresh_token
-# the token, needed for the 'chef-compliance' collector
-default['audit']['token'] = nil
-# refresh_token needed for the 'chef-compliance' collector
+# choose between refresh_token or token(access_token). Needed only for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
-# if self-signed certificates are used
+default['audit']['token'] = nil
+# set this insecure attribute to true if the compliance server uses self-signed ssl certificates
 default['audit']['insecure'] = nil
+
 # owner needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['owner'] = nil
 default['audit']['quiet'] = nil
