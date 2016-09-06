@@ -1,6 +1,16 @@
 # Change Log
 
-## [v0.14.3](https://github.com/chef-cookbooks/audit/tree/v0.14.3) (2016-08-26)
+## [v0.14.4](https://github.com/chef-cookbooks/audit/tree/v0.14.4) (2016-09-06)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.3...v0.14.4)
+
+**Merged pull requests:**
+
+- Improve logging and comments for attributes [\#89](https://github.com/chef-cookbooks/audit/pull/89) ([alexpop](https://github.com/alexpop))
+- fix Tempfile.new [\#88](https://github.com/chef-cookbooks/audit/pull/88) ([jeremymv2](https://github.com/jeremymv2))
+- making Auth - bad clock errors clearer [\#87](https://github.com/chef-cookbooks/audit/pull/87) ([jeremymv2](https://github.com/jeremymv2))
+- adding clarifications [\#86](https://github.com/chef-cookbooks/audit/pull/86) ([jeremymv2](https://github.com/jeremymv2))
+
+## [v0.14.3](https://github.com/chef-cookbooks/audit/tree/v0.14.3) (2016-08-25)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.2...v0.14.3)
 
 **Merged pull requests:**
