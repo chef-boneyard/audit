@@ -141,6 +141,22 @@ class Audit
         end
       end
 
+      action :upload do
+        converge_by 'upload compliance profile' do
+          fail 'unable to determine path to compressed profile archive' if path.nil?
+          o, p = normalize_owner_profile
+          node.run_state['compliance'] ||= {}
+
+          if node.run_state['compliance']['access_token']
+            reqpath ="owners/#{o}/compliance/#{p}/tar"
+            url = construct_url(server, reqpath)
+            Chef::Log.info "Upload compliance profile #{o}/#{p} to: #{url}"
+            res = Compliance::HTTP.post_file(url.to_s, node.run_state['compliance']['access_token'], path, insecure)
+            Chef::Log.info "Got: #{res.code} #{res.message}"
+          end
+        end
+      end
+
       def normalize_owner_profile
         if profile.include?('/')
           profile.split('/').last(2)
