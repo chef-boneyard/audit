@@ -12,10 +12,10 @@ class Audit
       property :token, [String, nil], required: true
       property :insecure, [TrueClass, FalseClass], default: false
 
-      default_action :exchange
+      default_action :create
 
-      action :exchange do
-        converge_by 'exchange compliance token if necessary' do
+      action :create do
+        converge_by 'compliance server auth token setup' do
           # stash token in node.run_state to pass between resources
           node.run_state['compliance'] ||= {}
           if node['audit']['refresh_token']

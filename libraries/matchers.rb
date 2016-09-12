@@ -5,6 +5,10 @@ if defined?(ChefSpec)
 
   ChefSpec.define_matcher :compliance_profile
 
+  def create_compliance_token(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:compliance_token, :create, resource_name)
+  end
+
   def fetch_compliance_profile(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:compliance_profile, :fetch, resource_name)
   end
