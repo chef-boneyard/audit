@@ -142,7 +142,7 @@ class Audit
 
       action :upload do
         converge_by 'upload compliance profile' do
-          fail 'unable to determine path to compressed profile archive' if path.nil?
+          raise 'unable to determine path to compressed profile archive' if path.nil?
           o, p = normalize_owner_profile
           node.run_state['compliance'] ||= {}
 
