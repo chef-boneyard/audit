@@ -12,6 +12,7 @@ class Audit
       # to use a chef-compliance server that is used with chef-server integration
       property :server, [String, URI, nil]
       property :port, Integer
+      property :insecure, [TrueClass, FalseClass], default: false
       property :quiet, [TrueClass, FalseClass], default: true
       property :collector, ['chef-visibility', 'chef-compliance', 'chef-server'], default: 'chef-server'
 

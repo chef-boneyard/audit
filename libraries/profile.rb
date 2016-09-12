@@ -18,6 +18,7 @@ class Audit
       # to use a chef-compliance server that is used with chef-server integration
       property :server, [String, URI, nil]
       property :port, Integer
+      property :insecure, [TrueClass, FalseClass], default: false
       property :formatter, ['json', 'json-min'], default: 'json-min'
       property :quiet, [TrueClass, FalseClass], default: true
       # TODO(sr) it might be nice to default to settings from attributes
