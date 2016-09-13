@@ -34,22 +34,28 @@ describe 'audit::default' do
   context 'When server and refresh_token are specified' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new do |node|
-        node.set['audit']['collector'] = 'chef-compliance'
-        node.set['audit']['profiles'] = { 'admin/myprofile' => true }
-        node.set['audit']['server'] = 'https://my.compliance.test/api'
-        node.set['audit']['refresh_token'] = 'abcdefg'
-        node.set['audit']['insecure'] = true
+        node.override['audit']['collector'] = 'chef-compliance'
+        node.override['audit']['profiles'] = { 'admin/myprofile' => true }
+        node.override['audit']['server'] = 'https://my.compliance.test/api'
+        node.override['audit']['refresh_token'] = 'abcdefg'
+        node.override['audit']['insecure'] = true
       end.converge(described_recipe)
+    end
+
+    it 'creates compliance_token resource' do
+      expect(chef_run).to create_compliance_token('Compliance Token').with(
+        server: 'https://my.compliance.test/api',
+        insecure: true,
+        token: 'abcdefg'
+      )
     end
 
     it 'fetches and executes compliance_profile[myprofile]' do
       expect(chef_run).to fetch_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
-        insecure: true,
       )
       expect(chef_run).to execute_compliance_profile('myprofile').with(
         server: 'https://my.compliance.test/api',
-        insecure: true,
       )
     end
 

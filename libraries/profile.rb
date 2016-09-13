@@ -18,7 +18,6 @@ class Audit
       # to use a chef-compliance server that is used with chef-server integration
       property :server, [String, URI, nil]
       property :port, Integer
-      property :token, [String, nil]
       property :insecure, [TrueClass, FalseClass], default: false
       property :formatter, ['json', 'json-min'], default: 'json-min'
       property :quiet, [TrueClass, FalseClass], default: true
@@ -53,9 +52,9 @@ class Audit
           Chef::Log.info "Fetch compliance profile #{o}/#{p}"
 
           path = tar_path
-          access_token = token
+          node.run_state['compliance'] ||= {}
 
-          if access_token # go direct
+          if node.run_state['compliance']['access_token'] # go direct
             reqpath ="owners/#{o}/compliance/#{p}/tar"
             url = construct_url(server, reqpath)
             Chef::Log.info "Load profile from: #{url}"
@@ -67,7 +66,7 @@ class Audit
             }
             Net::HTTP.start(url.host, url.port, opts) do |http|
               resp = with_http_rescue do
-                http.get(url.path, 'Authorization' => "Bearer #{access_token}")
+                http.get(url.path, 'Authorization' => "Bearer #{node.run_state['compliance']['access_token']}")
               end
               tf.write(resp.body)
             end

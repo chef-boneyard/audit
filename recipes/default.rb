@@ -26,19 +26,12 @@ report_collector = node['audit']['collector']
 # These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
 server = node['audit']['server']
 
-ruby_block 'exchange_refresh_token' do
-  block do
-    # Alternatively, specify a refresh_token and it will be used to retrieve an access token
-    refresh_token = node['audit']['refresh_token']
-    if report_collector == 'chef-compliance' && !refresh_token.nil?
-      token = retrieve_access_token(server, refresh_token, node['audit']['insecure'])
-      node.override['audit']['token'] = token
-    else
-      Chef::Log.info("Token Exchange not necessary, using #{report_collector} audit.collector instead.")
-    end
-  end
-  action :run
-end
+# only needed when fetching / reporting directly to Compliance Server
+compliance_token 'Compliance Token' do
+  server server
+  token node['audit']['refresh_token'] || node['audit']['token']
+  insecure node['audit']['insecure']
+end unless server.nil?
 
 # set the inspec report format based on collector
 formatter = report_collector == 'chef-visibility' ? 'json' : 'json-min'
@@ -79,8 +72,6 @@ node['audit']['profiles'].each do |owner_profile, value|
     owner o
     formatter formatter
     server server
-    token lazy { node['audit']['token'] }
-    insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
     path path unless path.nil?
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
     only_if { profile_overdue_to_run?(p, interval_seconds) }
@@ -94,8 +85,6 @@ compliance_report report_collector do
   owner node['audit']['owner']
   server server
   collector report_collector
-  token lazy { node['audit']['token'] }
-  insecure node['audit']['insecure'] unless node['audit']['insecure'].nil?
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
   action :execute
 end if node['audit']['profiles'].values.any?

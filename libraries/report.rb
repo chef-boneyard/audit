@@ -12,7 +12,6 @@ class Audit
       # to use a chef-compliance server that is used with chef-server integration
       property :server, [String, URI, nil]
       property :port, Integer
-      property :token, [String, nil]
       property :insecure, [TrueClass, FalseClass], default: false
       property :quiet, [TrueClass, FalseClass], default: true
       property :collector, ['chef-visibility', 'chef-compliance', 'chef-server'], default: 'chef-server'
@@ -38,17 +37,16 @@ class Audit
           # resolve owner
           o = return_or_guess_owner
 
-          # retrieve access token if a refresh token is set
-          access_token = token
-          raise_if_unreachable = run_context.node.audit.raise_if_unreachable if run_context.node.audit
+          raise_if_unreachable = run_context.node['audit']['raise_if_unreachable'] if run_context.node['audit']
 
           case collector
           when 'chef-visibility'
             Collector::ChefVisibility.new(entity_uuid, run_id, blob).send_report
           when 'chef-compliance'
-            if access_token && server
+            node.run_state['compliance'] ||= {}
+            if node.run_state['compliance']['access_token'] && server
               url = construct_url(server, ::File.join('/owners', o, 'inspec'))
-              Collector::ChefCompliance.new(url, blob, token, raise_if_unreachable).send_report
+              Collector::ChefCompliance.new(url, blob, node.run_state['compliance']['access_token'], raise_if_unreachable).send_report
             else
               Chef::Log.warn "'server' and 'token' properties required by inspec report collector '#{collector}'. Skipping..."
             end
