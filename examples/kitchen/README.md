@@ -14,6 +14,12 @@ export COMPLIANCE_API='https://compliance.test/api'
 export COMPLIANCE_REFRESHTOKEN='40/YUP...mA==''
 ```
 
+For Windows devs, you can set these environment variables in PowerShell (recommended over user/system variables):
+```
+$env:COMPLIANCE_API = "https://compliance.test/api/"
+$env:COMPLIANCE_ACCESSTOKEN = "eyJh..GTA"
+$env:COMPLIANCE_REFRESHTOKEN = "11/z..=="
+```
 
 ## Converge Linux
 
@@ -65,3 +71,7 @@ $ KITCHEN_YAML=.kitchen.win.yml kitchen destroy
 Now, the node reports are available in Chef Compliance:
 
 ![Chef Compliance Reports](cc_report.png "Chef Compliance Reports")
+
+If, configured, the reports are now in Chef Visibility instead:
+
+![Chef Visibility Reports](visib_reporting.png "Chef Visibility Reports")
