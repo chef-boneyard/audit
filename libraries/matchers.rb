@@ -13,6 +13,10 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:compliance_profile, :fetch, resource_name)
   end
 
+  def upload_compliance_profile(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:compliance_profile, :upload, resource_name)
+  end
+
   def execute_compliance_profile(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:compliance_profile, :execute, resource_name)
   end
