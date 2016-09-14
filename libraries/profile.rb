@@ -177,6 +177,8 @@ class Audit
                 Chef::Log.error "Error during profile upload: #{msg}"
               end
             end
+          else
+            Chef::Log.error 'unable to read access_token, aborting upload.'
           end
         end
       end
