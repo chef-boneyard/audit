@@ -190,6 +190,26 @@ audit: {
 }
 ```
 
+## Profile Upload to Compliance Server
+
+In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
+inspec compliance profile to the Compliance Server.
+
+Simply include the `upload` recipe in the run_list, with attribute overrides for the `audit` hash like so:
+
+```ruby
+audit: {
+  server: 'https://compliance-server.test/api'
+  collector: 'chef-compliance',
+  refresh_token: '21/XMEK3...',
+  profiles: {
+    'admin/ssh2': {
+      'source': '/some/base_ssh.tar.gz'
+    },
+  }
+}
+```
+
 ## Relationship with Chef Audit Mode
 
 The following tables compares the [Chef Client audit mode](https://docs.chef.io/ctl_chef_client.html#run-in-audit-mode) with this `audit` cookbook.
