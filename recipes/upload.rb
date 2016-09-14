@@ -49,6 +49,7 @@ node['audit']['profiles'].each do |owner_profile, value|
     server server
     path path
     insecure node['audit']['insecure']
+    overwrite node['audit']['overwrite']
     action :upload
   end
 end

@@ -21,6 +21,7 @@ class Audit
       property :insecure, [TrueClass, FalseClass], default: false
       property :formatter, ['json', 'json-min'], default: 'json-min'
       property :quiet, [TrueClass, FalseClass], default: true
+      property :overwrite, [TrueClass, FalseClass], default: true
       # TODO(sr) it might be nice to default to settings from attributes
 
       # alternative to (owner, profile)-addressing for profiles,
@@ -141,8 +142,19 @@ class Audit
       end
 
       action :upload do
+        converge_by 'profile validation checks' do
+          raise 'Path to profile archive not specified' if path.nil?
+          raise "Profile archive file #{path} does not exist." unless ::File.exist?(path)
+          profile = Inspec::Profile.for_target(path, {})
+          result = profile.check
+          unless result[:summary][:valid]
+            raise 'Profile check failed. Please fix the profile before upload.'
+          else
+            Chef::Log.info 'Profile is valid'
+          end
+        end
+
         converge_by 'upload compliance profile' do
-          raise 'unable to determine path to compressed profile archive' if path.nil?
           o, p = normalize_owner_profile
           node.run_state['compliance'] ||= {}
 
@@ -150,8 +162,21 @@ class Audit
             reqpath ="owners/#{o}/compliance/#{p}/tar"
             url = construct_url(server, reqpath)
             Chef::Log.info "Upload compliance profile #{o}/#{p} to: #{url}"
-            res = Compliance::HTTP.post_file(url.to_s, node.run_state['compliance']['access_token'], path, insecure)
-            Chef::Log.info "Got: #{res.code} #{res.message}"
+            config = Compliance::Configuration.new
+            config['token'] = node.run_state['compliance']['access_token']
+            config['insecure'] = insecure
+            config['server'] = server
+            config['version'] = Compliance::API.version(server, insecure)
+            if Compliance::API.exist?(config, "#{o}/#{p}") && !overwrite
+              raise 'Profile exists on the server, use property `overwrite`. Skipping upload!'
+            else
+              success, msg = Compliance::API.upload(config, o, p, path)
+              if success
+                Chef::Log.info 'Successfully uploaded profile'
+              else
+                Chef::Log.error "Error during profile upload: #{msg}"
+              end
+            end
           end
         end
       end
