@@ -142,13 +142,19 @@ class Audit
       end
 
       action :upload do
-        converge_by 'profile validation checks' do
+        converge_by 'run profile validation checks' do
           raise 'Path to profile archive not specified' if path.nil?
           raise "Profile archive file #{path} does not exist." unless ::File.exist?(path)
           profile = Inspec::Profile.for_target(path, {})
+          error_count = 0
+          lambda { |msg|
+            error_count += 1
+            Chef::Log.error msg
+          }
           result = profile.check
+          Chef::Log.info result[:summary].inspect
           unless result[:summary][:valid]
-            raise 'Profile check failed. Please fix the profile before upload.'
+            raise 'Profile check failed'
           else
             Chef::Log.info 'Profile is valid'
           end
@@ -161,14 +167,14 @@ class Audit
           if node.run_state['compliance']['access_token']
             reqpath ="owners/#{o}/compliance/#{p}/tar"
             url = construct_url(server, reqpath)
-            Chef::Log.info "Upload compliance profile #{o}/#{p} to: #{url}"
+            Chef::Log.info "Upload from #{path} to: #{url}"
             config = Compliance::Configuration.new
             config['token'] = node.run_state['compliance']['access_token']
             config['insecure'] = insecure
             config['server'] = server
             config['version'] = Compliance::API.version(server, insecure)
             if Compliance::API.exist?(config, "#{o}/#{p}") && !overwrite
-              raise 'Profile exists on the server, use property `overwrite`. Skipping upload!'
+              raise 'Profile exists on the server, use property `overwrite`'
             else
               success, msg = Compliance::API.upload(config, o, p, path)
               if success
@@ -178,7 +184,7 @@ class Audit
               end
             end
           else
-            Chef::Log.error 'unable to read access_token, aborting upload.'
+            raise 'Unable to read access token, aborting upload'
           end
         end
       end
