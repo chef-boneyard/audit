@@ -153,11 +153,8 @@ class Audit
           }
           result = profile.check
           Chef::Log.info result[:summary].inspect
-          unless result[:summary][:valid]
-            raise 'Profile check failed'
-          else
-            Chef::Log.info 'Profile is valid'
-          end
+          raise 'Profile check failed' unless result[:summary][:valid]
+          Chef::Log.info 'Profile is valid'
         end
 
         converge_by 'upload compliance profile' do
