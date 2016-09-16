@@ -25,12 +25,14 @@ default['audit']['collector'] = 'chef-server'
 default['audit']['server'] = nil
 # choose between refresh_token or token(access_token). Needed only for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
+# the token(access_token) expires in 12h after creation
 default['audit']['token'] = nil
 # set this insecure attribute to true if the compliance server uses self-signed ssl certificates
 default['audit']['insecure'] = nil
 
 # owner needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['owner'] = nil
+
 default['audit']['quiet'] = nil
 default['audit']['profiles'] = {}
 
