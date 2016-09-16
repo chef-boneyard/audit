@@ -23,7 +23,7 @@ default['audit']['collector'] = 'chef-server'
 # Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
 # server format example: 'https://comp-server.example.com/api'
 default['audit']['server'] = nil
-# choose between refresh_token or token(access_token). Needed only for the 'chef-compliance' collector
+# choose between the permanent refresh_token or ephemeral token(access_token). Needed only for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
 # the token(access_token) expires in 12h after creation
 default['audit']['token'] = nil

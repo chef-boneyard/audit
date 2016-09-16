@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: config_winchefclient
+# Cookbook Name:: visibility_win
 # Recipe:: default
 
-include_recipe 'visibility_converge::chef_client_visibility'
+include_recipe 'visibility_win::chef_client_config'
