@@ -98,34 +98,36 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 ### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attribute in a JSON-based role or environment file like this:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attributes in a role or environment file like this:
 
 ```ruby
-audit = {
+"audit" => {
+  "collector" => "chef-server",
+  "owner" => "prod-org",
+  "inspec_version" => "0.35.0",
   "profiles" => {
     # org / profile name from Chef Compliance
-    'base/linux' => true,
+    "base/linux" => true,
     # supermarket url
-    'brewinc/ssh-hardening' => {
+    "brewinc/ssh-hardening" => {
       # location where inspec will fetch the profile from
-      'source' => 'supermarket://hardening/ssh-hardening',
-      'key' => 'value',
+      "source" => "supermarket://hardening/ssh-hardening"
     },
     # local Windows path
-    'brewinc/win2012_audit' => {
+    "brewinc/win2012_audit" => {
       # filesystem path
-      'source' => 'E:/profiles/win2012_audit',
+      "source" => "E:/profiles/win2012_audit"
     },
     # github url
-    'brewinc/tmp_compliance_profile' => {
-      'source' => 'https://github.com/nathenharvey/tmp_compliance_profile',
+    "brewinc/tmp_compliance_profile" => {
+      "source" => "https://github.com/nathenharvey/tmp_compliance_profile"
     },
     # disable profile
-    'brewinc/tmp_compliance_profile-master' => {
-      'source' => '/tmp/tmp_compliance_profile-master',
-      'disabled' => true,
-    },
-  },
+    "brewinc/tmp_compliance_profile-master" => {
+      "source" => "/tmp/tmp_compliance_profile-master",
+      "disabled" => true
+    }
+  }
 }
 ```
 
@@ -133,7 +135,7 @@ You can also configure in a policyfile like this:
 
 ```ruby
 default['audit'] = {
-  profiles: {
+  'profiles' => {
     'base/linux' => true,
     'base/ssh' => true
   }
@@ -142,34 +144,34 @@ default['audit'] = {
 
 #### Direct reporting to Chef Compliance
 
-If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server` and the `token` attribute.
+If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server` and the `refresh_token` attribute.
 
  * `collector` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
- * `token` - access token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
+ * `refresh_token` - refresh token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
+ * `insecure` - a `true` value will skip the SSL certificate verification when retrieving access token. Default value is `false`
 
 ```ruby
-audit: {
-  collector: 'chef-compliance',
-  server: 'https://compliance-fqdn/api',
-  token: 'eyJ........................YQ',
-  profiles: {
-    'base/windows'    => true,
-  },
+"audit": {
+  "collector": "chef-compliance",
+  "server": "https://compliance-fqdn/api",
+  "refresh_token": "5/4T...g==",
+  "profiles": {
+    "base/windows": true
+  }
 }
 ```
 
-It is also possible to use a `refresh_token` instead of an access token.
- * `insecure` - toggles use of https when retrieving access token. default value is `false`
+Instead of a refresh token, it is also possible to use a `token` that expires in 12h after creation .
 
 ```ruby
-audit: {
-  collector: 'chef-compliance',
-  server: 'https://compliance-fqdn/api',
-  refresh_token: '5/4T...g==',
-  profiles: {
-    'base/windows'    => true,
-  },
+"audit": {
+  "collector": "chef-compliance",
+  "server": "https://compliance-fqdn/api",
+  "token": "eyJ........................YQ",
+  "profiles": {
+    "base/windows": true
+  }
 }
 ```
 
@@ -180,11 +182,11 @@ If you want the audit cookbook to directly report to Chef Visibility, set the `c
 This method is sending the report to `data_collector.server_url`, defined in `client.rb`. It require `inspec` version `0.27.1` or greater.
 
 ```ruby
-audit: {
-  collector: 'chef-visibility',
-  profiles: {
-    'brewinc/tmp_compliance_profile' => {
-      'source' => 'https://github.com/nathenharvey/tmp_compliance_profile'
+"audit": {
+  "collector": "chef-visibility",
+  "profiles": {
+    "brewinc/tmp_compliance_profile": {
+      "source": "https://github.com/nathenharvey/tmp_compliance_profile"
     }
   }
 }

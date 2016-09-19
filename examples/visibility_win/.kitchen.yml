@@ -19,7 +19,7 @@ platforms:
     name: winrm
 
 suites:
-  - name: chef_client_visibility
+  - name: visibility_win
     run_list:
-      - recipe[config_winchefclient::chef_client_visibility]
+      - recipe[visibility_win::chef_client_config]
     attributes:

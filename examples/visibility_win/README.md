@@ -20,4 +20,4 @@ No custom.
 
 ## Usage
 For this example, you would add the following recipes to a node's run list:
-- `config_windowsserver::chef_client_visibility` - Add configuration to chef-client for Chef Visibility data ingest.
+- `visibility_win::chef_client_config` - Add configuration to chef-client for Chef Visibility data ingest.

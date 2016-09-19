@@ -15,7 +15,7 @@ This example cookbook demonstrates how you could wrap the audit cookbook with a 
 
 ### Cookbooks
 - `audit`
-- `config_winchefclient`
+- `visibility_win`
 
 ## Attributes
 There are no custom attributes for this cookbook.
@@ -23,4 +23,4 @@ There are no custom attributes for this cookbook.
 ## Usage
 Include `wrapper_audit::default` in a node's `run_list`.  This will also pull down the community audit cookbook, which is used to run Chef Compliance profiles.  These profiles will create a report and send it to Chef Compliance or Visibility, depending on your [`audit`][`collector`] setting.
 
-This cookbook also consumes the example cookbook `config_winchefclient`, which demonstrates how to setup chef-client to ingest Visibility data.
+This cookbook also consumes the example cookbook `visibility_win`, which demonstrates how to setup chef-client to ingest Visibility data.
