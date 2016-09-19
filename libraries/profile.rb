@@ -21,6 +21,7 @@ class Audit
       property :insecure, [TrueClass, FalseClass], default: false
       property :formatter, ['json', 'json-min'], default: 'json-min'
       property :quiet, [TrueClass, FalseClass], default: true
+      property :overwrite, [TrueClass, FalseClass], default: true
       # TODO(sr) it might be nice to default to settings from attributes
 
       # alternative to (owner, profile)-addressing for profiles,
@@ -136,6 +137,51 @@ class Audit
             content runner.report.to_json
             sensitive true
             backup false
+          end
+        end
+      end
+
+      action :upload do
+        converge_by 'run profile validation checks' do
+          raise 'Path to profile archive not specified' if path.nil?
+          raise "Profile archive file #{path} does not exist." unless ::File.exist?(path)
+          profile = Inspec::Profile.for_target(path, {})
+          error_count = 0
+          lambda { |msg|
+            error_count += 1
+            Chef::Log.error msg
+          }
+          result = profile.check
+          Chef::Log.info result[:summary].inspect
+          raise 'Profile check failed' unless result[:summary][:valid]
+          Chef::Log.info 'Profile is valid'
+        end
+
+        converge_by 'upload compliance profile' do
+          o, p = normalize_owner_profile
+          node.run_state['compliance'] ||= {}
+
+          if node.run_state['compliance']['access_token']
+            reqpath ="owners/#{o}/compliance/#{p}/tar"
+            url = construct_url(server, reqpath)
+            Chef::Log.info "Upload from #{path} to: #{url}"
+            config = Compliance::Configuration.new
+            config['token'] = node.run_state['compliance']['access_token']
+            config['insecure'] = insecure
+            config['server'] = server
+            config['version'] = Compliance::API.version(server, insecure)
+            if Compliance::API.exist?(config, "#{o}/#{p}") && !overwrite
+              raise 'Profile exists on the server, use property `overwrite`'
+            else
+              success, msg = Compliance::API.upload(config, o, p, path)
+              if success
+                Chef::Log.info 'Successfully uploaded profile'
+              else
+                Chef::Log.error "Error during profile upload: #{msg}"
+              end
+            end
+          else
+            raise 'Unable to read access token, aborting upload'
           end
         end
       end

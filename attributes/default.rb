@@ -56,3 +56,6 @@ default['audit']['interval']['time'] = 1440
 
 # quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
 default['audit']['quiet'] = true
+
+# overwrite existing profile in upload mode
+default['audit']['overwrite'] = true
