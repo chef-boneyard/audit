@@ -24,14 +24,8 @@ class Audit
       action :execute do
         converge_by "report compliance profiles' results" do
           reports, ownermap = compound_report(profiles)
-
           blob = node_info
           blob[:reports] = reports
-          total_failed = 0
-          blob[:reports].each do |k, _|
-            Chef::Log.info "Summary for #{k} #{blob[:reports][k]['summary'].to_json}" if quiet
-            total_failed += blob[:reports][k]['summary']['failure_count'].to_i
-          end
           blob[:profiles] = ownermap
 
           # resolve owner
@@ -61,8 +55,6 @@ class Audit
           else
             Chef::Log.warn "#{collector} is not a supported inspec report collector"
           end
-
-          raise "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && node['audit']['fail_if_any_audits_failed']
         end
       end
 

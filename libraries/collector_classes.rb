@@ -17,16 +17,6 @@ class Collector
       @blob = blob
     end
 
-    # Transforms this hash:
-    # {'a1'=>{'a2'=>'a3'},'b1'=>{'b2'=>'b3'}}
-    # in this array:
-    # [{'id'=>'a1','a2'=>'a3'},{'id'=>'b1','b2'=>'b3'}]
-    def hash_to_array(hash)
-      return unless hash.is_a?(Hash)
-      hash.each { |k, v| v['id'] = k }
-      hash.values
-    end
-
     # A control can have multiple tests. Returns 'passed' unless any
     # of the results has a status different than 'passed'
     def control_status(results)
@@ -90,6 +80,7 @@ class Collector
       return count unless profiles.is_a?(Array)
 
       profiles.each do |profile|
+        profile = profile[0]
         next unless profile && profile['controls'].is_a?(Array)
         profile['controls'].each do |control|
           count['total'] += 1
@@ -119,22 +110,14 @@ class Collector
       inspec_version = 'unknown'
       # strip the report to leave only the profiles
       final_report['profiles'] = @blob[:reports].map do |_name, content|
-        next unless content.is_a?(Hash) &&
-                    content['profiles'].is_a?(Hash) &&
-                    content['profiles'].values.is_a?(Array)
+        next unless content.is_a?(Hash)
         inspec_version = content['version']
-        total_duration += content['summary']['duration'] if content['summary'].is_a?(Hash)
-        content['profiles'].values.first
+        total_duration += content['statistics']['duration']
+        content['profiles']
       end
 
       # remove nil profiles if any
       final_report['profiles'].select! { |p| p }
-
-      # using hash_to_array to remove non-static keys
-      final_report['profiles'].each do |profile|
-        profile['controls'] = hash_to_array(profile['controls'])
-        profile['groups'] = hash_to_array(profile['groups'])
-      end
 
       # add some additional fields to ease report parsing
       final_report['event_type'] = 'inspec'
