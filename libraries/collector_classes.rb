@@ -80,6 +80,7 @@ class Collector
       return count unless profiles.is_a?(Array)
 
       profiles.each do |profile|
+        # profile comes in here as [{'controls'=>[{'results'=>[{}]}]}]
         profile = profile[0]
         next unless profile && profile['controls'].is_a?(Array)
         profile['controls'].each do |control|
@@ -141,6 +142,7 @@ class Collector
         return false
       end
       json_report = enriched_report
+
       unless json_report
         Chef::Log.warn 'Something went wrong, enriched_report can\'t be nil'
         return false
