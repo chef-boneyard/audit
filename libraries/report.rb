@@ -27,6 +27,19 @@ class Audit
           blob = node_info
           blob[:reports] = reports
           blob[:profiles] = ownermap
+          total_failed = reports.map do |_name, report|
+            report['profiles'].map do |profile|
+              profile['controls'].map do |control|
+                if control['results']
+                  control['results'].map do |result|
+                    result['status'] != 'passed' ? 1 : 0
+                  end
+                else
+                  0
+                end
+              end
+            end
+          end.flatten.reduce(:+)
 
           # resolve owner
           o = return_or_guess_owner
@@ -55,6 +68,8 @@ class Audit
           else
             Chef::Log.warn "#{collector} is not a supported inspec report collector"
           end
+
+          raise "#{total_failed} audits have failed.  Aborting chef-client run." if total_failed > 0 && node['audit']['fail_if_any_audits_failed']
         end
       end
 
