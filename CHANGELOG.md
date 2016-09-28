@@ -1,5 +1,23 @@
 # Change Log
 
+## [1.0.0](https://github.com/chef-cookbooks/audit/tree/1.0.0) (2016-09-28)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.4...1.0.0)
+
+**Closed issues:**
+
+- Update to InSpec 1.0 [\#98](https://github.com/chef-cookbooks/audit/issues/98)
+- Some tests against windows machines will fail with winrm unitialized constant errors [\#94](https://github.com/chef-cookbooks/audit/issues/94)
+- Gzip error executing on windows host [\#93](https://github.com/chef-cookbooks/audit/issues/93)
+
+**Merged pull requests:**
+
+- update to work with inspec 1.0 json format [\#99](https://github.com/chef-cookbooks/audit/pull/99) ([vjeffrey](https://github.com/vjeffrey))
+- Docs and examples improvements [\#97](https://github.com/chef-cookbooks/audit/pull/97) ([alexpop](https://github.com/alexpop))
+- Compliance profile upload [\#96](https://github.com/chef-cookbooks/audit/pull/96) ([jeremymv2](https://github.com/jeremymv2))
+- bump inspec version to 0.34.1 to fix issue \#94 [\#95](https://github.com/chef-cookbooks/audit/pull/95) ([thomascate](https://github.com/thomascate))
+- Compliance Token resource [\#91](https://github.com/chef-cookbooks/audit/pull/91) ([jeremymv2](https://github.com/jeremymv2))
+- Updated examples [\#83](https://github.com/chef-cookbooks/audit/pull/83) ([jwmathe](https://github.com/jwmathe))
+
 ## [v0.14.4](https://github.com/chef-cookbooks/audit/tree/v0.14.4) (2016-09-06)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.3...v0.14.4)
 
