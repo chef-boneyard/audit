@@ -27,19 +27,17 @@ class Audit
           blob = node_info
           blob[:reports] = reports
           blob[:profiles] = ownermap
-          total_failed = reports.map do |_name, report|
-            report['profiles'].map do |profile|
+
+          total_failed = reports.map do |_name, profile|
+            if !profile['controls'].empty?
               profile['controls'].map do |control|
-                if control['results']
-                  control['results'].map do |result|
-                    result['status'] != 'passed' ? 1 : 0
-                  end
-                else
-                  0
-                end
+                control['status'] != 'passed' ? 1 : 0
               end
+            else
+              0
             end
           end.flatten.reduce(:+)
+          Chef::Log.info "Total number of failed controls: #{total_failed}"
 
           # resolve owner
           o = return_or_guess_owner
