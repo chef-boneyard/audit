@@ -46,8 +46,8 @@ default['audit']['fail_if_not_present'] = false
 # fail converge after posting report if any audits have failed
 default['audit']['fail_if_any_audits_failed'] = false
 
-# inspec gem version to install(e.g. '0.22.1') or 'latest'
-default['audit']['inspec_version'] = '1.0.0'
+# inspec gem version to install(e.g. '1.1.0')
+default['audit']['inspec_version'] = '1.1.0'
 
 # by default run audit every time
 default['audit']['interval']['enabled'] = false
