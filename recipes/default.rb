@@ -76,7 +76,8 @@ node['audit']['profiles'].each do |owner_profile, value|
     quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
     only_if { profile_overdue_to_run?(p, interval_seconds) }
     action [:fetch, :execute]
-    notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :immediately
+    notifies :touch, "file[#{compliance_cache_directory}/#{p}]", :delayed
+    notifies :execute, "compliance_report[#{report_collector}]", :delayed
   end
 end
 
@@ -86,5 +87,5 @@ compliance_report report_collector do
   server server
   collector report_collector
   quiet node['audit']['quiet'] unless node['audit']['quiet'].nil?
-  action :execute
+  action :nothing
 end if node['audit']['profiles'].values.any?
