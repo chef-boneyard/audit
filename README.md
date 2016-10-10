@@ -149,6 +149,8 @@ If you want the audit cookbook to directly report to Chef Compliance, set the `c
  * `collector` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
  * `refresh_token` - refresh token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
+   * a UI logout revokes the refresh_token
+   * workaround by logging in once in a private browser session, grab the token and then close the browser without logging out
  * `insecure` - a `true` value will skip the SSL certificate verification when retrieving access token. Default value is `false`
 
 ```ruby
