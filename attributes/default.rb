@@ -47,7 +47,7 @@ default['audit']['fail_if_not_present'] = false
 default['audit']['fail_if_any_audits_failed'] = false
 
 # inspec gem version to install(e.g. '1.1.0')
-default['audit']['inspec_version'] = '1.1.0'
+default['audit']['inspec_version'] = '1.2.0'
 
 # by default run audit every time
 default['audit']['interval']['enabled'] = false

@@ -28,15 +28,33 @@ class Audit
           blob[:reports] = reports
           blob[:profiles] = ownermap
 
-          total_failed = reports.map do |_name, profile|
-            if !profile['controls'].empty?
-              profile['controls'].map do |control|
-                control['status'] != 'passed' ? 1 : 0
+          formatter = collector == 'chef-visibility' ? 'json' : 'json-min'
+          # counting total_failed based on the json/json-min format
+          if formatter == 'json'
+            total_failed = reports.map do |_name, report|
+              report['profiles'].map do |profile|
+                profile['controls'].map do |control|
+                  if control['results']
+                    control['results'].map do |result|
+                      result['status'] != 'passed' ? 1 : 0
+                    end
+                  else
+                    0
+                  end
+                end
               end
-            else
-              0
-            end
-          end.flatten.reduce(:+)
+            end.flatten.reduce(:+)
+          else
+            total_failed = reports.map do |_name, profile|
+              if !profile['controls'].empty?
+                profile['controls'].map do |control|
+                  control['status'] != 'passed' ? 1 : 0
+                end
+              else
+                0
+              end
+            end.flatten.reduce(:+)
+          end
           Chef::Log.info "Total number of failed controls: #{total_failed}"
 
           # resolve owner
