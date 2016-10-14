@@ -8,16 +8,16 @@ group :style do
 end
 
 group :test do
-  gem 'rake', '~> 10'
-  gem 'berkshelf', '~> 3.3.0'
-  gem 'chefspec',  '~> 4.3.0'
+  gem 'rake', '>= 11.3'
+  gem 'berkshelf', '>= 5.0'
+  gem 'chefspec',  '>= 5.2'
   gem 'coveralls', '~> 0.8.2', require: false
 end
 
 group :integration do
-  gem 'test-kitchen', '~> 1.6'
+  gem 'test-kitchen', '~> 1.13'
   gem 'kitchen-dokken'
-  gem 'kitchen-inspec', '~> 0.9'
+  gem 'kitchen-inspec', '~> 0.15'
 end
 
 group :release do

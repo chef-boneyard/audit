@@ -11,3 +11,5 @@ source_url 'https://github.com/chef-cookbooks/audit'
 issues_url 'https://github.com/chef-cookbooks/audit/issues'
 
 chef_version '>= 12.5.1' if respond_to?(:chef_version)
+
+depends 'compat_resource'
