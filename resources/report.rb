@@ -90,7 +90,7 @@ end
 # filters resource collection
 def profiles
   run_context.resource_collection.select do |r|
-    r.is_a?(ComplianceProfile)
+    r.is_a?(AuditProfile)
   end.flatten
 end
 
