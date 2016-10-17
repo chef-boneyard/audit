@@ -73,6 +73,7 @@ describe 'audit::default' do
       runner.node.override['audit']['quiet'] = true
       runner.converge(described_recipe)
     end
+    let(:myprofile) { chef_run.compliance_profile('myprofile') }
 
     it 'fetches and executes compliance_profile[myprofile]' do
       expect(chef_run).to fetch_compliance_profile('myprofile').with(
@@ -86,12 +87,10 @@ describe 'audit::default' do
         token: nil,
         quiet: true,
       )
-      expect(chef_run).to execute_compliance_report('chef-server').with(
-        owner: nil,
-        server: nil,
-        token: nil,
-        quiet: true,
-      )
+    end
+
+    it 'notifies compliance_report[chef-server]' do
+      expect(myprofile).to notify('compliance_report[chef-server]').delayed
     end
 
     it 'skips compliance_profile[ssh]' do
@@ -137,6 +136,8 @@ describe 'audit::default' do
       }
       runner.converge(described_recipe)
     end
+    let(:linux_profile) { chef_run.compliance_profile('linux') }
+
     it 'executes base/linux in backward compatible mode' do
       expect(chef_run).to execute_compliance_profile('linux').with(
         path: nil,
@@ -160,10 +161,9 @@ describe 'audit::default' do
     it 'does not execute disabled exampleorg/myprofile' do
       expect(chef_run).to_not execute_compliance_profile('myprofile')
     end
-    it 'executes execute_compliance_report[chef-server]' do
-      expect(chef_run).to execute_compliance_report('chef-server')
+    it 'notifies compliance_report[chef-server]' do
+      expect(linux_profile).to notify('compliance_report[chef-server]').delayed
     end
-
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
