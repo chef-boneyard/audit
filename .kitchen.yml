@@ -64,8 +64,6 @@ suites:
     attributes:
       audit:
         profiles: &profiles
-          base/ssh: true
-          base/linux: true
   - name: compliance # compliance direct reporting
     run_list:
       - recipe[audit::default]
