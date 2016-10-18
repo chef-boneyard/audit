@@ -19,3 +19,7 @@ end
 chef_inspec 'inspec' do
   action :install
 end
+
+inspec_report 'report' do
+  action :execute
+end
