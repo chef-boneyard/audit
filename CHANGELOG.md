@@ -1,7 +1,36 @@
 # Change Log
 
-## [1.0.0](https://github.com/chef-cookbooks/audit/tree/1.0.0) (2016-09-28)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.4...1.0.0)
+## [v1.1.0](https://github.com/chef-cookbooks/audit/tree/v1.1.0) (2016-10-18)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.2...v1.1.0)
+
+**Closed issues:**
+
+- cookbook in master fails to converge [\#108](https://github.com/chef-cookbooks/audit/issues/108)
+- Interval setting is not working properly [\#101](https://github.com/chef-cookbooks/audit/issues/101)
+
+**Merged pull requests:**
+
+- Fix resource\_collection profiles selector.  [\#109](https://github.com/chef-cookbooks/audit/pull/109) ([alexpop](https://github.com/alexpop))
+- convert library resources to proper custom resources [\#107](https://github.com/chef-cookbooks/audit/pull/107) ([lamont-granquist](https://github.com/lamont-granquist))
+- described refresh\_token behavior when logging out of UI [\#105](https://github.com/chef-cookbooks/audit/pull/105) ([jeremymv2](https://github.com/jeremymv2))
+- fixing interval issues [\#104](https://github.com/chef-cookbooks/audit/pull/104) ([jeremymv2](https://github.com/jeremymv2))
+
+## [v1.0.2](https://github.com/chef-cookbooks/audit/tree/v1.0.2) (2016-10-12)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.1...v1.0.2)
+
+**Merged pull requests:**
+
+- Fix bug when counting total failed controls in json format [\#106](https://github.com/chef-cookbooks/audit/pull/106) ([alexpop](https://github.com/alexpop))
+
+## [v1.0.1](https://github.com/chef-cookbooks/audit/tree/v1.0.1) (2016-10-06)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- Use the new method to retrieve access tokens and fix total\_failed bug [\#103](https://github.com/chef-cookbooks/audit/pull/103) ([alexpop](https://github.com/alexpop))
+
+## [v1.0.0](https://github.com/chef-cookbooks/audit/tree/v1.0.0) (2016-09-28)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.4...v1.0.0)
 
 **Closed issues:**
 
@@ -11,6 +40,7 @@
 
 **Merged pull requests:**
 
+- Release version 1.0.0 [\#100](https://github.com/chef-cookbooks/audit/pull/100) ([alexpop](https://github.com/alexpop))
 - update to work with inspec 1.0 json format [\#99](https://github.com/chef-cookbooks/audit/pull/99) ([vjeffrey](https://github.com/vjeffrey))
 - Docs and examples improvements [\#97](https://github.com/chef-cookbooks/audit/pull/97) ([alexpop](https://github.com/alexpop))
 - Compliance profile upload [\#96](https://github.com/chef-cookbooks/audit/pull/96) ([jeremymv2](https://github.com/jeremymv2))
@@ -23,6 +53,7 @@
 
 **Merged pull requests:**
 
+- Release version 0.14.4 [\#90](https://github.com/chef-cookbooks/audit/pull/90) ([alexpop](https://github.com/alexpop))
 - Improve logging and comments for attributes [\#89](https://github.com/chef-cookbooks/audit/pull/89) ([alexpop](https://github.com/alexpop))
 - fix Tempfile.new [\#88](https://github.com/chef-cookbooks/audit/pull/88) ([jeremymv2](https://github.com/jeremymv2))
 - making Auth - bad clock errors clearer [\#87](https://github.com/chef-cookbooks/audit/pull/87) ([jeremymv2](https://github.com/jeremymv2))
