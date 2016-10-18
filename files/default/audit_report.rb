@@ -25,7 +25,7 @@ class Chef
 
       def call
         Chef::Log.debug "Initialize InSpec"
-        opts = { "format" => node['audit']['format'] }
+        opts = { "format" => node['audit']['format'], "output" => node['audit']['output']}
         runner = ::Inspec::Runner.new(opts)
 
         tests = node['audit']['profiles']

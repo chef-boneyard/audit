@@ -63,3 +63,7 @@ default['audit']['format'] = "json"
 
 # set profiles to empty array as default
 default['audit']['profiles'] = []
+
+# output for inspec results
+result_path = File.expand_path("../../inspec_results.txt", __FILE__)
+default['audit']['output'] = result_path
