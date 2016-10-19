@@ -1,0 +1,7 @@
+# encoding: utf-8
+source 'https://rubygems.org'
+
+gem 'berkshelf', '~> 4.3.5'
+gem 'test-kitchen', '~> 1.6'
+gem 'kitchen-vagrant'
+gem 'kitchen-inspec', '~> 0.9'

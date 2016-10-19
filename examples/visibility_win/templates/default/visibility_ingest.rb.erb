@@ -1,0 +1,15 @@
+# encoding: utf-8
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# FILE IS MANAGED BY CHEF, DON'T EDIT MANUALLY. CHANGES WILL BE OVERWRITTEN!
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# See https://docs.chef.io/ingest_data_chef_automate.html.
+
+# Your automate server URL would go here
+data_collector.server_url '<%= @server_url %>'
+# Your token from setting up Visibility
+data_collector.token '<%= @auth_token %>'
+
+# If you want to change the default SSL certificate validation
+#ssl_verify_mode :verify_none
+#verify_api_cert false
