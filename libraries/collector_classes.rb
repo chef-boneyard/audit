@@ -25,8 +25,8 @@ class Collector
       end
 
       # get file contents where inspec results were saved
-      result_path = File.expand_path("../../inspec_results.txt", __FILE__)
-      file = File.open(result_path, "rb")
+      result_path = File.expand_path('../../inspec_results.txt', __FILE__)
+      file = File.open(result_path, 'rb')
       content = file.read
       file.close
 
@@ -155,6 +155,17 @@ class Collector
         'skipped'
       else
         'passed'
+      end
+    end
+
+    # Returns a string with the control criticality based on the impact value
+    def impact_to_s(impact)
+      if impact < 0.4
+        'minor'
+      elsif impact < 0.7
+        'major'
+      else
+        'critical'
       end
     end
 

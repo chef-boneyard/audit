@@ -10,7 +10,7 @@ default_action :execute
 
 action :execute do
   case collector
-    when 'chef-visibility'
-      Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name).send_report
+  when 'chef-visibility'
+    Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name).send_report
   end
 end
