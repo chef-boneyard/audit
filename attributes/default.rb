@@ -59,11 +59,11 @@ default['audit']['quiet'] = true
 default['audit']['overwrite'] = true
 
 # use json format since this is for reporting
-default['audit']['format'] = "json"
+default['audit']['format'] = 'json'
 
 # set profiles to empty array as default
 default['audit']['profiles'] = []
 
 # output for inspec results
-result_path = File.expand_path("../../inspec_results.txt", __FILE__)
+result_path = File.expand_path('../../inspec_results.txt', __FILE__)
 default['audit']['output'] = result_path
