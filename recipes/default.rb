@@ -1,7 +1,13 @@
 include_recipe 'chef_handler'
 
-handler_directory = ::File.join(Chef::Config[:file_cache_path], 'handler')
+# install inspec if require
+inspec 'inspec' do
+  version node['audit']['inspec_version']
+  action :install
+end
 
+# run chef handler
+handler_directory = ::File.join(Chef::Config[:file_cache_path], 'handler')
 directory handler_directory do
   action :create
 end
@@ -13,12 +19,4 @@ end
 chef_handler 'Chef::Handler::AuditReport' do
   source "#{handler_directory}/audit_report.rb"
   action :enable
-end
-
-chef_inspec 'inspec' do
-  action :install
-end
-
-inspec_report 'report' do
-  action :execute
 end

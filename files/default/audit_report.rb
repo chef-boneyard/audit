@@ -1,4 +1,5 @@
 require 'chef/handler'
+include ReportHelpers
 
 class Chef
   class Handler
@@ -7,6 +8,7 @@ class Chef
       def report
         load_needed_dependencies
         call
+        send_report
       end
 
       def load_needed_dependencies
@@ -23,9 +25,20 @@ class Chef
         require 'bundles/inspec-compliance/target'
       end
 
+      def set_json_format
+        reporter = node['audit']['collector']
+        if reporter == 'chef-visibility'
+          format = 'json'
+        else
+          format = 'json-min'
+        end
+        format
+      end
+
       def call
         Chef::Log.debug 'Initialize InSpec'
-        opts = { 'format' => node['audit']['format'], 'output' => node['audit']['output'] }
+        format = set_json_format
+        opts = { 'format' => format, 'output' => node['audit']['output'] }
         runner = ::Inspec::Runner.new(opts)
 
         tests = node['audit']['profiles']
@@ -33,6 +46,15 @@ class Chef
 
         Chef::Log.debug 'Running tests from: #{tests.inspect}'
         runner.run
+      end
+
+      def send_report
+        reporter = node['audit']['collector']
+        Chef::Log.debug 'Reporting to #{reporter}'
+
+        if reporter == 'chef-visibility'
+          Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name).send_report
+        end
       end
     end
   end

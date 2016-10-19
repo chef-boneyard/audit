@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-provides :chef_inspec
-resource_name :chef_inspec
+provides :inspec
+resource_name :inspec
 
 property :version, String, default: 'latest'
 

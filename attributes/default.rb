@@ -14,7 +14,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+
+# inspec gem version to install(e.g. '1.1.0')
+default['audit']['inspec_version'] = '1.2.0'
 
 # collector possible values: chef-server, chef-compliance, chef-visibility
 # chef-visibility requires inspec version 0.27.1 or above
@@ -43,9 +45,6 @@ default['audit']['raise_if_unreachable'] = true
 # fail converge if downloaded profile is not present
 default['audit']['fail_if_not_present'] = false
 
-# fail converge after posting report if any audits have failed
-default['audit']['fail_if_any_audits_failed'] = false
-
 # by default run audit every time
 default['audit']['interval']['enabled'] = false
 
@@ -65,5 +64,8 @@ default['audit']['format'] = 'json'
 default['audit']['profiles'] = []
 
 # output for inspec results
-result_path = File.expand_path('../../inspec_results.txt', __FILE__)
+result_path = File.expand_path('../../inspec_results.json', __FILE__)
 default['audit']['output'] = result_path
+
+# inspec gem version to install(e.g. '1.1.0')
+default['audit']['inspec_version'] = '1.2.0'

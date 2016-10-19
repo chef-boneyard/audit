@@ -25,7 +25,7 @@ class Collector
       end
 
       # get file contents where inspec results were saved
-      result_path = File.expand_path('../../inspec_results.txt', __FILE__)
+      result_path = File.expand_path('../../inspec_results.json', __FILE__)
       file = File.open(result_path, 'rb')
       content = file.read
       file.close
