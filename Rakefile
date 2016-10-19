@@ -44,19 +44,11 @@ rescue LoadError => e
   puts ">>> Gem load error: #{e}, omitting spec" unless ENV['CI']
 end
 
-# Integration tests. Kitchen.ci
-namespace :integration do
-  begin
-    require 'kitchen/rake_tasks'
-
-    desc 'Run kitchen integration tests'
-    Kitchen::RakeTasks.new
-  rescue LoadError => e
-    puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
-  rescue Kitchen::UserError => e
-    puts ">>> Test Kitchen error: #{e}" unless ENV['CI']
-  rescue Kitchen::UserError => e
-    puts ">>> Test Kitchen error: #{e}" unless ENV['CI']
+namespace :test do
+  task :integration do
+    concurrency = ENV["CONCURRENCY"] || 1
+    os = ENV["OS"] || ""
+    sh("sh", "-c", "bundle exec kitchen test -c #{concurrency} #{os}")
   end
 end
 
