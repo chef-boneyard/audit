@@ -14,7 +14,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
+
+# inspec gem version to install(e.g. '1.1.0')
+default['audit']['inspec_version'] = '1.2.0'
 
 # collector possible values: chef-server, chef-compliance, chef-visibility
 # chef-visibility requires inspec version 0.27.1 or above
@@ -23,18 +25,18 @@ default['audit']['collector'] = 'chef-server'
 # Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
 # server format example: 'https://comp-server.example.com/api'
 default['audit']['server'] = nil
+
 # choose between the permanent refresh_token or ephemeral token(access_token). Needed only for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
+
 # the token(access_token) expires in 12h after creation
 default['audit']['token'] = nil
+
 # set this insecure attribute to true if the compliance server uses self-signed ssl certificates
 default['audit']['insecure'] = nil
 
 # owner needed for the 'chef-compliance' and 'chef-server' collectors
 default['audit']['owner'] = nil
-
-default['audit']['quiet'] = nil
-default['audit']['profiles'] = {}
 
 # raise exception if Compliance API endpoint is unreachable
 # while fetching profiles or posting report
@@ -43,14 +45,9 @@ default['audit']['raise_if_unreachable'] = true
 # fail converge if downloaded profile is not present
 default['audit']['fail_if_not_present'] = false
 
-# fail converge after posting report if any audits have failed
-default['audit']['fail_if_any_audits_failed'] = false
-
-# inspec gem version to install(e.g. '1.1.0')
-default['audit']['inspec_version'] = '1.2.0'
-
 # by default run audit every time
 default['audit']['interval']['enabled'] = false
+
 # by default run compliance once a day
 default['audit']['interval']['time'] = 1440
 
@@ -59,3 +56,16 @@ default['audit']['quiet'] = true
 
 # overwrite existing profile in upload mode
 default['audit']['overwrite'] = true
+
+# use json format since this is for reporting
+default['audit']['format'] = 'json'
+
+# set profiles to empty array as default
+default['audit']['profiles'] = []
+
+# output for inspec results
+result_path = File.expand_path('../../inspec_results.json', __FILE__)
+default['audit']['output'] = result_path
+
+# inspec gem version to install(e.g. '1.1.0')
+default['audit']['inspec_version'] = '1.2.0'

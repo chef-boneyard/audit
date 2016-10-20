@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-provides :chef_inspec
-resource_name :inspec # FIXME: why is this different than the provides name?
+provides :inspec
+resource_name :inspec
 
 property :version, String, default: 'latest'
 
