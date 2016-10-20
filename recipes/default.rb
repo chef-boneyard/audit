@@ -20,5 +20,3 @@ chef_handler 'Chef::Handler::AuditReport' do
   source "#{handler_directory}/audit_report.rb"
   action :enable
 end
-
-include_recipe 'audit::clean-up'

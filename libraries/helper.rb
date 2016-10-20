@@ -30,4 +30,52 @@ module ReportHelpers
     tests_for_runner = tests.map { |test| Hash[test.map { |k, v| [k.to_sym, v] }] }
     tests_for_runner
   end
+
+  def construct_url(server, path)
+    # sanitize inputs
+    server << '/' unless server =~ %r{/\z}
+    path.sub!(%r{^/}, '')
+    server = URI(server)
+    server.path = server.path + path if path
+    server
+  end
+
+  def with_http_rescue(*)
+    response = yield
+    if response.respond_to?(:code)
+      # handle non 200 error codes, they are not raised as Net::HTTPServerException
+      handle_http_error_code(response.code) if response.code.to_i >= 300
+    end
+    return response
+  rescue Net::HTTPServerException => e
+    Chef::Log.error e
+    handle_http_error_code(e.response.code)
+  end
+
+  def handle_http_error_code(code)
+    case code
+    when /401|403/
+      Chef::Log.error 'Auth issue: see audit cookbook TROUBLESHOOTING.md'
+    when /404/
+      Chef::Log.error 'Object does not exist on remote server.'
+    end
+    msg = "Received HTTP error #{code}"
+    Chef::Log.error msg
+    raise msg if @raise_if_unreachable
+  end
+
+  def base_chef_server_url
+    cs = URI(Chef::Config[:chef_server_url])
+    cs.path = ''
+    cs.to_s
+  end
+
+  def get_results
+    # get file contents where inspec results were saved
+    result_path = File.expand_path('../../inspec_results.json', __FILE__)
+    file = File.open(result_path, 'rb')
+    content = file.read
+    file.close
+    content
+  end
 end

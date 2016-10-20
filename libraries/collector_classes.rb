@@ -24,13 +24,7 @@ class Collector
         return false
       end
 
-      # get file contents where inspec results were saved
-      result_path = File.expand_path('../../inspec_results.json', __FILE__)
-      file = File.open(result_path, 'rb')
-      content = file.read
-      file.close
-
-      # parse that string of contents into json
+      content = get_results
       json_report = enriched_report(JSON.parse(content))
 
       unless json_report
@@ -179,6 +173,64 @@ class Collector
         status = 'skipped' if result['status'] == 'skipped'
       end
       status
+    end
+  end
+
+  #
+  # Used to send inspec reports to a Chef Compliance server
+  #
+  class ChefCompliance
+    include ReportHelpers
+
+    @url = nil
+    @node_info = {}
+
+    def initialize(url, token, raise_if_unreachable)
+      @config = Compliance::Configuration.new
+      @url = URI("#{@config['server']}/owners/#{@config['user']}/inspec")
+      @token = @config['token']
+      @raise_if_unreachable = raise_if_unreachable
+    end
+
+    def send_report
+      Chef::Log.info "Report to Chef Compliance: #{@token}"
+      req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
+      content = get_results
+      req.body = content.to_json
+      Chef::Log.info "Report to Chef Compliance: #{@url}"
+
+      opts = { use_ssl: @url.scheme == 'https',
+        verify_mode: OpenSSL::SSL::VERIFY_NONE,
+      }
+      Net::HTTP.start(@url.host, @url.port, opts) do |http|
+        with_http_rescue do
+          http.request(req)
+        end
+      end
+    end
+  end
+
+  #
+  # Used to send inspec reports to a Chef Compliance server via Chef Server
+  #
+  class ChefServer
+    include ReportHelpers
+
+    @url = nil
+
+    def initialize(url)
+      @url = url
+    end
+
+    def send_report
+      content = get_results
+      Chef::Config[:verify_api_cert] = false
+      Chef::Config[:ssl_verify_mode] = :verify_none
+      Chef::Log.info "Report to Chef Server: #{@url}"
+      rest = Chef::ServerAPI.new(@url, Chef::Config)
+      with_http_rescue do
+        rest.post(@url, content)
+      end
     end
   end
 end
