@@ -35,7 +35,8 @@ default['audit']['token'] = nil
 # set this insecure attribute to true if the compliance server uses self-signed ssl certificates
 default['audit']['insecure'] = nil
 
-# owner needed for the 'chef-compliance' and 'chef-server' collectors
+# Chef Compliance organization to post the report to. Defaults to Chef Server org if not defined
+# needed for the 'chef-compliance' collector, optional for 'chef-server' collector
 default['audit']['owner'] = nil
 
 # raise exception if Compliance API endpoint is unreachable

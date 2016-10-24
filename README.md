@@ -16,6 +16,7 @@ Using the `inspec_version` attribute, please use the following `InSpec` version 
 |----------------------------|----------------------------|----------------------------|
 | Less or equal to 1.1.23    | 0.20.1                     | 0.7.0                      |
 | Greater than 1.1.23        | Greater or equal to 0.22.1 | 0.8.0                      |
+| Greater or equal to 1.6.8  | Greater or equal to 1.2.0  | 1.0.2                      |
 
 
 You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
@@ -96,15 +97,21 @@ knife cookbook upload audit -o ./chef-cookbooks
 
 Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
-### Configure node
+
+#### Reporting to Chef Compliance via Chef Server
+
+If you want the audit cookbook to converge and retrieve compliance profiles through the Chef Server, set the `collector` and `profiles` attribute.
+
+This requires your Chef Server to be integrated with the Chef Compliance server using this [guide](https://docs.chef.io/integrate_compliance_chef_server.html).
+
+#### Configure node
 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attributes in a role or environment file like this:
 
 ```ruby
 "audit" => {
   "collector" => "chef-server",
-  "owner" => "prod-org",
-  "inspec_version" => "0.35.0",
+  "inspec_version" => "1.2.1",
   "profiles" => {
     # org / profile name from Chef Compliance
     "base/linux" => true,
@@ -135,6 +142,7 @@ You can also configure in a policyfile like this:
 
 ```ruby
 default['audit'] = {
+  'collector' => 'chef-server',
   'profiles' => {
     'base/linux' => true,
     'base/ssh' => true
@@ -142,12 +150,14 @@ default['audit'] = {
 }
 ```
 
+
 #### Direct reporting to Chef Compliance
 
-If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server` and the `refresh_token` attribute.
+If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server`, `owner`, `refresh_token` and `profiles` attributes.
 
  * `collector` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
+ * `owner` - Chef Compliance user or organization that will receive this scan report
  * `refresh_token` - refresh token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
    * note: A UI logout revokes the refresh_token. Workaround by logging in once in a private browser session, grab the token and then close the browser without logging out
  * `insecure` - a `true` value will skip the SSL certificate verification when retrieving access token. Default value is `false`
@@ -156,7 +166,9 @@ If you want the audit cookbook to directly report to Chef Compliance, set the `c
 "audit": {
   "collector": "chef-compliance",
   "server": "https://compliance-fqdn/api",
+  "owner": "my-comp-org",
   "refresh_token": "5/4T...g==",
+  "insecure": false,
   "profiles": {
     "base/windows": true
   }
@@ -169,6 +181,7 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 "audit": {
   "collector": "chef-compliance",
   "server": "https://compliance-fqdn/api",
+  "owner": "my-comp-org",
   "token": "eyJ........................YQ",
   "profiles": {
     "base/windows": true
@@ -179,8 +192,9 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 
 #### Direct reporting to Chef Visibility
 
-If you want the audit cookbook to directly report to Chef Visibility, set the `collector` attribute to 'chef-visibility'.
-This method is sending the report to `data_collector.server_url`, defined in `client.rb`. It require `inspec` version `0.27.1` or greater.
+If you want the audit cookbook to directly report to Chef Visibility, set the `collector` attribute to 'chef-visibility'. Also specify where to retrieve the `profiles` from.
+
+This method is sending the report using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater.
 
 ```ruby
 "audit": {
