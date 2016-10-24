@@ -1,0 +1,37 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+- name: bento/centos-7.2
+- name: bento/ubuntu-14.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[os-hardening]
+      - recipe[ssh-hardening]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: 'chef-compliance'
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        refresh_token:  <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>
+        insecure: true
+        owner: admin
+        # fail converge if downloaded profile is not present
+        fail_if_not_present: true
+        # fail converge after posting report if any audits have failed
+        fail_if_any_audits_failed: false
+        profiles:
+          base/linux: true
+          brewinc/ssh-hardening:
+            source: supermarket://hardening/ssh-hardening

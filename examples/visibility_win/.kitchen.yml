@@ -1,0 +1,25 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+# Your vagrant box name of a windows machines you have privately sourced
+- name: windows2012r2
+  driver:
+    # Your box or box_url should also be a privately hosted NFS, or URL,
+    # to publish your private Windows boxes
+    box: /vagrant/windows2012r2
+    box_url: http://boxshare.yourdomain.com/vagrant/windows2012r2
+  ostype: windows
+  shell_type: powershell
+  transport:
+    name: winrm
+
+suites:
+  - name: visibility_win
+    run_list:
+      - recipe[visibility_win::chef_client_config]
+    attributes:

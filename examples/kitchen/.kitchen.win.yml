@@ -1,0 +1,47 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+- name: windows-2012r2
+
+# The following (private) boxes are shared via Atlas and are only
+# available to users working for Chef. Sorry, it's about software licensing.
+#
+# Chef-internal users, you will need to:
+# 1.  Create an Atlas account:  https://atlas.hashicorp.com/
+# 2.  Ping #eng-services-support with your Atlas account name
+#     to be added to the relevant team in Atlas,
+# 3.  Do `vagrant login` with your Atlas creds so that you can download
+#     the private boxes.
+<% [ '', '-i386' ].each do |win_suffix| %>
+- name: windows-2012r2-standard<%= win_suffix %>
+  driver:
+    box: chef/windows-server-2012r2-standard # private
+<% end %>
+
+suites:
+  - name: windows
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: 'chef-compliance'
+        server: <%= ENV['COMPLIANCE_API'] %>
+        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
+        refresh_token:  <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>
+        insecure: true
+        owner: admin
+        # fail converge if downloaded profile is not present
+        fail_if_not_present: true
+        # fail converge after posting report if any audits have failed
+        fail_if_any_audits_failed: false
+        profiles:
+          base/windows: true
