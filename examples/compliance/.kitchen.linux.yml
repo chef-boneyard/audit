@@ -34,5 +34,5 @@ suites:
         profiles:
           - name: linux
             compliance: base/linux
-          - name: brewinc/ssh-hardening
-            supermarket: hardening/ssh-hardening
+          - name: ssh
+            compliance: base/ssh

@@ -70,8 +70,8 @@ module ReportHelpers
     cs.to_s
   end
 
-  def get_results
-    # get file contents where inspec results were saved
+  # get file contents where inspec results were saved
+  def results
     result_path = File.expand_path('../../inspec_results.json', __FILE__)
     file = File.open(result_path, 'rb')
     content = file.read
