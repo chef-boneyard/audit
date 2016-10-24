@@ -1,6 +1,8 @@
 # audit cookbook
 [![Cookbook Version](http://img.shields.io/cookbook/v/audit.svg)][cookbook] [![Build Status](http://img.shields.io/travis/chef-cookbooks/audit.svg)][travis]
 
+NOTE: The current readme refers to unreleased audit cookbook 2.0. Documentation for 1.x is available (here)[https://github.com/chef-cookbooks/audit/blob/v1.1.0/README.md]
+
 ## Requirements
 
 ### Chef
