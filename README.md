@@ -110,33 +110,41 @@ This requires your Chef Server to be integrated with the Chef Compliance server 
 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attributes in a role or environment file like this:
 
+
+node.default['audit']['profiles'].push("source": "#{PROFILES_PATH}/mylinux-failure-success")
+
 ```ruby
 "audit" => {
   "collector" => "chef-server",
   "inspec_version" => "1.2.1",
-  "profiles" => {
-    # org / profile name from Chef Compliance
-    "base/linux" => true,
-    # supermarket url
-    "brewinc/ssh-hardening" => {
-      # location where inspec will fetch the profile from
-      "source" => "supermarket://hardening/ssh-hardening"
+  "profiles" => [
+    # profile from Chef Compliance
+    {
+      "name": "linux",
+      "compliance": "base/linux"
+    },
+    # profile from supermarket
+    {
+      "name": "ssh",
+      "supermarket": "hardening/ssh-hardening"
     },
     # local Windows path
-    "brewinc/win2012_audit" => {
+    {
+      "name": "brewinc/win2012_audit",
       # filesystem path
-      "source" => "E:/profiles/win2012_audit"
+      "source": "E:/profiles/win2012_audit"
     },
-    # github url
-    "brewinc/tmp_compliance_profile" => {
-      "source" => "https://github.com/nathenharvey/tmp_compliance_profile"
+    # github
+    {
+      "name": "ssl",
+      "git": "https://github.com/dev-sec/ssl-benchmark.git"
     },
-    # disable profile
-    "brewinc/tmp_compliance_profile-master" => {
-      "source" => "/tmp/tmp_compliance_profile-master",
-      "disabled" => true
+    # url
+    {
+      "name": "ssh",
+      "url": "https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip"
     }
-  }
+  ]
 }
 ```
 
@@ -145,10 +153,16 @@ You can also configure in a policyfile like this:
 ```ruby
 default['audit'] = {
   'collector' => 'chef-server',
-  'profiles' => {
-    'base/linux' => true,
-    'base/ssh' => true
-  }
+  'profiles' => [
+    {
+      "name": "linux",
+      "compliance": "base/linux"
+    },
+    {
+      "name": "ssh",
+      "compliance": "base/ssh"
+    }
+  ]
 }
 ```
 
@@ -171,9 +185,12 @@ If you want the audit cookbook to directly report to Chef Compliance, set the `c
   "owner": "my-comp-org",
   "refresh_token": "5/4T...g==",
   "insecure": false,
-  "profiles": {
-    "base/windows": true
-  }
+  "profiles": [
+    {
+      "name": "windows",
+      "compliance": "base/windows"
+    }
+  ]
 }
 ```
 
@@ -185,9 +202,12 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
   "server": "https://compliance-fqdn/api",
   "owner": "my-comp-org",
   "token": "eyJ........................YQ",
-  "profiles": {
-    "base/windows": true
-  }
+  "profiles": [
+    {
+      "name": "windows",
+      "compliance": "base/windows"
+    }
+  ]
 }
 ```
 
@@ -201,11 +221,12 @@ This method is sending the report using the `data_collector.server_url` and `dat
 ```ruby
 "audit": {
   "collector": "chef-visibility",
-  "profiles": {
-    "brewinc/tmp_compliance_profile": {
+  "profiles": [
+    {
+      "name": "brewinc/tmp_compliance_profile",
       "source": "https://github.com/nathenharvey/tmp_compliance_profile"
     }
-  }
+  ]
 }
 ```
 
@@ -221,11 +242,12 @@ audit: {
   server: 'https://compliance-server.test/api'
   collector: 'chef-compliance',
   refresh_token: '21/XMEK3...',
-  profiles: {
-    'admin/ssh2': {
+  profiles: [
+   {
+      'name': 'admin/ssh2',
       'source': '/some/base_ssh.tar.gz'
-    },
-  }
+    }
+  ]
 }
 ```
 

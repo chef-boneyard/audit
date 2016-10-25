@@ -44,4 +44,5 @@ suites:
         # fail converge after posting report if any audits have failed
         fail_if_any_audits_failed: false
         profiles:
-          base/windows: true
+          - name: windows
+            compliance: base/windows

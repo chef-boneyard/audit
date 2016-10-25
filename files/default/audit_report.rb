@@ -41,7 +41,7 @@ class Chef
         opts = { 'format' => format, 'output' => node['audit']['output'] }
         runner = ::Inspec::Runner.new(opts)
 
-        tests = node['audit']['profiles']
+        tests = tests_for_runner
         tests.each { |target| runner.add_target(target, opts) }
 
         Chef::Log.debug 'Running tests from: #{tests.inspect}'
