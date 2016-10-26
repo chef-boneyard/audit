@@ -46,23 +46,18 @@ action :upload do
   end
 
   converge_by 'upload compliance profile' do
-    require 'bundles/inspec-compliance/configuration'
-    require 'bundles/inspec-compliance/support'
-    require 'bundles/inspec-compliance/http'
-    require 'bundles/inspec-compliance/api'
-    require 'bundles/inspec-compliance/target'
-    _success, msg, access_token = Compliance::API.get_token_via_refresh_token(server, refresh_token, true)
+    access_token = retrieve_access_token(server_url, refresh_token, insecure)
 
     raise 'Unable to read access token, aborting upload' unless access_token
     config = Compliance::Configuration.new
     config['token'] = access_token
     config['insecure'] = insecure
     config['server'] = server
-    config['version'] = Compliance::API.version(server, insecure)
-    if Compliance::API.exist?(config, "#{profile_name}/#{path}") && !overwrite
+    config['version'] = get_compliance_version
+    if check_existence(config, "#{profile_name}/#{path}") && !overwrite
       raise 'Profile exists on the server, use property `overwrite`'
     else
-      success, msg = Compliance::API.upload(config, owner, profile_name, path)
+      success, msg = upload_profile
       if success
         Chef::Log.info 'Successfully uploaded profile'
       else
