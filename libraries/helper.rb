@@ -23,4 +23,10 @@ module ReportHelpers
       return Chef::DataCollector::Messages.node_uuid
     end
   end
+
+  def tests_for_runner
+    tests = node['audit']['profiles']
+    tests_for_runner = tests.map { |test| Hash[test.map { |k, v| [k.to_sym, v] }] }
+    tests_for_runner
+  end
 end

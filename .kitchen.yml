@@ -58,12 +58,20 @@ platforms:
     pid_one_command: /bin/systemd
 
 suites:
-  - name: default # compliance reporting via chef-server
+  - name: default # run inspec locally
     run_list:
+      - recipe[apt]
+      - recipe[yum]
+      - recipe[audit::prep]
       - recipe[audit::default]
     attributes:
       audit:
-        profiles: &profiles
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
+          - git: https://github.com/dev-sec/tests-ssh-hardening.git
+          - name: ssh
+            supermarket: hardening/ssh-hardening
   - name: compliance # compliance direct reporting
     run_list:
       - recipe[audit::default]

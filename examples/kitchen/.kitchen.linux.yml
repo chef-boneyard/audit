@@ -32,6 +32,7 @@ suites:
         # fail converge after posting report if any audits have failed
         fail_if_any_audits_failed: false
         profiles:
-          base/linux: true
-          brewinc/ssh-hardening:
-            source: supermarket://hardening/ssh-hardening
+          - name: linux
+            compliance: base/linux
+          - name: brewinc/ssh-hardening
+            supermarket: hardening/ssh-hardening
