@@ -23,9 +23,6 @@ inspec 'inspec' do
   action :install
 end
 
-# These attributes should only be set when connecting directly to Chef Compliance, otherwise they should be nil
-server = node['audit']['server']
-
 # iterate over all selected profiles and upload them
 node['audit']['profiles'].each do |profile|
   profile_owner = profile[:name]
@@ -36,10 +33,10 @@ node['audit']['profiles'].each do |profile|
   raise "Invalid path '#{profile_path}'" if profile_path.nil?
 
   # upload profile
-  inspec p do
+  compliance_upload p do
     profile_name p
     owner node['audit']['owner']
-    server server
+    server node['audit']['server']
     path profile[:path]
     insecure node['audit']['insecure']
     overwrite node['audit']['overwrite']
