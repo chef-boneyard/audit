@@ -1,6 +1,6 @@
 include_recipe 'chef_handler'
 
-# install inspec if require
+# install inspec
 inspec 'inspec' do
   version node['audit']['inspec_version']
   action :install

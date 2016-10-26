@@ -13,8 +13,10 @@ property :profile_name, String
 
 default_action :upload
 
+# upload profile to compliance server
 action :upload do
   converge_by 'run profile validation checks' do
+    load_inspec_libs
     raise 'Path to profile archive not specified' if path.nil?
     raise "Profile archive file #{path} does not exist." unless ::File.exist?(path)
     profile = Inspec::Profile.for_target(path, {})
@@ -37,7 +39,7 @@ action :upload do
     config['token'] = access_token
     config['insecure'] = insecure
     config['server'] = server
-    config['version'] = get_compliance_version
+    config['version'] = compliance_version
     if check_existence(config, "#{profile_name}/#{path}") && !overwrite
       raise 'Profile exists on the server, use property `overwrite`'
     else
