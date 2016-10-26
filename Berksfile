@@ -3,5 +3,6 @@ source 'https://supermarket.chef.io'
 
 metadata
 
-cookbook 'apt'
-cookbook 'yum'
+group :integration do
+  cookbook 'git'
+end
