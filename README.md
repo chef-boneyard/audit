@@ -111,7 +111,7 @@ This requires your Chef Server to be integrated with the Chef Compliance server 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attributes in a role or environment file like this:
 
 
-node.default['audit']['profiles'].push("source": "#{PROFILES_PATH}/mylinux-failure-success")
+node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure-success")
 
 ```ruby
 "audit" => {
@@ -132,7 +132,7 @@ node.default['audit']['profiles'].push("source": "#{PROFILES_PATH}/mylinux-failu
     {
       "name": "brewinc/win2012_audit",
       # filesystem path
-      "source": "E:/profiles/win2012_audit"
+      "path": "E:/profiles/win2012_audit"
     },
     # github
     {
@@ -224,7 +224,7 @@ This method is sending the report using the `data_collector.server_url` and `dat
   "profiles": [
     {
       "name": "brewinc/tmp_compliance_profile",
-      "source": "https://github.com/nathenharvey/tmp_compliance_profile"
+      "url": "https://github.com/nathenharvey/tmp_compliance_profile"
     }
   ]
 }
@@ -245,7 +245,7 @@ audit: {
   profiles: [
    {
       'name': 'admin/ssh2',
-      'source': '/some/base_ssh.tar.gz'
+      'path': '/some/base_ssh.tar.gz'
     }
   ]
 }
