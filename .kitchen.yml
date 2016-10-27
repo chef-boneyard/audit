@@ -17,12 +17,18 @@ platforms:
 - name: ubuntu-12.04
   driver:
     image: ubuntu:12.04
+    intermediate_instructions:
+    - RUN /usr/bin/apt-get update
 - name: ubuntu-14.04
   driver:
     image: ubuntu:14.04
+    intermediate_instructions:
+    - RUN /usr/bin/apt-get update
 - name: ubuntu-15.10
   driver:
     image: ubuntu:15.10
+    intermediate_instructions:
+    - RUN /usr/bin/apt-get update
     pid_one_command: /bin/systemd
 - name: centos-6.6
   driver:
@@ -55,14 +61,14 @@ platforms:
 - name: debian-8
   driver:
     image: debian:8
+    intermediate_instructions:
+    - RUN /usr/bin/apt-get update
     pid_one_command: /bin/systemd
 
 suites:
   - name: default # run inspec locally
     run_list:
-      - recipe[apt]
-      - recipe[yum]
-      - recipe[audit::prep]
+      - recipe[git::default]
       - recipe[audit::default]
     attributes:
       audit:
