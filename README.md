@@ -322,10 +322,16 @@ You can enable the interval and set the interval time, along with your desired p
 ```json
 
   "audit": {
-    "profiles": {
-      "base/ssh": true,
-      "base/linux": true
-    },
+    "profiles": [
+      {
+        "name": "ssh",
+        "compliance": "base/ssh"
+      },
+      {
+        "name": "linux",
+        "compliance": "base/linux"
+      }
+    ],
     "interval": {
       "enabled": true,
       "time": 1440

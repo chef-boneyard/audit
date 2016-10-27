@@ -11,14 +11,22 @@ class Chef
         user = node['audit']['owner']
         token = node['audit']['token']
         refresh_token = node['audit']['refresh_token']
+        interval = node['audit']['interval']
+        interval_enabled = node['audit']['interval']['enabled']
+        interval_time = node['audit']['interval']['time']
+        report_file = node['audit']['output']
 
         load_needed_dependencies
 
         # ensure authentication for Chef Compliance is in place
         login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
-        call(reporter)
-        send_report(reporter, server, user)
+        if check_interval_settings(interval, interval_enabled, interval_time, report_file)
+          call(reporter)
+          send_report(reporter, server, user)
+        else
+          Chef::Log.error 'Please take a look at your interval settings'
+        end
       end
 
       def load_needed_dependencies
@@ -56,6 +64,17 @@ class Chef
           Chef::Log.error msg
           raise('Could not store authentication token')
         end
+      end
+
+      def check_interval_settings(interval, interval_enabled, interval_time, report_file)
+        # handle intervals
+        interval_seconds = 0 # always run this by default, unless interval is defined
+        if !interval.nil? && interval_enabled
+          interval_seconds = interval_time * 60 # seconds in interval
+          Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
+        end
+        # returns true if profile is overdue to run
+        profile_overdue_to_run?(interval_seconds, report_file)
       end
 
       def call(reporter)
