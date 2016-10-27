@@ -27,10 +27,10 @@ end
 node['audit']['profiles'].each do |profile|
   profile_owner = profile[:name]
   profile_path = profile[:path]
-  raise "Invalid profile name '#{profile_owner}'. "\
+  Chef::Log.error "Invalid profile name '#{profile_owner}'. "\
        "Must contain /, e.g. 'john/ssh'" if profile_owner !~ %r{\/}
   _o, p = profile_owner.split('/').last(2)
-  raise "Invalid path '#{profile_path}'" if profile_path.nil?
+  Chef::Log.error "Invalid path '#{profile_path}'" if profile_path.nil?
 
   # upload profile
   compliance_upload p do
