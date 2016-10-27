@@ -1,7 +1,7 @@
 # encoding: utf-8
 #
-# Cookbook Name:: compliance
-# Spec:: default
+# Cookbook Name:: audit
+# Spec:: visibility
 #
 # Copyright 2016 Chef Software, Inc.
 #
