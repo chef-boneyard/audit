@@ -77,5 +77,12 @@ module ReportHelpers
     content = file.read
     file.close
     content
+
+  def profile_overdue_to_run?(interval)
+    # Calculate when a report was last created so we delay the next report if necessary
+    report_file = node['audit']['output']
+    return true unless ::File.exist?(report_file)
+    seconds_since_last_run = Time.now - ::File.mtime(report_file)
+    seconds_since_last_run > interval
   end
 end
