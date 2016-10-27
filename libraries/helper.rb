@@ -24,6 +24,7 @@ module ReportHelpers
     end
   end
 
+  # Convert the strings in the profile definitions into symbols for handling
   def tests_for_runner
     tests = node['audit']['profiles']
     tests_for_runner = tests.map { |test| Hash[test.map { |k, v| [k.to_sym, v] }] }
