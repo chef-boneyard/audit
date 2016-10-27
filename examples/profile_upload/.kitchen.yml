@@ -1,0 +1,28 @@
+---
+driver:
+  name: vagrant
+  synced_folders:
+    - ["./profile_tar", "/opt", 'create: true']
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-14.04
+  - name: centos-7.2
+
+suites:
+  - name: default
+    run_list:
+      - recipe[profile_upload::default]
+    attributes:
+      audit:
+        collector: 'chef-compliance'
+        server: "https://192.168.33.201/api"
+        inspec_version: 1.2.1
+        insecure: true
+        refresh_token: '4/0N2sqBYyHpmxwBO0KegXs7IPJ9tKF6qQDB9iCOA72pDJLGcHQ69XZWOIOIT6JEwlmBFnLd7o_UN5MlwMTM_ofg=='
+        owner: admin
+        profiles:
+          - name: admin/hardening
+            path: /opt/ssh-hardening.tar.gz
