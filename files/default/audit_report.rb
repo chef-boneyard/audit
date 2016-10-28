@@ -14,8 +14,8 @@ class Chef
         interval = node['audit']['interval']
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
-        report_file = node['audit']['output']
         profiles = node['audit']['profiles']
+        quiet = node['audit']['quiet']
 
         load_needed_dependencies
 
@@ -23,8 +23,7 @@ class Chef
         login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
         if check_interval_settings(interval, interval_enabled, interval_time, report_file)
-          call(reporter, profiles)
-          send_report(reporter, server, user, profiles)
+          call(reporter, quiet, server, user, profiles)
         else
           Chef::Log.error 'Please take a look at your interval settings'
         end
@@ -78,14 +77,13 @@ class Chef
         profile_overdue_to_run?(interval_seconds, report_file)
       end
 
-      def call(reporter, profiles)
+      def call(reporter, quiet, server, user, profiles)
         Chef::Log.debug 'Initialize InSpec'
         format = reporter == 'chef-visibility' ? 'json' : 'json-min'
-        Chef::Log.warn "Format is  #{format}"
-        # TODO: for now we need to store the report to a file we expect that to
-        # get from the runner
-        Chef::Log.warn "*********** Directory is  #{node['audit']['output']}"
-        opts = { 'format' => format, 'output' => node['audit']['output'] }
+        output = quiet ? ::File::NULL : $stdout
+        Chef::Log.warn "Format is #{format}"
+        opts = { 'report' => true, 'format' => format, 'output' => output }
+        Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
         tests = tests_for_runner(profiles)
@@ -93,6 +91,8 @@ class Chef
 
         Chef::Log.info "Running tests from: #{tests.inspect}"
         runner.run
+        report = runner.report.to_json
+        send_report(reporter, server, user, profiles, report)
       end
 
       # extracts relevant node data
@@ -109,12 +109,12 @@ class Chef
         }
       end
 
-      def send_report(reporter, server, user, profiles)
+      def send_report(reporter, server, user, profiles, report)
         Chef::Log.info "Reporting to #{reporter}"
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo[:node]).send_report
+          Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name, report).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
@@ -131,7 +131,7 @@ class Chef
                 profile_id: profile_id,
               }
             }
-            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles).send_report
+            Collector::ChefCompliance.new(url, run_context, raise_if_unreachable, compliance_profiles, report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
