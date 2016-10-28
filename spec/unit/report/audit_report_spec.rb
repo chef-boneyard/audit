@@ -20,32 +20,32 @@
 require 'spec_helper'
 require_relative '../../../files/default/audit_report'
 require_relative '../../data/mock.rb'
-# require_relative '../../data/fake_file.json'
 
 describe 'Chef::Handler::AuditReport methods' do
   before :each do
     @audit_report = Chef::Handler::AuditReport.new()
+    @interval = 1440
+    @interval_time = 1440
+    @report_file = File.new("./mock_file.json", "w")
   end
 
   describe 'report when interval settings are set to default (disabled)' do
+    interval_enabled = false
+
     it 'returns true for check_interval_settings' do
-      interval = 1440
-      interval_enabled = false
-      interval_time = 1440
-      report_file = File.new("./mock_file.json", "w")
-      status = @audit_report.check_interval_settings(interval, interval_enabled, interval_time, report_file)
+      status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time, @report_file)
       expect(status).to eq(true)
+      File.delete("./mock_file.json")
     end
   end
 
   describe 'report when interval settings are enabled' do
+    interval_enabled = true
+
     it 'returns false for check_interval_settings' do
-      interval = 1440
-      interval_enabled = true
-      interval_time = 1440
-      report_file = File.new("./mock_file.json", "w")
-      status = @audit_report.check_interval_settings(interval, interval_enabled, interval_time, report_file)
+      status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time, @report_file)
       expect(status).to eq(false)
+      File.delete("./mock_file.json")
     end
   end
 end

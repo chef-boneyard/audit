@@ -17,51 +17,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# require 'spec_helper'
+require 'spec_helper'
 
-# describe 'audit::upload' do
-#   context 'When all attributes are default, on an unspecified platform' do
-#     let(:chef_run) do
-#       runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '14.04')
-#       runner.converge(described_recipe)
-#     end
+describe 'audit::upload' do
+  context 'When all attributes are default, on an unspecified platform' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '14.04')
+      runner.converge(described_recipe)
+    end
 
-#     it 'converges successfully' do
-#       expect { chef_run }.to_not raise_error
-#     end
-#   end
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
 
-#   context 'When server and refresh_token are specified' do
-#     let(:chef_run) do
-#       ChefSpec::ServerRunner.new do |node|
-#         node.override['audit']['collector'] = 'chef-compliance'
-#         node.override['audit']['profiles'] = { 'admin/myprofile' => { 'source' => '/some/path.tar.gz' } }
-#         node.override['audit']['server'] = 'https://my.compliance.test/api'
-#         node.override['audit']['refresh_token'] = 'abcdefg'
-#         node.override['audit']['insecure'] = true
-#       end.converge(described_recipe)
-#     end
+  context 'When server and refresh_token are specified' do
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new do |node|
+        node.override['audit']['collector'] = 'chef-compliance'
+        node.override['audit']['profiles'] = [ {'name': 'admin/myprofile', 'path': '/some/path.tar.gz' } ]
+        node.override['audit']['server'] = 'https://my.compliance.test/api'
+        node.override['audit']['refresh_token'] = 'abcdefg'
+        node.override['audit']['insecure'] = true
+        node.override['audit']['owner'] = 'admin'
+      end.converge(described_recipe)
+    end
 
-#     it 'creates compliance_token resource' do
-#       expect(chef_run).to create_compliance_token('Compliance Token').with(
-#         server: 'https://my.compliance.test/api',
-#         insecure: true,
-#         token: 'abcdefg'
-#       )
-#     end
+    it 'uploads compliance_profile[myprofile]' do
+      expect(chef_run).to upload_compliance_profile('myprofile').with(
+        server: 'https://my.compliance.test/api',
+        owner: 'admin',
+        path: '/some/path.tar.gz',
+        insecure: true,
+        overwrite: true
+      )
+    end
 
-#     it 'uploads compliance_profile[myprofile]' do
-#       expect(chef_run).to upload_compliance_profile('myprofile').with(
-#         server: 'https://my.compliance.test/api',
-#         owner: 'admin',
-#         path: '/some/path.tar.gz',
-#         insecure: true,
-#         overwrite: true
-#       )
-#     end
-
-#     it 'converges successfully' do
-#       expect { chef_run }.to_not raise_error
-#     end
-#   end
-# end
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+end

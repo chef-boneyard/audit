@@ -15,6 +15,7 @@ class Chef
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
         report_file = node['audit']['output']
+        profiles = node['audit']['profiles']
 
         load_needed_dependencies
 
@@ -22,8 +23,8 @@ class Chef
         login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
         if check_interval_settings(interval, interval_enabled, interval_time, report_file)
-          call(reporter)
-          send_report(reporter, server, user)
+          call(reporter, profiles)
+          send_report(reporter, server, user, profiles)
         else
           Chef::Log.error 'Please take a look at your interval settings'
         end
@@ -77,7 +78,7 @@ class Chef
         profile_overdue_to_run?(interval_seconds, report_file)
       end
 
-      def call(reporter)
+      def call(reporter, profiles)
         Chef::Log.debug 'Initialize InSpec'
         format = reporter == 'chef-visibility' ? 'json' : 'json-min'
         Chef::Log.warn "Format is  #{format}"
@@ -87,7 +88,7 @@ class Chef
         opts = { 'format' => format, 'output' => node['audit']['output'] }
         runner = ::Inspec::Runner.new(opts)
 
-        tests = tests_for_runner
+        tests = tests_for_runner(profiles)
         tests.each { |target| runner.add_target(target, opts) }
 
         Chef::Log.info "Running tests from: #{tests.inspect}"
@@ -108,7 +109,7 @@ class Chef
         }
       end
 
-      def send_report(reporter, server, user)
+      def send_report(reporter, server, user, profiles)
         Chef::Log.info "Reporting to #{reporter}"
 
         # TODO: harmonize reporter interface
@@ -122,7 +123,7 @@ class Chef
             # TODO: we should not send the profiles to the reporter, all the information
             # should be available in inspec reports out-of-the-box
             # TODO: Chef Compliance can only handle reports for profiles it knows
-            profiles = tests_for_runner.map { |profile| profile[:compliance] }.uniq
+            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] }.uniq
             compliance_profiles = profiles.map { |profile|
               owner, profile_id = profile.split('/')
               {
