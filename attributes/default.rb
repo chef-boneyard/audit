@@ -32,7 +32,7 @@ default['audit']['refresh_token'] = nil
 # the token(access_token) expires in 12h after creation
 default['audit']['token'] = nil
 
-# set this insecure attribute to true if the compliance server uses self-signed ssl certificates
+# set this insecure attribute to true if the compliance server / chef server uses self-signed ssl certificates
 default['audit']['insecure'] = nil
 
 # Chef Compliance organization to post the report to. Defaults to Chef Server org if not defined

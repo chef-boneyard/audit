@@ -212,7 +212,7 @@ class Collector
 
       Chef::Log.info "Report to Chef Compliance: #{@url}"
 
-      # TODO: use insecure option
+      # TODO: use secure option
       opts = { use_ssl: @url.scheme == 'https',
         verify_mode: OpenSSL::SSL::VERIFY_NONE,
       }
@@ -234,8 +234,11 @@ class Collector
       # build report for chef compliance, it includes node data
       blob[:reports] = {}
       blob[:profiles] = {}
+      Chef::Log.info "Control Profile: #{profiles}"
       profiles.each { |profile|
-        namespace = @compliance_profiles.select { |entry| entry[:profile_id] == 'ssh' }
+        Chef::Log.info "Control Profil: #{profile}"
+        Chef::Log.info "Compliance Profils: #{@compliance_profiles}"
+        namespace = @compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
           Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
           blob[:profiles][profile] = namespace[0][:owner]
@@ -254,23 +257,29 @@ class Collector
   #
   # Used to send inspec reports to a Chef Compliance server via Chef Server
   #
-  class ChefServer
-    include ReportHelpers
-
+  class ChefServer < ChefCompliance
     @url = nil
 
-    def initialize(url)
+    def initialize(url, node_info, raise_if_unreachable, compliance_profiles, report)
       @url = url
+      @node_info = node_info
+      @raise_if_unreachable = raise_if_unreachable
+      @compliance_profiles = compliance_profiles
+      @report = report
     end
 
     def send_report
-      content = results
+      content = @report
+      json_report = enriched_report(JSON.parse(content))
+
+      # TODO: only disable if insecure option is set
       Chef::Config[:verify_api_cert] = false
       Chef::Config[:ssl_verify_mode] = :verify_none
+
       Chef::Log.info "Report to Chef Server: #{@url}"
       rest = Chef::ServerAPI.new(@url, Chef::Config)
       with_http_rescue do
-        rest.post(@url, content)
+        rest.post(@url, JSON.parse(json_report))
       end
     end
   end

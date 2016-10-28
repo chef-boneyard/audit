@@ -60,13 +60,13 @@ describe 'Chef::Handler::AuditReport methods' do
       reporter = 'chef-compliance'
       quiet = true
       opts = @audit_report.get_opts(reporter, quiet)
-      expect(opts).to eq({'report' => true, 'format' => 'json-min', 'output' => '/dev/null'})
+      expect(opts).to eq({'report' => true, 'format' => 'json-min', 'output' => '/dev/null', 'logger' => Chef::Log})
     end
     it 'given chef-visibility sets the format to json' do
       reporter = 'chef-visibility'
       quiet = true
       opts = @audit_report.get_opts(reporter, quiet)
-      expect(opts).to eq({'report' => true, 'format' => 'json', 'output' => '/dev/null'})
+      expect(opts).to eq({'report' => true, 'format' => 'json', 'output' => '/dev/null', 'logger' => Chef::Log})
     end
   end
 

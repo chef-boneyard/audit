@@ -1,4 +1,4 @@
-# Example: Test-Kitchen
+# Example: Test-Kitchen with Chef Compliance
 
 This example demonstrates the usage of the audit cookbook with test-kitchen. In order to use it, we expect to have `COMPLIANCE_API` and `COMPLIANCE_ACCESSTOKEN` available as environment variables.
 

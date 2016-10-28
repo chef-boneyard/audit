@@ -7,6 +7,7 @@ AllCops:
   - 'test/**/*'
   - 'spec/**/*'
   - 'vendor/**/*'
+  - 'examples/chef-server/Vagrantfile'
 Documentation:
   Enabled: false
 AlignParameters:

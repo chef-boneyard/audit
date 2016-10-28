@@ -1,0 +1,51 @@
+# encoding: utf-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+NODE_SCRIPT = <<EOF.freeze
+echo "Prepare Chef Client node"
+apt-get update
+# ensure the time is uptodate
+apt-get -y install ntp
+service ntp stop
+ntpdate -s time.nist.gov
+service ntp start
+EOF
+
+def set_hostname(server)
+  server.vm.provision 'shell', inline: "hostname #{server.vm.hostname}"
+end
+
+Vagrant.configure(2) do |config|
+
+  config.vm.define 'chef-client-node' do |server|
+    server.vm.box = 'bento/ubuntu-14.04'
+    server.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box'
+    server.vm.hostname = 'audit-node'
+    server.vm.network 'private_network', ip: '192.168.33.102'
+    server.vm.synced_folder '.', '/vagrant'
+    config.vm.provision :shell, inline: NODE_SCRIPT.dup
+    set_hostname(server)
+
+    config.vm.provision :chef_client do |chef|
+      chef.chef_server_url = 'https://192.168.33.101/organizations/brewinc'
+      chef.validation_key_path = 'brewinc-validator.pem'
+      chef.validation_client_name = 'brewinc-validator'
+      chef.log_level = :debug
+      chef.add_recipe 'audit::default'
+      chef.json = {
+        audit: {
+          collector: "chef-server",
+          insecure: true,
+          profiles: [{
+            name: "linux",
+            compliance: "base/linux"
+          },{
+            name: "ssh",
+            compliance: "base/ssh"
+          }]
+        },
+      }
+    end
+  end
+end
