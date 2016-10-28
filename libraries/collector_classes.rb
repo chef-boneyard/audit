@@ -188,8 +188,8 @@ class Collector
     @node_info = {}
 
     # TODO: do not pass run_context in here, define a proper interface
-    def initialize(_url, run_context, raise_if_unreachable, compliance_profiles)
-      @run_context = run_context
+    def initialize(_url, node_info, raise_if_unreachable, compliance_profiles)
+      @node_info = node_info
       @config = Compliance::Configuration.new
       Chef::Log.warn "Report to Chef Compliance: #{@config['user']}"
       Chef::Log.warn "#{@config['server']}/owners/#{@config['user']}/inspec"
@@ -223,7 +223,7 @@ class Collector
     # TODO: add to docs that all profiles used in Chef Compliance, need to
     # be uploaded to Chef Compliance first
     def enriched_report(report)
-      blob = node_info
+      blob = @node_info.dup
 
       # extract profile names
       profiles = report['controls'].collect { |control| control['profile_id'] }.uniq
@@ -245,19 +245,6 @@ class Collector
       }
 
       blob.to_json
-    end
-
-    def node_info
-      n = @run_context.node
-      {
-        node: n.name,
-        os: {
-          # arch: n['arch'],
-          release: n['platform_version'],
-          family: n['platform'],
-        },
-        environment: n.environment,
-      }
     end
   end
 

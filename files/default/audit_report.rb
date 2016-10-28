@@ -94,12 +94,26 @@ class Chef
         runner.run
       end
 
+      # extracts relevant node data
+      def gather_nodeinfo
+        n = run_context.node
+        {
+          node: n.name,
+          os: {
+            # arch: n['arch'],
+            release: n['platform_version'],
+            family: n['platform'],
+          },
+          environment: n.environment,
+        }
+      end
+
       def send_report(reporter, server, user)
         Chef::Log.info "Reporting to #{reporter}"
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name).send_report
+          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo[:node]).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
@@ -116,7 +130,7 @@ class Chef
                 profile_id: profile_id,
               }
             }
-            Collector::ChefCompliance.new(url, run_context, raise_if_unreachable, compliance_profiles).send_report
+            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
