@@ -190,7 +190,7 @@ class Collector
     @node_info = {}
     @report = ''
 
-    def initialize(_url, run_context, raise_if_unreachable, compliance_profiles, report)
+    def initialize(_url, node_info, raise_if_unreachable, compliance_profiles, report)
       @node_info = node_info
       @config = Compliance::Configuration.new
       Chef::Log.warn "Report to Chef Compliance: #{@config['user']}"

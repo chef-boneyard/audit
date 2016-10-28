@@ -69,17 +69,28 @@ module ReportHelpers
     cs.to_s
   end
 
-  # get file contents where inspec results were saved
-  def results
-    result_path = File.expand_path('../../inspec_results.json', __FILE__)
-    file = File.open(result_path, 'rb')
-    content = file.read
-    file.close
-    content
+  # returns string of profile names separated with underscore
+  def extract_profile_names(profiles)
+    string = ''
+    profiles.each { |profile| string << profile["name"] << '_'}
+    string
   end
 
-  def profile_overdue_to_run?(interval, report_file)
+  # write to json file for interval calculations
+  def write_to_file(report, profiles)
+    names = extract_profile_names(profiles)
+    names << '-' << Time.now.utc.to_s.gsub(" ", "_") << '.json'
+    path = File.expand_path("../../#{names}", __FILE__)
+    json_file = File.new(path, 'w')
+    json_file.puts(report)
+    json_file.close
+  end
+
+  def profile_overdue_to_run?(interval, profiles)
     # Calculate when a report was last created so we delay the next report if necessary
+    names = extract_profile_names(profiles)
+    filename = /#{names}.*json/
+    report_file = File.expand_path("../../#{filename}", __FILE__)
     return true unless ::File.exist?(report_file)
     seconds_since_last_run = Time.now - ::File.mtime(report_file)
     seconds_since_last_run > interval

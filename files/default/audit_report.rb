@@ -22,7 +22,7 @@ class Chef
         # ensure authentication for Chef Compliance is in place
         login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
-        if check_interval_settings(interval, interval_enabled, interval_time, report_file)
+        if check_interval_settings(interval, interval_enabled, interval_time, profiles)
           call(reporter, quiet, server, user, profiles)
         else
           Chef::Log.error 'Please take a look at your interval settings'
@@ -66,7 +66,7 @@ class Chef
         end
       end
 
-      def check_interval_settings(interval, interval_enabled, interval_time, report_file)
+      def check_interval_settings(interval, interval_enabled, interval_time, profiles)
         # handle intervals
         interval_seconds = 0 # always run this by default, unless interval is defined
         if !interval.nil? && interval_enabled
@@ -74,7 +74,7 @@ class Chef
           Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
         end
         # returns true if profile is overdue to run
-        profile_overdue_to_run?(interval_seconds, report_file)
+        profile_overdue_to_run?(interval_seconds, profiles)
       end
 
       def call(reporter, quiet, server, user, profiles)
@@ -92,6 +92,7 @@ class Chef
         Chef::Log.info "Running tests from: #{tests.inspect}"
         runner.run
         report = runner.report.to_json
+        write_to_file(report, profiles)
         send_report(reporter, server, user, profiles, report)
       end
 
@@ -114,7 +115,7 @@ class Chef
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, run_context.node.name, report).send_report
+          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo[:node], report).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
@@ -131,7 +132,7 @@ class Chef
                 profile_id: profile_id,
               }
             }
-            Collector::ChefCompliance.new(url, run_context, raise_if_unreachable, compliance_profiles, report).send_report
+            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles, report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
