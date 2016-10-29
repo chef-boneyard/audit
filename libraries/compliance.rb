@@ -32,3 +32,26 @@ end
 def upload_profile(config, owner, profile_name, path)
   Compliance::API.upload(config, owner, profile_name, path)
 end
+
+# TODO: temporary, we should not use this
+# TODO: harmonize with CLI login_refreshtoken method
+def login_to_compliance(server, user, access_token, refresh_token)
+  if !refresh_token.nil?
+    success, msg, access_token = Compliance::API.get_token_via_refresh_token(server, refresh_token, true)
+  else
+    success = true
+  end
+
+  if success
+    config = Compliance::Configuration.new
+    config['user'] = user
+    config['server'] = server
+    config['token'] = access_token
+    config['insecure'] = true
+    config['version'] = Compliance::API.version(server, true)
+    config.store
+  else
+    Chef::Log.error msg
+    raise('Could not store authentication token')
+  end
+end

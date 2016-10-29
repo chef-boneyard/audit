@@ -64,9 +64,8 @@ default['audit']['format'] = 'json'
 # set profiles to empty array as default
 default['audit']['profiles'] = []
 
-# output for inspec results
-result_path = File.expand_path('../../inspec_results.json', __FILE__)
-default['audit']['output'] = result_path
+# write json report to file on disk
+default['audit']['write_to_file'] = false
 
 # inspec gem version to install(e.g. '1.1.0')
 default['audit']['inspec_version'] = '1.2.0'

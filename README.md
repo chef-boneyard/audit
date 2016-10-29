@@ -343,6 +343,31 @@ You can enable the interval and set the interval time, along with your desired p
 
 ```
 
+## Write to file
+
+If you would like to write the json report to a file on disk, you can enable the write to file attribute.
+  Note:  If write to file is enabled, interval timing may not be enabled.  This is because when we write
+        the file to disk, the file is named with a timestamp.  When we do interval timing, we write a file
+        with a simple name of the profiles, to enable easy checking for existence.
+
+```json
+
+  "audit": {
+    "profiles": [
+      {
+        "name": "ssh",
+        "compliance": "base/ssh"
+      },
+      {
+        "name": "linux",
+        "compliance": "base/linux"
+      }
+    ],
+    "write_to_file": true
+  }
+
+```
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.

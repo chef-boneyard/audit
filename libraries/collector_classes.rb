@@ -14,10 +14,10 @@ class Collector
     @node_name = ''
     @report = ''
 
-    def initialize(entity_uuid, run_id, node_name, report)
+    def initialize(entity_uuid, run_id, node_info, report)
       @entity_uuid = entity_uuid
       @run_id = run_id
-      @node_name = node_name
+      @node_name = node_info[:node]
       @report = report
     end
 

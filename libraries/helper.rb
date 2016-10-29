@@ -72,14 +72,18 @@ module ReportHelpers
   # returns string of profile names separated with underscore
   def extract_profile_names(profiles)
     string = ''
-    profiles.each { |profile| string << profile["name"] << '_'}
+    profiles.each do |profile|
+      name = 'unknown'
+      name = profile['name'] unless profile['name'].nil?
+      string << name << '_'
+    end
     string
   end
 
   # write to json file for interval calculations
-  def write_to_file(report, profiles)
-    names = extract_profile_names(profiles)
-    names << '-' << Time.now.utc.to_s.gsub(" ", "_") << '.json'
+  def write_to_file(report, profiles, interval_enabled, write_to_file)
+    names = extract_profile_names(profiles) << '.json' if interval_enabled
+    names = extract_profile_names(profiles) << '-' << Time.now.utc.to_s.tr(' ', '_') << '.json' if write_to_file
     path = File.expand_path("../../#{names}", __FILE__)
     json_file = File.new(path, 'w')
     json_file.puts(report)
@@ -89,10 +93,26 @@ module ReportHelpers
   def profile_overdue_to_run?(interval, profiles)
     # Calculate when a report was last created so we delay the next report if necessary
     names = extract_profile_names(profiles)
-    filename = /#{names}.*json/
-    report_file = File.expand_path("../../#{filename}", __FILE__)
+    report_file = File.expand_path("../../#{names}.json", __FILE__)
     return true unless ::File.exist?(report_file)
     seconds_since_last_run = Time.now - ::File.mtime(report_file)
     seconds_since_last_run > interval
+  end
+
+  def check_interval_settings(interval, interval_enabled, interval_time, profiles)
+    # handle intervals
+    interval_seconds = 0 # always run this by default, unless interval is defined
+    if !interval.nil? && interval_enabled
+      interval_seconds = interval_time * 60 # seconds in interval
+      Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
+    end
+    # returns true if profile is overdue to run
+    profile_overdue_to_run?(interval_seconds, profiles)
+  end
+
+  # write_to_file and interval_enabled cannot both be set to true, for file naming purposes
+  def check_attributes(write_to_file, interval_enabled)
+    return false if write_to_file && interval_enabled
+    true
   end
 end
