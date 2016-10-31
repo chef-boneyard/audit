@@ -16,12 +16,9 @@ class Chef
         interval_time = node['audit']['interval']['time']
         profiles = node['audit']['profiles']
         quiet = node['audit']['quiet']
-        write_to_file = node['audit']['write_to_file']
 
-        # used to ensure there are no conflicting attributes (see libraries/helper.rb)
-        if check_attributes(write_to_file, interval_enabled) == false
-          Chef::Log.error 'Please have a look at your attributes. Only one each of interval enabled and write to file may be set to true for filename writing purposes.'
-        end
+        # create a file with a timestamp to
+        create_timestamp_file if interval_enabled
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
@@ -30,15 +27,12 @@ class Chef
         login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
         # true if profile is due to run (see libraries/helper.rb)
-        if check_interval_settings(interval, interval_enabled, interval_time, profiles)
+        if check_interval_settings(interval, interval_enabled, interval_time)
           # return hash of opts to be used by runner
           opts = get_opts(reporter, quiet)
 
           # instantiate inspec runner with given options and run profiles; return report
           report = call(opts, profiles)
-
-          # creates file on disk if interval reporting is enabled or write_to_file is enabled (see libraries/helper.rb)
-          write_to_file(report, profiles, interval_enabled, write_to_file) if interval_enabled || write_to_file
 
           # send report to the correct reporter (visibility, compliance, chef-server)
           send_report(reporter, server, user, profiles, report)
@@ -134,6 +128,10 @@ class Chef
         #   else
         #     Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
         #   end
+
+        elsif reporter == 'json-file'
+          timestamp = Time.now.utc.to_s.tr(' ', '_')
+          Collector::JsonFile.new(report, profiles, timestamp).send_report
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end

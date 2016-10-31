@@ -80,26 +80,15 @@ module ReportHelpers
     string
   end
 
-  # write to json file for interval calculations
-  def write_to_file(report, profiles, interval_enabled, write_to_file)
-    names = extract_profile_names(profiles) << '.json' if interval_enabled
-    names = extract_profile_names(profiles) << '-' << Time.now.utc.to_s.tr(' ', '_') << '.json' if write_to_file
-    path = File.expand_path("../../#{names}", __FILE__)
-    json_file = File.new(path, 'w')
-    json_file.puts(report)
-    json_file.close
-  end
-
-  def profile_overdue_to_run?(interval, profiles)
+  def profile_overdue_to_run?(interval)
     # Calculate when a report was last created so we delay the next report if necessary
-    names = extract_profile_names(profiles)
-    report_file = File.expand_path("../../#{names}.json", __FILE__)
-    return true unless ::File.exist?(report_file)
-    seconds_since_last_run = Time.now - ::File.mtime(report_file)
+    file = File.expand_path('../../report_timing.json', __FILE__)
+    return true unless ::File.exist?(file)
+    seconds_since_last_run = Time.now - ::File.mtime(file)
     seconds_since_last_run > interval
   end
 
-  def check_interval_settings(interval, interval_enabled, interval_time, profiles)
+  def check_interval_settings(interval, interval_enabled, interval_time)
     # handle intervals
     interval_seconds = 0 # always run this by default, unless interval is defined
     if !interval.nil? && interval_enabled
@@ -107,12 +96,14 @@ module ReportHelpers
       Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
     end
     # returns true if profile is overdue to run
-    profile_overdue_to_run?(interval_seconds, profiles)
+    profile_overdue_to_run?(interval_seconds)
   end
 
-  # write_to_file and interval_enabled cannot both be set to true, for file naming purposes
-  def check_attributes(write_to_file, interval_enabled)
-    return false if write_to_file && interval_enabled
-    true
+  def create_timestamp_file
+    path = File.expand_path('../../report_timing.json', __FILE__)
+    timestamp = Time.now.utc
+    timestamp_file = File.new(path, 'w')
+    timestamp_file.puts(timestamp)
+    timestamp_file.close
   end
 end

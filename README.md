@@ -254,6 +254,22 @@ audit: {
 }
 ```
 
+## Write to file on disk
+
+To write the report to a file on disk, simply set the collector to 'json-file' like so:
+
+```ruby
+audit: {
+  collector: 'json-file',
+  profiles: [
+   {
+      'name': 'admin/ssh2',
+      'path': '/some/base_ssh.tar.gz'
+    }
+  ]
+}
+```
+
 ## Relationship with Chef Audit Mode
 
 The following tables compares the [Chef Client audit mode](https://docs.chef.io/ctl_chef_client.html#run-in-audit-mode) with this `audit` cookbook.
@@ -339,31 +355,6 @@ You can enable the interval and set the interval time, along with your desired p
       "enabled": true,
       "time": 1440
     }
-  }
-
-```
-
-## Write to file
-
-If you would like to write the json report to a file on disk, you can enable the write to file attribute.
-  Note:  If write to file is enabled, interval timing may not be enabled.  This is because when we write
-        the file to disk, the file is named with a timestamp.  When we do interval timing, we write a file
-        with a simple name of the profiles, to enable easy checking for existence.
-
-```json
-
-  "audit": {
-    "profiles": [
-      {
-        "name": "ssh",
-        "compliance": "base/ssh"
-      },
-      {
-        "name": "linux",
-        "compliance": "base/linux"
-      }
-    ],
-    "write_to_file": true
   }
 
 ```

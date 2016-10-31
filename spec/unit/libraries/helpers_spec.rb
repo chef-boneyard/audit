@@ -27,32 +27,10 @@ describe ReportHelpers do
     expect(names).to eq 'unknown_linux_'
   end
 
-  it 'write_to_file with interval enabled writes simple filename' do
-    report = 'some info'
-    profiles = [{'name'=> 'ssh', 'url'=> 'https://github.com/dev-sec/tests-ssh-hardening'}, {'name'=> 'linux', 'compliance'=> 'base/linux'}]
-    interval_enabled = true
-    write_to_file = false
-    @helpers.write_to_file(report, profiles, interval_enabled, write_to_file)
-    expected_file_path = File.expand_path("../../../../ssh_linux_.json", __FILE__)
+  it 'create_timestamp_file creates a new file' do
+    expected_file_path = File.expand_path("../../../../report_timing.json", __FILE__)
+    @report.create_timestamp_file
     expect(File).to exist("#{expected_file_path}")
     File.delete("#{expected_file_path}")
-  end
-
-  it 'write_to_file with write to file enabled writes filename with timestamp' do
-    report = 'some info'
-    profiles = [{'name'=> 'ssh', 'url'=> 'https://github.com/dev-sec/tests-ssh-hardening'}, {'name'=> 'linux', 'compliance'=> 'base/linux'}]
-    interval_enabled = false
-    write_to_file = true
-    timestamp = Time.now.utc.to_s.gsub(" ", "_")
-    @helpers.write_to_file(report, profiles, interval_enabled, write_to_file)
-    expected_file_path = File.expand_path("../../../../ssh_linux_-#{timestamp}.json", __FILE__)
-    expect(File).to exist("#{expected_file_path}")
-    File.delete("#{expected_file_path}")
-  end
-
-  it 'check_attributes given true for write_to_file and interval_enabled returns false' do
-    write_to_file = true
-    interval_enabled = true
-    expect(@helpers.check_attributes(write_to_file, interval_enabled)).to eq false
   end
 end

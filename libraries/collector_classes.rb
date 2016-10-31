@@ -49,7 +49,7 @@ class Collector
         end
 
         begin
-          Chef::Log.info "Report to Chef Visibility: #{dc[:server_url]}"
+          Chef::Log.warn "Report to Chef Visibility: #{dc[:server_url]}"
           Chef::Log.debug("POSTing the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
@@ -272,6 +272,36 @@ class Collector
       with_http_rescue do
         rest.post(@url, content)
       end
+    end
+  end
+
+  #
+  # Used to write report to file on disk
+  #
+  class JsonFile
+    include ReportHelpers
+
+    @report = ''
+    @profiles = []
+
+    def initialize(report, profiles, timestamp)
+      @report = report
+      @profiles = profiles
+      @timestamp = timestamp
+    end
+
+    def send_report
+      Chef::Log.warn 'Writing report to file.'
+      write_to_file(@report, @profiles, @timestamp)
+    end
+
+    def write_to_file(report, profiles, timestamp)
+      filename = extract_profile_names(profiles) << '-' << timestamp << '.json'
+      path = File.expand_path("../../#{filename}", __FILE__)
+      Chef::Log.warn "Filename is #{path}"
+      json_file = File.new(path, 'w')
+      json_file.puts(report)
+      json_file.close
     end
   end
 end

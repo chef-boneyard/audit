@@ -18,7 +18,7 @@
 # inspec gem version to install(e.g. '1.1.0')
 default['audit']['inspec_version'] = '1.2.0'
 
-# collector possible values: chef-server, chef-compliance, chef-visibility
+# collector possible values: chef-server, chef-compliance, chef-visibility, json-file
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
 
@@ -63,9 +63,6 @@ default['audit']['format'] = 'json'
 
 # set profiles to empty array as default
 default['audit']['profiles'] = []
-
-# write json report to file on disk
-default['audit']['write_to_file'] = false
 
 # inspec gem version to install(e.g. '1.1.0')
 default['audit']['inspec_version'] = '1.2.0'

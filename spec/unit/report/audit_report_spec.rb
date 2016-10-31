@@ -33,15 +33,14 @@ describe 'Chef::Handler::AuditReport methods' do
       @interval_time = 1440
       interval_enabled = true
       write_to_file = false
-      @profiles = [{'name'=> 'ssh', 'compliance'=> 'base/ssh'}, {'name'=> 'linux', 'compliance'=> 'base/linux'}]
-      @helpers.write_to_file('some info', @profiles, interval_enabled, write_to_file)
+      @helpers.create_timestamp_file
     end
 
     describe 'report when interval settings are set to default (disabled)' do
       interval_enabled = false
 
       it 'returns true for check_interval_settings' do
-        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time, @profiles)
+        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time)
         expect(status).to eq(true)
       end
     end
@@ -50,7 +49,7 @@ describe 'Chef::Handler::AuditReport methods' do
       interval_enabled = true
 
       it 'returns false for check_interval_settings' do
-        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time, @profiles)
+        status = @audit_report.check_interval_settings(@interval, interval_enabled, @interval_time)
         expect(status).to eq(false)
       end
     end
