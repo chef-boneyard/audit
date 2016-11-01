@@ -26,6 +26,9 @@ class Chef
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
+        # detect if we run in a chef client with chef server
+        load_chef_fetcher if reporters.include?('chef-server')
+
         # iterate through reporters
         reporters.each do |reporter|
           # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
@@ -61,17 +64,31 @@ class Chef
         require 'bundles/inspec-compliance/target'
       end
 
+      # we expect inspec to be loaded before
+      def load_chef_fetcher
+        Chef::Log.debug "Load vendored ruby files from: #{cookbook_vendor_path}"
+        $LOAD_PATH.unshift(cookbook_vendor_path)
+        require 'chef-server/fetcher'
+      end
+
       # sets format to json-min when chef-compliance, json when chef-visibility
       def get_opts(reporter, quiet)
         format = reporter == 'chef-visibility' ? 'json' : 'json-min'
         output = quiet ? ::File::NULL : $stdout
+
         Chef::Log.warn "Format is #{format}"
-        { 'report' => true, 'format' => format, 'output' => output }
+        opts = {
+          'report' => true,
+          'format' => format,
+          'output' => output,
+          'logger' => Chef::Log, # Use chef-client log level for inspec run
+        }
+        opts
       end
 
       # run profiles and return report
       def call(opts, profiles)
-        Chef::Log.debug 'Initialize InSpec'
+        Chef::Log.info 'Initialize InSpec'
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
@@ -98,6 +115,22 @@ class Chef
         }
       end
 
+      # this is a helper methods to extract the profiles we scan and hand this
+      # over to the reporter in addition to the `json-min` report. `json-min`
+      # reports do not include information about the source of the profiles
+      # TODO: should be available in inspec `json-min` reports out-of-the-box
+      # TODO: raise warning when not a compliance-known profile
+      def cc_profile_index(profiles)
+        cc_profiles = tests_for_runner(profiles).select { |profile| profile[:compliance] }.map { |profile| profile[:compliance] }.uniq.compact
+        cc_profiles.map { |profile|
+          owner, profile_id = profile.split('/')
+          {
+            owner: owner,
+            profile_id: profile_id,
+          }
+        }
+      end
+
       # send report to the collector (see libraries/collector_classes.rb)
       def send_report(reporter, server, user, profiles, report)
         Chef::Log.info "Reporting to #{reporter}"
@@ -110,31 +143,19 @@ class Chef
           raise_if_unreachable = node['audit']['raise_if_unreachable']
           url = construct_url(server, File.join('/owners', user, 'inspec'))
           if server
-            # TODO: we should not send the profiles to the reporter, all the information
-            # should be available in inspec reports out-of-the-box
-            # TODO: raise warning when not a compliance-known profile
-            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] if profile[:compliance] }.uniq.compact
-            compliance_profiles = profiles.map { |profile|
-              owner, profile_id = profile.split('/')
-              {
-                owner: owner,
-                profile_id: profile_id,
-              }
-            }
-            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles, report).send_report
+            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
-
-        # elsif reporter == 'chef-server'
-        #   chef_url = server || base_chef_server_url
-        #   if chef_url
-        #     url = construct_url(chef_url + '/compliance/', File.join('organizations', user, 'inspec'))
-        #     Collector::ChefServer.new(url).send_report
-        #   else
-        #     Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
-        #   end
-
+        elsif reporter == 'chef-server'
+          chef_url = server || base_chef_server_url
+          chef_org = Chef::Config[:chef_server_url].split('/').last
+          if chef_url
+            url = construct_url(chef_url + '/compliance/', File.join('organizations', chef_org, 'inspec'))
+            Collector::ChefServer.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
+          else
+            Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
+          end
         elsif reporter == 'json-file'
           timestamp = Time.now.utc.to_s.tr(' ', '_')
           Collector::JsonFile.new(report, timestamp).send_report

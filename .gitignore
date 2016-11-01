@@ -38,7 +38,6 @@ doc/
 Berksfile.lock
 .kitchen
 .kitchen.local.yml
-vendor/
 .coverage/
 .zero-knife.rb
 
@@ -46,3 +45,4 @@ vendor/
 .vagrant/
 .vagrant.d/
 .kitchen/
+brewinc-validator.pem

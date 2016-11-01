@@ -102,4 +102,8 @@ module ReportHelpers
     return reporters if reporters.is_a? Array
     [reporters]
   end
+
+  def cookbook_vendor_path
+    File.expand_path('../../files/default/vendor', __FILE__)
+  end
 end
