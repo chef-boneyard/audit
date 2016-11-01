@@ -95,4 +95,48 @@ describe 'audit::default' do
       expect { chef_run }.to_not raise_error
     end
   end
+
+  context 'When specifying a single reporter' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner.node.override['audit']['collector'] = 'json-file'
+      runner.node.override['audit']['profiles'] = [
+        { 'name': 'linux', 'compliance': 'base/linux' },
+        { 'name': 'apache', 'compliance': 'base/apache' },
+        { 'name': 'ssh-hardening', 'supermarket': 'hardening/ssh-hardening' },
+        { 'name': 'brewinc/tmp_compliance_profile',
+          'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+        },
+        { 'name': 'brewinc/tmp_compliance_profile-master',
+          'path': '/tmp/tmp_compliance_profile-master'
+        }
+      ]
+      runner.converge(described_recipe)
+    end
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+  context 'When specifying multiple reporters' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner.node.override['audit']['collector'] = ['chef-compliance', 'json-file']
+      runner.node.override['audit']['profiles'] = [
+        { 'name': 'linux', 'compliance': 'base/linux' },
+        { 'name': 'apache', 'compliance': 'base/apache' },
+        { 'name': 'ssh-hardening', 'supermarket': 'hardening/ssh-hardening' },
+        { 'name': 'brewinc/tmp_compliance_profile',
+          'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+        },
+        { 'name': 'brewinc/tmp_compliance_profile-master',
+          'path': '/tmp/tmp_compliance_profile-master'
+        }
+      ]
+      runner.converge(described_recipe)
+    end
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
 end

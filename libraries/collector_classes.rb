@@ -282,21 +282,19 @@ class Collector
     include ReportHelpers
 
     @report = ''
-    @profiles = []
 
-    def initialize(report, profiles, timestamp)
+    def initialize(report, timestamp)
       @report = report
-      @profiles = profiles
       @timestamp = timestamp
     end
 
     def send_report
       Chef::Log.warn 'Writing report to file.'
-      write_to_file(@report, @profiles, @timestamp)
+      write_to_file(@report, @timestamp)
     end
 
-    def write_to_file(report, profiles, timestamp)
-      filename = extract_profile_names(profiles) << '-' << timestamp << '.json'
+    def write_to_file(report, timestamp)
+      filename = 'inspec' << '-' << timestamp << '.json'
       path = File.expand_path("../../#{filename}", __FILE__)
       Chef::Log.warn "Filename is #{path}"
       json_file = File.new(path, 'w')

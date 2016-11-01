@@ -6,7 +6,10 @@ class Chef
     # Creates a compliance audit report
     class AuditReport < ::Chef::Handler
       def report
-        reporter = node['audit']['collector']
+        # ensure reporters is array
+        reporters = handle_reporters(node['audit']['collector'])
+
+        # collect attribute values
         server = node['audit']['server']
         user = node['audit']['owner']
         token = node['audit']['token']
@@ -23,21 +26,24 @@ class Chef
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
-        # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
-        login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
+        # iterate through reporters
+        reporters.each do |reporter|
+          # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
+          login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
-        # true if profile is due to run (see libraries/helper.rb)
-        if check_interval_settings(interval, interval_enabled, interval_time)
-          # return hash of opts to be used by runner
-          opts = get_opts(reporter, quiet)
+          # true if profile is due to run (see libraries/helper.rb)
+          if check_interval_settings(interval, interval_enabled, interval_time)
+            # return hash of opts to be used by runner
+            opts = get_opts(reporter, quiet)
 
-          # instantiate inspec runner with given options and run profiles; return report
-          report = call(opts, profiles)
+            # instantiate inspec runner with given options and run profiles; return report
+            report = call(opts, profiles)
 
-          # send report to the correct reporter (visibility, compliance, chef-server)
-          send_report(reporter, server, user, profiles, report)
-        else
-          Chef::Log.error 'Please take a look at your interval settings'
+            # send report to the correct reporter (visibility, compliance, chef-server)
+            send_report(reporter, server, user, profiles, report)
+          else
+            Chef::Log.error 'Please take a look at your interval settings'
+          end
         end
       end
 
@@ -106,8 +112,8 @@ class Chef
           if server
             # TODO: we should not send the profiles to the reporter, all the information
             # should be available in inspec reports out-of-the-box
-            # TODO: Chef Compliance can only handle reports for profiles it knows
-            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] }.uniq
+            # TODO: raise warning when not a compliance-known profile
+            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] if profile[:compliance] }.uniq.compact
             compliance_profiles = profiles.map { |profile|
               owner, profile_id = profile.split('/')
               {
@@ -131,7 +137,7 @@ class Chef
 
         elsif reporter == 'json-file'
           timestamp = Time.now.utc.to_s.tr(' ', '_')
-          Collector::JsonFile.new(report, profiles, timestamp).send_report
+          Collector::JsonFile.new(report, timestamp).send_report
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end

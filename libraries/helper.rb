@@ -69,17 +69,6 @@ module ReportHelpers
     cs.to_s
   end
 
-  # returns string of profile names separated with underscore
-  def extract_profile_names(profiles)
-    string = ''
-    profiles.each do |profile|
-      name = 'unknown'
-      name = profile['name'] unless profile['name'].nil?
-      string << name << '_'
-    end
-    string
-  end
-
   def profile_overdue_to_run?(interval)
     # Calculate when a report was last created so we delay the next report if necessary
     file = File.expand_path('../../report_timing.json', __FILE__)
@@ -99,11 +88,18 @@ module ReportHelpers
     profile_overdue_to_run?(interval_seconds)
   end
 
+  # used for interval timing
   def create_timestamp_file
     path = File.expand_path('../../report_timing.json', __FILE__)
     timestamp = Time.now.utc
     timestamp_file = File.new(path, 'w')
     timestamp_file.puts(timestamp)
     timestamp_file.close
+  end
+
+  # takes value of reporters and returns array to ensure backwards-compatibility
+  def handle_reporters(reporters)
+    return reporters if reporters.is_a? Array
+    [reporters]
   end
 end

@@ -15,22 +15,20 @@ describe ReportHelpers do
     expect(symbol_tests).to eq([{:name=>"ssh", :url=>"https://github.com/dev-sec/tests-ssh-hardening"}])
   end
 
-  it 'extract_profile_names given profiles returns names' do
-    profiles = [{'name'=> 'ssh', 'url'=> 'https://github.com/dev-sec/tests-ssh-hardening'}, {'name'=> 'linux', 'compliance'=> 'base/linux'}]
-    names = @helpers.extract_profile_names(profiles)
-    expect(names).to eq 'ssh_linux_'
-  end
-
-  it 'extract_profile_names given profiles without a name returns names' do
-    profiles = [{'url'=> 'https://github.com/dev-sec/tests-ssh-hardening'}, {'name'=> 'linux', 'compliance'=> 'base/linux'}]
-    names = @helpers.extract_profile_names(profiles)
-    expect(names).to eq 'unknown_linux_'
-  end
-
   it 'create_timestamp_file creates a new file' do
     expected_file_path = File.expand_path("../../../../report_timing.json", __FILE__)
     @report.create_timestamp_file
     expect(File).to exist("#{expected_file_path}")
     File.delete("#{expected_file_path}")
+  end
+
+  it 'handle_reporters returns array of reporters when given array' do
+    reporters = ['chef-compliance', 'json-file']
+    expect(@report.handle_reporters(reporters)).to eq(['chef-compliance', 'json-file'])
+  end
+
+  it 'handle_reporters returns array of reporters when given string' do
+    reporters = 'chef-compliance'
+    expect(@report.handle_reporters(reporters)).to eq(['chef-compliance'])
   end
 end

@@ -270,6 +270,28 @@ audit: {
 }
 ```
 
+## Multiple reporters
+
+To enable multiple reporters, simply define multiple reporters with all the necessary information
+for each one.  For example, to report to chef-compliance and write to json file on disk:
+
+```ruby
+"audit": {
+  "collector": [ "chef-compliance", "json-file" ]
+  "server": "https://compliance-fqdn/api",
+  "owner": "my-comp-org",
+  "refresh_token": "5/4T...g==",
+  "insecure": false,
+  "profiles": [
+    {
+      "name": "windows",
+      "compliance": "base/windows"
+    }
+  ]
+}
+```
+
+
 ## Relationship with Chef Audit Mode
 
 The following tables compares the [Chef Client audit mode](https://docs.chef.io/ctl_chef_client.html#run-in-audit-mode) with this `audit` cookbook.
