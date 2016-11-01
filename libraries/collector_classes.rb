@@ -12,11 +12,13 @@ class Collector
     @entity_uuid = nil
     @run_id = nil
     @node_name = ''
+    @report = ''
 
-    def initialize(entity_uuid, run_id, node_name)
+    def initialize(entity_uuid, run_id, node_info, report)
       @entity_uuid = entity_uuid
       @run_id = run_id
-      @node_name = node_name
+      @node_name = node_info[:node]
+      @report = report
     end
 
     # Method used in order to send the inspec report to the data_collector server
@@ -26,7 +28,7 @@ class Collector
         return false
       end
 
-      content = results
+      content = @report
       json_report = enriched_report(JSON.parse(content))
 
       unless json_report
@@ -47,7 +49,7 @@ class Collector
         end
 
         begin
-          Chef::Log.info "Report to Chef Visibility: #{dc[:server_url]}"
+          Chef::Log.warn "Report to Chef Visibility: #{dc[:server_url]}"
           Chef::Log.debug("POSTing the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
@@ -186,9 +188,9 @@ class Collector
 
     @url = nil
     @node_info = {}
+    @report = ''
 
-    # TODO: do not pass run_context in here, define a proper interface
-    def initialize(_url, node_info, raise_if_unreachable, compliance_profiles)
+    def initialize(_url, node_info, raise_if_unreachable, compliance_profiles, report)
       @node_info = node_info
       @config = Compliance::Configuration.new
       Chef::Log.warn "Report to Chef Compliance: #{@config['user']}"
@@ -197,13 +199,14 @@ class Collector
       @token = @config['token']
       @raise_if_unreachable = raise_if_unreachable
       @compliance_profiles = compliance_profiles
+      @report = report
     end
 
     def send_report
       Chef::Log.info "Report to Chef Compliance: #{@token}"
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
 
-      content = results
+      content = @report
       json_report = enriched_report(JSON.parse(content))
       req.body = json_report
 
@@ -269,6 +272,34 @@ class Collector
       with_http_rescue do
         rest.post(@url, content)
       end
+    end
+  end
+
+  #
+  # Used to write report to file on disk
+  #
+  class JsonFile
+    include ReportHelpers
+
+    @report = ''
+
+    def initialize(report, timestamp)
+      @report = report
+      @timestamp = timestamp
+    end
+
+    def send_report
+      Chef::Log.warn 'Writing report to file.'
+      write_to_file(@report, @timestamp)
+    end
+
+    def write_to_file(report, timestamp)
+      filename = 'inspec' << '-' << timestamp << '.json'
+      path = File.expand_path("../../#{filename}", __FILE__)
+      Chef::Log.warn "Filename is #{path}"
+      json_file = File.new(path, 'w')
+      json_file.puts(report)
+      json_file.close
     end
   end
 end

@@ -69,19 +69,37 @@ module ReportHelpers
     cs.to_s
   end
 
-  # get file contents where inspec results were saved
-  def results
-    result_path = File.expand_path('../../inspec_results.json', __FILE__)
-    file = File.open(result_path, 'rb')
-    content = file.read
-    file.close
-    content
+  def profile_overdue_to_run?(interval)
+    # Calculate when a report was last created so we delay the next report if necessary
+    file = File.expand_path('../../report_timing.json', __FILE__)
+    return true unless ::File.exist?(file)
+    seconds_since_last_run = Time.now - ::File.mtime(file)
+    seconds_since_last_run > interval
   end
 
-  def profile_overdue_to_run?(interval, report_file)
-    # Calculate when a report was last created so we delay the next report if necessary
-    return true unless ::File.exist?(report_file)
-    seconds_since_last_run = Time.now - ::File.mtime(report_file)
-    seconds_since_last_run > interval
+  def check_interval_settings(interval, interval_enabled, interval_time)
+    # handle intervals
+    interval_seconds = 0 # always run this by default, unless interval is defined
+    if !interval.nil? && interval_enabled
+      interval_seconds = interval_time * 60 # seconds in interval
+      Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
+    end
+    # returns true if profile is overdue to run
+    profile_overdue_to_run?(interval_seconds)
+  end
+
+  # used for interval timing
+  def create_timestamp_file
+    path = File.expand_path('../../report_timing.json', __FILE__)
+    timestamp = Time.now.utc
+    timestamp_file = File.new(path, 'w')
+    timestamp_file.puts(timestamp)
+    timestamp_file.close
+  end
+
+  # takes value of reporters and returns array to ensure backwards-compatibility
+  def handle_reporters(reporters)
+    return reporters if reporters.is_a? Array
+    [reporters]
   end
 end

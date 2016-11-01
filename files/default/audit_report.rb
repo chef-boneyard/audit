@@ -6,7 +6,10 @@ class Chef
     # Creates a compliance audit report
     class AuditReport < ::Chef::Handler
       def report
-        reporter = node['audit']['collector']
+        # ensure reporters is array
+        reporters = handle_reporters(node['audit']['collector'])
+
+        # collect attribute values
         server = node['audit']['server']
         user = node['audit']['owner']
         token = node['audit']['token']
@@ -14,19 +17,33 @@ class Chef
         interval = node['audit']['interval']
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
-        report_file = node['audit']['output']
         profiles = node['audit']['profiles']
+        quiet = node['audit']['quiet']
 
+        # create a file with a timestamp to
+        create_timestamp_file if interval_enabled
+
+        # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
-        # ensure authentication for Chef Compliance is in place
-        login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
+        # iterate through reporters
+        reporters.each do |reporter|
+          # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
+          login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
 
-        if check_interval_settings(interval, interval_enabled, interval_time, report_file)
-          call(reporter, profiles)
-          send_report(reporter, server, user, profiles)
-        else
-          Chef::Log.error 'Please take a look at your interval settings'
+          # true if profile is due to run (see libraries/helper.rb)
+          if check_interval_settings(interval, interval_enabled, interval_time)
+            # return hash of opts to be used by runner
+            opts = get_opts(reporter, quiet)
+
+            # instantiate inspec runner with given options and run profiles; return report
+            report = call(opts, profiles)
+
+            # send report to the correct reporter (visibility, compliance, chef-server)
+            send_report(reporter, server, user, profiles, report)
+          else
+            Chef::Log.error 'Please take a look at your interval settings'
+          end
         end
       end
 
@@ -44,55 +61,27 @@ class Chef
         require 'bundles/inspec-compliance/target'
       end
 
-      # TODO: temporary, we should not use this
-      # TODO: harmonize with CLI login_refreshtoken method
-      def login_to_compliance(server, user, access_token, refresh_token)
-        if !refresh_token.nil?
-          success, msg, access_token = Compliance::API.get_token_via_refresh_token(server, refresh_token, true)
-        else
-          success = true
-        end
-
-        if success
-          config = Compliance::Configuration.new
-          config['user'] = user
-          config['server'] = server
-          config['token'] = access_token
-          config['insecure'] = true
-          config['version'] = Compliance::API.version(server, true)
-          config.store
-        else
-          Chef::Log.error msg
-          raise('Could not store authentication token')
-        end
-      end
-
-      def check_interval_settings(interval, interval_enabled, interval_time, report_file)
-        # handle intervals
-        interval_seconds = 0 # always run this by default, unless interval is defined
-        if !interval.nil? && interval_enabled
-          interval_seconds = interval_time * 60 # seconds in interval
-          Chef::Log.debug "Auditing this machine every #{interval_seconds} seconds "
-        end
-        # returns true if profile is overdue to run
-        profile_overdue_to_run?(interval_seconds, report_file)
-      end
-
-      def call(reporter, profiles)
-        Chef::Log.debug 'Initialize InSpec'
+      # sets format to json-min when chef-compliance, json when chef-visibility
+      def get_opts(reporter, quiet)
         format = reporter == 'chef-visibility' ? 'json' : 'json-min'
-        Chef::Log.warn "Format is  #{format}"
-        # TODO: for now we need to store the report to a file we expect that to
-        # get from the runner
-        Chef::Log.warn "*********** Directory is  #{node['audit']['output']}"
-        opts = { 'format' => format, 'output' => node['audit']['output'] }
+        output = quiet ? ::File::NULL : $stdout
+        Chef::Log.warn "Format is #{format}"
+        { 'report' => true, 'format' => format, 'output' => output }
+      end
+
+      # run profiles and return report
+      def call(opts, profiles)
+        Chef::Log.debug 'Initialize InSpec'
+        Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
+        # parse profile hashes for runner, see libraries/helper.rb
         tests = tests_for_runner(profiles)
         tests.each { |target| runner.add_target(target, opts) }
 
         Chef::Log.info "Running tests from: #{tests.inspect}"
         runner.run
+        runner.report.to_json
       end
 
       # extracts relevant node data
@@ -109,12 +98,13 @@ class Chef
         }
       end
 
-      def send_report(reporter, server, user, profiles)
+      # send report to the collector (see libraries/collector_classes.rb)
+      def send_report(reporter, server, user, profiles, report)
         Chef::Log.info "Reporting to #{reporter}"
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo[:node]).send_report
+          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo, report).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
@@ -122,8 +112,8 @@ class Chef
           if server
             # TODO: we should not send the profiles to the reporter, all the information
             # should be available in inspec reports out-of-the-box
-            # TODO: Chef Compliance can only handle reports for profiles it knows
-            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] }.uniq
+            # TODO: raise warning when not a compliance-known profile
+            profiles = tests_for_runner(profiles).map { |profile| profile[:compliance] if profile[:compliance] }.uniq.compact
             compliance_profiles = profiles.map { |profile|
               owner, profile_id = profile.split('/')
               {
@@ -131,19 +121,23 @@ class Chef
                 profile_id: profile_id,
               }
             }
-            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles).send_report
+            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, compliance_profiles, report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
 
-        elsif reporter == 'chef-server'
-          chef_url = server || base_chef_server_url
-          if chef_url
-            url = construct_url(chef_url + '/compliance/', File.join('organizations', user, 'inspec'))
-            Collector::ChefServer.new(url).send_report
-          else
-            Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
-          end
+        # elsif reporter == 'chef-server'
+        #   chef_url = server || base_chef_server_url
+        #   if chef_url
+        #     url = construct_url(chef_url + '/compliance/', File.join('organizations', user, 'inspec'))
+        #     Collector::ChefServer.new(url).send_report
+        #   else
+        #     Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
+        #   end
+
+        elsif reporter == 'json-file'
+          timestamp = Time.now.utc.to_s.tr(' ', '_')
+          Collector::JsonFile.new(report, timestamp).send_report
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end
