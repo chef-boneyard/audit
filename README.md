@@ -127,6 +127,7 @@ node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure
       "compliance": "base/linux"
     },
     # profile from supermarket
+    # Note: Supermarket profile needs to be uploaded to Chef Compliance first
     {
       "name": "ssh",
       "supermarket": "hardening/ssh-hardening"
