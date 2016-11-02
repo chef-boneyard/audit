@@ -63,6 +63,3 @@ default['audit']['format'] = 'json'
 
 # set profiles to empty array as default
 default['audit']['profiles'] = []
-
-# inspec gem version to install(e.g. '1.1.0')
-default['audit']['inspec_version'] = '1.2.0'
