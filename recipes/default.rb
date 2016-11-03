@@ -4,5 +4,5 @@ chef_gem 'inspec' do
   action :install
 end
 
-# load the audit report handler
+load_inspec_libs
 load_audit_handler
