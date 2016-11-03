@@ -3,6 +3,12 @@
 # load all the inspec and compliance bundle requirements
 def load_inspec_libs
   require 'inspec'
+  if Inspec::VERSION != node['audit']['inspec_version'] && node['audit']['inspec_version'] !='latest'
+    Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
+      'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
+  else
+    Chef::Log.warn "Using inspec version: (#{Inspec::VERSION})"
+  end
   require 'bundles/inspec-compliance/api'
   require 'bundles/inspec-compliance/http'
   require 'bundles/inspec-compliance/configuration'

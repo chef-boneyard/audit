@@ -236,8 +236,8 @@ class Collector
       blob[:profiles] = {}
       Chef::Log.info "Control Profile: #{profiles}"
       profiles.each { |profile|
-        Chef::Log.info "Control Profil: #{profile}"
-        Chef::Log.info "Compliance Profils: #{@compliance_profiles}"
+        Chef::Log.info "Control Profile: #{profile}"
+        Chef::Log.info "Compliance Profiles: #{@compliance_profiles}"
         namespace = @compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
           Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"

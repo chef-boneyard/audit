@@ -18,7 +18,7 @@
 # limitations under the License.
 
 require 'spec_helper'
-require_relative '../../../files/default/audit_report'
+require_relative '../../../files/default/handler/audit_report'
 require_relative '../../data/mock.rb'
 
 describe 'Chef::Handler::AuditReport methods' do

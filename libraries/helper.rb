@@ -106,4 +106,18 @@ module ReportHelpers
   def cookbook_vendor_path
     File.expand_path('../../files/default/vendor', __FILE__)
   end
+
+  def cookbook_handler_path
+    File.expand_path('../../files/default/handler', __FILE__)
+  end
+
+  def load_audit_handler
+    libpath = ::File.join(cookbook_handler_path, 'audit_report')
+    Chef::Log.info("loading handler from #{libpath}")
+    $LOAD_PATH.unshift(libpath) unless $LOAD_PATH.include?(libpath)
+    require libpath
+    Chef::Config.send('report_handlers') << Chef::Handler::AuditReport.new
+  end
 end
+
+::Chef::Recipe.send(:include, ReportHelpers)
