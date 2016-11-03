@@ -18,10 +18,14 @@
 # limitations under the License.
 
 # ensure inspec is available
-inspec 'inspec' do
-  version node['audit']['inspec_version']
+chef_gem 'inspec' do
+  version node['audit']['inspec_version'] if node['audit']['inspec_version'] != 'latest'
+  compile_time true
   action :install
 end
+
+load_inspec_libs
+load_audit_handler
 
 # iterate over all selected profiles and upload them
 node['audit']['profiles'].each do |profile|
