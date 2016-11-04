@@ -18,6 +18,10 @@
 # inspec gem version to install(e.g. '1.1.0')
 default['audit']['inspec_version'] = '1.2.0'
 
+# URI to alternate gem source (e.g. http://gems.server.com)
+# root of location must host the *specs.4.8.gz source index
+default['audit']['inspec_gem_source'] = nil
+
 # collector possible values: chef-server, chef-compliance, chef-visibility, json-file
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'

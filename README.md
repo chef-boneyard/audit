@@ -382,6 +382,19 @@ You can enable the interval and set the interval time, along with your desired p
 
 ```
 
+## Alternate Source Location for `inspec` Gem
+
+If you are not able or do not wish to pull the `inspec` gem from rubygems.org,
+you may specify an alternate source using:
+
+```
+# URI to alternate gem source (e.g. http://gems.server.com or filesytem location)
+# root of location must host the *specs.4.8.gz source index
+default['audit']['inspec_gem_source'] = 'http://internal.gem.server.com/gems'
+```
+
+Please note that all dependencies to the `inspec` gem must also be hosted in this location.
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.

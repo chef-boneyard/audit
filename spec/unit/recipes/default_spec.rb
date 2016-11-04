@@ -26,6 +26,44 @@ describe 'audit::default' do
       runner.converge(described_recipe)
     end
 
+    it 'installs the inspec gem' do
+      expect(chef_run).to install_chef_gem('inspec')
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+
+  context 'When an inspec gem version is specified ' do
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new do |node|
+        node.override['audit']['inspec_version'] = '0.0.0'
+      end.converge(described_recipe)
+    end
+
+    it 'installs the inspec gem with the correct version' do
+      expect(chef_run).to install_chef_gem('inspec').with(version: '0.0.0')
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+  context 'When an inspec gem alternate source is specified ' do
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new do |node|
+        node.override['audit']['inspec_gem_source'] = 'http://0.0.0.0:8080'
+      end.converge(described_recipe)
+    end
+
+    it 'installs the inspec gem from the alternate source' do
+      expect(chef_run).to install_chef_gem('inspec').with(clear_sources: true)
+      expect(chef_run).to install_chef_gem('inspec').with(source: 'http://0.0.0.0:8080')
+    end
+
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
