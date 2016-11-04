@@ -5,6 +5,7 @@ gem 'chef', '>= 12.5.1'
 if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.2.2')
   gem 'json', '~> 1.8'
   gem 'rack', '< 2.0'
+  gem 'fauxhai', '< 3.10'
 end
 
 group :style do

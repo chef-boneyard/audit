@@ -1,5 +1,54 @@
 # Change Log
 
+## [v2.0.0](https://github.com/chef-cookbooks/audit/tree/v2.0.0) (2016-11-04)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.1.0...v2.0.0)
+
+**Closed issues:**
+
+- Cannot run profiles from Supermarket [\#139](https://github.com/chef-cookbooks/audit/issues/139)
+- version 2.0.0 reporting resources updated [\#138](https://github.com/chef-cookbooks/audit/issues/138)
+- inspec\_version attribute specified twice [\#137](https://github.com/chef-cookbooks/audit/issues/137)
+- README.md "Upload cookbook to Chef Server" [\#136](https://github.com/chef-cookbooks/audit/issues/136)
+- Remove temporary report file [\#132](https://github.com/chef-cookbooks/audit/issues/132)
+- Add Chef Server authentication support [\#129](https://github.com/chef-cookbooks/audit/issues/129)
+- Add unit tests [\#128](https://github.com/chef-cookbooks/audit/issues/128)
+- JSON file reporter [\#126](https://github.com/chef-cookbooks/audit/issues/126)
+- Implement RFC: Harmonize profile location targets [\#118](https://github.com/chef-cookbooks/audit/issues/118)
+- Features missing from 2.0.0 [\#116](https://github.com/chef-cookbooks/audit/issues/116)
+- Implement reporting as InSpec plugin [\#111](https://github.com/chef-cookbooks/audit/issues/111)
+- Harmonize audit cookbook profile fetcher with InSpec fetchers [\#110](https://github.com/chef-cookbooks/audit/issues/110)
+- profile scan is reported every chef-client run even if compliance\_profile resource wasn't executed [\#102](https://github.com/chef-cookbooks/audit/issues/102)
+- Timing issues during report aggregation [\#81](https://github.com/chef-cookbooks/audit/issues/81)
+- audit cookbook compliance run and report should not report converge [\#70](https://github.com/chef-cookbooks/audit/issues/70)
+- quiet should control whether converge is reported by Chef [\#65](https://github.com/chef-cookbooks/audit/issues/65)
+- Node information sent to Compliance after first audit run are not accurate [\#40](https://github.com/chef-cookbooks/audit/issues/40)
+- 403 Forbidden [\#21](https://github.com/chef-cookbooks/audit/issues/21)
+
+**Merged pull requests:**
+
+- adding support for alternate gem source [\#146](https://github.com/chef-cookbooks/audit/pull/146) ([jeremymv2](https://github.com/jeremymv2))
+- enable chef-server fetcher attribute [\#145](https://github.com/chef-cookbooks/audit/pull/145) ([chris-rock](https://github.com/chris-rock))
+- Supermarket [\#143](https://github.com/chef-cookbooks/audit/pull/143) ([jeremymv2](https://github.com/jeremymv2))
+- fixing resources reporting as updated [\#142](https://github.com/chef-cookbooks/audit/pull/142) ([jeremymv2](https://github.com/jeremymv2))
+- fix \#136 thanks @jeremymv2 [\#141](https://github.com/chef-cookbooks/audit/pull/141) ([chris-rock](https://github.com/chris-rock))
+- fix \#137 [\#140](https://github.com/chef-cookbooks/audit/pull/140) ([chris-rock](https://github.com/chris-rock))
+- implement chef-server fetcher and reporter [\#135](https://github.com/chef-cookbooks/audit/pull/135) ([chris-rock](https://github.com/chris-rock))
+- fix reporting files [\#134](https://github.com/chef-cookbooks/audit/pull/134) ([vjeffrey](https://github.com/vjeffrey))
+- do not hand over run context into reporter [\#133](https://github.com/chef-cookbooks/audit/pull/133) ([chris-rock](https://github.com/chris-rock))
+- Add unit tests [\#131](https://github.com/chef-cookbooks/audit/pull/131) ([vjeffrey](https://github.com/vjeffrey))
+- update readme [\#130](https://github.com/chef-cookbooks/audit/pull/130) ([chris-rock](https://github.com/chris-rock))
+- bring back intervals [\#127](https://github.com/chef-cookbooks/audit/pull/127) ([vjeffrey](https://github.com/vjeffrey))
+- Integrate with Chef Compliance [\#124](https://github.com/chef-cookbooks/audit/pull/124) ([chris-rock](https://github.com/chris-rock))
+- move testing deps to integration group in berksfile [\#123](https://github.com/chef-cookbooks/audit/pull/123) ([vjeffrey](https://github.com/vjeffrey))
+- Upload profiles to Chef Compliance via Chef resource [\#122](https://github.com/chef-cookbooks/audit/pull/122) ([vjeffrey](https://github.com/vjeffrey))
+-  harmonize profile targets [\#121](https://github.com/chef-cookbooks/audit/pull/121) ([vjeffrey](https://github.com/vjeffrey))
+- Update Github PR template [\#120](https://github.com/chef-cookbooks/audit/pull/120) ([tas50](https://github.com/tas50))
+- recover examples [\#119](https://github.com/chef-cookbooks/audit/pull/119) ([chris-rock](https://github.com/chris-rock))
+- add reference to 1.x documentation [\#117](https://github.com/chef-cookbooks/audit/pull/117) ([chris-rock](https://github.com/chris-rock))
+- Audit docs improvements [\#115](https://github.com/chef-cookbooks/audit/pull/115) ([alexpop](https://github.com/alexpop))
+- Activate test-kitchen in travis [\#114](https://github.com/chef-cookbooks/audit/pull/114) ([chris-rock](https://github.com/chris-rock))
+- use chef handler to run inspec tests [\#113](https://github.com/chef-cookbooks/audit/pull/113) ([vjeffrey](https://github.com/vjeffrey))
+
 ## [v1.1.0](https://github.com/chef-cookbooks/audit/tree/v1.1.0) (2016-10-18)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.2...v1.1.0)
 
