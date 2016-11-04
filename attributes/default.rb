@@ -22,6 +22,12 @@ default['audit']['inspec_version'] = '1.2.0'
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
 
+# It will use an InSpec fetcher that fetches compliance profiles via Chef Server
+# from Chef Compliance. Will be activated by default if the 'chef-server' collector
+# is used
+# fetcher possible values: chef-server
+default['audit']['fetcher'] = nil
+
 # Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
 # server format example: 'https://comp-server.example.com/api'
 default['audit']['server'] = nil

@@ -27,7 +27,7 @@ class Chef
         load_needed_dependencies
 
         # detect if we run in a chef client with chef server
-        load_chef_fetcher if reporters.include?('chef-server')
+        load_chef_fetcher if reporters.include?('chef-server') || node['audit']['fetcher'] == 'chef-server'
 
         # iterate through reporters
         reporters.each do |reporter|
