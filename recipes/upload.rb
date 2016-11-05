@@ -17,17 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# ensure inspec is available
-chef_gem 'inspec' do
-  version node['audit']['inspec_version'] if node['audit']['inspec_version'] != 'latest'
-  compile_time true
-  clear_sources true if node['audit']['inspec_gem_source']
-  source node['audit']['inspec_gem_source'] if node['audit']['inspec_gem_source']
-  action :install
-end
-
-load_inspec_libs
-load_audit_handler
+include_recipe 'audit::inspec'
 
 # iterate over all selected profiles and upload them
 node['audit']['profiles'].each do |profile|
