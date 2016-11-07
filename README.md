@@ -5,8 +5,6 @@ The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client 
 
 Version 2.0 of the audit cookbook is based on an idea from [Michael Hedgpeth](https://github.com/chef-cookbooks/audit/issues/70). Under the hood it uses [Chef handler](https://docs.chef.io/handlers.html) instead of Chef resources now.
 
-NOTE: The current readme refers to unreleased audit cookbook 2.0. Documentation for 1.x is available (here)[https://github.com/chef-cookbooks/audit/blob/v1.1.0/README.md]
-
 ## Requirements
 
 ### Chef
