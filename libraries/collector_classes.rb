@@ -14,10 +14,11 @@ class Collector
     @node_name = ''
     @report = ''
 
-    def initialize(entity_uuid, run_id, node_info, report)
+    def initialize(entity_uuid, run_id, node_info, insecure, report)
       @entity_uuid = entity_uuid
       @run_id = run_id
       @node_name = node_info[:node]
+      @insecure = insecure
       @report = report
     end
 
@@ -46,6 +47,13 @@ class Collector
         unless dc[:token].nil?
           headers['x-data-collector-token'] = dc[:token]
           headers['x-data-collector-auth'] = 'version=1.0'
+        end
+
+        # Enable OpenSSL::SSL::VERIFY_NONE via `node['audit']['insecure']`
+        # See https://github.com/chef/chef/blob/master/lib/chef/http/ssl_policies.rb#L54
+        if @insecure
+          Chef::Config[:verify_api_cert] = false
+          Chef::Config[:ssl_verify_mode] = :verify_none
         end
 
         begin

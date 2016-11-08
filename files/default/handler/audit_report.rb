@@ -136,9 +136,13 @@ class Chef
       def send_report(reporter, server, user, profiles, report)
         Chef::Log.info "Reporting to #{reporter}"
 
+        # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
+        # See `cookstyle` Metrics/ParameterLists
+        insecure = node['audit']['insecure']
+
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo, report).send_report
+          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
