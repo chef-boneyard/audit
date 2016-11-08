@@ -235,6 +235,8 @@ This method is sending the report using the `data_collector.server_url` and `dat
 }
 ```
 
+If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/setup_visibility_chef_automate.html#add-chef-automate-certificate-to-trusted-certs-directory)
+
 ## Profile Upload to Compliance Server
 
 In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
