@@ -20,9 +20,6 @@ class Chef
         profiles = node['audit']['profiles']
         quiet = node['audit']['quiet']
 
-        # create a file with a timestamp to
-        create_timestamp_file if interval_enabled
-
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
@@ -36,6 +33,10 @@ class Chef
 
           # true if profile is due to run (see libraries/helper.rb)
           if check_interval_settings(interval, interval_enabled, interval_time)
+
+            # create a file with a timestamp to calculate interval timing
+            create_timestamp_file if interval_enabled
+
             # return hash of opts to be used by runner
             opts = get_opts(reporter, quiet)
 
@@ -45,7 +46,7 @@ class Chef
             # send report to the correct reporter (visibility, compliance, chef-server)
             send_report(reporter, server, user, profiles, report)
           else
-            Chef::Log.error 'Please take a look at your interval settings'
+            Chef::Log.warn 'Audit run skipped due to interval configuration'
           end
         end
       end
