@@ -25,9 +25,10 @@ describe 'Collector::ChefVisibility methods' do
   before :each do
     entity_uuid = 'aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz'
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
+    insecure = false
     report = MockData.inspec_results
     @enriched_report_expected =  "{\"profiles\":[{\"name\":\"tmp_compliance_profile\",\"title\":\"/tmp Compliance Profile\",\"summary\":\"An Example Compliance Profile\",\"version\":\"0.1.1\",\"maintainer\":\"Nathen Harvey <nharvey@chef.io>\",\"license\":\"Apache 2.0 License\",\"copyright\":\"Nathen Harvey <nharvey@chef.io>\",\"supports\":[],\"controls\":[{\"title\":\"A /tmp directory must exist\",\"desc\":\"A /tmp directory must exist\",\"impact\":0.3,\"refs\":[],\"tags\":{},\"code\":\"control 'tmp-1.0' do\\n  impact 0.3\\n  title 'A /tmp directory must exist'\\n  desc 'A /tmp directory must exist'\\n  describe file '/tmp' do\\n    it { should be_directory }\\n  end\\nend\\n\",\"source_location\":{\"ref\":\"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb\",\"line\":3},\"id\":\"tmp-1.0\",\"results\":[{\"status\":\"passed\",\"code_desc\":\"File /tmp should be directory\",\"run_time\":0.002312,\"start_time\":\"2016-10-19 11:09:43 -0400\"}]},{\"title\":\"/tmp directory is owned by the root user\",\"desc\":\"The /tmp directory must be owned by the root user\",\"impact\":0.3,\"refs\":[{\"url\":\"https://pages.chef.io/rs/255-VFB-268/images/compliance-at-velocity2015.pdf\",\"ref\":\"Compliance Whitepaper\"}],\"tags\":{\"production\":null,\"development\":null,\"identifier\":\"value\",\"remediation\":\"https://github.com/chef-cookbooks/audit\"},\"code\":\"control 'tmp-1.1' do\\n  impact 0.3\\n  title '/tmp directory is owned by the root user'\\n  desc 'The /tmp directory must be owned by the root user'\\n  tag 'production','development'\\n  tag identifier: 'value'\\n  tag remediation: 'https://github.com/chef-cookbooks/audit'\\n  ref 'Compliance Whitepaper', url: 'https://pages.chef.io/rs/255-VFB-268/images/compliance-at-velocity2015.pdf'\\n  describe file '/tmp' do\\n    it { should be_owned_by 'root' }\\n  end\\nend\\n\",\"source_location\":{\"ref\":\"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb\",\"line\":12},\"id\":\"tmp-1.1\",\"results\":[{\"status\":\"passed\",\"code_desc\":\"File /tmp should be owned by \\\"root\\\"\",\"run_time\":0.028845,\"start_time\":\"2016-10-19 11:09:43 -0400\"}]}],\"groups\":[{\"title\":\"/tmp Compliance Profile\",\"controls\":[\"tmp-1.0\",\"tmp-1.1\"],\"id\":\"controls/tmp.rb\"}],\"attributes\":[]}],\"event_type\":\"inspec\",\"event_action\":\"exec\",\"compliance_summary\":{\"total\":2,\"passed\":{\"total\":2},\"skipped\":{\"total\":0},\"failed\":{\"total\":0,\"minor\":0,\"major\":0,\"critical\":0},\"status\":\"passed\",\"node_name\":\"chef-client.solo\",\"end_time\":\"2016-07-19T19:19:19+01:00\",\"duration\":0.032332,\"inspec_version\":\"1.2.1\"},\"entity_uuid\":\"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz\",\"run_id\":\"3f0536f7-3361-4bca-ae53-b45118dceb5d\"}"
-    @viz = Collector::ChefVisibility.new(entity_uuid, run_id, MockData.node_info, report)
+    @viz = Collector::ChefVisibility.new(entity_uuid, run_id, MockData.node_info, insecure, report)
   end
 
   it 'returns the correct control status' do
@@ -90,7 +91,8 @@ describe 'Collector::ChefVisibility methods' do
   it 'is not sending report when entity_uuid is missing' do
     entity_uuid = nil
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
-    viz2 = Collector::ChefVisibility.new(entity_uuid, run_id, {}, MockData.inspec_results)
+    insecure = false
+    viz2 = Collector::ChefVisibility.new(entity_uuid, run_id, {}, insecure, MockData.inspec_results)
     expect(viz2.send_report).to eq(false)
   end
 end

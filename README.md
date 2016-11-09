@@ -218,11 +218,14 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 
 If you want the audit cookbook to directly report to Chef Visibility, set the `collector` attribute to 'chef-visibility'. Also specify where to retrieve the `profiles` from.
 
+* `insecure` - a `true` value will skip the SSL certificate verification. Default value is `false`
+
 This method is sending the report using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater.
 
 ```ruby
 "audit": {
   "collector": "chef-visibility",
+  "insecure": "false",
   "profiles": [
     {
       "name": "brewinc/tmp_compliance_profile",
