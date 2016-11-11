@@ -1,5 +1,20 @@
 # Change Log
 
+## [v2.1.0](https://github.com/chef-cookbooks/audit/tree/v2.1.0) (2016-11-11)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.0.0...v2.1.0)
+
+**Closed issues:**
+
+- Modify wording of `ERROR: Please take a look at your interval settings` [\#149](https://github.com/chef-cookbooks/audit/issues/149)
+
+**Merged pull requests:**
+
+- Add fetcher info to readme [\#154](https://github.com/chef-cookbooks/audit/pull/154) ([vjeffrey](https://github.com/vjeffrey))
+- Add insecure flag for `Collector::ChefVisibility` [\#153](https://github.com/chef-cookbooks/audit/pull/153) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
+- add reference to self-signed certs with visibility [\#152](https://github.com/chef-cookbooks/audit/pull/152) ([chris-rock](https://github.com/chris-rock))
+- change interval timing msg to warn [\#151](https://github.com/chef-cookbooks/audit/pull/151) ([vjeffrey](https://github.com/vjeffrey))
+- dry up chef\_gem inspec resource declarations [\#147](https://github.com/chef-cookbooks/audit/pull/147) ([jeremymv2](https://github.com/jeremymv2))
+
 ## [v2.0.0](https://github.com/chef-cookbooks/audit/tree/v2.0.0) (2016-11-04)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.1.0...v2.0.0)
 
