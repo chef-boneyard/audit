@@ -153,9 +153,9 @@ node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure
 You can also configure in a policyfile like this:
 
 ```ruby
-default['audit'] = {
-  'collector' => 'chef-server',
-  'profiles' => [
+default["audit"] = {
+  "collector" => "chef-server",
+  "profiles" => [
     {
       "name": "linux",
       "compliance": "base/linux"
@@ -246,7 +246,7 @@ Simply include the `upload` recipe in the run_list, with attribute overrides for
 
 ```ruby
 audit: {
-  server: 'https://compliance-server.test/api'
+  server: 'https://compliance-server.test/api',
   collector: 'chef-compliance',
   refresh_token: '21/XMEK3...',
   profiles: [
@@ -302,8 +302,8 @@ This will allow the audit cookbook to fetch the profile from chef-compliance.  F
 
 ```ruby
 "audit": {
-  "fetcher": 'chef-server'
-  "collector": 'chef-visibility'
+  "fetcher": "chef-server",
+  "collector": "chef-visibility",
   "profiles": [
     {
       "name": "ssh",
