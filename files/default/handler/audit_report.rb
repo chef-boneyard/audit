@@ -24,7 +24,7 @@ class Chef
         load_needed_dependencies
 
         # detect if we run in a chef client with chef server
-        load_chef_fetcher if reporters.include?('chef-server') || node['audit']['fetcher'] == 'chef-server'
+        load_chef_fetcher if reporters.include?('chef-server') || reporters.include?('chef-server-visibility') || node['audit']['fetcher'] == 'chef-server'
 
         # iterate through reporters
         reporters.each do |reporter|
@@ -74,7 +74,7 @@ class Chef
 
       # sets format to json-min when chef-compliance, json when chef-visibility
       def get_opts(reporter, quiet)
-        format = reporter == 'chef-visibility' ? 'json' : 'json-min'
+        format = ['chef-visibility', 'chef-server-visibility'].include?(reporter) ? 'json' : 'json-min'
         output = quiet ? ::File::NULL : $stdout
 
         Chef::Log.warn "Format is #{format}"
@@ -151,6 +151,15 @@ class Chef
             Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
+          end
+        elsif reporter == 'chef-server-visibility'
+          chef_url = server || base_chef_server_url
+          chef_org = Chef::Config[:chef_server_url].split('/').last
+          if chef_url
+            url = construct_url(chef_url, File.join('organizations', chef_org, 'data-collector'))
+            Collector::ChefServerVisibility.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report(url)
+          else
+            Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
         elsif reporter == 'chef-server'
           chef_url = server || base_chef_server_url

@@ -22,12 +22,13 @@ default['audit']['inspec_version'] = '1.2.0'
 # root of location must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
 
-# collector possible values: chef-server, chef-compliance, chef-visibility, json-file
+# collector possible values: chef-server, chef-compliance, chef-visibility, chef-server-visibility, json-file
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
 
 # It will use an InSpec fetcher that fetches compliance profiles via Chef Server
-# from Chef Compliance. Will be activated by default if the 'chef-server' collector
+# from Chef Compliance or Chef Automate. Will be activated by default if the collectors
+# 'chef-server' or 'chef-server-visibility' are used
 # is used
 # fetcher possible values: chef-server
 default['audit']['fetcher'] = nil
@@ -46,7 +47,7 @@ default['audit']['token'] = nil
 default['audit']['insecure'] = nil
 
 # Chef Compliance organization to post the report to. Defaults to Chef Server org if not defined
-# needed for the 'chef-compliance' collector, optional for 'chef-server' collector
+# needed for the 'chef-compliance' collector, optional for 'chef-server' and 'chef-server-visibility' collectors
 default['audit']['owner'] = nil
 
 # raise exception if Compliance API endpoint is unreachable
