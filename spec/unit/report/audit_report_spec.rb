@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: compliance
+# Cookbook Name:: audit
 # Spec:: default
 #
 # Copyright 2016 Chef Software, Inc.
@@ -18,6 +18,7 @@
 # limitations under the License.
 
 require 'spec_helper'
+require 'json'
 require_relative '../../../files/default/handler/audit_report'
 require_relative '../../data/mock.rb'
 
@@ -62,8 +63,20 @@ describe 'Chef::Handler::AuditReport methods' do
       opts = @audit_report.get_opts(reporter, quiet)
       expect(opts).to eq({'report' => true, 'format' => 'json-min', 'output' => '/dev/null', 'logger' => Chef::Log})
     end
+    it 'given chef-server sets the format to json-min' do
+      reporter = 'chef-server'
+      quiet = true
+      opts = @audit_report.get_opts(reporter, quiet)
+      expect(opts).to eq({'report' => true, 'format' => 'json-min', 'output' => '/dev/null', 'logger' => Chef::Log})
+    end
     it 'given chef-visibility sets the format to json' do
       reporter = 'chef-visibility'
+      quiet = true
+      opts = @audit_report.get_opts(reporter, quiet)
+      expect(opts).to eq({'report' => true, 'format' => 'json', 'output' => '/dev/null', 'logger' => Chef::Log})
+    end
+    it 'given chef-server-visibility sets the format to json' do
+      reporter = 'chef-server-visibility'
       quiet = true
       opts = @audit_report.get_opts(reporter, quiet)
       expect(opts).to eq({'report' => true, 'format' => 'json', 'output' => '/dev/null', 'logger' => Chef::Log})
@@ -71,7 +84,7 @@ describe 'Chef::Handler::AuditReport methods' do
   end
 
   describe 'call' do
-    it 'given a profile returns a report' do
+    it 'given a profile, returns a json report' do
       require 'inspec'
       opts = {'report' => true, 'format' => 'json', 'output' => '/dev/null'}
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
@@ -79,6 +92,14 @@ describe 'Chef::Handler::AuditReport methods' do
       report = @audit_report.call(opts, profiles)
       expected_report = /^.*version.*profiles.*controls.*statistics.*duration.*/
       expect(report).to match(expected_report)
+    end
+    it 'given a profile, returns a json-min report' do
+      require 'inspec'
+      opts = {'report' => true, 'format' => 'json-min', 'output' => '/dev/null'}
+      path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
+      profiles = [{'name': 'example', 'path': path }]
+      report = JSON.parse(@audit_report.call(opts, profiles))
+      expect(report['controls'].length).to eq(2)
     end
   end
 end

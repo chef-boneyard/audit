@@ -293,6 +293,27 @@ class Collector
   end
 
   #
+  # Used to send inspec reports to Chef Visibility server via Chef Server
+  #
+  class ChefServerVisibility < ChefVisibility
+    def send_report(url)
+      content = @report
+      json_report = enriched_report(JSON.parse(content))
+
+      if @insecure
+        Chef::Config[:verify_api_cert] = false
+        Chef::Config[:ssl_verify_mode] = :verify_none
+      end
+
+      Chef::Log.info "Report to Visibility via Chef Server: #{url}"
+      rest = Chef::ServerAPI.new(url, Chef::Config)
+      with_http_rescue do
+        rest.post(url, JSON.parse(json_report))
+      end
+    end
+  end
+
+  #
   # Used to write report to file on disk
   #
   class JsonFile

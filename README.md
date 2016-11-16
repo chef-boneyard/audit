@@ -103,7 +103,7 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 #### Reporting to Chef Compliance via Chef Server
 
-If you want the audit cookbook to converge and retrieve compliance profiles through the Chef Server, set the `collector` and `profiles` attribute.
+If you want the audit cookbook to converge and retrieve compliance profiles through the Chef Server, set the `collector` and `profiles` attributes.
 
 This requires your Chef Server to be integrated with the Chef Compliance server using this [guide](https://docs.chef.io/integrate_compliance_chef_server.html).
 
@@ -153,9 +153,9 @@ node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure
 You can also configure in a policyfile like this:
 
 ```ruby
-default['audit'] = {
-  'collector' => 'chef-server',
-  'profiles' => [
+default["audit"] = {
+  "collector" => "chef-server",
+  "profiles" => [
     {
       "name": "linux",
       "compliance": "base/linux"
@@ -163,6 +163,24 @@ default['audit'] = {
     {
       "name": "ssh",
       "compliance": "base/ssh"
+    }
+  ]
+}
+```
+
+#### Reporting to Chef Visibility via Chef Server
+
+If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate(Visibility) through Chef Server, set the `collector` and `profiles` attributes. For example:
+
+
+```ruby
+"audit": {
+  "collector": "chef-server-visibility",
+  "insecure": false,
+  "profiles": [
+    {
+      "name": "windows",
+      "compliance": "base/windows"
     }
   ]
 }
@@ -246,7 +264,7 @@ Simply include the `upload` recipe in the run_list, with attribute overrides for
 
 ```ruby
 audit: {
-  server: 'https://compliance-server.test/api'
+  server: 'https://compliance-server.test/api',
   collector: 'chef-compliance',
   refresh_token: '21/XMEK3...',
   profiles: [
@@ -302,8 +320,8 @@ This will allow the audit cookbook to fetch the profile from chef-compliance.  F
 
 ```ruby
 "audit": {
-  "fetcher": 'chef-server'
-  "collector": 'chef-visibility'
+  "fetcher": "chef-server",
+  "collector": "chef-visibility",
   "profiles": [
     {
       "name": "ssh",
