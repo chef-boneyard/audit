@@ -68,10 +68,11 @@ platforms:
 suites:
   - name: default # run inspec locally
     run_list:
-      - recipe[git::default]
+      - recipe[test_helper::setup]
       - recipe[audit::default]
     attributes:
       audit:
+        collector: json-file
         profiles:
           - name: ssh-hardening
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
