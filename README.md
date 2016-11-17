@@ -172,7 +172,7 @@ default["audit"] = {
 
 If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate(Visibility) through Chef Server, set the `collector` and `profiles` attributes.
 
-This requires Chef Server version 12.11.0 and Chef Automate 0.6.0 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
+This requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
 
 Attributes example:
 
@@ -318,8 +318,8 @@ for each one.  For example, to report to chef-compliance and write to json file 
 
 ## Fetcher attribute
 
-To enable reporting to chef-visibility with profiles from chef-compliance, you need to have chef-server integrated with chef-compliance. You can then set the fetcher attribute to 'chef-server'.
-This will allow the audit cookbook to fetch the profile from chef-compliance.  For example:
+To enable reporting to Chef Visibility with profiles from Chef Compliance, you need to have Chef Server integrated with Chef Compliance. You can then set the `fetcher` attribute to 'chef-server'.
+This will allow the audit cookbook to fetch profiles stored in Chef Compliance. For example:
 
 ```ruby
 "audit": {

@@ -9,7 +9,7 @@
 # how you would setup chef-client to send converge data to your
 # Chef Visibility server.
 include_recipe 'visibility_win::chef_client_config'
-# Set the collector to chef-visibility instead of the default chef-server.
+# Set the collector to chef-visibility instead of the default chef-server-compliance.
 node.default['audit']['collector'] = 'chef-visibility'
 # Execute the community audit cookbook with the collector set
 include_recipe 'audit::default'

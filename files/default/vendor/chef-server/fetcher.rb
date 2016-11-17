@@ -49,6 +49,18 @@ module ChefServer
       Chef::Config[:chef_server_url].split('/').last
     end
 
+    def self.url_prefix
+      if defined?(Chef) &&
+         defined?(Chef.node) &&
+         defined?(Chef.node.attributes) &&
+         Chef.node.attributes['audit'] &&
+         get_reporters(Chef.node.attributes['audit']).include?('chef-server-visibility')
+        ''
+      else
+        '/compliance'
+      end
+    end
+
     def self.target_url(profile, config)
       o, p = profile.split('/')
       reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/tar"
@@ -58,7 +70,7 @@ module ChefServer
         Chef::Config[:ssl_verify_mode] = :verify_none
       end
 
-      construct_url(chef_server_url_base + '/compliance/', reqpath)
+      construct_url(chef_server_url_base + url_prefix + '/', reqpath)
     end
 
     #
