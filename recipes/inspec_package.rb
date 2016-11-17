@@ -1,7 +1,7 @@
 # encoding: utf-8
 #
 # Cookbook Name:: audit
-# Recipe:: default
+# Recipe:: inspec_package
 #
 # Copyright 2016 Chef Software, Inc.
 #
@@ -17,9 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node['audit']['inspec_package']
-  include_recipe 'audit::inspec_package'
-else
-  include_recipe 'audit::inspec'
-  load_audit_handler
+chef_ingredient 'inspec' do
+  version node['audit']['inspec_version'] if node['audit']['inspec_version'] != 'latest'
+  accept_license true
+  action :upgrade
 end
+
+load_inspec_libs
+
+load_audit_handler

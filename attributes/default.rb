@@ -22,6 +22,10 @@ default['audit']['inspec_version'] = '1.2.0'
 # root of location must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
 
+# Used in cases where the desired install of inspec is via package instead of gem
+# Default to false, set to true if needed. Setting to true will skip the inspec recipe and use inspec_package recipe
+default['audit']['inspec_package'] = false
+
 # collector possible values: chef-server, chef-compliance, chef-visibility, chef-server-visibility, json-file
 # chef-visibility requires inspec version 0.27.1 or above
 default['audit']['collector'] = 'chef-server'
