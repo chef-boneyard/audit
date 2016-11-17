@@ -9,6 +9,7 @@ end
 
 node = json('/tmp/node.json')
 
+# TODO: change once gem resource handles alternate path to `gem` command
 describe command('/opt/chef/embedded/bin/gem list --local -a -q inspec | grep \'^inspec\' | awk -F"[()]" \'{printf $2}\'') do
   its('stdout') { should eq node.value(['audit','inspec_version']) }
 end
