@@ -87,3 +87,18 @@ suites:
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         owner: admin
         profiles: *profiles
+
+  - name: vendored_inspec_gem # run inspec locally
+    run_list:
+      - recipe[git::default]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        inspec_gem_vendored: true
+        # inspec_gem_source: "#{Chef::Config[:file_cache_path]}/"
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
+          - git: https://github.com/dev-sec/tests-ssh-hardening.git
+          - name: ssh
+            supermarket: hardening/ssh-hardening
