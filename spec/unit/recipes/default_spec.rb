@@ -69,6 +69,27 @@ describe 'audit::default' do
     end
   end
 
+
+  context 'When the option to install from vendored gem is turned on' do
+    let(:chef_run) do
+      ChefSpec::ServerRunner.new do |node|
+        node.override['audit']['inspec_gem_vendored'] = true
+      end.converge(described_recipe)
+    end
+
+    it 'installs the inspec gem' do
+      expect(chef_run).to install_chef_gem('inspec')
+    end
+
+    it 'installs the inspec gem from the correct source' do
+      expect(chef_run).to install_chef_gem('inspec').with(source: 'testing')
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
   context 'When server and refresh_token are specified' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new do |node|
