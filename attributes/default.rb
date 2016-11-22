@@ -24,7 +24,8 @@ default['audit']['inspec_gem_source'] = nil
 
 # Used in cases where the desired install of inspec is via package instead of gem
 # Default to false, set to true if needed. Setting to true will skip the inspec recipe and use inspec_package recipe
-default['audit']['inspec_package'] = false
+default['audit']['inspec_package_source'] = nil
+default['audit']['inspec_package_libpath'] = nil
 
 # collector possible values: chef-server, chef-compliance, chef-visibility, chef-server-visibility, json-file
 # chef-visibility requires inspec version 0.27.1 or above

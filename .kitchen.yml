@@ -87,3 +87,14 @@ suites:
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         owner: admin
         profiles: *profiles
+
+  - name: inspec_package # compliance direct reporting
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        inspec_package_source: 'https://packages.chef.io/stable/el/6/inspec-1.4.1-1.el6.x86_64.rpm'
+        inspec_package_libpath: '/opt/inspec/embedded/lib/ruby/gems/2.3.0/gems/inspec-1.4.1/lib'
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/tests-ssh-hardening

@@ -17,9 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if node['audit']['inspec_package']
+if node['audit']['inspec_package_source']
   include_recipe 'audit::inspec_package'
 else
   include_recipe 'audit::inspec'
-  load_audit_handler
 end
+
+load_audit_handler
