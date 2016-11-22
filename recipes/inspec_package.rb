@@ -17,12 +17,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-chef_ingredient 'inspec' do
-  version node['audit']['inspec_version'] if node['audit']['inspec_version'] != 'latest'
-  accept_license true
-  action :upgrade
+package 'inspec' do
+  source "/tmp/#{File.basename(node['audit']['inspec_package_source'])}"
+  action :nothing
+end
+
+remote_file "/tmp/#{File.basename(node['audit']['inspec_package_source'])}" do
+  source node['audit']['inspec_package_source']
+  notifies :upgrade, 'package[inspec]', :immediately
 end
 
 load_inspec_libs
-
-load_audit_handler
