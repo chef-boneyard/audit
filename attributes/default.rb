@@ -18,6 +18,9 @@
 # inspec gem version to install(e.g. '1.1.0')
 default['audit']['inspec_version'] = '1.2.0'
 
+# install inspec via vendored gem in cookbook
+default['audit']['inspec_gem_vendored'] = false
+
 # URI to alternate gem source (e.g. http://gems.server.com)
 # root of location must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
