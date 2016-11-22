@@ -35,7 +35,6 @@ describe 'audit::default' do
     end
   end
 
-
   context 'When an inspec gem version is specified ' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new do |node|
@@ -66,39 +65,6 @@ describe 'audit::default' do
 
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
-    end
-  end
-
-  context 'When a package install is specified' do
-    let(:chef_run) do
-      ChefSpec::ServerRunner.new do |node|
-        node.override['audit']['inspec_package'] = true
-      end.converge(described_recipe)
-    end
-
-    it 'does not install the inspec gem' do
-      expect(chef_run).to_not install_chef_gem('inspec')
-    end
-
-    it 'upgrades the inspec resource' do
-      expect(chef_run).to upgrade_chef_ingredient('inspec')
-    end
-
-    it 'converges successfully' do
-      expect { chef_run }.to_not raise_error
-    end
-  end
-
-  context 'When a package install and a version is specified' do
-    let(:chef_run) do
-      ChefSpec::ServerRunner.new do |node|
-        node.override['audit']['inspec_version'] = '0.0.0'
-        node.override['audit']['inspec_package'] = true
-      end.converge(described_recipe)
-    end
-
-    it 'installs the correct package version' do
-      expect(chef_run).to upgrade_chef_ingredient('inspec').with(version: '0.0.0')
     end
   end
 

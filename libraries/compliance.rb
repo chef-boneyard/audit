@@ -2,12 +2,6 @@
 
 # load all the inspec and compliance bundle requirements
 def load_inspec_libs
-
-  if node['audit']['inspec_package_source']
-    libpath = node['audit']['inspec_package_libpath']
-    $LOAD_PATH.unshift(libpath) unless $LOAD_PATH.include?(libpath)
-  end
-
   require 'inspec'
   if Inspec::VERSION != node['audit']['inspec_version'] && node['audit']['inspec_version'] !='latest'
     Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
