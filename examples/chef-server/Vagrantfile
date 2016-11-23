@@ -37,13 +37,19 @@ Vagrant.configure(2) do |config|
         audit: {
           collector: "chef-server-compliance",
           insecure: true,
-          profiles: [{
-            name: "linux",
-            compliance: "base/linux"
-          },{
-            name: "ssh",
-            compliance: "base/ssh"
-          }]
+          profiles: [
+            {
+              name: "acme",
+              compliance: "admin/acme-inspec-profile"
+            }
+            # {
+            #   name: "linux",
+            #   compliance: "base/linux"
+            # },{
+            #   name: "ssh",
+            #   compliance: "base/ssh"
+            # }
+          ]
         },
       }
     end

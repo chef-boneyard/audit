@@ -243,20 +243,21 @@ class Collector
       blob[:reports] = {}
       blob[:profiles] = {}
       Chef::Log.info "Control Profile: #{profiles}"
-      profiles.each { |profile|
+      profile = profiles[0]
+      # profiles.each { |profile|
         Chef::Log.info "Control Profile: #{profile}"
         Chef::Log.info "Compliance Profiles: #{@compliance_profiles}"
         namespace = @compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
-          Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
+          Chef::Log.debug "Namespace for #{profile} is #{namespace}"
           blob[:profiles][profile] = namespace[0][:owner]
           blob[:reports][profile] = report.dup
           # filter controls by profile_id
-          blob[:reports][profile]['controls'] = blob[:reports][profile]['controls'].select { |control| control['profile_id'] == profile }
+          # blob[:reports][profile]['controls'] = blob[:reports][profile]['controls'].select { |control| control['profile_id'] == profile }
         else
           Chef::Log.warn "Could not determine compliance namespace for #{profile}"
         end
-      }
+      # }
 
       blob.to_json
     end
