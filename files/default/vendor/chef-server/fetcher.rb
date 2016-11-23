@@ -50,15 +50,19 @@ module ChefServer
     end
 
     def self.url_prefix
-      if defined?(Chef) &&
-         defined?(Chef.node) &&
-         defined?(Chef.node.attributes) &&
-         Chef.node.attributes['audit'] &&
-         get_reporters(Chef.node.attributes['audit']).include?('chef-server-visibility')
+      if chef_server_visibility?
         ''
       else
         '/compliance'
       end
+    end
+
+    def self.chef_server_visibility?
+      attributes_exist? && Chef.node.attributes['audit'] && get_reporters(Chef.node.attributes['audit']).include?('chef-server-visibility')
+    end
+
+    def self.attributes_exist?
+      defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes)
     end
 
     def self.target_url(profile, config)
