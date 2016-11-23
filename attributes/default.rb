@@ -16,21 +16,19 @@
 # limitations under the License.
 
 # inspec gem version to install(e.g. '1.1.0')
-default['audit']['inspec_version'] = '1.2.0'
+default['audit']['inspec_version'] = '1.5.0'
 
-# URI to alternate gem source (e.g. http://gems.server.com)
+# URI to alternate gem source (e.g. 'http://gems.server.com')
 # root of location must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
 
-# collector possible values: chef-server, chef-compliance, chef-visibility, chef-server-visibility, json-file
+# collector possible values: 'chef-server-visibility', 'chef-server-compliance', 'chef-compliance', 'chef-visibility', 'json-file'
 # chef-visibility requires inspec version 0.27.1 or above
-default['audit']['collector'] = 'chef-server'
+default['audit']['collector'] = 'chef-server-compliance'
 
 # It will use an InSpec fetcher that fetches compliance profiles via Chef Server
-# from Chef Compliance or Chef Automate. Will be activated by default if the collectors
-# 'chef-server' or 'chef-server-visibility' are used
-# is used
-# fetcher possible values: chef-server
+# from Chef Compliance or Chef Automate. Will be activated by default if collector
+# 'chef-server-compliance' or 'chef-server-visibility' is used. Possible values: 'chef-server'
 default['audit']['fetcher'] = nil
 
 # Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
