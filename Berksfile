@@ -4,5 +4,5 @@ source 'https://supermarket.chef.io'
 metadata
 
 group :integration do
-  cookbook 'git'
+  cookbook 'test_helper', path: 'test/cookbooks/test_helper'
 end
