@@ -1,0 +1,44 @@
+---
+driver:
+  name: ec2
+  region: us-east-1
+  subnet_id: subnet-46b55431
+  security_group_ids: ['sg-c94c25b4'] # audit-integration-tests security group
+  aws_ssh_key_id: kitchen-key-compliance
+  instance_type: t2.medium
+  interface: public
+  instance_initiated_shutdown_behavior: terminate
+  tags:
+    Name: 'kitchen-test-automate'
+    # without these tags, the machine can be auto terminated:
+    X-Dept: 'Eng'
+    X-Contact: 'apop'
+    X-Production: 'false'
+    X-Environment: 'acceptance'
+    X-Role: 'Standalone Chef Server + Automate'
+
+transport:
+  name: ssh
+  ssh_key: ~/.ssh/kitchen-key-compliance.pem
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.16.42
+
+verifier:
+  name: inspec
+  sudo: true
+
+platforms:
+  - name: amzn
+    driver:
+      # start with a private ami created from an OpsWorks instance snapshot
+      image_id: ami-b02b10a7
+    transport:
+      username: ec2-user
+
+suites:
+  - name: default
+    run_list:
+      - recipe[kitchen-automate::default]
+    attributes:

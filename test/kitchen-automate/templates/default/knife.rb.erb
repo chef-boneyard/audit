@@ -1,0 +1,11 @@
+base_dir = File.join(File.dirname(File.expand_path(__FILE__)), '..')
+
+log_level                <%= @log_level %>
+log_location             STDOUT
+node_name                'pivotal'
+client_key               '/etc/opscode/pivotal.pem'
+syntax_check_cache_path  File.join(base_dir, '.chef', 'syntax_check_cache')
+cookbook_path            '/tmp/kitchen/cookbooks'
+chef_server_url          'https://localhost/organizations/default'
+trusted_certs_dir        File.join(base_dir, '.chef', 'ca_certs')
+ssl_verify_mode          :verify_none
