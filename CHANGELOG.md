@@ -1,5 +1,30 @@
 # Change Log
 
+## [v2.3.0](https://github.com/chef-cookbooks/audit/tree/v2.3.0) (2016-11-23)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.2.0...v2.3.0)
+
+**Closed issues:**
+
+- Update chef web docs [\#159](https://github.com/chef-cookbooks/audit/issues/159)
+- Improve cookbook usability\(fetcher, reporter\) renaming [\#158](https://github.com/chef-cookbooks/audit/issues/158)
+
+**Merged pull requests:**
+
+- Install inspec from source [\#168](https://github.com/chef-cookbooks/audit/pull/168) ([stephenlauck](https://github.com/stephenlauck))
+- Update fetcher for chef-server-visibility and add chef-server-compliance collector [\#163](https://github.com/chef-cookbooks/audit/pull/163) ([alexpop](https://github.com/alexpop))
+- Mention the integration guide between Chef Server and Automate [\#160](https://github.com/chef-cookbooks/audit/pull/160) ([alexpop](https://github.com/alexpop))
+
+## [v2.2.0](https://github.com/chef-cookbooks/audit/tree/v2.2.0) (2016-11-16)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.1.0...v2.2.0)
+
+**Closed issues:**
+
+- Add chef-server-visibility collector and automate fetcher [\#156](https://github.com/chef-cookbooks/audit/issues/156)
+
+**Merged pull requests:**
+
+- Add chef-server-visibility collector [\#157](https://github.com/chef-cookbooks/audit/pull/157) ([alexpop](https://github.com/alexpop))
+
 ## [v2.1.0](https://github.com/chef-cookbooks/audit/tree/v2.1.0) (2016-11-11)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.0.0...v2.1.0)
 
