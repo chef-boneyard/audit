@@ -168,7 +168,7 @@ default["audit"] = {
 }
 ```
 
-#### Reporting to Chef Visibility via Chef Server
+#### Reporting to Chef Automate (Chef Visibility via Chef Server)
 
 If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate(Visibility) through Chef Server, set the `collector` and `profiles` attributes.
 
@@ -441,6 +441,23 @@ Please note that all dependencies to the `inspec` gem must also be hosted in thi
 Please refer to TROUBLESHOOTING.md.
 
 Please let us know if you have any [issues](https://github.com/chef-cookbooks/audit/issues), we are happy to help.
+
+## How to release the `audit` cookbook
+
+* Cookbook source located here: (https://github.com/chef-cookbooks/audit)
+* Hosted Chef users("collaborators") that can publish it to supermarket.chef.io: `apop`, `arlimus`, `chris-rock`, `sr`. Add more collaborators from `Supermarket>Manage Cookbook>Add Collaborator`
+
+Releasing a new cookbook version:
+
+1. version bump the metadata.rb and updated changelog (`bundle exec rake changelog`)
+2. Get your changes merged into master
+3. Go to the `audit` cookbook directory and pull from master
+4. Run `bundle install`
+5. Use stove to publish the cookbook(including git version tag). You must point to the private key of your hosted chef user. For example:
+
+  ```
+  bundle exec stove --username apop --key ~/git/chef-repo/.chef/apop.pem
+  ```
 
 ## License
 
