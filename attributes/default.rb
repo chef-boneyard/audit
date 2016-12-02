@@ -17,7 +17,7 @@
 
 # controls inspec gem version to install
 # example values: '1.1.0', 'latest'
-default['audit']['inspec_version'] = '1.2.0'
+default['audit']['inspec_version'] = '1.5.0'
 
 # sets URI to alternate gem source
 # example values: nil, 'https://mygem.server.com'
@@ -27,7 +27,7 @@ default['audit']['inspec_gem_source'] = nil
 # controls where inspec scan reports are sent
 # possible values: 'chef-server', 'chef-compliance', 'chef-visibility', 'chef-server-visibility', 'json-file'
 # notes: 'chef-visibility' requires inspec version 0.27.1 or greater
-default['audit']['collector'] = 'chef-server'
+default['audit']['collector'] = 'chef-server-compliance'
 
 # controls reporting to Chef Visibility with profiles from Chef Compliance
 # possible values: nil, 'chef-server'
