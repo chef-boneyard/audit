@@ -15,37 +15,44 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# inspec gem version to install(e.g. '1.1.0')
-default['audit']['inspec_version'] = '1.5.0'
+# controls inspec gem version to install
+# example values: '1.1.0', 'latest'
+default['audit']['inspec_version'] = '1.2.0'
 
-# URI to alternate gem source (e.g. 'http://gems.server.com')
-# root of location must host the *specs.4.8.gz source index
+# sets URI to alternate gem source
+# example values: nil, 'https://mygem.server.com'
+# notes: the root of the URL must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
 
-# collector possible values: 'chef-server-visibility', 'chef-server-compliance', 'chef-compliance', 'chef-visibility', 'json-file'
-# chef-visibility requires inspec version 0.27.1 or above
-default['audit']['collector'] = 'chef-server-compliance'
+# controls where inspec scan reports are sent
+# possible values: 'chef-server', 'chef-compliance', 'chef-visibility', 'chef-server-visibility', 'json-file'
+# notes: 'chef-visibility' requires inspec version 0.27.1 or greater
+default['audit']['collector'] = 'chef-server'
 
-# It will use an InSpec fetcher that fetches compliance profiles via Chef Server
-# from Chef Compliance or Chef Automate. Will be activated by default if collector
-# 'chef-server-compliance' or 'chef-server-visibility' is used. Possible values: 'chef-server'
+# controls reporting to Chef Visibility with profiles from Chef Compliance
+# possible values: nil, 'chef-server'
+# notes: requires Chef Server ingtegrated with Chef Compliance
 default['audit']['fetcher'] = nil
 
-# Attributes server, insecure and token/refresh_token are only needed for the 'chef-compliance' collector
-# server format example: 'https://comp-server.example.com/api'
+# url of Chef Compliance server API endpoint
+# example values: nil, 'https://comp-server.example.com/api'
+# notes: only required for 'chef-compliance' collector
 default['audit']['server'] = nil
 
-# choose between the permanent refresh_token or ephemeral token(access_token). Needed only for the 'chef-compliance' collector
+# refresh token from the "About" dialogue in Chef Compliance UI
+# notes: used only for the 'chef-compliance' collector
 default['audit']['refresh_token'] = nil
 
-# the token(access_token) expires in 12h after creation
+# token from the "About" dialogue in Chef Compliance UI
+# notes: used only for the 'chef-compliance' collector.  this token expires 12h after creation
 default['audit']['token'] = nil
 
-# set this insecure attribute to true if the compliance server / chef server uses self-signed ssl certificates
+# allow for connections to HTTPS endpoints using self-signed ssl certificates
 default['audit']['insecure'] = nil
 
-# Chef Compliance organization to post the report to. Defaults to Chef Server org if not defined
-# needed for the 'chef-compliance' collector, optional for 'chef-server' and 'chef-server-visibility' collectors
+# Chef Compliance organization to post the report to
+# notes: only needed for the 'chef-compliance' collector, optional for 'chef-server' and 'chef-server-visibility'
+# defaults to Chef Server org if not defined
 default['audit']['owner'] = nil
 
 # raise exception if Compliance API endpoint is unreachable
@@ -53,22 +60,23 @@ default['audit']['owner'] = nil
 default['audit']['raise_if_unreachable'] = true
 
 # fail converge if downloaded profile is not present
+# https://github.com/chef-cookbooks/audit/issues/166
 default['audit']['fail_if_not_present'] = false
 
-# by default run audit every time
+# control how often inspec scans are run, if not on every node converge
+# notes: false value will result in running inspec scan every converge
 default['audit']['interval']['enabled'] = false
 
-# by default run compliance once a day
+# controls how often inspec scans are run (in minutes)
+# notes: only used if interval is enabled above
 default['audit']['interval']['time'] = 1440
 
-# quiet mode, on by default because this is testing, resources aren't converged in the normal chef sense
+# controls verbosity of inspec runner
 default['audit']['quiet'] = true
 
-# overwrite existing profile in upload mode
+# controls whether or not existing profile is overwritten when using upload recipe
 default['audit']['overwrite'] = true
 
-# use json format since this is for reporting
-default['audit']['format'] = 'json'
-
-# set profiles to empty array as default
+# Chef Inspec Compliance profiles to be used for scan of node
+# See README.md for details
 default['audit']['profiles'] = []
