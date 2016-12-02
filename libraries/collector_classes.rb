@@ -332,7 +332,7 @@ class Collector
     end
 
     def write_to_file(report, timestamp)
-      filename = 'inspec' << '-' << timestamp << '.json'
+      filename = 'inspec' << '-' << timestamp.tr(':', '-') << '.json'
       path = File.expand_path("../../#{filename}", __FILE__)
       Chef::Log.warn "Filename is #{path}"
       json_file = File.new(path, 'w')
