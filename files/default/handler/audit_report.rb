@@ -174,7 +174,7 @@ class Chef
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
         elsif reporter == 'json-file'
-          timestamp = Time.now.utc.to_s.tr(' ', '_')
+          timestamp = Time.now.utc.strftime('%Y%m%d%H%M%S')
           Collector::JsonFile.new(report, timestamp).send_report
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
