@@ -35,7 +35,6 @@ describe 'audit::default' do
     end
   end
 
-
   context 'When an inspec gem version is specified ' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new do |node|

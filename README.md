@@ -436,6 +436,16 @@ default['audit']['inspec_gem_source'] = 'http://internal.gem.server.com/gems'
 
 Please note that all dependencies to the `inspec` gem must also be hosted in this location.
 
+## Installing InSpec from package location instead of gem
+
+If you do not have access to rubygems.org or a local gem source, you may opt to install
+from a package source. In order to do this, please specify the following two attributes:
+
+```
+default['audit']['inspec_package']['source'] = 'https://path/to/inspec/package.rpm'
+default['audit']['inspec_package']['libpath'] = 'path/where/your/package/is/installed'
+```
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.
