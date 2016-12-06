@@ -1,5 +1,23 @@
 # Change Log
 
+## [v2.3.1](https://github.com/chef-cookbooks/audit/tree/v2.3.1) (2016-12-06)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.0...v2.3.1)
+
+**Closed issues:**
+
+- json-file, unable to save file on a windows system [\#173](https://github.com/chef-cookbooks/audit/issues/173)
+- Update Changelog [\#170](https://github.com/chef-cookbooks/audit/issues/170)
+- Integration testing with Chef Automate via test-kitchen [\#169](https://github.com/chef-cookbooks/audit/issues/169)
+- Support Visibility in Automate via Chef Server [\#148](https://github.com/chef-cookbooks/audit/issues/148)
+
+**Merged pull requests:**
+
+- change json-file filename [\#177](https://github.com/chef-cookbooks/audit/pull/177) ([jeremymv2](https://github.com/jeremymv2))
+- Attributes file clarifications [\#176](https://github.com/chef-cookbooks/audit/pull/176) ([jeremymv2](https://github.com/jeremymv2))
+- Integration tests via OpsWorks ec2 [\#175](https://github.com/chef-cookbooks/audit/pull/175) ([alexpop](https://github.com/alexpop))
+- Fix \#170, update changelog, add release instructions [\#171](https://github.com/chef-cookbooks/audit/pull/171) ([chris-rock](https://github.com/chris-rock))
+- minimum integration tests [\#162](https://github.com/chef-cookbooks/audit/pull/162) ([jeremymv2](https://github.com/jeremymv2))
+
 ## [v2.3.0](https://github.com/chef-cookbooks/audit/tree/v2.3.0) (2016-11-23)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.2.0...v2.3.0)
 
