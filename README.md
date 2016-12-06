@@ -115,10 +115,10 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure-success")
 
 ```ruby
-"audit" => {
-  "collector" => "chef-server",
-  "inspec_version" => "1.2.1",
-  "profiles" => [
+"audit": {
+  "collector": "chef-server",
+  "inspec_version": "1.2.1",
+  "profiles": [
     # profile from Chef Compliance
     {
       "name": "linux",
@@ -172,7 +172,7 @@ default["audit"] = {
 
 If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate (Visibility) through Chef Server, set the `collector` and `profiles` attributes.
 
-This requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
+This requires Chef Client >= 12.16.42.  Also requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
 
 Attributes example:
 
