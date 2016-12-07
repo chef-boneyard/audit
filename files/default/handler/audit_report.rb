@@ -54,6 +54,18 @@ class Chef
         end
       end
 
+      # overwrite the default run_report_safely to be able to throw exceptions
+      def run_report_safely(run_status)
+        run_report_unsafe(run_status)
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        Chef::Log.error("Report handler #{self.class.name} raised #{e.inspect}")
+        Array(e.backtrace).each { |line| Chef::Log.error(line) }
+        # force a chef-client exception if user requested it
+        throw e if node['audit']['fail_if_not_present']
+      ensure
+        @run_status = nil
+      end
+
       def load_needed_dependencies
         require 'inspec'
         # load supermarket plugin, this is part of the inspec gem

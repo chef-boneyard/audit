@@ -79,6 +79,32 @@ suites:
           - git: https://github.com/dev-sec/tests-ssh-hardening.git
           - name: ssh
             supermarket: hardening/ssh-hardening
+  # default setting does not fail for missing profile
+  - name: missing-profile-no-fail
+    run_list:
+      - recipe[test_helper::setup]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: json-file
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/this-is-not-available.zip
+    includes:
+      - ubuntu-14.04
+  - name: missing-profile-fail
+    run_list:
+      - recipe[test_helper::setup]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: json-file
+        fail_if_not_present: true
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/this-is-not-available.zip
+    includes:
+      - ubuntu-14.04
   - name: compliance # compliance direct reporting
     run_list:
       - recipe[audit::default]
