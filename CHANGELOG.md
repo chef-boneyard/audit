@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.3.2](https://github.com/chef-cookbooks/audit/tree/v2.3.2) (2016-12-08)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.1...v2.3.2)
+
+**Closed issues:**
+
+- fail\_if\_not\_present doesn't work [\#166](https://github.com/chef-cookbooks/audit/issues/166)
+
+**Merged pull requests:**
+
+- throw chef-client exception if requested by users [\#180](https://github.com/chef-cookbooks/audit/pull/180) ([chris-rock](https://github.com/chris-rock))
+- min chef-client version for chef-server-visibility [\#179](https://github.com/chef-cookbooks/audit/pull/179) ([jeremymv2](https://github.com/jeremymv2))
+
 ## [v2.3.1](https://github.com/chef-cookbooks/audit/tree/v2.3.1) (2016-12-06)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.0...v2.3.1)
 
