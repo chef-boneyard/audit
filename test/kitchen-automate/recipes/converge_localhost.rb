@@ -88,6 +88,8 @@ execute "### Run chef-client w/ collector chef-visibility" do
     sudo knife node show testus -m
     sudo chef-client --override-runlist "recipe[audit::default]" \
       --json-attributes /root/attrs_chef-visibility.json
+    # give time to ElasticSearch to index the report
+    sleep 10
   EOH
   live_stream true
   action :run
