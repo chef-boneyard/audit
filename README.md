@@ -174,6 +174,8 @@ If you want the audit cookbook to retrieve compliance profiles and report to Che
 
 This requires Chef Client >= 12.16.42.  Also requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
 
+Chef Automate is not shipping with build-in profiles at the moment. To upload profiles, you can use the [Automate API](https://docs.chef.io/api_delivery.html) or the `inspec compliance` subcommands (requires InSpec 1.7.2 or newer).
+
 Attributes example:
 
 ```ruby
@@ -182,8 +184,8 @@ Attributes example:
   "insecure": false,
   "profiles": [
     {
-      "name": "windows",
-      "compliance": "base/windows"
+      "name": "my-profile",
+      "compliance": "john/my-profile"
     }
   ]
 }
