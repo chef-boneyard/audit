@@ -50,11 +50,8 @@ module ChefServer
     end
 
     def self.url_prefix
-      if chef_server_visibility?
-        ''
-      else
-        '/compliance'
-      end
+      return '/compliance' unless chef_server_visibility? && Chef.node.attributes['audit']['fetcher'] != 'chef-server'
+      ''
     end
 
     def self.chef_server_visibility?
