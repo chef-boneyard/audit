@@ -84,7 +84,7 @@ module ChefServer
 
     # Downloads archive to temporary file from Chef Compliance via Chef Server
     def download_archive_to_temp
-      return @temp_archive_path if ! @temp_archive_path.nil?
+      return @temp_archive_path if !@temp_archive_path.nil?
       Inspec::Log.debug("Fetching URL: #{@target}")
 
       Chef::Config[:verify_api_cert] = false # FIXME
