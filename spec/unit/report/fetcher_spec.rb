@@ -32,8 +32,8 @@ describe ChefServer::Fetcher do
 
   it 'should resolve a target' do
     mynode.default['audit']['fetcher'] = nil
-    target = ChefServer::Fetcher.resolve(myprofile)
-    expect(target.target).to eq(URI(myprofile))
+    res = ChefServer::Fetcher.resolve(myprofile)
+    expect(res.target).to eq(URI(myprofile))
   end
 
   it 'should add /compliance URL prefix if needed' do
