@@ -50,11 +50,8 @@ module ChefServer
     end
 
     def self.url_prefix
-      if chef_server_visibility?
-        ''
-      else
-        '/compliance'
-      end
+      return '/compliance' unless chef_server_visibility? && Chef.node.attributes['audit']['fetcher'] != 'chef-server'
+      ''
     end
 
     def self.chef_server_visibility?
@@ -87,7 +84,7 @@ module ChefServer
 
     # Downloads archive to temporary file from Chef Compliance via Chef Server
     def download_archive_to_temp
-      return @temp_archive_path if ! @temp_archive_path.nil?
+      return @temp_archive_path if !@temp_archive_path.nil?
       Inspec::Log.debug("Fetching URL: #{@target}")
 
       Chef::Config[:verify_api_cert] = false # FIXME

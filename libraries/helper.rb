@@ -20,7 +20,7 @@ module ReportHelpers
        defined?(Chef::DataCollector) &&
        defined?(Chef::DataCollector::Messages) &&
        defined?(Chef::DataCollector::Messages.node_uuid)
-      return Chef::DataCollector::Messages.node_uuid
+      Chef::DataCollector::Messages.node_uuid
     end
   end
 
