@@ -1,5 +1,19 @@
 # Change Log
 
+## [v2.3.3](https://github.com/chef-cookbooks/audit/tree/v2.3.3) (2017-01-04)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.2...v2.3.3)
+
+**Closed issues:**
+
+- Run Chef Automate integration tests in travis [\#178](https://github.com/chef-cookbooks/audit/issues/178)
+- Unable to use GIT as a profile source [\#172](https://github.com/chef-cookbooks/audit/issues/172)
+
+**Merged pull requests:**
+
+- fixing \#184 [\#186](https://github.com/chef-cookbooks/audit/pull/186) ([jeremymv2](https://github.com/jeremymv2))
+- Mention uploading profiles to Automate [\#183](https://github.com/chef-cookbooks/audit/pull/183) ([alexpop](https://github.com/alexpop))
+- Travis and kitchen-ec2 testing [\#181](https://github.com/chef-cookbooks/audit/pull/181) ([alexpop](https://github.com/alexpop))
+
 ## [v2.3.2](https://github.com/chef-cookbooks/audit/tree/v2.3.2) (2016-12-08)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.1...v2.3.2)
 
