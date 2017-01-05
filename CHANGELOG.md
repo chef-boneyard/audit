@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-01-05)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.3...v2.3.4)
+
+**Closed issues:**
+
+- audit 2.3.2 no longer supports `chef-server` fetcher + `chef-server-visibility` collector [\#184](https://github.com/chef-cookbooks/audit/issues/184)
+
+**Merged pull requests:**
+
+- make automate integration tests optional [\#192](https://github.com/chef-cookbooks/audit/pull/192) ([chris-rock](https://github.com/chris-rock))
+- Fix issue with interval being removed because of chef-client cookbook cleanup [\#191](https://github.com/chef-cookbooks/audit/pull/191) ([brentm5](https://github.com/brentm5))
+
 ## [v2.3.3](https://github.com/chef-cookbooks/audit/tree/v2.3.3) (2017-01-04)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.2...v2.3.3)
 
@@ -10,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Releasing audit 2.3.3 defaulting to inspec 1.8.0 [\#189](https://github.com/chef-cookbooks/audit/pull/189) ([alexpop](https://github.com/alexpop))
 - fixing \#184 [\#186](https://github.com/chef-cookbooks/audit/pull/186) ([jeremymv2](https://github.com/jeremymv2))
 - Mention uploading profiles to Automate [\#183](https://github.com/chef-cookbooks/audit/pull/183) ([alexpop](https://github.com/alexpop))
 - Travis and kitchen-ec2 testing [\#181](https://github.com/chef-cookbooks/audit/pull/181) ([alexpop](https://github.com/alexpop))
