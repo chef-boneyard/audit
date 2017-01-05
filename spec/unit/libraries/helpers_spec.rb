@@ -15,8 +15,12 @@ describe ReportHelpers do
     expect(symbol_tests).to eq([{:name=>"ssh", :url=>"https://github.com/dev-sec/tests-ssh-hardening"}])
   end
 
+  it 'report_timing_file returns where the report timing file is located' do
+    expect(@report.report_timing_file).to eq("#{Chef::Config[:file_cache_path]}/compliance/report_timing.json")
+  end
+
   it 'create_timestamp_file creates a new file' do
-    expected_file_path = File.expand_path("../../../../report_timing.json", __FILE__)
+    expected_file_path = @report.report_timing_file
     @report.create_timestamp_file
     expect(File).to exist("#{expected_file_path}")
     File.delete("#{expected_file_path}")

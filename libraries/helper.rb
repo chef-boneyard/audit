@@ -69,11 +69,15 @@ module ReportHelpers
     cs.to_s
   end
 
+  def report_timing_file
+    # Will create and return the complete folder path for the chef cache location and the passed in value
+    ::File.join(Chef::FileCache.create_cache_path('compliance'), 'report_timing.json')
+  end
+
   def profile_overdue_to_run?(interval)
     # Calculate when a report was last created so we delay the next report if necessary
-    file = File.expand_path('../../report_timing.json', __FILE__)
-    return true unless ::File.exist?(file)
-    seconds_since_last_run = Time.now - ::File.mtime(file)
+    return true unless ::File.exist?(report_timing_file)
+    seconds_since_last_run = Time.now - ::File.mtime(report_timing_file)
     seconds_since_last_run > interval
   end
 
@@ -90,9 +94,8 @@ module ReportHelpers
 
   # used for interval timing
   def create_timestamp_file
-    path = File.expand_path('../../report_timing.json', __FILE__)
     timestamp = Time.now.utc
-    timestamp_file = File.new(path, 'w')
+    timestamp_file = File.new(report_timing_file, 'w')
     timestamp_file.puts(timestamp)
     timestamp_file.close
   end
