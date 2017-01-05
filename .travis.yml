@@ -39,6 +39,8 @@ matrix:
     - rm ~/.ssh/kitchen-key-compliance.*
     after_success:
     - bundle exec rake $SUITE[destroy]
+  allow_failures:
+  - env: SUITE=test:kitchen_automate
 env:
   global:
   # AWS keys:
