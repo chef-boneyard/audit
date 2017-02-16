@@ -72,6 +72,34 @@ class Collector
       end
     end
 
+    # Some document stores like ElasticSearch don't like values that change type
+    # This function converts all profile attribute defaults to string and
+    # adds a 'type' key to store the original type
+    def typed_attributes(profiles)
+      return profiles unless profiles.class == Array && !profiles.empty?
+      profiles.each { |profile|
+        next unless profile['attributes'].class == Array && !profile['attributes'].empty?
+        profile['attributes'].map { |attrib|
+          case attrib['options']['default'].class.to_s
+          when 'String'
+            attrib['options']['type'] = 'string'
+          when 'FalseClass'
+            attrib['options']['type'] = 'boolean'
+            attrib['options']['default'] = attrib['options']['default'].to_s
+          when 'Fixnum'
+            attrib['options']['type'] = 'int'
+            attrib['options']['default'] = attrib['options']['default'].to_s
+          when 'Float'
+            attrib['options']['type'] = 'float'
+            attrib['options']['default'] = attrib['options']['default'].to_s
+          else
+            Chef::Log.warn "enriched_report: unsupported data type(#{attrib['options']['default'].class}) for attribute #{attrib['options']['name']}"
+            attrib['options']['type'] = 'unknown'
+          end
+        }
+      }
+    end
+
     # ***************************************************************************************
     # TODO: We could likely simplify/remove alot of the extra logic we have here with a small
     # revamp of the visibility expected input.
@@ -88,6 +116,9 @@ class Collector
 
       # remove nil profiles if any
       final_report['profiles'].select! { |p| p }
+
+      # set types for profile attributes
+      final_report['profiles'] = typed_attributes(final_report['profiles'])
 
       # add some additional fields to ease report parsing
       final_report['event_type'] = 'inspec'

@@ -444,6 +444,17 @@ Please refer to TROUBLESHOOTING.md.
 
 Please let us know if you have any [issues](https://github.com/chef-cookbooks/audit/issues), we are happy to help.
 
+## Run the tests for this cookbook:
+
+```bash
+bundle install
+bundle exec rake style
+# run all ChefSpec tests
+bundle exec rspec
+# run a specific test
+bundle exec rspec ./spec/unit/libraries/visibility_spec.rb
+```
+
 ## How to release the `audit` cookbook
 
 * Cookbook source located here: (https://github.com/chef-cookbooks/audit)
