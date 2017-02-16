@@ -18,6 +18,7 @@ group :test do
   gem 'berkshelf', '>= 5.0'
   gem 'chefspec',  '>= 5.2'
   gem 'coveralls', '~> 0.8.2', require: false
+  gem 'rb-readline'
 end
 
 group :integration do
