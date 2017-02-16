@@ -1,5 +1,17 @@
 # Change Log
 
+## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-02-16)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.4...v2.3.4)
+
+**Closed issues:**
+
+- Direct reporting to Chef Visibility doesn't work when proxying node data through Chef Server [\#195](https://github.com/chef-cookbooks/audit/issues/195)
+- could not find valid gem 'inspec' [\#194](https://github.com/chef-cookbooks/audit/issues/194)
+
+**Merged pull requests:**
+
+- Type the inspec profile attributes [\#196](https://github.com/chef-cookbooks/audit/pull/196) ([alexpop](https://github.com/alexpop))
+
 ## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-01-05)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.3...v2.3.4)
 
