@@ -1,7 +1,10 @@
 # Change Log
 
-## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-02-16)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.4...v2.3.4)
+## [v2.4.0](https://github.com/chef-cookbooks/audit/tree/v2.4.0) (2017-02-16)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.5...v2.4.0)
+
+## [v2.3.5](https://github.com/chef-cookbooks/audit/tree/v2.3.5) (2017-02-16)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.4...v2.3.5)
 
 **Closed issues:**
 
@@ -10,6 +13,7 @@
 
 **Merged pull requests:**
 
+- Release 2.3.5 [\#197](https://github.com/chef-cookbooks/audit/pull/197) ([alexpop](https://github.com/alexpop))
 - Type the inspec profile attributes [\#196](https://github.com/chef-cookbooks/audit/pull/196) ([alexpop](https://github.com/alexpop))
 
 ## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-01-05)
