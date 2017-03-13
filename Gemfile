@@ -24,6 +24,7 @@ end
 group :integration do
   gem 'test-kitchen', '~> 1.13'
   gem 'kitchen-dokken'
+  gem 'kitchen-vagrant'
   gem 'kitchen-ec2', '~> 1.2'
   gem 'kitchen-inspec', '~> 0.15'
 end
