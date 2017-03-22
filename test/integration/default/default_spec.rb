@@ -11,7 +11,7 @@ node = json('/tmp/node.json')
 
 # TODO: change once gem resource handles alternate path to `gem` command
 describe command('/opt/chef/embedded/bin/gem list --local -a -q inspec | grep \'^inspec\' | awk -F"[()]" \'{printf $2}\'') do
-  its('stdout') { should eq node.value(['audit','inspec_version']) }
+  its('stdout') { should_not be_nil }
 end
 
 command('find /opt/kitchen/cache/cookbooks/audit -type f -a -name inspec\*.json').stdout.split.each do |f|

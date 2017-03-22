@@ -17,7 +17,7 @@
 
 # controls inspec gem version to install
 # example values: '1.1.0', 'latest'
-default['audit']['inspec_version'] = '1.15.0'
+default['audit']['inspec_version'] = nil
 
 # sets URI to alternate gem source
 # example values: nil, 'https://mygem.server.com'

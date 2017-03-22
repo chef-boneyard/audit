@@ -84,6 +84,14 @@ The third scenario supports direct reporting to Chef Visibility. It also support
 
 The audit cookbook needs to be configured for each node where the `chef-client` runs. The `audit` cookbook can be reused for all nodes, all node-specific configuration is done via Chef attributes.
 
+### InSpec Gem Installation
+
+Beginning with version 3.x of the `audit` cookbook, the cookbook will first check to see if InSpec is already installed. If it is, it will not attempt to install it. Future releases of the Chef omnibus package are expected to include InSpec so this will reduce audit run times and also ensure that Chef users in air-gapped or firewalled environments can still use the `audit` cookbook without requiring gem mirrors, etc.
+
+Also beginning with version 3.x of the `audit` cookbook, the default version of the InSpec gem to be installed (if it isn't already installed) is the latest version. Prior versions of the `audit` cookbook were version-locked to `inspec` version 1.15.0.
+
+To install a different version of the InSpec gem, or to force installation of the gem, set the `node['audit']['inspec_version']` attribute to the version you wish to be installed.
+
 ### Upload cookbook to Chef Server
 
 The `audit` cookbook is available at [Chef Supermarket](https://supermarket.chef.io/cookbooks/audit). This allows you to reuse your existing workflow for managing cookbooks in your runlist.
