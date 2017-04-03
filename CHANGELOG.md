@@ -1,7 +1,28 @@
 # Change Log
 
-## [v2.4.0](https://github.com/chef-cookbooks/audit/tree/v2.4.0) (2017-02-16)
+## [v3.0.0](https://github.com/chef-cookbooks/audit/tree/v3.0.0) (2017-04-03)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.4.0...v3.0.0)
+
+**Implemented enhancements:**
+
+- Automate profile fetcher [\#193](https://github.com/chef-cookbooks/audit/issues/193)
+
+**Closed issues:**
+
+- upload failed for cookbooks/audit because missing "compat\_resource" [\#204](https://github.com/chef-cookbooks/audit/issues/204)
+- Missing data in Automate UI [\#199](https://github.com/chef-cookbooks/audit/issues/199)
+
+**Merged pull requests:**
+
+- Only install InSpec if not installed or version provided [\#203](https://github.com/chef-cookbooks/audit/pull/203) ([adamleff](https://github.com/adamleff))
+- Use `chef-server-compliance` vs `chef-server` [\#202](https://github.com/chef-cookbooks/audit/pull/202) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
+
+## [v2.4.0](https://github.com/chef-cookbooks/audit/tree/v2.4.0) (2017-03-01)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.5...v2.4.0)
+
+**Merged pull requests:**
+
+- Bump cookbook version with new inspec release [\#198](https://github.com/chef-cookbooks/audit/pull/198) ([alexpop](https://github.com/alexpop))
 
 ## [v2.3.5](https://github.com/chef-cookbooks/audit/tree/v2.3.5) (2017-02-16)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.4...v2.3.5)
