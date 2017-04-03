@@ -27,7 +27,7 @@ describe 'audit::default' do
     end
 
     it 'installs the inspec gem' do
-      expect(chef_run).to install_chef_gem('inspec')
+      expect(chef_run).to install_inspec_gem('inspec')
     end
 
     it 'converges successfully' do
@@ -44,7 +44,7 @@ describe 'audit::default' do
     end
 
     it 'installs the inspec gem with the correct version' do
-      expect(chef_run).to install_chef_gem('inspec').with(version: '0.0.0')
+      expect(chef_run).to install_inspec_gem('inspec').with(version: '0.0.0')
     end
 
     it 'converges successfully' do
@@ -60,8 +60,7 @@ describe 'audit::default' do
     end
 
     it 'installs the inspec gem from the alternate source' do
-      expect(chef_run).to install_chef_gem('inspec').with(clear_sources: true)
-      expect(chef_run).to install_chef_gem('inspec').with(source: 'http://0.0.0.0:8080')
+      expect(chef_run).to install_inspec_gem('inspec').with(source: 'http://0.0.0.0:8080')
     end
 
     it 'converges successfully' do

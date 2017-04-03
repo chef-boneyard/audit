@@ -17,12 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-chef_gem 'inspec' do
-  version node['audit']['inspec_version'] if node['audit']['inspec_version'] != 'latest'
-  compile_time true
-  clear_sources true if node['audit']['inspec_gem_source']
-  source node['audit']['inspec_gem_source'] if node['audit']['inspec_gem_source']
-  action :install
-end
-
-load_inspec_libs
+inspec_gem 'inspec' do
+  version node['audit']['inspec_version']
+  source node['audit']['inspec_gem_source']
+  action :nothing
+end.run_action(:install)
