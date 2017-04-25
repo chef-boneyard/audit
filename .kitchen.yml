@@ -116,9 +116,9 @@ suites:
         profiles: *profiles
   - name: gem-install-version
     run_list:
-      - recipe[test_helper::install_inspec_1_17]
+      - recipe[test_helper::install_inspec]
       - recipe[audit::default]
     attributes:
       audit:
         collector: json-file
-        inspec_version: 1.18.0
+        inspec_version: 1.20.0
