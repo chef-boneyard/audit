@@ -105,18 +105,50 @@ class Chef
       # run profiles and return report
       def call(opts, profiles)
         Chef::Log.info "Initialize InSpec #{::Inspec::VERSION}"
-
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
         # parse profile hashes for runner, see libraries/helper.rb
         tests = tests_for_runner(profiles)
-        tests.each { |target| runner.add_target(target, opts) }
+        if !tests.empty?
+          tests.each { |target| runner.add_target(target, opts) }
 
-        Chef::Log.info "Running tests from: #{tests.inspect}"
-        runner.run
-        runner.report.to_json
-      rescue Inspec::FetcherFailure => _e
+          Chef::Log.info "Running tests from: #{tests.inspect}"
+          runner.run
+          r = runner.report
+
+          # output summary of InSpec Report in Chef Logs
+          if !r.nil? && 'json-min' == opts['format']
+            time = 0
+            time = r[:statistics][:duration] unless r[:statistics].nil?
+            passed_controls = r[:controls].select { |c| c[:status] == 'passed' }.size
+            failed_controls = r[:controls].select { |c| c[:status] == 'failed' }.size
+            skipped_controls = r[:controls].select { |c| c[:status] == 'skipped' }.size
+            Chef::Log.info "Summary: #{passed_controls} successful, #{failed_controls} failures, #{skipped_controls} skipped in #{time} s"
+          end
+
+          if !r.nil? && 'json' == opts['format']
+            # ensure controls are never stored or shipped, since this was an accidential
+            # addition in InSpec and will be remove in our next major release
+            r.delete(:controls)
+
+            # calculate statistics
+            stats = count_controls(JSON.parse(r[:profiles].to_json))
+
+            time = 0
+            time = r[:statistics][:duration] unless r[:statistics].nil?
+
+            # count controls
+            Chef::Log.info "Summary #{stats['total']} controls: #{stats['passed']['total']} successful, #{stats['failed']['total']} failures, #{stats['skipped']['total']} skipped in #{time} s"
+          end
+
+          r.to_json
+        else
+          Chef::Log.warn 'No audit tests are defined.'
+          {}
+        end
+      rescue Inspec::FetcherFailure => e
+        Chef::Log.error e.message
         Chef::Log.error "We cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable."
       end
 
