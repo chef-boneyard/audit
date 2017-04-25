@@ -104,7 +104,8 @@ class Chef
 
       # run profiles and return report
       def call(opts, profiles)
-        Chef::Log.info 'Initialize InSpec'
+        Chef::Log.info "Initialize InSpec #{::Inspec::VERSION}"
+
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
@@ -115,6 +116,8 @@ class Chef
         Chef::Log.info "Running tests from: #{tests.inspect}"
         runner.run
         runner.report.to_json
+      rescue Inspec::FetcherFailure => _e
+        Chef::Log.error "We cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable."
       end
 
       # extracts relevant node data
