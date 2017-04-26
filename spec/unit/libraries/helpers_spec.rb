@@ -4,7 +4,7 @@
 # Spec:: helpers
 
 require 'spec_helper'
-require_relative '../../../libraries/collector_classes'
+require_relative '../../../libraries/reporters'
 
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }

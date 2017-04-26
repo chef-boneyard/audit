@@ -27,7 +27,7 @@ default['audit']['inspec_gem_source'] = nil
 # controls where inspec scan reports are sent
 # possible values: 'chef-server-visibility', 'chef-server-compliance', 'chef-compliance', 'chef-visibility', 'json-file'
 # notes: 'chef-visibility' requires inspec version 0.27.1 or greater
-default['audit']['collector'] = 'chef-server-compliance'
+default['audit']['reporter'] = 'chef-server-compliance'
 
 # controls reporting to Chef Visibility with profiles from Chef Compliance
 # possible values: nil, 'chef-server'

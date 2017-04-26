@@ -24,6 +24,22 @@ Using the `inspec_version` attribute, please use the following `InSpec` version 
 
 You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
 
+## Deprecation Note:
+
+With version 3.1.0 the use of the `collector` attribute is deprecated. Please use `reporter` instead. The `collector` attribute will be removed in the next major version.
+
+```
+"audit": {
+  "collector": "chef-server-compliance",
+```
+
+becomes:
+
+```
+"audit": {
+  "reporter": "chef-server-compliance",
+```
+
 ## Overview
 
 The `audit` support three scenarios:
@@ -111,7 +127,7 @@ Please ensure that `chef-cookbooks` is the parent directory of `audit` cookbook.
 
 #### Reporting to Chef Compliance via Chef Server
 
-If you want the audit cookbook to converge and retrieve compliance profiles through the Chef Server, set the `collector` and `profiles` attributes.
+If you want the audit cookbook to converge and retrieve compliance profiles through the Chef Server, set the `reporter` and `profiles` attributes.
 
 This requires your Chef Server to be integrated with the Chef Compliance server using this [guide](https://docs.chef.io/integrate_compliance_chef_server.html).
 
@@ -124,7 +140,7 @@ node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure
 
 ```ruby
 "audit": {
-  "collector": "chef-server-compliance",
+  "reporter": "chef-server-compliance",
   "inspec_version": "1.2.1",
   "profiles": [
     # profile from Chef Compliance
@@ -162,7 +178,7 @@ You can also configure in a policyfile like this:
 
 ```ruby
 default["audit"] = {
-  "collector" => "chef-server-compliance",
+  "reporter" => "chef-server-compliance",
   "profiles" => [
     {
       "name": "linux",
@@ -178,7 +194,7 @@ default["audit"] = {
 
 #### Reporting to Chef Automate (Chef Visibility via Chef Server)
 
-If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate (Visibility) through Chef Server, set the `collector` and `profiles` attributes.
+If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate (Visibility) through Chef Server, set the `reporter` and `profiles` attributes.
 
 This requires Chef Client >= 12.16.42.  Also requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
 
@@ -188,7 +204,7 @@ Attributes example:
 
 ```ruby
 "audit": {
-  "collector": "chef-server-visibility",
+  "reporter": "chef-server-visibility",
   "insecure": false,
   "profiles": [
     {
@@ -202,9 +218,9 @@ Attributes example:
 
 #### Direct reporting to Chef Compliance
 
-If you want the audit cookbook to directly report to Chef Compliance, set the `collector`, `server`, `owner`, `refresh_token` and `profiles` attributes.
+If you want the audit cookbook to directly report to Chef Compliance, set the `reporter`, `server`, `owner`, `refresh_token` and `profiles` attributes.
 
- * `collector` - 'chef-compliance' to report to Chef Compliance
+ * `reporter` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
  * `owner` - Chef Compliance user or organization that will receive this scan report
  * `refresh_token` - refresh token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
@@ -213,7 +229,7 @@ If you want the audit cookbook to directly report to Chef Compliance, set the `c
 
 ```ruby
 "audit": {
-  "collector": "chef-compliance",
+  "reporter": "chef-compliance",
   "server": "https://compliance-fqdn/api",
   "owner": "my-comp-org",
   "refresh_token": "5/4T...g==",
@@ -231,7 +247,7 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 
 ```ruby
 "audit": {
-  "collector": "chef-compliance",
+  "reporter": "chef-compliance",
   "server": "https://compliance-fqdn/api",
   "owner": "my-comp-org",
   "token": "eyJ........................YQ",
@@ -247,7 +263,7 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 
 #### Direct reporting to Chef Visibility
 
-If you want the audit cookbook to directly report to Chef Visibility, set the `collector` attribute to 'chef-visibility'. Also specify where to retrieve the `profiles` from.
+If you want the audit cookbook to directly report to Chef Visibility, set the `reporter` attribute to 'chef-visibility'. Also specify where to retrieve the `profiles` from.
 
 * `insecure` - a `true` value will skip the SSL certificate verification. Default value is `false`
 
@@ -255,7 +271,7 @@ This method is sending the report using the `data_collector.server_url` and `dat
 
 ```ruby
 "audit": {
-  "collector": "chef-visibility",
+  "reporter": "chef-visibility",
   "insecure": "false",
   "profiles": [
     {
@@ -278,7 +294,7 @@ Simply include the `upload` recipe in the run_list, with attribute overrides for
 ```ruby
 audit: {
   server: 'https://compliance-server.test/api',
-  collector: 'chef-compliance',
+  reporter: 'chef-compliance',
   refresh_token: '21/XMEK3...',
   profiles: [
    {
@@ -291,11 +307,11 @@ audit: {
 
 ## Write to file on disk
 
-To write the report to a file on disk, simply set the collector to 'json-file' like so:
+To write the report to a file on disk, simply set the `reporter` to 'json-file' like so:
 
 ```ruby
 audit: {
-  collector: 'json-file',
+  reporter: 'json-file',
   profiles: [
    {
       'name': 'admin/ssh2',
@@ -305,14 +321,14 @@ audit: {
 }
 ```
 
-## Multiple reporters
+## Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information
 for each one.  For example, to report to chef-compliance and write to json file on disk:
 
 ```ruby
 "audit": {
-  "collector": [ "chef-compliance", "json-file" ]
+  "reporter": [ "chef-compliance", "json-file" ]
   "server": "https://compliance-fqdn/api",
   "owner": "my-comp-org",
   "refresh_token": "5/4T...g==",
@@ -334,7 +350,7 @@ This will allow the audit cookbook to fetch profiles stored in Chef Compliance. 
 ```ruby
 "audit": {
   "fetcher": "chef-server",
-  "collector": "chef-visibility",
+  "reporter": "chef-visibility",
   "profiles": [
     {
       "name": "ssh",
