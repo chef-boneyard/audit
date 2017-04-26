@@ -18,7 +18,7 @@
 # limitations under the License.
 
 require 'spec_helper'
-require_relative '../../../libraries/collector_classes'
+require_relative '../../../libraries/reporters'
 require_relative '../../data/mock.rb'
 
 describe 'Collector::ChefVisibility methods' do

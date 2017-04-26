@@ -1,10 +1,10 @@
 # encoding: utf-8
 #
 # Cookbook Name:: audit
-# Spec:: compliance
+# Spec:: reporters
 
 require 'spec_helper'
-require_relative '../../../libraries/collector_classes'
+require_relative '../../../libraries/reporters'
 
 describe 'Collector::ChefCompliance methods' do
   before :each do

@@ -182,7 +182,7 @@ class Chef
         }
       end
 
-      # send report to the collector (see libraries/collector_classes.rb)
+      # send InSpec report to the reporter (see libraries/reporters.rb)
       def send_report(reporter, server, user, profiles, report)
         Chef::Log.info "Reporting to #{reporter}"
 

@@ -4,7 +4,7 @@
 # Spec:: json-file
 
 require 'spec_helper'
-require_relative '../../../libraries/collector_classes'
+require_relative '../../../libraries/reporters'
 
 describe 'Collector::JsonFile methods' do
   it 'writes the report to a file on disk' do
