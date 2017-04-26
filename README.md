@@ -5,21 +5,6 @@ The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client 
 
 Version 2.0 of the audit cookbook is based on an idea from [Michael Hedgpeth](https://github.com/chef-cookbooks/audit/issues/70). Under the hood it uses [Chef handler](https://docs.chef.io/handlers.html) instead of Chef resources now.
 
-Note: With version 3.1.0, we are deprecating the use `collector` attribute and use the term `reporter`. The following
-
-```
-"audit": {
-  "collector": "chef-server-compliance",
-```
-
-becomes:
-
-```
-"audit": {
-  "reporter": "chef-server-compliance",
-```
-
-
 ## Requirements
 
 ### Chef
@@ -38,6 +23,22 @@ Using the `inspec_version` attribute, please use the following `InSpec` version 
 
 
 You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
+
+## Deprecation Note:
+
+With version 3.1.0 the use of the `collector` attribute is deprecated. Please use `reporter` instead. The `collector` attribute will be removed in the next major version.
+
+```
+"audit": {
+  "collector": "chef-server-compliance",
+```
+
+becomes:
+
+```
+"audit": {
+  "reporter": "chef-server-compliance",
+```
 
 ## Overview
 
@@ -320,7 +321,7 @@ audit: {
 }
 ```
 
-## Multiple reporters
+## Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information
 for each one.  For example, to report to chef-compliance and write to json file on disk:
