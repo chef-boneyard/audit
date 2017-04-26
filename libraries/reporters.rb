@@ -25,7 +25,7 @@ class Collector
     # Method used in order to send the inspec report to the data_collector server
     def send_report
       unless @entity_uuid && @run_id
-        Chef::Log.warn "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report..."
+        Chef::Log.error "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report to Chef Automate"
         return false
       end
 
@@ -57,17 +57,18 @@ class Collector
         end
 
         begin
-          Chef::Log.warn "Report to Chef Visibility: #{dc[:server_url]}"
-          Chef::Log.debug("POSTing the following message to #{dc[:server_url]}: #{json_report}")
+          Chef::Log.info "Report to Chef Visibility: #{dc[:server_url]}"
+          Chef::Log.debug("POST the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
           return true
         rescue => e
-          Chef::Log.error "send_inspec_report: POSTing to #{dc[:server_url]} returned: #{e.message}"
+          Chef::Log.error "send_inspec_report: POST to #{dc[:server_url]} returned: #{e.message}"
           return false
         end
       else
         Chef::Log.warn 'data_collector.token and data_collector.server_url must be defined in client.rb!'
+        Chef::Log.warn 'Further information: https://github.com/chef-cookbooks/audit#direct-reporting-to-chef-visibility'
         return false
       end
     end
@@ -275,14 +276,13 @@ class Collector
     end
 
     def send_report
-      Chef::Log.warn 'Writing report to file.'
       write_to_file(@report, @timestamp)
     end
 
     def write_to_file(report, timestamp)
       filename = 'inspec' << '-' << timestamp << '.json'
       path = File.expand_path("../../#{filename}", __FILE__)
-      Chef::Log.warn "Filename is #{path}"
+      Chef::Log.info "Writing report to #{path}"
       json_file = File.new(path, 'w')
       json_file.puts(report)
       json_file.close

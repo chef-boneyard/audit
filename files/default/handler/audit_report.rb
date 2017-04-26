@@ -150,6 +150,7 @@ class Chef
       rescue Inspec::FetcherFailure => e
         Chef::Log.error e.message
         Chef::Log.error "We cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable."
+        {}
       end
 
       # extracts relevant node data
