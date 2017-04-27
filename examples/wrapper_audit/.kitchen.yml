@@ -34,7 +34,7 @@ suites:
       - recipe[wrapper_audit::default]
     attributes:
       audit:
-        collector: 'chef-visibility'
+        reporter: 'chef-automate'
         server: <%= ENV['COMPLIANCE_API'] %>
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         refresh_token: <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>
