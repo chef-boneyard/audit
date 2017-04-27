@@ -1,0 +1,17 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: windows-2012R2
+    driver_config:
+      box: mwrock/Windows2012R2
+
+suites:
+  - name: automate_win
+    run_list:
+      - recipe[automate_win::chef_client_config]
+    attributes:
