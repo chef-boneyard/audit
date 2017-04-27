@@ -69,6 +69,14 @@ module ReportHelpers
     cs.to_s
   end
 
+  # used for interval timing
+  def create_timestamp_file
+    timestamp = Time.now.utc
+    timestamp_file = File.new(report_timing_file, 'w')
+    timestamp_file.puts(timestamp)
+    timestamp_file.close
+  end
+
   def report_timing_file
     # Will create and return the complete folder path for the chef cache location and the passed in value
     ::File.join(Chef::FileCache.create_cache_path('compliance'), 'report_timing.json')
@@ -90,14 +98,6 @@ module ReportHelpers
     end
     # returns true if profile is overdue to run
     profile_overdue_to_run?(interval_seconds)
-  end
-
-  # used for interval timing
-  def create_timestamp_file
-    timestamp = Time.now.utc
-    timestamp_file = File.new(report_timing_file, 'w')
-    timestamp_file.puts(timestamp)
-    timestamp_file.close
   end
 
   # takes value of reporters and returns array to ensure backwards-compatibility

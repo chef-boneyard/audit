@@ -193,46 +193,81 @@ class Chef
       end
 
       # send InSpec report to the reporter (see libraries/reporters.rb)
-      def send_report(reporter, server, user, profiles, report)
+      def send_report(reporter, server, user, profiles, content)
         Chef::Log.info "Reporting to #{reporter}"
 
         # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
         # See `cookstyle` Metrics/ParameterLists
         insecure = node['audit']['insecure']
+        report = JSON.parse(content)
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility' || reporter == 'chef-automate'
-          Reporter::ChefAutomate.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report
-
-        elsif reporter == 'chef-compliance'
-          raise_if_unreachable = node['audit']['raise_if_unreachable']
-          url = construct_url(server, File.join('/owners', user, 'inspec'))
-          if server
-            Reporter::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
-          else
-            Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
-          end
+          opts = {
+            entity_uuid: run_status.entity_uuid,
+            run_id: run_status.run_id,
+            node_info: gather_nodeinfo,
+            insecure: insecure,
+          }
+          Reporter::ChefAutomate.new(opts).send_report(report)
         elsif reporter == 'chef-server-visibility' || reporter == 'chef-server-automate'
           chef_url = server || base_chef_server_url
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
             url = construct_url(chef_url, File.join('organizations', chef_org, 'data-collector'))
-            Reporter::ChefServerAutomate.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report(url)
+            opts = {
+              entity_uuid: run_status.entity_uuid,
+              run_id: run_status.run_id,
+              node_info: gather_nodeinfo,
+              insecure: insecure,
+              url: url,
+            }
+            Reporter::ChefServerAutomate.new(opts).send_report(report)
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
-        elsif reporter == 'chef-server-compliance' || reporter == 'chef-server' # chef-server is legacy reporter
+        elsif reporter == 'chef-compliance'
+          if server
+            raise_if_unreachable = node['audit']['raise_if_unreachable']
+            url = construct_url(server, File.join('/owners', user, 'inspec'))
+
+            # @config = Compliance::Configuration.new
+            # Chef::Log.info "Report to Chef Compliance: #{@config['server']}/owners/#{@config['user']}/inspec"
+            # @url = URI("#{@config['server']}/owners/#{@config['user']}/inspec")
+            token = @config['token']
+
+            opts = {
+              url: url,
+              node_info: gather_nodeinfo,
+              raise_if_unreachable: raise_if_unreachable,
+              profile_index: cc_profile_index(profiles),
+              token: token,
+            }
+            Reporter::ChefCompliance.new(opts).send_report(report)
+          else
+            Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
+          end
+        elsif reporter == 'chef-server-compliance' || reporter == 'chef-server'
           chef_url = server || base_chef_server_url
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
             url = construct_url(chef_url + '/compliance/', File.join('organizations', chef_org, 'inspec'))
-            Reporter::ChefServer.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
+            opts = {
+              url: url,
+              node_info: gather_nodeinfo,
+              raise_if_unreachable: raise_if_unreachable,
+              profile_index: cc_profile_index(profiles),
+            }
+            Reporter::ChefServer.new(opts).send_report(report)
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
         elsif reporter == 'json-file'
           timestamp = Time.now.utc.strftime('%Y%m%d%H%M%S')
-          Reporter::JsonFile.new(report, timestamp).send_report
+          filename = 'inspec' << '-' << timestamp << '.json'
+          path = File.expand_path("../../../../#{filename}", __FILE__)
+          Chef::Log.info "Writing report to #{path}"
+          Reporter::JsonFile.new({ file: path }).send_report(report)
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end
