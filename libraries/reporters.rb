@@ -2,11 +2,11 @@
 require 'json'
 require_relative 'helper'
 
-class Collector
+class Reporter
   #
-  # Used to send inspec reports to Chef Visibility via the data_collector service
+  # Used to send inspec reports to Chef Automate via the data_collector service
   #
-  class ChefVisibility
+  class ChefAutomate
     include ReportHelpers
 
     @entity_uuid = nil
@@ -57,7 +57,7 @@ class Collector
         end
 
         begin
-          Chef::Log.info "Report to Chef Visibility: #{dc[:server_url]}"
+          Chef::Log.info "Report to Chef Automate: #{dc[:server_url]}"
           Chef::Log.debug("POST the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
@@ -68,7 +68,7 @@ class Collector
         end
       else
         Chef::Log.warn 'data_collector.token and data_collector.server_url must be defined in client.rb!'
-        Chef::Log.warn 'Further information: https://github.com/chef-cookbooks/audit#direct-reporting-to-chef-visibility'
+        Chef::Log.warn 'Further information: https://github.com/chef-cookbooks/audit#direct-reporting-to-chef-automate'
         return false
       end
     end
@@ -103,7 +103,7 @@ class Collector
 
     # ***************************************************************************************
     # TODO: We could likely simplify/remove alot of the extra logic we have here with a small
-    # revamp of the visibility expected input.
+    # revamp of the Automate expected input.
     # ***************************************************************************************
 
     def enriched_report(content)
@@ -242,9 +242,9 @@ class Collector
   end
 
   #
-  # Used to send inspec reports to Chef Visibility server via Chef Server
+  # Used to send inspec reports to Chef Automate server via Chef Server
   #
-  class ChefServerVisibility < ChefVisibility
+  class ChefServerAutomate < ChefAutomate
     def send_report(url)
       content = @report
       json_report = enriched_report(JSON.parse(content))
@@ -254,7 +254,7 @@ class Collector
         Chef::Config[:ssl_verify_mode] = :verify_none
       end
 
-      Chef::Log.info "Report to Visibility via Chef Server: #{url}"
+      Chef::Log.info "Report to Chef Automate via Chef Server: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       with_http_rescue do
         rest.post(url, JSON.parse(json_report))

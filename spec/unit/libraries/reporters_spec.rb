@@ -6,7 +6,7 @@
 require 'spec_helper'
 require_relative '../../../libraries/reporters'
 
-describe 'Collector::ChefCompliance methods' do
+describe 'Reporter::ChefCompliance methods' do
   before :each do
   require 'bundles/inspec-compliance/configuration'
     url = 'https://192.168.33.201/api'
@@ -24,7 +24,7 @@ describe 'Collector::ChefCompliance methods' do
       "reports"=>{"ssh"=>{"version"=>"1.2.1", "controls"=>[{"id"=>"basic-4", "status"=>"passed", "code_desc"=>"File /etc/ssh/sshd_config should be owned by \"root\"", "profile_id"=>"ssh"}], "statistics"=>{"duration"=>0.355784812}}},
       "profiles"=>{"ssh"=>"admin"}
     }
-    @chef_compliance = Collector::ChefCompliance.new(url, node_info, raise_if_unreachable, compliance_profiles, @report)
+    @chef_compliance = Reporter::ChefCompliance.new(url, node_info, raise_if_unreachable, compliance_profiles, @report)
   end
 
   it 'enriches the report correctly' do

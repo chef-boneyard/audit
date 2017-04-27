@@ -1,7 +1,7 @@
 # encoding: utf-8
 #
 # Cookbook Name:: audit
-# Spec:: visibility
+# Spec:: automate_spec
 #
 # Copyright 2016 Chef Software, Inc.
 #
@@ -21,7 +21,7 @@ require 'spec_helper'
 require_relative '../../../libraries/reporters'
 require_relative '../../data/mock.rb'
 
-describe 'Collector::ChefVisibility methods' do
+describe 'Reporter::ChefAutomate methods' do
   before :each do
     entity_uuid = 'aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz'
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
@@ -73,7 +73,7 @@ describe 'Collector::ChefVisibility methods' do
         "inspec_version"=>"1.2.1"},
       "entity_uuid"=>"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
       "run_id"=>"3f0536f7-3361-4bca-ae53-b45118dceb5d"}
-    @viz = Collector::ChefVisibility.new(entity_uuid, run_id, MockData.node_info, insecure, report)
+    @viz = Reporter::ChefAutomate.new(entity_uuid, run_id, MockData.node_info, insecure, report)
   end
 
   it 'returns the correct control status' do
@@ -167,7 +167,7 @@ describe 'Collector::ChefVisibility methods' do
     entity_uuid = nil
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
     insecure = false
-    viz2 = Collector::ChefVisibility.new(entity_uuid, run_id, {}, insecure, MockData.inspec_results)
+    viz2 = Reporter::ChefAutomate.new(entity_uuid, run_id, {}, insecure, MockData.inspec_results)
     expect(viz2.send_report).to eq(false)
   end
 end

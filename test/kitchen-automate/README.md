@@ -21,7 +21,7 @@ This cookbook uses the `kitchen-ec2` driver in order to spin up an OpsWorks (Che
 A `kitchen test` will:
 1. Create the ec2 instance
 2. Converge the node with chef_zero using the `default` recipe
-3. Test the success of the reporting using InSpec resources in `test/integration/default/`. This is verifying that compliance scan reports exist in ElasticSearch (used by Chef Visibility) for both converges.
+3. Test the success of the reporting using InSpec resources in `test/integration/default/`. This is verifying that compliance scan reports exist in ElasticSearch (used by Chef Automate) for both converges.
 4. Terminate the instance
 
 Let's look a bit closer and the recipes used during the converge step:
