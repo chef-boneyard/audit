@@ -9,6 +9,14 @@ class Chef
         # get reporter(s) from attributes as an array
         reporters = get_reporters(node['audit'])
 
+        if reporters.include?('chef-visibility')
+          Chef::Log.warn 'reporter `chef-visibility` is deprecated and removed in audit cookbook 4.0. Please use `chef-automate`.'
+        end
+
+        if reporters.include?('chef-server-visibility')
+          Chef::Log.warn 'reporter `chef-server-visibility`is deprecated and removed in audit cookbook 4.0. Please use `chef-server-automate`.'
+        end
+
         # collect attribute values
         server = node['audit']['server']
         user = node['audit']['owner']
@@ -27,6 +35,7 @@ class Chef
         load_chef_fetcher if reporters.include?('chef-server') ||
                              reporters.include?('chef-server-compliance') ||
                              reporters.include?('chef-server-visibility') ||
+                             reporters.include?('chef-server-automate') ||
                              node['audit']['fetcher'] == 'chef-server'
 
         # iterate through reporters
@@ -46,10 +55,10 @@ class Chef
             # instantiate inspec runner with given options and run profiles; return report
             report = call(opts, profiles)
 
-            # send report to the correct reporter (visibility, compliance, chef-server)
+            # send report to the correct reporter (automate, compliance, chef-server)
             send_report(reporter, server, user, profiles, report)
           else
-            Chef::Log.warn 'Audit run skipped due to interval configuration'
+            Chef::Log.info 'Audit run skipped due to interval configuration'
           end
         end
       end
@@ -87,9 +96,9 @@ class Chef
         require 'chef-server/fetcher'
       end
 
-      # sets format to json-min when chef-compliance, json when chef-visibility
+      # sets format to json-min when chef-compliance, json when chef-automate
       def get_opts(reporter, quiet)
-        format = ['chef-visibility', 'chef-server-visibility'].include?(reporter) ? 'json' : 'json-min'
+        format = ['chef-visibility', 'chef-server-visibility', 'chef-automate', 'chef-server-automate'].include?(reporter) ? 'json' : 'json-min'
         output = quiet ? ::File::NULL : $stdout
 
         Chef::Log.warn "Format is #{format}"
@@ -150,6 +159,7 @@ class Chef
       rescue Inspec::FetcherFailure => e
         Chef::Log.error e.message
         Chef::Log.error "We cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable."
+        {}
       end
 
       # extracts relevant node data
@@ -191,23 +201,23 @@ class Chef
         insecure = node['audit']['insecure']
 
         # TODO: harmonize reporter interface
-        if reporter == 'chef-visibility'
-          Collector::ChefVisibility.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report
+        if reporter == 'chef-visibility' || reporter == 'chef-automate'
+          Reporter::ChefAutomate.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report
 
         elsif reporter == 'chef-compliance'
           raise_if_unreachable = node['audit']['raise_if_unreachable']
           url = construct_url(server, File.join('/owners', user, 'inspec'))
           if server
-            Collector::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
+            Reporter::ChefCompliance.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
           else
             Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
           end
-        elsif reporter == 'chef-server-visibility'
+        elsif reporter == 'chef-server-visibility' || reporter == 'chef-server-automate'
           chef_url = server || base_chef_server_url
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
             url = construct_url(chef_url, File.join('organizations', chef_org, 'data-collector'))
-            Collector::ChefServerVisibility.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report(url)
+            Reporter::ChefServerAutomate.new(entity_uuid, run_id, gather_nodeinfo, insecure, report).send_report(url)
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
@@ -216,13 +226,13 @@ class Chef
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
             url = construct_url(chef_url + '/compliance/', File.join('organizations', chef_org, 'inspec'))
-            Collector::ChefServer.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
+            Reporter::ChefServer.new(url, gather_nodeinfo, raise_if_unreachable, cc_profile_index(profiles), report).send_report
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
         elsif reporter == 'json-file'
           timestamp = Time.now.utc.strftime('%Y%m%d%H%M%S')
-          Collector::JsonFile.new(report, timestamp).send_report
+          Reporter::JsonFile.new(report, timestamp).send_report
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end

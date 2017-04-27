@@ -72,6 +72,6 @@ Now, the node reports are available in Chef Compliance:
 
 ![Chef Compliance Reports](cc_report.png "Chef Compliance Reports")
 
-If, configured, the reports are now in Chef Visibility instead:
+If, configured, the reports are now in Chef Automate instead:
 
-![Chef Visibility Reports](visib_reporting.png "Chef Visibility Reports")
+![Chef Automate Reports](visib_reporting.png "Chef Automate Reports")

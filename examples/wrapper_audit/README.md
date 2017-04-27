@@ -1,5 +1,6 @@
 # Example: Wrapper cookbook for `Audit`
-This example cookbook demonstrates how you could wrap the audit cookbook with a customizable internal cookbook.  This might be done to easily change default attributes set in the audit cookbook.  The wrapper also helps you control the versioning of the audit cookbook in your environment.  It can also be useful to help create roles to target where the audit cookbook applies, or even set attributes on nodes to apply Compliance profiles (if you had some you want to run on all machines).
+
+This example cookbook demonstrates how you could wrap the audit cookbook with a customizable internal cookbook. This might be done to easily change default attributes set in the audit cookbook.  The wrapper also helps you control the versioning of the audit cookbook in your environment.  It can also be useful to help create roles to target where the audit cookbook applies, or even set attributes on nodes to apply Compliance profiles (if you had some you want to run on all machines).
 
 ## Requirements
 
@@ -11,16 +12,20 @@ This example cookbook demonstrates how you could wrap the audit cookbook with a 
 - Ubuntu 14.04
 
 ### Chef
+
 - Chef 12+
 
 ### Cookbooks
+
 - `audit`
-- `visibility_win`
+- `automate_win`
 
 ## Attributes
+
 There are no custom attributes for this cookbook.
 
 ## Usage
-Include `wrapper_audit::default` in a node's `run_list`.  This will also pull down the community audit cookbook, which is used to run Chef Compliance profiles.  These profiles will create a report and send it to Chef Compliance or Visibility, depending on your [`audit`][`collector`] setting.
 
-This cookbook also consumes the example cookbook `visibility_win`, which demonstrates how to setup chef-client to ingest Visibility data.
+Include `wrapper_audit::default` in a node's `run_list`.  This will also pull down the community audit cookbook, which is used to run Chef Compliance profiles.  These profiles will create a report and send it to Chef Compliance or Chef Automate, depending on your `['audit']['reporter']` setting.
+
+This cookbook also consumes the example cookbook `automate_win`, which demonstrates how to setup chef-client to ingest Chef Automate data.

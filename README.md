@@ -1,9 +1,9 @@
 # audit cookbook
 [![Cookbook Version](http://img.shields.io/cookbook/v/audit.svg)][cookbook] [![Build Status](http://img.shields.io/travis/chef-cookbooks/audit.svg)][travis]
 
-The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client run. It downloads configured profiles from various sources like Chef Compliance, Chef Supermarket or Git and reports audit runs to Chef Compliance or Chef Visibility.
+The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client run. It downloads configured profiles from various sources like Chef Compliance, Chef Supermarket or Git and reports audit runs to Chef Compliance or Chef Automate.
 
-Version 2.0 of the audit cookbook is based on an idea from [Michael Hedgpeth](https://github.com/chef-cookbooks/audit/issues/70). Under the hood it uses [Chef handler](https://docs.chef.io/handlers.html) instead of Chef resources now.
+Version 2.0+ of the audit cookbook is based on an idea from [Michael Hedgpeth](https://github.com/chef-cookbooks/audit/issues/70). Under the hood it uses [Chef handler](https://docs.chef.io/handlers.html) instead of Chef resources now.
 
 ## Requirements
 
@@ -11,20 +11,9 @@ Version 2.0 of the audit cookbook is based on an idea from [Michael Hedgpeth](ht
 
 - Chef Client >=12.5.1
 
-### Chef Compliance and InSpec
-
-Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
-
-| Chef Compliance version    | InSpec version             | Audit Cookbook  version    |
-|----------------------------|----------------------------|----------------------------|
-| Less or equal to 1.1.23    | 0.20.1                     | 0.7.0                      |
-| Greater than 1.1.23        | Greater or equal to 0.22.1 | 0.8.0                      |
-| Greater or equal to 1.6.8  | Greater or equal to 1.2.0  | 1.0.2                      |
-
-
-You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
-
 ## Deprecation Note:
+
+### Please use `reporter` instead of `collector` attribute
 
 With version 3.1.0 the use of the `collector` attribute is deprecated. Please use `reporter` instead. The `collector` attribute will be removed in the next major version.
 
@@ -39,6 +28,15 @@ becomes:
 "audit": {
   "reporter": "chef-server-compliance",
 ```
+
+### Use `chef-server-automate` and `chef-automate` instead of `chef-server-visibility` and `chef-visibility`
+
+With version 3.1.0 the reporter attribute deprecates the values `chef-server-visibility` and `chef-visibility`. They have been renamed:
+
+ * `chef-server-visibility` => `chef-server-automate`
+ * `chef-visibility` => `chef-automate`
+
+The support for values `chef-server-visibility` and `chef-visibility` will be removed in the next major version.
 
 ## Overview
 
@@ -78,13 +76,13 @@ The second scenario supports a direct connection with Chef Compliance. It also s
  └──────────────────────┘                                └─────────────────────┘
 ```
 
-### Chef Visibility Integration
+### Chef Automate Integration
 
-The third scenario supports direct reporting to Chef Visibility. It also supports chef-solo mode.
+The third scenario supports direct reporting to Chef Automate. It also supports chef-solo mode.
 
 ```
  ┌──────────────────────┐                                ┌─────────────────────┐
- │     Chef Client      │     ┌───────────────────────┐  │   Chef Visibility   │
+ │     Chef Client      │     ┌───────────────────────┐  │   Chef Automate     │
  │                      │  ┌──│ Profiles(Supermarket, │  │                     │
  │ ┌──────────────────┐ │  │  │ Github, local, etc)   │  │                     │
  │ │                  │◀┼──┘  └───────────────────────┘  │                     │
@@ -192,11 +190,11 @@ default["audit"] = {
 }
 ```
 
-#### Reporting to Chef Automate (Chef Visibility via Chef Server)
+#### Reporting to Chef Automate via Chef Server
 
 If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate (Visibility) through Chef Server, set the `reporter` and `profiles` attributes.
 
-This requires Chef Client >= 12.16.42.  Also requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-visibility).
+This requires Chef Client >= 12.16.42.  Also requires Chef Server version 12.11.1 and Chef Automate 0.6.6 or newer, as well as integration between the two. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate).
 
 Chef Automate is not shipping with build-in profiles at the moment. To upload profiles, you can use the [Automate API](https://docs.chef.io/api_delivery.html) or the `inspec compliance` subcommands (requires InSpec 1.7.2 or newer).
 
@@ -204,7 +202,7 @@ Attributes example:
 
 ```ruby
 "audit": {
-  "reporter": "chef-server-visibility",
+  "reporter": "chef-server-automate",
   "insecure": false,
   "profiles": [
     {
@@ -261,17 +259,17 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 ```
 
 
-#### Direct reporting to Chef Visibility
+#### Direct reporting to Chef Automate
 
-If you want the audit cookbook to directly report to Chef Visibility, set the `reporter` attribute to 'chef-visibility'. Also specify where to retrieve the `profiles` from.
+If you want the audit cookbook to directly report to Chef Automate, set the `reporter` attribute to 'chef-automate'. Also specify where to retrieve the `profiles` from.
 
 * `insecure` - a `true` value will skip the SSL certificate verification. Default value is `false`
 
-This method is sending the report using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater.
+This method is sending the report using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
 
 ```ruby
 "audit": {
-  "reporter": "chef-visibility",
+  "reporter": "chef-automate",
   "insecure": "false",
   "profiles": [
     {
@@ -344,13 +342,13 @@ for each one.  For example, to report to chef-compliance and write to json file 
 
 ## Fetcher attribute
 
-To enable reporting to Chef Visibility with profiles from Chef Compliance, you need to have Chef Server integrated with Chef Compliance. You can then set the `fetcher` attribute to 'chef-server'.
+To enable reporting to Chef Automate with profiles from Chef Compliance, you need to have Chef Server integrated with Chef Compliance. You can then set the `fetcher` attribute to 'chef-server'.
 This will allow the audit cookbook to fetch profiles stored in Chef Compliance. For example:
 
 ```ruby
 "audit": {
   "fetcher": "chef-server",
-  "reporter": "chef-visibility",
+  "reporter": "chef-automate",
   "profiles": [
     {
       "name": "ssh",
@@ -462,6 +460,18 @@ default['audit']['inspec_gem_source'] = 'http://internal.gem.server.com/gems'
 
 Please note that all dependencies to the `inspec` gem must also be hosted in this location.
 
+## Chef Compliance and InSpec Version
+
+Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
+
+| Chef Compliance version    | InSpec version             | Audit Cookbook  version    |
+|----------------------------|----------------------------|----------------------------|
+| Less or equal to 1.1.23    | 0.20.1                     | 0.7.0                      |
+| Greater than 1.1.23        | Greater or equal to 0.22.1 | 0.8.0                      |
+| Greater or equal to 1.6.8  | Greater or equal to 1.2.0  | 1.0.2                      |
+
+You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.
@@ -476,7 +486,7 @@ bundle exec rake style
 # run all ChefSpec tests
 bundle exec rspec
 # run a specific test
-bundle exec rspec ./spec/unit/libraries/visibility_spec.rb
+bundle exec rspec ./spec/unit/libraries/automate_spec.rb
 ```
 
 ## How to release the `audit` cookbook

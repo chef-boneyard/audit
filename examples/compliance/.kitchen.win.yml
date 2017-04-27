@@ -10,22 +10,9 @@ verifier:
   sudo: true
 
 platforms:
-- name: windows-2012r2
-
-# The following (private) boxes are shared via Atlas and are only
-# available to users working for Chef. Sorry, it's about software licensing.
-#
-# Chef-internal users, you will need to:
-# 1.  Create an Atlas account:  https://atlas.hashicorp.com/
-# 2.  Ping #eng-services-support with your Atlas account name
-#     to be added to the relevant team in Atlas,
-# 3.  Do `vagrant login` with your Atlas creds so that you can download
-#     the private boxes.
-<% [ '', '-i386' ].each do |win_suffix| %>
-- name: windows-2012r2-standard<%= win_suffix %>
-  driver:
-    box: chef/windows-server-2012r2-standard # private
-<% end %>
+- name: windows-2012R2
+  driver_config:
+    box: mwrock/Windows2012R2
 
 suites:
   - name: windows
@@ -33,7 +20,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: 'chef-compliance'
+        reporter: 'chef-compliance'
         server: <%= ENV['COMPLIANCE_API'] %>
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         refresh_token:  <%= ENV['COMPLIANCE_REFRESHTOKEN'] %>

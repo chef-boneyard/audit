@@ -2,11 +2,11 @@
 require 'json'
 require_relative 'helper'
 
-class Collector
+class Reporter
   #
-  # Used to send inspec reports to Chef Visibility via the data_collector service
+  # Used to send inspec reports to Chef Automate via the data_collector service
   #
-  class ChefVisibility
+  class ChefAutomate
     include ReportHelpers
 
     @entity_uuid = nil
@@ -25,7 +25,7 @@ class Collector
     # Method used in order to send the inspec report to the data_collector server
     def send_report
       unless @entity_uuid && @run_id
-        Chef::Log.warn "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report..."
+        Chef::Log.error "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report to Chef Automate"
         return false
       end
 
@@ -57,17 +57,18 @@ class Collector
         end
 
         begin
-          Chef::Log.warn "Report to Chef Visibility: #{dc[:server_url]}"
-          Chef::Log.debug("POSTing the following message to #{dc[:server_url]}: #{json_report}")
+          Chef::Log.info "Report to Chef Automate: #{dc[:server_url]}"
+          Chef::Log.debug("POST the following message to #{dc[:server_url]}: #{json_report}")
           http = Chef::HTTP.new(dc[:server_url])
           http.post(nil, json_report, headers)
           return true
         rescue => e
-          Chef::Log.error "send_inspec_report: POSTing to #{dc[:server_url]} returned: #{e.message}"
+          Chef::Log.error "send_inspec_report: POST to #{dc[:server_url]} returned: #{e.message}"
           return false
         end
       else
         Chef::Log.warn 'data_collector.token and data_collector.server_url must be defined in client.rb!'
+        Chef::Log.warn 'Further information: https://github.com/chef-cookbooks/audit#direct-reporting-to-chef-automate'
         return false
       end
     end
@@ -102,7 +103,7 @@ class Collector
 
     # ***************************************************************************************
     # TODO: We could likely simplify/remove alot of the extra logic we have here with a small
-    # revamp of the visibility expected input.
+    # revamp of the Automate expected input.
     # ***************************************************************************************
 
     def enriched_report(content)
@@ -241,9 +242,9 @@ class Collector
   end
 
   #
-  # Used to send inspec reports to Chef Visibility server via Chef Server
+  # Used to send inspec reports to Chef Automate server via Chef Server
   #
-  class ChefServerVisibility < ChefVisibility
+  class ChefServerAutomate < ChefAutomate
     def send_report(url)
       content = @report
       json_report = enriched_report(JSON.parse(content))
@@ -253,7 +254,7 @@ class Collector
         Chef::Config[:ssl_verify_mode] = :verify_none
       end
 
-      Chef::Log.info "Report to Visibility via Chef Server: #{url}"
+      Chef::Log.info "Report to Chef Automate via Chef Server: #{url}"
       rest = Chef::ServerAPI.new(url, Chef::Config)
       with_http_rescue do
         rest.post(url, JSON.parse(json_report))
@@ -275,14 +276,13 @@ class Collector
     end
 
     def send_report
-      Chef::Log.warn 'Writing report to file.'
       write_to_file(@report, @timestamp)
     end
 
     def write_to_file(report, timestamp)
       filename = 'inspec' << '-' << timestamp << '.json'
       path = File.expand_path("../../#{filename}", __FILE__)
-      Chef::Log.warn "Filename is #{path}"
+      Chef::Log.info "Writing report to #{path}"
       json_file = File.new(path, 'w')
       json_file.puts(report)
       json_file.close

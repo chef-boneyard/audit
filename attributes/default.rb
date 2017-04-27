@@ -25,11 +25,13 @@ default['audit']['inspec_version'] = nil
 default['audit']['inspec_gem_source'] = nil
 
 # controls where inspec scan reports are sent
-# possible values: 'chef-server-visibility', 'chef-server-compliance', 'chef-compliance', 'chef-visibility', 'json-file'
-# notes: 'chef-visibility' requires inspec version 0.27.1 or greater
+# possible values: 'chef-server-automate', 'chef-server-compliance', 'chef-compliance', 'chef-automate', 'json-file'
+# notes: 'chef-automate' requires inspec version 0.27.1 or greater
+# deprecated: 'chef-visibility' is replaced with 'chef-automate'
+# deprecated: 'chef-server-visibility' is replaced with 'chef-server-automate'
 default['audit']['reporter'] = 'chef-server-compliance'
 
-# controls reporting to Chef Visibility with profiles from Chef Compliance
+# controls reporting to Chef Automate with profiles from Chef Compliance
 # possible values: nil, 'chef-server'
 # notes: requires Chef Server ingtegrated with Chef Compliance
 default['audit']['fetcher'] = nil
@@ -51,7 +53,7 @@ default['audit']['token'] = nil
 default['audit']['insecure'] = nil
 
 # Chef Compliance organization to post the report to
-# notes: only needed for the 'chef-compliance' collector, optional for 'chef-server-compliance' and 'chef-server-visibility'
+# notes: only needed for the 'chef-compliance' collector, optional for 'chef-server-compliance' and 'chef-server-automate'
 # defaults to Chef Server org if not defined
 default['audit']['owner'] = nil
 

@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: visibility_win
+# Cookbook Name:: automate_win
 # Recipe:: chef_client_config
 
 # Create client.d directory in the chef client folder
@@ -9,10 +9,10 @@ directory 'c:/chef/client.d/' do
   action :create
 end
 
-# Create the visibility_ingest file in the client.d directory which will send
-# 'chef-client' data to Visibility
-template 'c:/chef/client.d/visibility_ingest.rb' do
-  source 'visibility_ingest.rb.erb'
+# Create the automate_ingest file in the client.d directory which will send
+# 'chef-client' data to Chef Automate
+template 'c:/chef/client.d/automate_ingest.rb' do
+  source 'automate_ingest.rb.erb'
   variables(
     server_url: 'https://automateserver.domain.com/data-collector/v0/',
     auth_token: 'some#databag#value',

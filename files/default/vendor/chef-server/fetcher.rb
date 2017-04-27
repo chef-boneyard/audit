@@ -50,16 +50,8 @@ module ChefServer
     end
 
     def self.url_prefix
-      return '/compliance' unless chef_server_visibility? && Chef.node.attributes['audit']['fetcher'] != 'chef-server'
+      return '/compliance' if chef_server_reporter? || chef_server_fetcher?
       ''
-    end
-
-    def self.chef_server_visibility?
-      attributes_exist? && Chef.node.attributes['audit'] && get_reporters(Chef.node.attributes['audit']).include?('chef-server-visibility')
-    end
-
-    def self.attributes_exist?
-      defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes)
     end
 
     def self.target_url(profile, config)
@@ -101,6 +93,20 @@ module ChefServer
 
     def to_s
       'Chef Server/Compliance Profile Loader'
+    end
+
+    # internal class methods
+    def self.chef_server_reporter?
+      return false if !(defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes))
+      reporters = get_reporters(Chef.node.attributes['audit'])
+      Chef.node.attributes['audit'] && (
+        reporters.include?('chef-server-visibility') ||
+        reporters.include?('chef-server-automate')
+      )
+    end
+
+    def self.chef_server_fetcher?
+      Chef.node.attributes['audit']['fetcher'] == 'chef-server'
     end
 
     private
