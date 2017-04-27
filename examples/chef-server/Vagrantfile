@@ -19,7 +19,7 @@ end
 Vagrant.configure(2) do |config|
 
   config.vm.define 'chef-client-node' do |server|
-    server.vm.box = 'bento/ubuntu-14.04'
+    server.vm.box = 'bento/ubuntu-16.04'
     server.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box'
     server.vm.hostname = 'audit-node'
     server.vm.network 'private_network', ip: '192.168.33.102'
