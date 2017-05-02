@@ -19,6 +19,7 @@ group :test do
   gem 'chefspec',  '~> 7.0'
   gem 'coveralls', '~> 0.8.2', require: false
   gem 'rb-readline'
+  gem 'webmock'
 end
 
 group :integration do
