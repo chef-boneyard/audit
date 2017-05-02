@@ -38,28 +38,32 @@ class Chef
                              reporters.include?('chef-server-automate') ||
                              node['audit']['fetcher'] == 'chef-server'
 
-        # iterate through reporters
-        reporters.each do |reporter|
-          # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
-          login_to_compliance(server, user, token, refresh_token) if reporter == 'chef-compliance'
+        # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
+        login_to_compliance(server, user, token, refresh_token) if reporters.include?('chef-compliance')
 
-          # true if profile is due to run (see libraries/helper.rb)
-          if check_interval_settings(interval, interval_enabled, interval_time)
+        # true if profile is due to run (see libraries/helper.rb)
+        if check_interval_settings(interval, interval_enabled, interval_time)
 
-            # create a file with a timestamp to calculate interval timing
-            create_timestamp_file if interval_enabled
+          # create a file with a timestamp to calculate interval timing
+          create_timestamp_file if interval_enabled
 
-            # return hash of opts to be used by runner
-            opts = get_opts(reporter, quiet)
+          # return hash of opts to be used by runner
+          opts = get_opts('json', quiet)
 
-            # instantiate inspec runner with given options and run profiles; return report
-            report = call(opts, profiles)
+          # instantiate inspec runner with given options and run profiles; return report
+          report = call(opts, profiles)
 
-            # send report to the correct reporter (automate, compliance, chef-server)
-            send_report(reporter, server, user, profiles, report)
+          # send report to the correct reporter (automate, compliance, chef-server)
+          if !report.empty?
+            # iterate through reporters
+            reporters.each do |reporter|
+              send_report(reporter, server, user, profiles, report)
+            end
           else
-            Chef::Log.info 'Audit run skipped due to interval configuration'
+            Chef::Log.error 'Audit report was not generated properly, skipped reporting'
           end
+        else
+          Chef::Log.info 'Audit run skipped due to interval configuration'
         end
       end
 
@@ -97,10 +101,8 @@ class Chef
       end
 
       # sets format to json-min when chef-compliance, json when chef-automate
-      def get_opts(reporter, quiet)
-        format = ['chef-visibility', 'chef-server-visibility', 'chef-automate', 'chef-server-automate'].include?(reporter) ? 'json' : 'json-min'
+      def get_opts(format, quiet)
         output = quiet ? ::File::NULL : $stdout
-
         Chef::Log.warn "Format is #{format}"
         opts = {
           'report' => true,
@@ -176,24 +178,8 @@ class Chef
         }
       end
 
-      # this is a helper methods to extract the profiles we scan and hand this
-      # over to the reporter in addition to the `json-min` report. `json-min`
-      # reports do not include information about the source of the profiles
-      # TODO: should be available in inspec `json-min` reports out-of-the-box
-      # TODO: raise warning when not a compliance-known profile
-      def cc_profile_index(profiles)
-        cc_profiles = tests_for_runner(profiles).select { |profile| profile[:compliance] }.map { |profile| profile[:compliance] }.uniq.compact
-        cc_profiles.map { |profile|
-          owner, profile_id = profile.split('/')
-          {
-            owner: owner,
-            profile_id: profile_id,
-          }
-        }
-      end
-
       # send InSpec report to the reporter (see libraries/reporters.rb)
-      def send_report(reporter, server, user, profiles, content)
+      def send_report(reporter, server, user, source_location, content)
         Chef::Log.info "Reporting to #{reporter}"
 
         # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
@@ -208,6 +194,7 @@ class Chef
             run_id: run_status.run_id,
             node_info: gather_nodeinfo,
             insecure: insecure,
+            source_location: source_location,
           }
           Reporter::ChefAutomate.new(opts).send_report(report)
         elsif reporter == 'chef-server-visibility' || reporter == 'chef-server-automate'
@@ -221,6 +208,7 @@ class Chef
               node_info: gather_nodeinfo,
               insecure: insecure,
               url: url,
+              source_location: source_location,
             }
             Reporter::ChefServerAutomate.new(opts).send_report(report)
           else
@@ -240,8 +228,8 @@ class Chef
               url: url,
               node_info: gather_nodeinfo,
               raise_if_unreachable: raise_if_unreachable,
-              profile_index: cc_profile_index(profiles),
               token: token,
+              source_location: source_location,
             }
             Reporter::ChefCompliance.new(opts).send_report(report)
           else
@@ -256,7 +244,7 @@ class Chef
               url: url,
               node_info: gather_nodeinfo,
               raise_if_unreachable: raise_if_unreachable,
-              profile_index: cc_profile_index(profiles),
+              source_location: source_location,
             }
             Reporter::ChefServer.new(opts).send_report(report)
           else

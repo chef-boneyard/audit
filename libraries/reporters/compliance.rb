@@ -13,16 +13,17 @@ module Reporter
       @node_info = opts[:node_info]
       @url = opts[:url]
       @raise_if_unreachable = opts[:raise_if_unreachable]
-      @compliance_profiles = opts[:compliance_profiles]
       @insecure = opts[:insecure]
       @token = opts[:token]
+      @source_location = opts[:source_location]
     end
 
     def send_report(report)
       Chef::Log.info "Report to Chef Compliance: #{@url} with #{@token}"
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
 
-      json_report = enriched_report(report)
+      min_report = transform(report)
+      json_report = enriched_report(min_report, @source_location)
       req.body = json_report
 
       # TODO: use secure option
@@ -44,7 +45,8 @@ module Reporter
 
     # TODO: add to docs that all profiles used in Chef Compliance, need to
     # be uploaded to Chef Compliance first
-    def enriched_report(report)
+    def enriched_report(report, source_location)
+      compliance_profiles = cc_profile_index(source_location)
       blob = @node_info.dup
 
       # extract profile names
@@ -56,8 +58,8 @@ module Reporter
       Chef::Log.info "Control Profile: #{profiles}"
       profiles.each { |profile|
         Chef::Log.info "Control Profile: #{profile}"
-        Chef::Log.info "Compliance Profiles: #{@compliance_profiles}"
-        namespace = @compliance_profiles.select { |entry| entry[:profile_id] == profile }
+        Chef::Log.info "Compliance Profiles: #{compliance_profiles}"
+        namespace = compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
           Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
           blob[:profiles][profile] = namespace[0][:owner]
@@ -70,6 +72,50 @@ module Reporter
       }
 
       blob.to_json
+    end
+
+    # transforms a full InSpec json report to a min InSpec json report
+    def transform(full_report)
+      min_report = {}
+      min_report['version'] = full_report[:version]
+
+      # iterate over each profile and control
+      min_report['controls'] = []
+      full_report[:profiles].each { |profile|
+        min_report['controls'] += profile[:controls].map { |control|
+          control[:results].map { |result|
+            c = {}
+            c['id'] = control[:id]
+            c['profile_id'] = profile[:name]
+            c['status'] = result[:status]
+            c['code_desc'] = result[:code_desc]
+            c
+          }
+        }
+      }
+      min_report['controls'].flatten!
+      min_report['statistics'] = {
+        'duration' => full_report[:statistics][:duration],
+      }
+      min_report
+    end
+
+    private
+
+    # this is a helper methods to extract the profiles we scan and hand this
+    # over to the reporter in addition to the `json-min` report. `json-min`
+    # reports do not include information about the source of the profiles
+    # TODO: should be available in inspec `json-min` reports out-of-the-box
+    # TODO: raise warning when not a compliance-known profile
+    def cc_profile_index(profiles)
+      cc_profiles = tests_for_runner(profiles).select { |profile| profile[:compliance] }.map { |profile| profile[:compliance] }.uniq.compact
+      cc_profiles.map { |profile|
+        owner, profile_id = profile.split('/')
+        {
+          owner: owner,
+          profile_id: profile_id,
+        }
+      }
     end
   end
 end
