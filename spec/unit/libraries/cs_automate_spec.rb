@@ -1,27 +1,13 @@
 # encoding: utf-8
 #
 # Cookbook Name:: audit
-# Spec:: automate_spec
-#
-# Copyright 2016 Chef Software, Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Spec:: cs_automate_spec
 
 require 'spec_helper'
-require_relative '../../../libraries/reporters/automate'
+require_relative '../../../libraries/reporters/cs_automate'
 require_relative '../../data/mock.rb'
 
-describe 'Reporter::ChefAutomate methods' do
+describe 'Reporter::ChefServerAutomate methods' do
   before :each do
     entity_uuid = 'aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz'
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
@@ -78,65 +64,22 @@ describe 'Reporter::ChefAutomate methods' do
       run_id: run_id,
       node_info: MockData.node_info,
       insecure: insecure,
+      url: "https://chef.server/data_collector"
     }
-    # set data_collector
-    Chef::Config[:data_collector] = {token: 'dctoken', server_url: 'https://automate.test/data_collector' }
-    stub_request(:post, 'https://automate.test/data_collector').
-             with(:body => @enriched_report_expected.to_json,
-                  :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'identity', 'Content-Length'=>'2818', 'Content-Type'=>'application/json', 'Host'=>'automate.test', 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Data-Collector-Auth'=>'version=1.0', 'X-Data-Collector-Token'=>'dctoken'}).
-             to_return(:status => 200, :body => "", :headers => {})
 
-    @automate = Reporter::ChefAutomate.new(opts)
+    Chef::Config[:client_key] = File.expand_path("../../chef-client.pem", File.dirname(__FILE__))
+    Chef::Config[:node_name] = 'spec-node'
+
+    # set data_collector
+    stub_request(:post, 'https://chef.server/data_collector').
+             with(:body => @enriched_report_expected.to_json,
+             :headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Length'=>'2818', 'Content-Type'=>'application/json', 'Host'=>/.+/, 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Ops-Authorization-1'=>/.+/, 'X-Ops-Authorization-2'=>/.+/, 'X-Ops-Authorization-3'=>/.+/, 'X-Ops-Authorization-4' => /.+/, 'X-Ops-Authorization-5'=>/.+/, 'X-Ops-Authorization-6'=>/.+/, 'X-Ops-Content-Hash'=>/.+/, 'X-Ops-Server-Api-Version'=>'1', 'X-Ops-Sign'=>'algorithm=sha1;version=1.1;', 'X-Ops-Timestamp'=>/.+/, 'X-Ops-Userid'=>'spec-node', 'X-Remote-Request-Id'=>/.+/}).
+             to_return(:status => 200, :body => "", :headers => {})
+    @automate = Reporter::ChefServerAutomate.new(opts)
   end
 
   it 'sends report successfully' do
     allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
     expect(@automate.send_report(MockData.inspec_results)).to eq(true)
-  end
-
-  it 'enriches report correctly with the most test coverage' do
-    allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
-    expect(JSON.parse(@automate.enriched_report(MockData.inspec_results))).to eq(@enriched_report_expected)
-  end
-
-  it 'is not sending report when entity_uuid is missing' do
-    opts = {
-      entity_uuid: nil,
-      run_id: '3f0536f7-3361-4bca-ae53-b45118dceb5d',
-      node_info: MockData.node_info,
-      insecure: false,
-    }
-    viz2 = Reporter::ChefAutomate.new(opts)
-    expect(viz2.send_report(MockData.inspec_results)).to eq(false)
-  end
-
-  it 'sets the attribute types like TypeScript' do
-    profiles = [
-      {
-        "attributes"=>[
-          { "name"=>"syslog_pkg",
-            "options"=>{ "default"=>"rsyslog", "description"=>"a string" } },
-          { "name"=>"sysctl_forwarding",
-            "options"=>{ "default"=>false, "description"=>"a boolean" } },
-          { "name"=>"some_number",
-            "options"=>{ "default"=>0, "description"=>"a number" } },
-          { "name"=>"some_float",
-            "options"=>{ "default"=>0.8, "description"=>"a bloody float" } },
-          { "name"=>"some_array",
-            "options"=>{ "default"=>[], "description"=>"a bloody array" } }
-        ]
-      }
-    ]
-    # poor man's deep clone
-    types_profiles = JSON.parse(profiles.to_json)
-    types_profiles[0]['attributes'][0]['options']['type'] = 'string'
-    types_profiles[0]['attributes'][1]['options']['type'] = 'boolean'
-    types_profiles[0]['attributes'][1]['options']['default'] = 'false'
-    types_profiles[0]['attributes'][2]['options']['type'] = 'int'
-    types_profiles[0]['attributes'][2]['options']['default'] = '0'
-    types_profiles[0]['attributes'][3]['options']['type'] = 'float'
-    types_profiles[0]['attributes'][3]['options']['default'] = '0.8'
-    types_profiles[0]['attributes'][4]['options']['type'] = 'unknown'
-    expect(@automate.typed_attributes(profiles)).to eq(types_profiles)
   end
 end
