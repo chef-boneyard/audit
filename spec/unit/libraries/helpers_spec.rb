@@ -38,12 +38,12 @@ describe ReportHelpers do
 
   it 'returns the correct control status' do
     expect(@helpers.control_status(nil)).to eq(nil)
-    expect(@helpers.control_status([{"status"=>"failed"}])).to eq('failed')
-    expect(@helpers.control_status([{"status"=>"passed"}])).to eq('passed')
-    expect(@helpers.control_status([{"status"=>"passed"},{"status"=>"failed"}])).to eq('failed')
-    expect(@helpers.control_status([{"status"=>"failed"},{"status"=>"passed"}])).to eq('failed')
-    expect(@helpers.control_status([{"status"=>"passed"},{"status"=>"skipped"}])).to eq('skipped')
-    expect(@helpers.control_status([{"status"=>"skipped"},{"status"=>"failed"}])).to eq('failed')
+    expect(@helpers.control_status([{"status":"failed"}])).to eq('failed')
+    expect(@helpers.control_status([{"status":"passed"}])).to eq('passed')
+    expect(@helpers.control_status([{"status":"passed"},{"status":"failed"}])).to eq('failed')
+    expect(@helpers.control_status([{"status":"failed"},{"status":"passed"}])).to eq('failed')
+    expect(@helpers.control_status([{"status":"passed"},{"status":"skipped"}])).to eq('skipped')
+    expect(@helpers.control_status([{"status":"skipped"},{"status":"failed"}])).to eq('failed')
   end
 
   it 'reports impact criticality correctly' do
@@ -56,9 +56,9 @@ describe ReportHelpers do
   end
 
   it 'reports compliance status like a compliance officer' do
-    passed = {"total"=>5, "passed"=>{"total"=>3}, "skipped"=>{"total"=>2}, "failed"=>{"total"=>0, "minor"=>0, "major"=>0, "critical"=>0}}
-    failed = {"total"=>5, "passed"=>{"total"=>1}, "skipped"=>{"total"=>1}, "failed"=>{"total"=>3, "minor"=>1, "major"=>1, "critical"=>1}}
-    skipped = {"total"=>5, "passed"=>{"total"=>0}, "skipped"=>{"total"=>5}, "failed"=>{"total"=>0, "minor"=>0, "major"=>0, "critical"=>0}}
+    passed = {"total":5, "passed":{"total":3}, "skipped":{"total":2}, "failed":{"total":0, "minor":0, "major":0, "critical":0}}
+    failed = {"total":5, "passed":{"total":1}, "skipped":{"total":1}, "failed":{"total":3, "minor":1, "major":1, "critical":1}}
+    skipped = {"total":5, "passed":{"total":0}, "skipped":{"total":5}, "failed":{"total":0, "minor":0, "major":0, "critical":0}}
     expect(@helpers.compliance_status(nil)).to eq('unknown')
     expect(@helpers.compliance_status(failed)).to eq('failed')
     expect(@helpers.compliance_status(passed)).to eq('passed')
@@ -66,25 +66,25 @@ describe ReportHelpers do
   end
 
   it 'counts controls like an accountant' do
-    profi = [{"name"=>"test-profile",
-              "controls"=>
-              [{"id"=>"Checking /etc/missing1.rb existance",
-                "impact"=>0,
-                "results"=>[{"status"=>"failed"}]},
-              {"id"=>"Checking /etc/missing2.rb existance",
-                "impact"=>0.5,
-                "results"=>[{"status"=>"failed"}]},
-              {"id"=>"Checking /etc/missing3.rb existance",
-                "impact"=>0.8,
-                "results"=>[{"status"=>"failed"}]},
-              {"id"=>"Checking /etc/passwd existance",
-                "impact"=>0.88,
-                "results"=>[{"status"=>"passed"}]},
-              {"id"=>"Checking /etc/something existance",
-                "impact"=>1.0,
-                "results"=>[{"status"=>"skipped"}]}]
+    profil = [{"name":"test-profile",
+              "controls":
+              [{"id":"Checking /etc/missing1.rb existance",
+                "impact":0,
+                "results":[{"status":"failed"}]},
+              {"id":"Checking /etc/missing2.rb existance",
+                "impact":0.5,
+                "results":[{"status":"failed"}]},
+              {"id":"Checking /etc/missing3.rb existance",
+                "impact":0.8,
+                "results":[{"status":"failed"}]},
+              {"id":"Checking /etc/passwd existance",
+                "impact":0.88,
+                "results":[{"status":"passed"}]},
+              {"id":"Checking /etc/something existance",
+                "impact":1.0,
+                "results":[{"status":"skipped"}]}]
     }]
-    expected_count = {"total"=>5, "passed"=>{"total"=>1}, "skipped"=>{"total"=>1}, "failed"=>{"total"=>3, "minor"=>1, "major"=>1, "critical"=>1}}
-    expect(@helpers.count_controls(profi)).to eq(expected_count)
+    expected_count = {"total":5, "passed":{"total":1}, "skipped":{"total":1}, "failed":{"total":3, "minor":1, "major":1, "critical":1}}
+    expect(@helpers.count_controls(profil)).to eq(expected_count)
   end
 end

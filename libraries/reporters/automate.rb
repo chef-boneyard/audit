@@ -34,7 +34,7 @@ module Reporter
         return false
       end
 
-      json_report = enriched_report(report)
+      json_report = enriched_report(report).to_json
 
       unless json_report
         Chef::Log.warn 'Something went wrong, report can\'t be nil'
@@ -75,27 +75,27 @@ module Reporter
 
     # Some document stores like ElasticSearch don't like values that change type
     # This function converts all profile attribute defaults to string and
-    # adds a 'type' key to store the original type
+    # adds a :type key to store the original type
     def typed_attributes(profiles)
       return profiles unless profiles.class == Array && !profiles.empty?
       profiles.each { |profile|
-        next unless profile['attributes'].class == Array && !profile['attributes'].empty?
-        profile['attributes'].map { |attrib|
-          case attrib['options']['default'].class.to_s
+        next unless profile[:attributes].class == Array && !profile[:attributes].empty?
+        profile[:attributes].map { |attrib|
+          case attrib[:options][:default].class.to_s
           when 'String'
-            attrib['options']['type'] = 'string'
+            attrib[:options][:type] = 'string'
           when 'FalseClass'
-            attrib['options']['type'] = 'boolean'
-            attrib['options']['default'] = attrib['options']['default'].to_s
+            attrib[:options][:type] = 'boolean'
+            attrib[:options][:default] = attrib[:options][:default].to_s
           when 'Fixnum'
-            attrib['options']['type'] = 'int'
-            attrib['options']['default'] = attrib['options']['default'].to_s
+            attrib[:options][:type] = 'int'
+            attrib[:options][:default] = attrib[:options][:default].to_s
           when 'Float'
-            attrib['options']['type'] = 'float'
-            attrib['options']['default'] = attrib['options']['default'].to_s
+            attrib[:options][:type] = 'float'
+            attrib[:options][:default] = attrib[:options][:default].to_s
           else
-            Chef::Log.warn "enriched_report: unsupported data type(#{attrib['options']['default'].class}) for attribute #{attrib['options']['name']}"
-            attrib['options']['type'] = 'unknown'
+            Chef::Log.warn "enriched_report: unsupported data type(#{attrib[:options][:default].class}) for attribute #{attrib[:options]['name']}"
+            attrib[:options][:type] = 'unknown'
           end
         }
       }
@@ -109,31 +109,31 @@ module Reporter
     def enriched_report(content)
       return nil unless content.is_a?(Hash)
       final_report = {}
-      total_duration = content['statistics']['duration']
-      inspec_version = content['version']
+      total_duration = content[:statistics][:duration]
+      inspec_version = content[:version]
 
       # strip the report to leave only the profiles
-      final_report['profiles'] = content['profiles']
+      final_report[:profiles] = content[:profiles]
 
       # remove nil profiles if any
-      final_report['profiles'].select! { |p| p }
+      final_report[:profiles].select! { |p| p }
 
       # set types for profile attributes
-      final_report['profiles'] = typed_attributes(final_report['profiles'])
+      final_report[:profiles] = typed_attributes(final_report[:profiles])
 
       # add some additional fields to ease report parsing
-      final_report['event_type'] = 'inspec'
-      final_report['event_action'] = 'exec'
-      final_report['compliance_summary'] = count_controls(final_report['profiles'])
-      final_report['compliance_summary']['status'] = compliance_status(final_report['compliance_summary'])
-      final_report['compliance_summary']['node_name'] = @node_name
-      final_report['compliance_summary']['end_time'] = DateTime.now.iso8601
-      final_report['compliance_summary']['duration'] = total_duration
-      final_report['compliance_summary']['inspec_version'] = inspec_version
-      final_report['entity_uuid'] = @entity_uuid
-      final_report['run_id'] = @run_id
-      Chef::Log.info "Compliance Summary #{final_report['compliance_summary']}"
-      final_report.to_json
+      final_report[:event_type] = 'inspec'
+      final_report[:event_action] = 'exec'
+      final_report[:compliance_summary] = count_controls(final_report[:profiles])
+      final_report[:compliance_summary][:status] = compliance_status(final_report[:compliance_summary])
+      final_report[:compliance_summary][:node_name] = @node_name
+      final_report[:compliance_summary][:end_time] = DateTime.now.iso8601
+      final_report[:compliance_summary][:duration] = total_duration
+      final_report[:compliance_summary][:inspec_version] = inspec_version
+      final_report[:entity_uuid] = @entity_uuid
+      final_report[:run_id] = @run_id
+      Chef::Log.info "Compliance Summary #{final_report[:compliance_summary]}"
+      final_report
     end
   end
 end

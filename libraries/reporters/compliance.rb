@@ -24,7 +24,7 @@ module Reporter
 
       min_report = transform(report)
       json_report = enriched_report(min_report, @source_location)
-      req.body = json_report
+      req.body = json_report.to_json
 
       # TODO: use secure option
       uri = URI(@url)
@@ -50,7 +50,7 @@ module Reporter
       blob = @node_info.dup
 
       # extract profile names
-      profiles = report['controls'].collect { |control| control['profile_id'] }.uniq
+      profiles = report[:controls].collect { |control| control[:profile_id] }.uniq
 
       # build report for chef compliance, it includes node data
       blob[:reports] = {}
@@ -62,41 +62,39 @@ module Reporter
         namespace = compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
           Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
-          blob[:profiles][profile] = namespace[0][:owner]
-          blob[:reports][profile] = report.dup
+          blob[:profiles][profile.to_sym] = namespace[0][:owner]
+          blob[:reports][profile.to_sym] = report.dup
           # filter controls by profile_id
-          blob[:reports][profile]['controls'] = blob[:reports][profile]['controls'].select { |control| control['profile_id'] == profile }
+          blob[:reports][profile.to_sym][:controls] = blob[:reports][profile.to_sym][:controls].select { |control| control[:profile_id] == profile }
         else
           Chef::Log.warn "Could not determine compliance namespace for #{profile}"
         end
       }
 
-      blob.to_json
+      blob
     end
 
     # transforms a full InSpec json report to a min InSpec json report
     def transform(full_report)
       min_report = {}
-      min_report['version'] = full_report[:version]
+      min_report[:version] = full_report[:version]
 
       # iterate over each profile and control
-      min_report['controls'] = []
+      min_report[:controls] = []
       full_report[:profiles].each { |profile|
-        min_report['controls'] += profile[:controls].map { |control|
+        min_report[:controls] += profile[:controls].map { |control|
           control[:results].map { |result|
             c = {}
-            c['id'] = control[:id]
-            c['profile_id'] = profile[:name]
-            c['status'] = result[:status]
-            c['code_desc'] = result[:code_desc]
+            c[:id] = control[:id]
+            c[:profile_id] = profile[:name]
+            c[:status] = result[:status]
+            c[:code_desc] = result[:code_desc]
             c
           }
         }
       }
-      min_report['controls'].flatten!
-      min_report['statistics'] = {
-        'duration' => full_report[:statistics][:duration],
-      }
+      min_report[:controls].flatten!
+      min_report[:statistics] = full_report[:statistics]
       min_report
     end
 

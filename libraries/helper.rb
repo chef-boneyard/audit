@@ -142,37 +142,37 @@ module ReportHelpers
   #  e.g. minor: 10, major: 15, critical: 25
   def count_controls(profiles)
     count = {
-      'total' => 0,
-      'passed' => {
-        'total' => 0,
+      total: 0,
+      passed: {
+        total: 0,
       },
-      'skipped' => {
-        'total' => 0,
+      skipped: {
+        total: 0,
       },
-      'failed' => {
-        'total' => 0,
-        'minor' => 0,
-        'major' => 0,
-        'critical' => 0,
+      failed: {
+        total: 0,
+        minor: 0,
+        major: 0,
+        critical: 0,
       },
     }
     return count unless profiles.is_a?(Array)
 
     profiles.each do |profile|
-      next unless profile && profile['controls'].is_a?(Array)
-      profile['controls'].each do |control|
-        count['total'] += 1
+      next unless profile && profile[:controls].is_a?(Array)
+      profile[:controls].each do |control|
+        count[:total] += 1
         # ensure all impacts are float
-        control['impact'] = control['impact'].to_f
-        case control_status(control['results'])
+        control[:impact] = control[:impact].to_f
+        case control_status(control[:results])
         when 'passed'
-          count['passed']['total'] += 1
+          count[:passed][:total] += 1
         when 'skipped'
-          count['skipped']['total'] += 1
+          count[:skipped][:total] += 1
         when 'failed'
-          count['failed']['total'] += 1
-          criticality = impact_to_s(control['impact'])
-          count['failed'][criticality] += 1 unless criticality.nil?
+          count[:failed][:total] += 1
+          criticality = impact_to_s(control[:impact])
+          count[:failed][criticality.to_sym] += 1 unless criticality.nil?
         end
       end
     end
@@ -182,11 +182,11 @@ module ReportHelpers
   # Returns a complince status string based on the passed/failed/skipped controls
   def compliance_status(counts)
     return 'unknown' unless counts.is_a?(Hash) &&
-                            counts['failed'].is_a?(Hash) &&
-                            counts['skipped'].is_a?(Hash)
-    if counts['failed']['total'] > 0
+                            counts[:failed].is_a?(Hash) &&
+                            counts[:skipped].is_a?(Hash)
+    if counts[:failed][:total] > 0
       'failed'
-    elsif counts['total'] == counts['skipped']['total']
+    elsif counts[:total] == counts[:skipped][:total]
       'skipped'
     else
       'passed'
@@ -210,8 +210,8 @@ module ReportHelpers
     return unless results.is_a?(Array)
     status = 'passed'
     results.each do |result|
-      return 'failed' if result['status'] == 'failed'
-      status = 'skipped' if result['status'] == 'skipped'
+      return 'failed' if result[:status] == 'failed'
+      status = 'skipped' if result[:status] == 'skipped'
     end
     status
   end

@@ -51,15 +51,15 @@ describe 'Reporter::ChefServerCompliance methods' do
       "compliance": "admin/tmp_compliance_profile"
     }]
     @enriched_report_expected = {
-      "node"=>"default-ubuntu-1404",
-      "os"=>{"release"=>"14.04", "family"=>"ubuntu"},
-      "environment"=>"_default",
-      "reports"=>{"tmp_compliance_profile"=>{
-        "version" => "1.21.0",
-        "controls" => [{"id"=>"tmp-1.0","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be directory"},{"id"=>"tmp-1.1","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be owned by \"root\""}],
-        "statistics" => {"duration"=>0.028643}
+      "node": "default-ubuntu-1404",
+      "os": {"release": "14.04", "family": "ubuntu"},
+      "environment": "_default",
+      "reports": {"tmp_compliance_profile": {
+        "version": "1.21.0",
+        "controls": [{"id": "tmp-1.0","profile_id": "tmp_compliance_profile","status": "passed","code_desc": "File /tmp should be directory"},{"id": "tmp-1.1","profile_id": "tmp_compliance_profile","status": "passed","code_desc": "File /tmp should be owned by \"root\""}],
+        "statistics":  {"duration": 0.028643}
         }},
-      "profiles"=>{"tmp_compliance_profile"=>"admin"}
+      "profiles": {"tmp_compliance_profile"=>"admin"}
     }
 
     opts = {
