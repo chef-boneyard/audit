@@ -218,10 +218,8 @@ class Chef
             raise_if_unreachable = node['audit']['raise_if_unreachable']
             url = construct_url(server, File.join('/owners', user, 'inspec'))
 
-            # @config = Compliance::Configuration.new
-            # Chef::Log.info "Report to Chef Compliance: #{@config['server']}/owners/#{@config['user']}/inspec"
-            # @url = URI("#{@config['server']}/owners/#{@config['user']}/inspec")
-            token = @config['token']
+            config = Compliance::Configuration.new
+            token = config['token']
 
             opts = {
               url: url,

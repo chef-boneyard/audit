@@ -31,12 +31,14 @@ module ReportHelpers
   end
 
   def construct_url(server, path)
+    # ensure we do not modify a frozen String
+    srv = server.dup
     # sanitize inputs
-    server << '/' unless server =~ %r{/\z}
+    srv << '/' unless server =~ %r{/\z}
     path.sub!(%r{^/}, '')
-    server = URI(server)
-    server.path = server.path + path if path
-    server
+    srv = URI(srv)
+    srv.path = srv.path + path if path
+    srv
   end
 
   def with_http_rescue(*)
