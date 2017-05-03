@@ -8,19 +8,30 @@ property :source, String
 default_action :install
 
 action :install do
-  if !version.nil?
+  # detect if installation is required
+  installation_required = inspec_info.nil? || !version.nil?
+
+  # detect if the same version is already installed
+  if !inspec_info.nil?
+    installed_version = inspec_info.version.to_s
+    Chef::Log.debug("Installed InSpec version: #{installed_version}")
+    installation_required = false if version == installed_version
+  end
+  Chef::Log.info("Installation of InSpec required: #{installation_required}")
+
+  # only uninstall if InSpec is installed
+  if installation_required && !inspec_info.nil?
     converge_by 'uninstall all inspec and train gem versions' do
       uninstall_inspec_gem
     end
-    converge_by "install requested inspec version #{version}" do
+  end
+
+  if installation_required
+    converge_by 'install latest InSpec version' do
       install_inspec_gem(version: version, source: source)
     end
-  elsif !inspec_installed?
-    converge_by 'install latest InSpec version' do
-      install_inspec_gem(source: source)
-    end
   else
-    Chef::Log.info("inspec_gem: not installing InSpec. It's already installed and an explicit version was not supplied.")
+    Chef::Log.info("inspec_gem: not installing InSpec. It's already installed or an explicit version was not supplied.")
   end
 end
 
@@ -49,10 +60,10 @@ action_class do
     end
   end
 
-  def inspec_installed?
-    require 'inspec'
-    true
+  def inspec_info
+    require 'rubygems'
+    Gem::Specification.find_by_name('inspec')
   rescue LoadError
-    false
+    nil
   end
 end

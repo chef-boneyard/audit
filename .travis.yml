@@ -35,6 +35,9 @@ matrix:
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='gem-install-version-ubuntu-1404'
   - rvm: 2.3.1
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='skip-inspec-gem-install-ubuntu-1404'
+  - rvm: 2.3.1
     env: SUITE=test:kitchen_automate
     before_install:
     - echo -n $EC2_KEY_CHUNK_{0..24} >> ~/.ssh/kitchen-key-compliance.base64
