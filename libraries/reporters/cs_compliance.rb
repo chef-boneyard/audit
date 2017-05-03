@@ -10,7 +10,7 @@ module Reporter
   class ChefServerCompliance < ChefCompliance
     def send_report(report)
       min_report = transform(report)
-      json_report = enriched_report(min_report, @source_location)
+      cc_report = enriched_report(min_report, @source_location)
 
       # TODO: only disable if insecure option is set
       Chef::Config[:verify_api_cert] = false
@@ -19,7 +19,7 @@ module Reporter
       Chef::Log.info "Report to Chef Compliance via Chef Server: #{@url}"
       rest = Chef::ServerAPI.new(@url, Chef::Config)
       with_http_rescue do
-        rest.post(@url, JSON.parse(json_report))
+        rest.post(@url, cc_report)
         return true
       end
       false

@@ -144,16 +144,16 @@ class Chef
             r.delete(:controls)
 
             # calculate statistics
-            stats = count_controls(JSON.parse(r[:profiles].to_json))
+            stats = count_controls(r[:profiles])
 
             time = 0
             time = r[:statistics][:duration] unless r[:statistics].nil?
 
             # count controls
-            Chef::Log.info "Summary #{stats['total']} controls: #{stats['passed']['total']} successful, #{stats['failed']['total']} failures, #{stats['skipped']['total']} skipped in #{time} s"
+            Chef::Log.info "Summary #{stats[:total]} controls: #{stats[:passed][:total]} successful, #{stats[:failed][:total]} failures, #{stats[:skipped][:total]} skipped in #{time} s"
           end
-
-          r.to_json
+          Chef::Log.debug "Audit Report #{r}"
+          r
         else
           Chef::Log.warn 'No audit tests are defined.'
           {}
@@ -179,13 +179,12 @@ class Chef
       end
 
       # send InSpec report to the reporter (see libraries/reporters.rb)
-      def send_report(reporter, server, user, source_location, content)
+      def send_report(reporter, server, user, source_location, report)
         Chef::Log.info "Reporting to #{reporter}"
 
         # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
         # See `cookstyle` Metrics/ParameterLists
         insecure = node['audit']['insecure']
-        report = JSON.parse(content)
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility' || reporter == 'chef-automate'

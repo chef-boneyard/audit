@@ -17,7 +17,7 @@ module Reporter
     end
 
     def send_report(report)
-      json_report = enriched_report(report)
+      automate_report = enriched_report(report)
 
       if @insecure
         Chef::Config[:verify_api_cert] = false
@@ -27,7 +27,7 @@ module Reporter
       Chef::Log.info "Report to Chef Automate via Chef Server: #{@url}"
       rest = Chef::ServerAPI.new(@url, Chef::Config)
       with_http_rescue do
-        rest.post(@url, JSON.parse(json_report))
+        rest.post(@url, automate_report)
         return true
       end
       false

@@ -26,52 +26,52 @@ describe 'Reporter::ChefAutomate methods' do
     entity_uuid = 'aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz'
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
     insecure = false
-    @enriched_report_expected = { "profiles"=>
-      [{"name"=>"tmp_compliance_profile",
-        "title"=>"/tmp Compliance Profile",
-        "summary"=>"An Example Compliance Profile",
-        "version"=>"0.1.1",
-        "maintainer"=>"Nathen Harvey <nharvey@chef.io>",
-        "license"=>"Apache 2.0 License",
-        "copyright"=>"Nathen Harvey <nharvey@chef.io>",
-        "supports"=>[],
-        "controls"=>
-         [ {"title"=>"A /tmp directory must exist",
-            "desc"=>"A /tmp directory must exist",
-            "impact"=>0.3,
-            "refs"=>[],
-            "tags"=>{},
-            "code"=>
+    @enriched_report_expected = { "profiles":
+      [{"name":"tmp_compliance_profile",
+        "title":"/tmp Compliance Profile",
+        "summary":"An Example Compliance Profile",
+        "version":"0.1.1",
+        "maintainer":"Nathen Harvey <nharvey@chef.io>",
+        "license":"Apache 2.0 License",
+        "copyright":"Nathen Harvey <nharvey@chef.io>",
+        "supports":[],
+        "controls":
+         [ {"title":"A /tmp directory must exist",
+            "desc":"A /tmp directory must exist",
+            "impact":0.3,
+            "refs":[],
+            "tags":{},
+            "code":
               "control 'tmp-1.0' do\n  impact 0.3\n  title 'A /tmp directory must exist'\n  desc 'A /tmp directory must exist'\n  describe file '/tmp' do\n    it { should be_directory }\n  end\nend\n",
-            "source_location"=>{"ref"=>"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb", "line"=>3},
-            "id"=>"tmp-1.0",
-            "results"=>[{"status"=>"passed", "code_desc"=>"File /tmp should be directory", "run_time"=>0.002312, "start_time"=>"2016-10-19 11:09:43 -0400"}]},
-           {"title"=>"/tmp directory is owned by the root user",
-            "desc"=>"The /tmp directory must be owned by the root user",
-            "impact"=>0.3,
-            "refs"=>[{"url"=>"https://pages.chef.io/rs/255-VFB-268/images/compliance-at-velocity2015.pdf", "ref"=>"Compliance Whitepaper"}],
-            "tags"=>{"production"=>nil, "development"=>nil, "identifier"=>"value", "remediation"=>"https://github.com/chef-cookbooks/audit"},
-            "code"=>
+            "source_location":{"ref":"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb", "line":3},
+            "id":"tmp-1.0",
+            "results":[{"status":"passed", "code_desc":"File /tmp should be directory", "run_time":0.002312, "start_time":"2016-10-19 11:09:43 -0400"}]},
+           {"title":"/tmp directory is owned by the root user",
+            "desc":"The /tmp directory must be owned by the root user",
+            "impact":0.3,
+            "refs":[{"url":"https://pages.chef.io/rs/255-VFB-268/images/compliance-at-velocity2015.pdf", "ref":"Compliance Whitepaper"}],
+            "tags":{"production":nil, "development":nil, "identifier":"value", "remediation":"https://github.com/chef-cookbooks/audit"},
+            "code":
               "control 'tmp-1.1' do\n  impact 0.3\n  title '/tmp directory is owned by the root user'\n  desc 'The /tmp directory must be owned by the root user'\n  tag 'production','development'\n  tag identifier: 'value'\n  tag remediation: 'https://github.com/chef-cookbooks/audit'\n  ref 'Compliance Whitepaper', url: 'https://pages.chef.io/rs/255-VFB-268/images/compliance-at-velocity2015.pdf'\n  describe file '/tmp' do\n    it { should be_owned_by 'root' }\n  end\nend\n",
-            "source_location"=>{"ref"=>"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb", "line"=>12},
-            "id"=>"tmp-1.1",
-            "results"=>[{"status"=>"passed", "code_desc"=>"File /tmp should be owned by \"root\"", "run_time"=>0.028845, "start_time"=>"2016-10-19 11:09:43 -0400"}]}],
-        "groups"=>[{"title"=>"/tmp Compliance Profile", "controls"=>["tmp-1.0", "tmp-1.1"], "id"=>"controls/tmp.rb"}],
-        "attributes"=>[{"name"=>"syslog_pkg", "options"=>{"default"=>"rsyslog", "description"=>"syslog package...", "type"=>"string"}}]}],
-      "event_type"=>"inspec",
-      "event_action"=>"exec",
-      "compliance_summary"=>{
-        "total"=>2,
-        "passed"=>{"total"=>2},
-        "skipped"=>{"total"=>0},
-        "failed"=>{"total"=>0, "minor"=>0, "major"=>0, "critical"=>0},
-        "status"=>"passed",
-        "node_name"=>"chef-client.solo",
-        "end_time"=>"2016-07-19T19:19:19+01:00",
-        "duration"=>0.032332,
-        "inspec_version"=>"1.2.1"},
-      "entity_uuid"=>"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
-      "run_id"=>"3f0536f7-3361-4bca-ae53-b45118dceb5d"}
+            "source_location":{"ref":"/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb", "line":12},
+            "id":"tmp-1.1",
+            "results":[{"status":"passed", "code_desc":"File /tmp should be owned by \"root\"", "run_time":0.028845, "start_time":"2016-10-19 11:09:43 -0400"}]}],
+        "groups":[{"title":"/tmp Compliance Profile", "controls":["tmp-1.0", "tmp-1.1"], "id":"controls/tmp.rb"}],
+        "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package...", "type":"string"}}]}],
+      "event_type":"inspec",
+      "event_action":"exec",
+      "compliance_summary":{
+        "total":2,
+        "passed":{"total":2},
+        "skipped":{"total":0},
+        "failed":{"total":0, "minor":0, "major":0, "critical":0},
+        "status":"passed",
+        "node_name":"chef-client.solo",
+        "end_time":"2016-07-19T19:19:19+01:00",
+        "duration":0.032332,
+        "inspec_version":"1.2.1"},
+      "entity_uuid":"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
+      "run_id":"3f0536f7-3361-4bca-ae53-b45118dceb5d"}
 
     opts = {
       entity_uuid: entity_uuid,
@@ -83,7 +83,7 @@ describe 'Reporter::ChefAutomate methods' do
     Chef::Config[:data_collector] = {token: 'dctoken', server_url: 'https://automate.test/data_collector' }
     stub_request(:post, 'https://automate.test/data_collector').
              with(:body => @enriched_report_expected.to_json,
-                  :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'identity', 'Content-Length'=>'2818', 'Content-Type'=>'application/json', 'Host'=>'automate.test', 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Data-Collector-Auth'=>'version=1.0', 'X-Data-Collector-Token'=>'dctoken'}).
+                  :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'identity', 'Content-Length'=>/.+/, 'Content-Type'=>'application/json', 'Host'=>'automate.test', 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Data-Collector-Auth'=>'version=1.0', 'X-Data-Collector-Token'=>'dctoken'}).
              to_return(:status => 200, :body => "", :headers => {})
 
     @automate = Reporter::ChefAutomate.new(opts)
@@ -96,7 +96,7 @@ describe 'Reporter::ChefAutomate methods' do
 
   it 'enriches report correctly with the most test coverage' do
     allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
-    expect(JSON.parse(@automate.enriched_report(MockData.inspec_results))).to eq(@enriched_report_expected)
+    expect(@automate.enriched_report(MockData.inspec_results)).to eq(@enriched_report_expected)
   end
 
   it 'is not sending report when entity_uuid is missing' do
@@ -113,30 +113,30 @@ describe 'Reporter::ChefAutomate methods' do
   it 'sets the attribute types like TypeScript' do
     profiles = [
       {
-        "attributes"=>[
-          { "name"=>"syslog_pkg",
-            "options"=>{ "default"=>"rsyslog", "description"=>"a string" } },
-          { "name"=>"sysctl_forwarding",
-            "options"=>{ "default"=>false, "description"=>"a boolean" } },
-          { "name"=>"some_number",
-            "options"=>{ "default"=>0, "description"=>"a number" } },
-          { "name"=>"some_float",
-            "options"=>{ "default"=>0.8, "description"=>"a bloody float" } },
-          { "name"=>"some_array",
-            "options"=>{ "default"=>[], "description"=>"a bloody array" } }
+        "attributes":[
+          { "name":"syslog_pkg",
+            "options":{ "default":"rsyslog", "description":"a string" } },
+          { "name":"sysctl_forwarding",
+            "options":{ "default":false, "description":"a boolean" } },
+          { "name":"some_number",
+            "options":{ "default":0, "description":"a number" } },
+          { "name":"some_float",
+            "options":{ "default":0.8, "description":"a bloody float" } },
+          { "name":"some_array",
+            "options":{ "default":[], "description":"a bloody array" } }
         ]
       }
     ]
     # poor man's deep clone
-    types_profiles = JSON.parse(profiles.to_json)
-    types_profiles[0]['attributes'][0]['options']['type'] = 'string'
-    types_profiles[0]['attributes'][1]['options']['type'] = 'boolean'
-    types_profiles[0]['attributes'][1]['options']['default'] = 'false'
-    types_profiles[0]['attributes'][2]['options']['type'] = 'int'
-    types_profiles[0]['attributes'][2]['options']['default'] = '0'
-    types_profiles[0]['attributes'][3]['options']['type'] = 'float'
-    types_profiles[0]['attributes'][3]['options']['default'] = '0.8'
-    types_profiles[0]['attributes'][4]['options']['type'] = 'unknown'
+    types_profiles = profiles.dup
+    types_profiles[0][:attributes][0][:options][:type] = 'string'
+    types_profiles[0][:attributes][1][:options][:type] = 'boolean'
+    types_profiles[0][:attributes][1][:options][:default] = 'false'
+    types_profiles[0][:attributes][2][:options][:type] = 'int'
+    types_profiles[0][:attributes][2][:options][:default] = '0'
+    types_profiles[0][:attributes][3][:options][:type] = 'float'
+    types_profiles[0][:attributes][3][:options][:default] = '0.8'
+    types_profiles[0][:attributes][4][:options][:type] = 'unknown'
     expect(@automate.typed_attributes(profiles)).to eq(types_profiles)
   end
 end

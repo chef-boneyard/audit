@@ -10,13 +10,13 @@ describe 'Reporter::ChefCompliance methods' do
   before :each do
   require 'bundles/inspec-compliance/configuration'
     url = 'https://192.168.33.201/api/owners/admin/inspec'
-    node_info = {:node=>"default-ubuntu-1404", :os=>{:release=>"14.04", :family=>"ubuntu"}, :environment=>"_default"}
+    node_info = {node:"default-ubuntu-1404", os:{release:"14.04", family:"ubuntu"}, environment:"_default"}
     raise_if_unreachable = true
 
     @report_min = {
-      "version" => "1.21.0",
-      "controls" => [{"id"=>"tmp-1.0","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be directory"},{"id"=>"tmp-1.1","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be owned by \"root\""}],
-      "statistics" => {"duration"=>0.028643}
+      "version":"1.21.0",
+      "controls":[{"id":"tmp-1.0","profile_id":"tmp_compliance_profile","status":"passed","code_desc":"File /tmp should be directory"},{"id":"tmp-1.1","profile_id":"tmp_compliance_profile","status":"passed","code_desc":"File /tmp should be owned by \"root\""}],
+      "statistics":{"duration":0.028643}
     }
 
     @report_full = {
@@ -54,23 +54,21 @@ describe 'Reporter::ChefCompliance methods' do
         "statistics":{"duration":0.028643}
     }
 
-    # @compliance_profiles = [{:owner=> 'admin', :profile_id=> 'tmp_compliance_profile'}]
-
     @source_location = [{
-      "name": "tmp_compliance_profile",
-      "compliance": "admin/tmp_compliance_profile"
+      "name":"tmp_compliance_profile",
+      "compliance":"admin/tmp_compliance_profile"
     }]
 
     @enriched_report_expected = {
-      "node"=>"default-ubuntu-1404",
-      "os"=>{"release"=>"14.04", "family"=>"ubuntu"},
-      "environment"=>"_default",
-      "reports"=>{"tmp_compliance_profile"=>{
-        "version" => "1.21.0",
-        "controls" => [{"id"=>"tmp-1.0","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be directory"},{"id"=>"tmp-1.1","profile_id"=>"tmp_compliance_profile","status"=>"passed","code_desc"=>"File /tmp should be owned by \"root\""}],
-        "statistics" => {"duration"=>0.028643}
+      "node":"default-ubuntu-1404",
+      "os":{"release":"14.04", "family":"ubuntu"},
+      "environment":"_default",
+      "reports":{"tmp_compliance_profile":{
+        "version":"1.21.0",
+        "controls":[{"id":"tmp-1.0","profile_id":"tmp_compliance_profile","status":"passed","code_desc":"File /tmp should be directory"},{"id":"tmp-1.1","profile_id":"tmp_compliance_profile","status":"passed","code_desc":"File /tmp should be owned by \"root\""}],
+        "statistics":{"duration":0.028643}
         }},
-      "profiles"=>{"tmp_compliance_profile"=>"admin"}
+      "profiles":{"tmp_compliance_profile":"admin"}
     }
 
     opts = {
@@ -98,6 +96,6 @@ describe 'Reporter::ChefCompliance methods' do
   end
 
   it 'enriches the report correctly' do
-    expect(JSON.parse(@chef_compliance.enriched_report(@report_min, @source_location))).to eq(@enriched_report_expected)
+    expect(@chef_compliance.enriched_report(@report_min, @source_location)).to eq(@enriched_report_expected)
   end
 end

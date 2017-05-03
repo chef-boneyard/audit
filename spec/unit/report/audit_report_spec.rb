@@ -19,6 +19,7 @@
 
 require 'spec_helper'
 require 'json'
+require_relative '../../../libraries/helper'
 require_relative '../../../files/default/handler/audit_report'
 require_relative '../../data/mock.rb'
 
@@ -73,21 +74,24 @@ describe 'Chef::Handler::AuditReport methods' do
 
   describe 'call' do
     it 'given a profile, returns a json report' do
-      require 'inspec'
       opts = {'report' => true, 'format' => 'json', 'output' => '/dev/null'}
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
       profiles = [{'name': 'example', 'path': path }]
+      # we cirumwent the default load mechanisms, therefore we have to require inspec
+      require 'inspec'
       report = @audit_report.call(opts, profiles)
       expected_report = /^.*version.*profiles.*controls.*statistics.*duration.*/
-      expect(report).to match(expected_report)
+      expect(report.to_json).to match(expected_report)
     end
     it 'given a profile, returns a json-min report' do
       require 'inspec'
       opts = {'report' => true, 'format' => 'json-min', 'output' => '/dev/null'}
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
       profiles = [{'name': 'example', 'path': path }]
-      report = JSON.parse(@audit_report.call(opts, profiles))
-      expect(report['controls'].length).to eq(2)
+      # we cirumwent the default load mechanisms, therefore we have to require inspec
+      require 'inspec'
+      report = @audit_report.call(opts, profiles)
+      expect(report[:controls].length).to eq(2)
     end
   end
 end
