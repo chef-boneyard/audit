@@ -1,5 +1,40 @@
 # Change Log
 
+## [v3.1.0](https://github.com/chef-cookbooks/audit/tree/v3.1.0) (2017-05-04)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v3.0.0...v3.1.0)
+
+**Closed issues:**
+
+- Inspec gem is constantly reinstalled if version is specified [\#215](https://github.com/chef-cookbooks/audit/issues/215)
+- JSON output contains "You have X number of issues or packages out of date" [\#207](https://github.com/chef-cookbooks/audit/issues/207)
+- Audit coobook via Chef Automate fails to inherit profiles  [\#206](https://github.com/chef-cookbooks/audit/issues/206)
+- Rename `collector` to `reporter` [\#205](https://github.com/chef-cookbooks/audit/issues/205)
+- Audit cookbook failing to install from internal Ruby gem mirror [\#200](https://github.com/chef-cookbooks/audit/issues/200)
+- Document new `chef-server-compliance` collector in Readme [\#190](https://github.com/chef-cookbooks/audit/issues/190)
+- Missing default attribute `fail\_if\_any\_audits\_failed` [\#182](https://github.com/chef-cookbooks/audit/issues/182)
+- ability to install inspec as a package [\#164](https://github.com/chef-cookbooks/audit/issues/164)
+- Warning from wrong attribute syntax [\#161](https://github.com/chef-cookbooks/audit/issues/161)
+- Cannot report meta-profiles to Chef Compliance [\#155](https://github.com/chef-cookbooks/audit/issues/155)
+- Support certificates \(insecure\) for reporting to chef-visibility [\#150](https://github.com/chef-cookbooks/audit/issues/150)
+- Missing profile results in misleading error message in chef\_gate log [\#144](https://github.com/chef-cookbooks/audit/issues/144)
+- Vendor InSpec gem [\#112](https://github.com/chef-cookbooks/audit/issues/112)
+- Compliance Profile inheritence does not work with audit cookbook [\#38](https://github.com/chef-cookbooks/audit/issues/38)
+- Provide gem\_source attribute for fetching any required gems [\#26](https://github.com/chef-cookbooks/audit/issues/26)
+
+**Merged pull requests:**
+
+- fix cc token and ensure we create a new string for a url [\#220](https://github.com/chef-cookbooks/audit/pull/220) ([chris-rock](https://github.com/chris-rock))
+- stick to plain ruby hash [\#219](https://github.com/chef-cookbooks/audit/pull/219) ([chris-rock](https://github.com/chris-rock))
+- fix reinstallation of inspec if version is already installed [\#218](https://github.com/chef-cookbooks/audit/pull/218) ([chris-rock](https://github.com/chris-rock))
+- update metadata and gemfile [\#216](https://github.com/chef-cookbooks/audit/pull/216) ([chris-rock](https://github.com/chris-rock))
+- refactor reporting [\#214](https://github.com/chef-cookbooks/audit/pull/214) ([chris-rock](https://github.com/chris-rock))
+- Use Automate instead of Visibility [\#213](https://github.com/chef-cookbooks/audit/pull/213) ([chris-rock](https://github.com/chris-rock))
+- Always use json format for inspec report [\#212](https://github.com/chef-cookbooks/audit/pull/212) ([chris-rock](https://github.com/chris-rock))
+- Deprecate `collector` attribute [\#211](https://github.com/chef-cookbooks/audit/pull/211) ([chris-rock](https://github.com/chris-rock))
+- Add report summary output to chef logs [\#210](https://github.com/chef-cookbooks/audit/pull/210) ([chris-rock](https://github.com/chris-rock))
+- use inspec without nokogiri [\#209](https://github.com/chef-cookbooks/audit/pull/209) ([chris-rock](https://github.com/chris-rock))
+- better error output [\#208](https://github.com/chef-cookbooks/audit/pull/208) ([chris-rock](https://github.com/chris-rock))
+
 ## [v3.0.0](https://github.com/chef-cookbooks/audit/tree/v3.0.0) (2017-04-03)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.4.0...v3.0.0)
 
