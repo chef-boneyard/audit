@@ -133,7 +133,6 @@ module ReportHelpers
     end
     handle_reporters(audit['reporter'])
   end
-
 end
 
 ::Chef::Recipe.send(:include, ReportHelpers)

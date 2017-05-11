@@ -1,6 +1,7 @@
 class MockData
   def self.node_info
-    { node: "chef-client.solo" }
+    { node: "chef-client.solo",
+      environment: 'My Prod Env' }
   end
 
   def self.inspec_results

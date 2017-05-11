@@ -26,7 +26,8 @@ describe 'Reporter::ChefAutomate methods' do
     entity_uuid = 'aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz'
     run_id = '3f0536f7-3361-4bca-ae53-b45118dceb5d'
     insecure = false
-    @enriched_report_expected = { "profiles":
+    @enriched_report_expected = {"version":"1.2.1",
+      "profiles":
       [{"name":"tmp_compliance_profile",
         "title":"/tmp Compliance Profile",
         "summary":"An Example Compliance Profile",
@@ -58,20 +59,15 @@ describe 'Reporter::ChefAutomate methods' do
             "results":[{"status":"passed", "code_desc":"File /tmp should be owned by \"root\"", "run_time":0.028845, "start_time":"2016-10-19 11:09:43 -0400"}]}],
         "groups":[{"title":"/tmp Compliance Profile", "controls":["tmp-1.0", "tmp-1.1"], "id":"controls/tmp.rb"}],
         "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package...", "type":"string"}}]}],
-      "event_type":"inspec",
-      "event_action":"exec",
-      "compliance_summary":{
-        "total":2,
-        "passed":{"total":2},
-        "skipped":{"total":0},
-        "failed":{"total":0, "minor":0, "major":0, "critical":0},
-        "status":"passed",
-        "node_name":"chef-client.solo",
-        "end_time":"2016-07-19T19:19:19+01:00",
-        "duration":0.032332,
-        "inspec_version":"1.2.1"},
-      "entity_uuid":"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
-      "run_id":"3f0536f7-3361-4bca-ae53-b45118dceb5d"}
+      "other_checks": [],
+      "statistics":{"duration":0.032332},
+      "type":"inspec_report",
+      "node_name":"chef-client.solo",
+      "end_time":"2016-07-19T19:19:19+01:00",
+      "node_uuid":"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
+      "environment":"My Prod Env",
+      "report_uuid":"3f0536f7-3361-4bca-ae53-b45118dceb5d"
+      }
 
     opts = {
       entity_uuid: entity_uuid,
@@ -89,7 +85,7 @@ describe 'Reporter::ChefAutomate methods' do
     @automate = Reporter::ChefAutomate.new(opts)
   end
 
-  it 'sends report successfully' do
+  it 'sends report successfully to ChefAutomate' do
     allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
     expect(@automate.send_report(MockData.inspec_results)).to eq(true)
   end
