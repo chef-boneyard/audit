@@ -13,6 +13,7 @@ module Reporter
       @entity_uuid = opts[:entity_uuid]
       @run_id = opts[:run_id]
       @node_name = opts[:node_info][:node]
+      @environment = opts[:node_info][:environment]
       @insecure = opts[:insecure]
 
       if defined?(Chef) &&
@@ -59,6 +60,7 @@ module Reporter
 
         begin
           Chef::Log.warn "Report to Chef Automate: #{@url}"
+          Chef::Log.debug "Audit Report: #{json_report}"
           http = Chef::HTTP.new(@url)
           http.post(nil, json_report, headers)
           return true
@@ -106,33 +108,26 @@ module Reporter
     # revamp of the Automate expected input.
     # ***************************************************************************************
 
-    def enriched_report(content)
-      return nil unless content.is_a?(Hash)
-      final_report = {}
-      total_duration = content[:statistics][:duration]
-      inspec_version = content[:version]
+    def enriched_report(final_report)
+      return nil unless final_report.is_a?(Hash)
 
-      # strip the report to leave only the profiles
-      final_report[:profiles] = content[:profiles]
-
-      # remove nil profiles if any
+      # Remove nil profiles if any
       final_report[:profiles].select! { |p| p }
 
-      # set types for profile attributes
+      # Set types for profile attributes
       final_report[:profiles] = typed_attributes(final_report[:profiles])
 
-      # add some additional fields to ease report parsing
-      final_report[:event_type] = 'inspec'
-      final_report[:event_action] = 'exec'
-      final_report[:compliance_summary] = count_controls(final_report[:profiles])
-      final_report[:compliance_summary][:status] = compliance_status(final_report[:compliance_summary])
-      final_report[:compliance_summary][:node_name] = @node_name
-      final_report[:compliance_summary][:end_time] = DateTime.now.iso8601
-      final_report[:compliance_summary][:duration] = total_duration
-      final_report[:compliance_summary][:inspec_version] = inspec_version
-      final_report[:entity_uuid] = @entity_uuid
-      final_report[:run_id] = @run_id
-      Chef::Log.info "Compliance Summary #{final_report[:compliance_summary]}"
+      # Label this content as an inspec_report
+      final_report[:type] = 'inspec_report'
+
+      # Ensure controls are never stored or shipped, since this was an accidential
+      # addition in InSpec and will be remove in the next inspec major release
+      final_report.delete(:controls)
+      final_report[:node_name]   = @node_name
+      final_report[:end_time]    = DateTime.now.iso8601
+      final_report[:node_uuid]   = @entity_uuid
+      final_report[:environment] = @environment
+      final_report[:report_uuid] = @run_id
       final_report
     end
   end
