@@ -138,20 +138,6 @@ class Chef
             Chef::Log.info "Summary: #{passed_controls} successful, #{failed_controls} failures, #{skipped_controls} skipped in #{time} s"
           end
 
-          if !r.nil? && 'json' == opts['format']
-            # ensure controls are never stored or shipped, since this was an accidential
-            # addition in InSpec and will be remove in our next major release
-            r.delete(:controls)
-
-            # calculate statistics
-            stats = count_controls(r[:profiles])
-
-            time = 0
-            time = r[:statistics][:duration] unless r[:statistics].nil?
-
-            # count controls
-            Chef::Log.info "Summary #{stats[:total]} controls: #{stats[:passed][:total]} successful, #{stats[:failed][:total]} failures, #{stats[:skipped][:total]} skipped in #{time} s"
-          end
           Chef::Log.debug "Audit Report #{r}"
           r
         else

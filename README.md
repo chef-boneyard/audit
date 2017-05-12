@@ -282,6 +282,13 @@ This method is sending the report using the `data_collector.server_url` and `dat
 
 If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/setup_visibility_chef_automate.html#add-chef-automate-certificate-to-trusted-certs-directory)
 
+Version compatibility matrix:
+
+| Automate version   | InSpec version   | Audit Cookbook version   |
+|--------------------|------------------|--------------------------|
+|   < 0.8.0          |   ≤ 1.23.0       |   ≤ 3.1.0                |
+|   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
+
 ## Profile Upload to Compliance Server
 
 In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
@@ -464,11 +471,11 @@ Please note that all dependencies to the `inspec` gem must also be hosted in thi
 
 Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
 
-| Chef Compliance version    | InSpec version             | Audit Cookbook  version    |
-|----------------------------|----------------------------|----------------------------|
-| Less or equal to 1.1.23    | 0.20.1                     | 0.7.0                      |
-| Greater than 1.1.23        | Greater or equal to 0.22.1 | 0.8.0                      |
-| Greater or equal to 1.6.8  | Greater or equal to 1.2.0  | 1.0.2                      |
+| Chef Compliance version    | InSpec version    | Audit Cookbook version    |
+|----------------------------|-------------------|---------------------------|
+|   ≤ 1.1.23                 |   = 0.20.1        |   = 0.7.0                 |
+|   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
+|   ≥ 1.6.8                  |   ≥ 1.2.0         |   = 1.0.2                 |
 
 You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
 

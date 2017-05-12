@@ -13,6 +13,7 @@ module Reporter
       @run_id = opts[:run_id]
       @node_name = opts[:node_info][:node]
       @insecure = opts[:insecure]
+      @environment = opts[:node_info][:environment]
       @url = opts[:url]
     end
 
