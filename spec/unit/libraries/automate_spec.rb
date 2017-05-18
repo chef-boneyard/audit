@@ -58,7 +58,7 @@ describe 'Reporter::ChefAutomate methods' do
             "id":"tmp-1.1",
             "results":[{"status":"passed", "code_desc":"File /tmp should be owned by \"root\"", "run_time":0.028845, "start_time":"2016-10-19 11:09:43 -0400"}]}],
         "groups":[{"title":"/tmp Compliance Profile", "controls":["tmp-1.0", "tmp-1.1"], "id":"controls/tmp.rb"}],
-        "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package...", "type":"string"}}]}],
+        "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package..."}}]}],
       "other_checks": [],
       "statistics":{"duration":0.032332},
       "type":"inspec_report",
