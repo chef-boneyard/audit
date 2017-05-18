@@ -58,7 +58,7 @@ describe 'Reporter::ChefAutomate methods' do
             "id":"tmp-1.1",
             "results":[{"status":"passed", "code_desc":"File /tmp should be owned by \"root\"", "run_time":0.028845, "start_time":"2016-10-19 11:09:43 -0400"}]}],
         "groups":[{"title":"/tmp Compliance Profile", "controls":["tmp-1.0", "tmp-1.1"], "id":"controls/tmp.rb"}],
-        "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package...", "type":"string"}}]}],
+        "attributes":[{"name":"syslog_pkg", "options":{"default":"rsyslog", "description":"syslog package..."}}]}],
       "other_checks": [],
       "statistics":{"duration":0.032332},
       "type":"inspec_report",
@@ -106,33 +106,4 @@ describe 'Reporter::ChefAutomate methods' do
     expect(viz2.send_report(MockData.inspec_results)).to eq(false)
   end
 
-  it 'sets the attribute types like TypeScript' do
-    profiles = [
-      {
-        "attributes":[
-          { "name":"syslog_pkg",
-            "options":{ "default":"rsyslog", "description":"a string" } },
-          { "name":"sysctl_forwarding",
-            "options":{ "default":false, "description":"a boolean" } },
-          { "name":"some_number",
-            "options":{ "default":0, "description":"a number" } },
-          { "name":"some_float",
-            "options":{ "default":0.8, "description":"a bloody float" } },
-          { "name":"some_array",
-            "options":{ "default":[], "description":"a bloody array" } }
-        ]
-      }
-    ]
-    # poor man's deep clone
-    types_profiles = profiles.dup
-    types_profiles[0][:attributes][0][:options][:type] = 'string'
-    types_profiles[0][:attributes][1][:options][:type] = 'boolean'
-    types_profiles[0][:attributes][1][:options][:default] = 'false'
-    types_profiles[0][:attributes][2][:options][:type] = 'int'
-    types_profiles[0][:attributes][2][:options][:default] = '0'
-    types_profiles[0][:attributes][3][:options][:type] = 'float'
-    types_profiles[0][:attributes][3][:options][:default] = '0.8'
-    types_profiles[0][:attributes][4][:options][:type] = 'unknown'
-    expect(@automate.typed_attributes(profiles)).to eq(types_profiles)
-  end
 end
