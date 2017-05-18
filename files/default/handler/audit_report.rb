@@ -27,6 +27,7 @@ class Chef
         interval_time = node['audit']['interval']['time']
         profiles = node['audit']['profiles']
         quiet = node['audit']['quiet']
+        fetcher = node['audit']['fetcher']
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
@@ -36,7 +37,9 @@ class Chef
                              reporters.include?('chef-server-compliance') ||
                              reporters.include?('chef-server-visibility') ||
                              reporters.include?('chef-server-automate') ||
-                             node['audit']['fetcher'] == 'chef-server'
+                             %w{chef-server chef-server-compliance chef-server-visibility chef-server-automate}.include?(fetcher)
+
+        load_automate_fetcher if fetcher == 'chef-automate'
 
         # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
         login_to_compliance(server, user, token, refresh_token) if reporters.include?('chef-compliance')
@@ -95,9 +98,15 @@ class Chef
 
       # we expect inspec to be loaded before
       def load_chef_fetcher
-        Chef::Log.debug "Load vendored ruby files from: #{cookbook_vendor_path}"
+        Chef::Log.debug "Load Chef Server fetcher from: #{cookbook_vendor_path}"
         $LOAD_PATH.unshift(cookbook_vendor_path)
         require 'chef-server/fetcher'
+      end
+
+      def load_automate_fetcher
+        Chef::Log.debug "Load Chef Automate fetcher from: #{cookbook_vendor_path}"
+        $LOAD_PATH.unshift(cookbook_vendor_path)
+        require 'chef-automate/fetcher'
       end
 
       # sets format to json-min when chef-compliance, json when chef-automate
