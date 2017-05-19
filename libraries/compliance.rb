@@ -39,7 +39,7 @@ def upload_profile(config, owner, profile_name, path)
   Compliance::API.upload(config, owner, profile_name, path)
 end
 
-# TODO: temporary, we should not use this
+# TODO: temporary, we should use a stateless approach
 # TODO: harmonize with CLI login_refreshtoken method
 def login_to_compliance(server, user, access_token, refresh_token)
   if !refresh_token.nil?
