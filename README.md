@@ -9,6 +9,24 @@ The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client 
 
 - Chef Client >=12.5.1
 
+### Support Matrix
+
+#### Chef Automate
+
+| Automate version   | InSpec version   | Audit Cookbook version   |
+|--------------------|------------------|--------------------------|
+|   < 0.8.0          |   ≤ 1.23.0       |   ≤ 3.1.0                |
+|   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
+
+#### Chef Compliance
+
+| Chef Compliance version    | InSpec version    | Audit Cookbook version    |
+|----------------------------|-------------------|---------------------------|
+|   ≤ 1.1.23                 |   = 0.20.1        |   = 0.7.0                 |
+|   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
+|   ≥ 1.6.8                  |   ≥ 1.2.0         |   > 1.0.2                 |
+
+
 ## Deprecation Note:
 
 ### Please use `reporter` instead of `collector` attribute
@@ -35,6 +53,7 @@ With version 3.1.0 the reporter attribute deprecates the values `chef-server-vis
  * `chef-visibility` => `chef-automate`
 
 The support for values `chef-server-visibility` and `chef-visibility` will be removed in the next major version.
+
 
 ## Overview
 
@@ -66,152 +85,6 @@ Inspec Profiles can be hosted from a variety of locations:
  └──────────────────────┘                                └─────────────────────┘
 ```
 
-## Supported Configurations
-<table>
-<tr>
-  <th>Fetch Directly From Compliance</th>
-  <td><b>Report Directly to Compliance</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-compliance'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-</code></pre>
-<p><b>Report Directly to Automate</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-automate'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-&#35;
-&#35; client.rb:
-data_collector['server_url'] = 'https://automate-server.test/data-collector/v0/'
-data_collector['token'] = '..'
-</code></pre>
-<p><b>Report to Compliance via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-compliance'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-</code></pre>
-<p><b>Report to Automate via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-automate'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-&#35;
-&#35; chef-server.rb:
-data_collector['root_url'] = 'https://automate-server.test/data-collector/v0/'
-</code></pre>
-  </td>
-</tr>
-<tr>
-  <th>Fetch From Compliance via Chef Server</th>
-  <td><b>Report Directly to Compliance</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-compliance'
-['audit']['fetcher'] = 'chef-server'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-&#35;
-&#35; NOTE: Must have Compliance Integrated w/ Chef Server
-</code></pre>
-<p><b>Report Directly to Automate</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-automate'
-['audit']['fetcher'] = 'chef-server'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-&#35;
-&#35; client.rb:
-data_collector['server_url'] = 'https://automate-server.test/data-collector/v0/'
-data_collector['token'] = '..'
-&#35;
-&#35; NOTE: Must have Compliance Integrated w/ Chef Server
-</code></pre>
-<p><b>Report to Compliance via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-compliance'
-['audit']['fetcher'] = 'chef-server'
-&#35;
-&#35; NOTE: Must have Compliance Integrated w/ Chef Server
-</code></pre>
-<p><b>Report to Automate via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-automate'
-['audit']['fetcher'] = 'chef-server'
-&#35;
-&#35; chef-server.rb:
-data_collector['root_url'] = 'https://automate-server.test/data-collector/v0/'
-&#35;
-&#35; NOTE: Must have Compliance Integrated w/ Chef Server
-</code></pre>
-  </td>
-</tr>
-<tr>
-  <th>Fetch From Automate via Chef Server</th>
-  <td><b>Report Directly to Compliance</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-compliance'
-['audit']['fetcher'] = 'chef-server'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
-['audit']['owner'] = 'User/Org'
-&#35;
-&#35; chef-server.rb:
-profiles['root_url'] = 'https://automate-server.test'
-&#35;
-&#35; delivery.rb:
-compliance_profiles["enable"] = true
-</code></pre>
-<p><b>Report Directly to Automate</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-automate'
-['audit']['fetcher'] = 'chef-server'
-&#35;
-&#35; chef-server.rb:
-profiles['root_url'] = 'https://automate-server.test'
-&#35;
-&#35; client.rb:
-data_collector['server_url'] = 'https://automate-server.test/data-collector/v0/'
-data_collector['token'] = '..'
-&#35;
-&#35; delivery.rb:
-compliance_profiles["enable"] = true
-</code></pre>
-<p><b>Report to Compliance via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-compliance'
-['audit']['fetcher'] = 'chef-server'
-&#35;
-&#35; chef-server.rb:
-profiles['root_url'] = 'https://automate-server.test'
-&#35;
-&#35; delivery.rb:
-compliance_profiles["enable"] = true
-&#35;
-&#35; NOTE: Must have Compliance Integrated w/ Chef Server
-</code></pre>
-<p><b>Report to Automate via Chef Server</b>
-<pre lang="ruby"><code>
-['audit']['reporter'] = 'chef-server-automate'
-['audit']['fetcher'] = 'chef-server'
-&#35;
-&#35; chef-server.rb:
-data_collector['root_url'] = 'https://automate-server.test/data-collector/v0/'
-profiles['root_url'] = 'https://automate-server.test'
-&#35;
-&#35; delivery.rb:
-compliance_profiles["enable"] = true
-</code></pre>
-  </td>
-</tr>
-</table>
-
 ## Usage
 
 The audit cookbook needs to be configured for each node where the `chef-client` runs. The `audit` cookbook can be reused for all nodes, all node-specific configuration is done via Chef attributes.
@@ -224,9 +97,9 @@ Also beginning with version 3.x of the `audit` cookbook, the default version of 
 
 To install a different version of the InSpec gem, or to force installation of the gem, set the `node['audit']['inspec_version']` attribute to the version you wish to be installed.
 
-#### Configure node
+### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. For example you can define the attributes in a role or environment file like this:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. A complete list of the possible configuration are documented in [Supported Configurations](docs/supported_configuration.md). For example you can define the attributes in a role or environment file like this:
 
 
 node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure-success")
@@ -284,6 +157,8 @@ default["audit"] = {
   ]
 }
 ```
+
+### Reporting
 
 #### Reporting to Chef Automate via Chef Server
 
@@ -354,7 +229,6 @@ Instead of a refresh token, it is also possible to use a `token` that expires in
 }
 ```
 
-
 #### Direct reporting to Chef Automate
 
 If you want the audit cookbook to directly report to Chef Automate, set the `reporter` attribute to 'chef-automate'. Also specify where to retrieve the `profiles` from.
@@ -385,28 +259,8 @@ Version compatibility matrix:
 |   < 0.8.0          |   ≤ 1.23.0       |   ≤ 3.1.0                |
 |   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
 
-## Profile Upload to Compliance Server
 
-In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
-inspec compliance profile to the Compliance Server.
-
-Simply include the `upload` recipe in the run_list, with attribute overrides for the `audit` hash like so:
-
-```ruby
-audit: {
-  server: 'https://compliance-server.test/api',
-  reporter: 'chef-compliance',
-  refresh_token: '21/XMEK3...',
-  profiles: [
-   {
-      'name': 'admin/ssh2',
-      'path': '/some/base_ssh.tar.gz'
-    }
-  ]
-}
-```
-
-## Write to file on disk
+#### Write to file on disk
 
 To write the report to a file on disk, simply set the `reporter` to 'json-file' like so:
 
@@ -422,7 +276,7 @@ audit: {
 }
 ```
 
-## Multiple Reporters
+#### Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information
 for each one.  For example, to report to chef-compliance and write to json file on disk:
@@ -443,19 +297,59 @@ for each one.  For example, to report to chef-compliance and write to json file 
 }
 ```
 
-## Fetcher attribute
+### Profile Fetcher
 
-To enable reporting to Chef Automate with profiles from Chef Compliance, you need to have Chef Server integrated with Chef Compliance. You can then set the `fetcher` attribute to 'chef-server'.
+#### Fetch profiles from Chef Automate/Chef Compliance via Chef Server
+
+To enable reporting to Chef Automate with profiles from Chef Compliance or Chef Automate, you need to have Chef Server integrated with [Chef Compliance or Chef Automate](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate). You can then set the `fetcher` attribute to 'chef-server'.
 This will allow the audit cookbook to fetch profiles stored in Chef Compliance. For example:
 
 ```ruby
 "audit": {
   "fetcher": "chef-server",
+  "reporter": "chef-server-automate",
+  "profiles": [
+    {
+      "name": "ssh",
+      "compliance": "base/ssh"
+    }
+  ]
+}
+```
+
+#### Fetch profiles directly from Chef Automate
+
+This method is fetching profiles using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
+
+```ruby
+"audit": {
+  "fetcher": "chef-automate",
   "reporter": "chef-automate",
   "profiles": [
     {
       "name": "ssh",
       "compliance": "base/ssh"
+    }
+  ]
+}
+```
+
+## Profile Upload to Compliance Server
+
+In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
+inspec compliance profile to the Compliance Server.
+
+Simply include the `upload` recipe in the run_list, with attribute overrides for the `audit` hash like so:
+
+```ruby
+audit: {
+  server: 'https://compliance-server.test/api',
+  reporter: 'chef-compliance',
+  refresh_token: '21/XMEK3...',
+  profiles: [
+   {
+      'name': 'admin/ssh2',
+      'path': '/some/base_ssh.tar.gz'
     }
   ]
 }
@@ -562,18 +456,6 @@ default['audit']['inspec_gem_source'] = 'http://internal.gem.server.com/gems'
 ```
 
 Please note that all dependencies to the `inspec` gem must also be hosted in this location.
-
-## Chef Compliance and InSpec Version
-
-Using the `inspec_version` attribute, please use the following `InSpec` version based on your Chef Compliance version:
-
-| Chef Compliance version    | InSpec version    | Audit Cookbook version    |
-|----------------------------|-------------------|---------------------------|
-|   ≤ 1.1.23                 |   = 0.20.1        |   = 0.7.0                 |
-|   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
-|   ≥ 1.6.8                  |   ≥ 1.2.0         |   = 1.0.2                 |
-
-You can see all publicly available InSpec versions [here](https://rubygems.org/gems/inspec/versions)
 
 ## Troubleshooting
 
