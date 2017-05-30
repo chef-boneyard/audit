@@ -1,5 +1,20 @@
 # Change Log
 
+## [v4.0.0](https://github.com/chef-cookbooks/audit/tree/v4.0.0) (2017-05-22)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v3.1.0...v4.0.0)
+
+**Closed issues:**
+
+- Implement Chef-solo Chef Automate fetcher [\#226](https://github.com/chef-cookbooks/audit/issues/226)
+
+**Merged pull requests:**
+
+- update readme [\#229](https://github.com/chef-cookbooks/audit/pull/229) ([chris-rock](https://github.com/chris-rock))
+- add automate fetcher for chef solo [\#227](https://github.com/chef-cookbooks/audit/pull/227) ([chris-rock](https://github.com/chris-rock))
+- Remove typed\_attributes and leave the backend handle attributes [\#225](https://github.com/chef-cookbooks/audit/pull/225) ([alexpop](https://github.com/alexpop))
+- Reduce report enrichment, bump cookbook to version 4.0.0 [\#224](https://github.com/chef-cookbooks/audit/pull/224) ([alexpop](https://github.com/alexpop))
+- readme updates [\#223](https://github.com/chef-cookbooks/audit/pull/223) ([jeremymv2](https://github.com/jeremymv2))
+
 ## [v3.1.0](https://github.com/chef-cookbooks/audit/tree/v3.1.0) (2017-05-04)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v3.0.0...v3.1.0)
 
@@ -23,6 +38,7 @@
 
 **Merged pull requests:**
 
+- 3.1.0 [\#221](https://github.com/chef-cookbooks/audit/pull/221) ([chris-rock](https://github.com/chris-rock))
 - fix cc token and ensure we create a new string for a url [\#220](https://github.com/chef-cookbooks/audit/pull/220) ([chris-rock](https://github.com/chris-rock))
 - stick to plain ruby hash [\#219](https://github.com/chef-cookbooks/audit/pull/219) ([chris-rock](https://github.com/chris-rock))
 - fix reinstallation of inspec if version is already installed [\#218](https://github.com/chef-cookbooks/audit/pull/218) ([chris-rock](https://github.com/chris-rock))
