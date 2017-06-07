@@ -238,7 +238,7 @@ class Chef
               raise_if_unreachable: raise_if_unreachable,
               source_location: source_location,
             }
-            Reporter::ChefServer.new(opts).send_report(report)
+            Reporter::ChefServerCompliance.new(opts).send_report(report)
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
