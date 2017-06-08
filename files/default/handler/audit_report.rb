@@ -124,7 +124,13 @@ class Chef
 
       # run profiles and return report
       def call(opts, profiles)
-        Chef::Log.info "Initialize InSpec #{::Inspec::VERSION}"
+        Chef::Log.info "Using InSpec #{::Inspec::VERSION}"
+
+        if Gem::Version.new(Inspec::VERSION) < Gem::Version.new('1.24.0')
+          Chef::Log.error "This audit cookbook version requires InSpec 1.24.0 or newer, aborting compliance scan..."
+          return {}
+        end
+
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
