@@ -17,6 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# The "audit cookbook" and Chef's own "Audit Mode" are not compatible
+# due to global state management done by RSpec which is used by both
+# implementations. To prevent unexpected results, the audit cookbook
+# will prevent Chef from continuing if Audit Mode is not disabled.
+unless Chef::Config[:audit_mode] == :disabled
+  raise 'Audit Mode is enabled. The audit cookbook and Audit Mode' \
+    ' cannot be used at the same time. Please disable Audit Mode' \
+    ' in your client configuration.'
+end
+
 include_recipe 'audit::inspec'
 
 load_audit_handler
