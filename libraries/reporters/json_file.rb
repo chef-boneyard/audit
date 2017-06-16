@@ -16,7 +16,7 @@ module Reporter
 
     def write_to_file(report, path)
       json_file = File.new(path, 'w')
-      json_file.puts(report)
+      json_file.puts(JSON.generate(report))
       json_file.close
     end
   end
