@@ -28,6 +28,12 @@ module ChefAutomate
         url = URI(dc[:server_url])
         url.path = profile_path
         profile_fetch_url = url.to_s
+
+        raise 'No data-collector token set, which is required by the chef-automate fetcher. ' \
+          'Set the `data_collector.token` configuration parameter in your client.rb ' \
+          'or use the "chef-server-automate" reporter which does not require any ' \
+          'data-collector settings and uses Chef Server to fetch profiles.' if dc[:token].nil?
+
         config = {
           'token' => dc[:token],
         }
