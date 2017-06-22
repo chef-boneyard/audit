@@ -54,7 +54,7 @@ def login_to_compliance(server, user, access_token, refresh_token)
     config['server'] = server
     config['token'] = access_token
     config['insecure'] = true
-    config['version'] = Compliance::API.version(server, true)
+    config['version'] = Compliance::API.version({ 'server' => server, 'insecure' => true })
     config.store
   else
     Chef::Log.error msg
