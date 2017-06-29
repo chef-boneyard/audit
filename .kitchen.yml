@@ -121,7 +121,7 @@ suites:
     attributes:
       audit:
         collector: json-file
-        inspec_version: 1.20.0
+        inspec_version: 1.29.0
         fail_if_not_present: true
   - name: skip-inspec-gem-install
     run_list:
@@ -130,5 +130,5 @@ suites:
     attributes:
       audit:
         collector: json-file
-        inspec_version: 1.19.1
+        inspec_version: 1.25.1
         fail_if_not_present: true
