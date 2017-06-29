@@ -69,7 +69,7 @@ describe 'Reporter::ChefServerAutomate methods' do
     # set data_collector
     stub_request(:post, 'https://chef.server/data_collector').
              with(:body => @enriched_report_expected.to_json,
-             headers: {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Length'=>/.+/, 'Content-Type'=>'application/json', 'Host'=>/.+/, 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Ops-Authorization-1'=>/.+/, 'X-Ops-Authorization-2'=>/.+/, 'X-Ops-Authorization-3'=>/.+/, 'X-Ops-Authorization-4'=>/.+/, 'X-Ops-Authorization-5'=>/.+/, 'X-Ops-Authorization-6'=>/.+/, 'X-Ops-Content-Hash'=>/.+/, 'X-Ops-Server-Api-Version'=>'1', 'X-Ops-Sign'=>'algorithm=sha1;version=1.1;', 'X-Ops-Timestamp'=>/.+/, 'X-Ops-Userid'=>'spec-node', 'X-Remote-Request-Id'=>/.+/}).           
+             headers: {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Length'=>/.+/, 'Content-Type'=>'application/json', 'Host'=>/.+/, 'User-Agent'=>/.+/, 'X-Chef-Version'=>/.+/, 'X-Ops-Authorization-1'=>/.+/, 'X-Ops-Authorization-2'=>/.+/, 'X-Ops-Authorization-3'=>/.+/, 'X-Ops-Authorization-4'=>/.+/, 'X-Ops-Authorization-5'=>/.+/, 'X-Ops-Authorization-6'=>/.+/, 'X-Ops-Content-Hash'=>/.+/, 'X-Ops-Server-Api-Version'=>'1', 'X-Ops-Sign'=>'algorithm=sha1;version=1.1;', 'X-Ops-Timestamp'=>/.+/, 'X-Ops-Userid'=>'spec-node', 'X-Remote-Request-Id'=>/.+/}).
              to_return(:status => 200, :body => "", :headers => {})
 
     @automate = Reporter::ChefServerAutomate.new(opts)

@@ -38,7 +38,7 @@ describe 'audit::default' do
 
   context 'When an inspec gem version is specified ' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new do |node|
+      ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') do |node|
         node.override['audit']['inspec_version'] = '0.0.0'
       end.converge(described_recipe)
     end
@@ -54,7 +54,7 @@ describe 'audit::default' do
 
   context 'When an inspec gem alternate source is specified ' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new do |node|
+      ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') do |node|
         node.override['audit']['inspec_gem_source'] = 'http://0.0.0.0:8080'
       end.converge(described_recipe)
     end
@@ -70,7 +70,7 @@ describe 'audit::default' do
 
   context 'When server and refresh_token are specified' do
     let(:chef_run) do
-      ChefSpec::ServerRunner.new do |node|
+      ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') do |node|
         node.override['audit']['collector'] = 'chef-compliance'
         node.override['audit']['profiles'] = [ { 'name': 'myprofile', 'compliance': 'admin/myprofile' } ]
         node.override['audit']['server'] = 'https://my.compliance.test/api'
@@ -86,7 +86,7 @@ describe 'audit::default' do
 
   context 'When two profiles are specified' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
       runner.node.override['audit']['profiles'] = [ { 'name': 'myprofile', 'compliance': 'admin/myprofile' }, { 'name': 'ssh', 'compliance': 'base/ssh' } ]
       runner.node.override['audit']['inspec_version'] = 'latest'
       runner.node.override['audit']['quiet'] = true
@@ -102,7 +102,7 @@ describe 'audit::default' do
   # TODO: need to implement functionality for this
   # context 'When invalid profile is passed' do
   #   let(:chef_run) do
-  #     runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+  #     runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
   #     runner.node.override['audit']['profiles'] = [ { 'name': 'myprofile', 'compliance': 'myprofile' } ]
   #     runner.converge(described_recipe)
   #   end
@@ -114,7 +114,7 @@ describe 'audit::default' do
 
   context 'When specifying profiles with alternate sources' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
       runner.node.override['audit']['profiles'] = [
         { 'name': 'linux', 'compliance': 'base/linux' },
         { 'name': 'apache', 'compliance': 'base/apache' },
@@ -135,7 +135,7 @@ describe 'audit::default' do
 
   context 'When specifying a single reporter' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
       runner.node.override['audit']['collector'] = 'json-file'
       runner.node.override['audit']['profiles'] = [
         { 'name': 'linux', 'compliance': 'base/linux' },
@@ -157,7 +157,7 @@ describe 'audit::default' do
 
   context 'When specifying multiple reporters' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
       runner.node.override['audit']['collector'] = ['chef-compliance', 'json-file']
       runner.node.override['audit']['profiles'] = [
         { 'name': 'linux', 'compliance': 'base/linux' },
@@ -179,7 +179,7 @@ describe 'audit::default' do
 
   context 'when audit_mode is enabled' do
     let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.5')
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
       runner.node.override['audit']['collector'] = 'json-file'
       runner.node.override['audit']['profiles'] = [
         { 'name': 'linux', 'compliance': 'base/linux' },
