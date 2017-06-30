@@ -31,29 +31,29 @@ default['audit']['inspec_gem_source'] = nil
 # deprecated: 'chef-server-visibility' is replaced with 'chef-server-automate'
 default['audit']['reporter'] = 'chef-server-compliance'
 
-# controls reporting to Chef Automate with profiles from Chef Compliance
-# possible values: nil, 'chef-server'
+# controls reporting to Chef Automate with profiles from Chef Compliance or Chef Automate
+# possible values: nil, 'chef-server', 'chef-automate'
 # notes: requires Chef Server ingtegrated with Chef Compliance
 default['audit']['fetcher'] = nil
 
 # url of Chef Compliance server API endpoint
 # example values: nil, 'https://comp-server.example.com/api'
-# notes: only required for 'chef-compliance' collector
+# notes: only required for 'chef-compliance' reporter
 default['audit']['server'] = nil
 
 # refresh token from the "About" dialogue in Chef Compliance UI
-# notes: used only for the 'chef-compliance' collector
+# notes: used only for the 'chef-compliance' reporter
 default['audit']['refresh_token'] = nil
 
 # token from the "About" dialogue in Chef Compliance UI
-# notes: used only for the 'chef-compliance' collector.  this token expires 12h after creation
+# notes: used only for the 'chef-compliance' reporter. This token expires 12h after creation
 default['audit']['token'] = nil
 
 # allow for connections to HTTPS endpoints using self-signed ssl certificates
 default['audit']['insecure'] = nil
 
 # Chef Compliance organization to post the report to
-# notes: only needed for the 'chef-compliance' collector, optional for 'chef-server-compliance' and 'chef-server-automate'
+# notes: only needed for the 'chef-compliance' reporter, optional for 'chef-server-compliance' and 'chef-server-automate'
 # defaults to Chef Server org if not defined
 default['audit']['owner'] = nil
 
