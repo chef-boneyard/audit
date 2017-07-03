@@ -34,7 +34,7 @@ action :upload do
     config['token'] = access_token
     config['insecure'] = insecure
     config['server'] = server
-    config['version'] = compliance_version
+    config['version'] = compliance_version(config)
     if check_existence(config, "#{profile_name}/#{path}") && !overwrite
       Chef::Log.error 'Profile exists on the server, use property `overwrite`'
     else

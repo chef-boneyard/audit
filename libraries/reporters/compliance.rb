@@ -50,22 +50,31 @@ module Reporter
       blob = @node_info.dup
 
       # extract profile names
-      profiles = report[:controls].collect { |control| control[:profile_id] }.uniq
+      profiles = report[:controls].collect { |control|
+        control[:profile_id] if !control.nil?
+      }.uniq
 
       # build report for chef compliance, it includes node data
       blob[:reports] = {}
       blob[:profiles] = {}
-      Chef::Log.info "Control Profile: #{profiles}"
+      Chef::Log.info "Profiles: #{profiles}"
       profiles.each { |profile|
-        Chef::Log.info "Control Profile: #{profile}"
+        Chef::Log.info "Profile: #{profile}"
         Chef::Log.info "Compliance Profiles: #{compliance_profiles}"
         namespace = compliance_profiles.select { |entry| entry[:profile_id] == profile }
         unless namespace.nil? && namespace.empty?
           Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
           blob[:profiles][profile.to_sym] = namespace[0][:owner]
+
           blob[:reports][profile.to_sym] = report.dup
           # filter controls by profile_id
-          blob[:reports][profile.to_sym][:controls] = blob[:reports][profile.to_sym][:controls].select { |control| control[:profile_id] == profile }
+          if !blob[:reports][profile.to_sym][:controls].nil?
+            blob[:reports][profile.to_sym][:controls] = blob[:reports][profile.to_sym][:controls].select { |control|
+              !control.nil? && control[:profile_id] == profile
+            }
+          else
+            blob[:reports][profile.to_sym][:controls] = []
+          end
         else
           Chef::Log.warn "Could not determine compliance namespace for #{profile}"
         end
@@ -82,16 +91,22 @@ module Reporter
       # iterate over each profile and control
       min_report[:controls] = []
       full_report[:profiles].each { |profile|
-        min_report[:controls] += profile[:controls].map { |control|
-          control[:results].map { |result|
-            c = {}
-            c[:id] = control[:id]
-            c[:profile_id] = profile[:name]
-            c[:status] = result[:status]
-            c[:code_desc] = result[:code_desc]
-            c
+
+        if profile[:controls].nil?
+          min_report[:controls] = nil
+        else
+          min_report[:controls] += profile[:controls].map { |control|
+            next if control[:results].nil?
+            control[:results].map { |result|
+              c = {}
+              c[:id] = control[:id]
+              c[:profile_id] = profile[:name]
+              c[:status] = result[:status]
+              c[:code_desc] = result[:code_desc]
+              c
+            }
           }
-        }
+        end
       }
       min_report[:controls].flatten!
       min_report[:statistics] = full_report[:statistics]

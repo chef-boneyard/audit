@@ -25,8 +25,8 @@ def retrieve_access_token(server_url, refresh_token, insecure)
 end
 
 # used for compliance config
-def compliance_version
-  Compliance::API.version(server, insecure)
+def compliance_version(config)
+  Compliance::API.version(config)
 end
 
 # check if profile already exists on compliance server
@@ -40,7 +40,7 @@ def upload_profile(config, owner, profile_name, path)
 end
 
 # TODO: temporary, we should use a stateless approach
-# TODO: harmonize with CLI login_refreshtoken method
+# TODO: harmonize with CLI store_access_token(url, user, token, insecure)
 def login_to_compliance(server, user, access_token, refresh_token)
   if !refresh_token.nil?
     success, msg, access_token = Compliance::API.get_token_via_refresh_token(server, refresh_token, true)
@@ -50,11 +50,13 @@ def login_to_compliance(server, user, access_token, refresh_token)
 
   if success
     config = Compliance::Configuration.new
-    config['user'] = user
+    config.clean
     config['server'] = server
-    config['token'] = access_token
     config['insecure'] = true
-    config['version'] = Compliance::API.version({ 'server' => server, 'insecure' => true })
+    config['user'] = user
+    config['token'] = access_token
+    config['server_type'] = 'compliance'
+    config['version'] = Compliance::API.version(config)
     config.store
   else
     Chef::Log.error msg
