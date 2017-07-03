@@ -46,40 +46,26 @@ module Reporter
     # TODO: add to docs that all profiles used in Chef Compliance, need to
     # be uploaded to Chef Compliance first
     def enriched_report(report, source_location)
-      compliance_profiles = cc_profile_index(source_location)
+      inspec_profiles = cc_profile_index(source_location)
       blob = @node_info.dup
 
       # extract profile names
-      profiles = report[:controls].collect { |control|
-        control[:profile_id] if !control.nil?
+      profiles = report[:controls].compact.collect { |control|
+        control[:profile_id]
       }.uniq
 
       # build report for chef compliance, it includes node data
       blob[:reports] = {}
       blob[:profiles] = {}
-      Chef::Log.info "Profiles: #{profiles}"
-      profiles.each { |profile|
-        Chef::Log.info "Profile: #{profile}"
-        Chef::Log.info "Compliance Profiles: #{compliance_profiles}"
-        namespace = compliance_profiles.select { |entry| entry[:profile_id] == profile }
-        unless namespace.nil? && namespace.empty?
-          Chef::Log.debug "Namespace for #{profile} is #{namespace[0][:owner]}"
-          blob[:profiles][profile.to_sym] = namespace[0][:owner]
-
-          blob[:reports][profile.to_sym] = report.dup
-          # filter controls by profile_id
-          if !blob[:reports][profile.to_sym][:controls].nil?
-            blob[:reports][profile.to_sym][:controls] = blob[:reports][profile.to_sym][:controls].select { |control|
-              !control.nil? && control[:profile_id] == profile
-            }
-          else
-            blob[:reports][profile.to_sym][:controls] = []
-          end
-        else
-          Chef::Log.warn "Could not determine compliance namespace for #{profile}"
-        end
+      Chef::Log.info "InSpec Profiles: #{inspec_profiles}"
+      Chef::Log.info "Expanded Profiles: #{profiles}"
+      inspec_profiles.each { |inspec_profile|
+        blob[:profiles][inspec_profile[:profile_id].to_sym] = inspec_profile[:owner]
+        # TODO: we duplicate data here, since we attach the complete profile min
+        # but this reduces the complexity of nested searches, we need to
+        # fix this in InSpec
+        blob[:reports][inspec_profile[:profile_id].to_sym] = report.dup
       }
-
       blob
     end
 
