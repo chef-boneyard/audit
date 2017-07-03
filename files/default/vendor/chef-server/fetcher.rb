@@ -63,7 +63,9 @@ module ChefServer
         Chef::Config[:ssl_verify_mode] = :verify_none
       end
 
-      construct_url(chef_server_url_base + url_prefix + '/', reqpath)
+      target_url = construct_url(chef_server_url_base + url_prefix + '/', reqpath)
+      Chef::Log.info("Fetching profile from: #{target_url}")
+      target_url
     end
 
     #
@@ -77,7 +79,6 @@ module ChefServer
     # Downloads archive to temporary file from Chef Compliance via Chef Server
     def download_archive_to_temp
       return @temp_archive_path if !@temp_archive_path.nil?
-      Inspec::Log.debug("Fetching URL: #{@target}")
 
       Chef::Config[:verify_api_cert] = false # FIXME
       Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
@@ -99,14 +100,18 @@ module ChefServer
     def self.chef_server_reporter?
       return false if !(defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes))
       reporters = get_reporters(Chef.node.attributes['audit'])
+      # TODO: harmonize with audit_report.rb load_chef_fetcher
       Chef.node.attributes['audit'] && (
+        reporters.include?('chef-server') ||
+        reporters.include?('chef-server-compliance') ||
         reporters.include?('chef-server-visibility') ||
         reporters.include?('chef-server-automate')
       )
     end
 
     def self.chef_server_fetcher?
-      Chef.node.attributes['audit']['fetcher'] == 'chef-server'
+      # TODO: harmonize with audit_report.rb load_chef_fetcher
+      %w{chef-server chef-server-compliance chef-server-visibility chef-server-automate}.include?(Chef.node.attributes['audit']['fetcher'])
     end
 
     private
