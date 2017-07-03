@@ -5,6 +5,8 @@ class Chef
   class Handler
     # Creates a compliance audit report
     class AuditReport < ::Chef::Handler
+      MIN_INSPEC_VERSION = '1.25.1'.freeze
+
       def report
         # get reporter(s) from attributes as an array
         reporters = get_reporters(node['audit'])
@@ -124,7 +126,11 @@ class Chef
 
       # run profiles and return report
       def call(opts, profiles)
-        Chef::Log.info "Initialize InSpec #{::Inspec::VERSION}"
+        Chef::Log.info "Using InSpec #{::Inspec::VERSION}"
+        if Gem::Version.new(::Inspec::VERSION) < Gem::Version.new(MIN_INSPEC_VERSION)
+          raise "This audit cookbook version requires InSpec #{MIN_INSPEC_VERSION} or newer, aborting compliance scan..."
+        end
+
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
