@@ -20,6 +20,7 @@ group :test do
   gem 'coveralls', '~> 0.8.2', require: false
   gem 'rb-readline'
   gem 'webmock'
+  gem 'fauxhai', '~> 5.2'
 end
 
 group :integration do

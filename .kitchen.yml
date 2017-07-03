@@ -132,3 +132,11 @@ suites:
         collector: json-file
         inspec_version: 1.25.1
         fail_if_not_present: true
+  - name: chef-12-test
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: json-file
+        inspec_version: 1.25.1
+        fail_if_not_present: true

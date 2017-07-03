@@ -16,24 +16,24 @@ matrix:
   include:
   - rvm: 2.2
     script: bundle exec rake
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='default-centos-7'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='default-ubuntu-1404'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='missing-profile-no-fail-ubuntu-1404'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE && exit 1 || echo "OK"
     env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1404'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='gem-install-version-centos-7'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='gem-install-version-ubuntu-1404'
-  - rvm: 2.3.1
+  - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='skip-inspec-gem-install-ubuntu-1404'

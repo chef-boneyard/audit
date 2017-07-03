@@ -111,7 +111,7 @@ node.default['audit']['profiles'].push("path": "#{PROFILES_PATH}/mylinux-failure
 ```ruby
 "audit": {
   "reporter": "chef-server-compliance",
-  "inspec_version": "1.2.1",
+  "inspec_version": "1.29.0",
   "profiles": [
     # profile from Chef Compliance
     {
