@@ -76,6 +76,7 @@ The support for values `chef-server-visibility` and `chef-visibility` will be re
 ```
 
 Inspec Profiles can be hosted from a variety of locations:
+
 ```
  ┌──────────────────────┐                                ┌─────────────────────┐
  │     Chef Client      │     ┌───────────────────────┐  │   Chef Compliance   │
