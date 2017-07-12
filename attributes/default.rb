@@ -84,4 +84,4 @@ default['audit']['overwrite'] = true
 default['audit']['profiles'] = []
 
 # Attributes used to run the given profiles
-default['audit']['attributes'] = { }
+default['audit']['attributes'] = {}
