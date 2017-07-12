@@ -80,6 +80,18 @@ suites:
           - name: ssh
             supermarket: hardening/ssh-hardening
   # default setting does not fail for missing profile
+  - name: attributes-work
+    run_list:
+      - recipe[test_helper::create_file]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        collector: json-file
+        profiles:
+          - name: attribute-file-exists
+            git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
+        attributes:
+          file: /opt/kitchen/cache/attribute-file-exists.test
   - name: missing-profile-no-fail
     run_list:
       - recipe[test_helper::setup]

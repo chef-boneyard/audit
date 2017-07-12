@@ -120,6 +120,7 @@ class Chef
           'format' => format,
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run
+          'attributes' => node['audit']['attributes'],
         }
         opts
       end

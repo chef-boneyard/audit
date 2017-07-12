@@ -163,6 +163,17 @@ default["audit"] = {
 }
 ```
 
+#### Attributes
+
+You can also pass in [InSpec Attributes](http://www.anniehedgie.com/inspec-basics-10) to your audit run. You do this by defining the attributes here:
+
+```ruby
+default['audit']['attributes'] = {
+  first_attribute: 'some vaule',
+  second_attribute: 'another value',
+}
+```
+
 ### Reporting
 
 #### Reporting to Chef Automate via Chef Server
