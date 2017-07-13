@@ -21,6 +21,8 @@ group :test do
   gem 'rb-readline'
   gem 'webmock'
   gem 'fauxhai', '~> 5.2'
+  gem 'pry-remote'
+  gem 'pry-nav'
 end
 
 group :integration do
