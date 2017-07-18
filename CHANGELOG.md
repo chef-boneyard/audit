@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.1.1](https://github.com/chef-cookbooks/audit/tree/v4.1.1) (2017-07-18)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.0...v4.1.1)
+
+**Closed issues:**
+
+- Unexpected Error when using chef-automate fetcher [\#258](https://github.com/chef-cookbooks/audit/issues/258)
+- Declare audit profile in recipes [\#257](https://github.com/chef-cookbooks/audit/issues/257)
+
+**Merged pull requests:**
+
+- Fix inspec hosted profile diagram for Chef Supermarket [\#260](https://github.com/chef-cookbooks/audit/pull/260) ([alexpop](https://github.com/alexpop))
+- Non-null header value required for using chef-automate fetcher \(\#258\) [\#259](https://github.com/chef-cookbooks/audit/pull/259) ([ChefRycar](https://github.com/ChefRycar))
+
 ## [v4.1.0](https://github.com/chef-cookbooks/audit/tree/v4.1.0) (2017-07-05)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.0.0...v4.1.0)
 
