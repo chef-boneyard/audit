@@ -165,7 +165,7 @@ default["audit"] = {
 
 #### Attributes
 
-You can also pass in [InSpec Attributes](http://www.anniehedgie.com/inspec-basics-10) to your audit run. You do this by defining the attributes here:
+You can also pass in [InSpec Attributes](https://www.inspec.io/docs/reference/profiles/) to your audit run. You do this by defining the attributes here:
 
 ```ruby
 default['audit']['attributes'] = {
