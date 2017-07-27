@@ -72,7 +72,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         profiles:
           - name: ssh-hardening
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
@@ -86,10 +86,9 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         profiles:
-          - name: attribute-file-exists
-            git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
+          - git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
         attributes:
           file: /opt/kitchen/cache/attribute-file-exists.test
   - name: missing-profile-no-fail
@@ -98,7 +97,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         profiles:
           - name: ssh-hardening
             url: https://github.com/dev-sec/this-is-not-available.zip
@@ -110,7 +109,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         fail_if_not_present: true
         profiles:
           - name: ssh-hardening
@@ -132,7 +131,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         inspec_version: 1.29.0
         fail_if_not_present: true
   - name: skip-inspec-gem-install
@@ -141,7 +140,7 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         inspec_version: 1.25.1
         fail_if_not_present: true
   - name: chef-12-test
@@ -149,6 +148,6 @@ suites:
       - recipe[audit::default]
     attributes:
       audit:
-        collector: json-file
+        reporter: json-file
         inspec_version: 1.25.1
         fail_if_not_present: true
