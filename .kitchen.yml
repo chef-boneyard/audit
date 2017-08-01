@@ -8,6 +8,8 @@ transport:
 
 provisioner:
   name: dokken
+  chef_log_level: info
+  chef_output_format: minimal
 
 verifier:
   name: inspec
@@ -77,11 +79,12 @@ suites:
           - name: ssh-hardening
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
           - git: https://github.com/dev-sec/tests-ssh-hardening.git
-          - name: ssh
-            supermarket: hardening/ssh-hardening
+          - name: ssh-baseline
+            supermarket: dev-sec/ssh-baseline
   # default setting does not fail for missing profile
   - name: attributes-work
     run_list:
+      - recipe[test_helper::setup]
       - recipe[test_helper::create_file]
       - recipe[audit::default]
     attributes:

@@ -11,4 +11,5 @@ include_recipe 'git::default'
 output=Chef::JSONCompat.to_json_pretty(node.to_hash).to_s
 file '/tmp/node.json' do
   content output
+  sensitive true
 end

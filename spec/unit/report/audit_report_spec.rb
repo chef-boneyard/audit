@@ -66,7 +66,7 @@ describe 'Chef::Handler::AuditReport methods' do
       expect(opts['format']).to eq('json-min')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
-      expect(opts['attributes'].empty?).to be true
+      expect(opts[:attributes].empty?).to be true
     end
     it 'sets the format to json-min' do
       format = 'json'
@@ -76,7 +76,7 @@ describe 'Chef::Handler::AuditReport methods' do
       expect(opts['format']).to eq('json')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
-      expect(opts['attributes'].empty?).to be true
+      expect(opts[:attributes].empty?).to be true
     end
     it 'sets the attributes' do
       format = 'json-min'
@@ -86,8 +86,8 @@ describe 'Chef::Handler::AuditReport methods' do
         second: 'value2'
       }
       opts = @audit_report.get_opts(format, quiet, attributes)
-      expect(opts['attributes'][:first]).to eq('value1')
-      expect(opts['attributes'][:second]).to eq('value2')
+      expect(opts[:attributes][:first]).to eq('value1')
+      expect(opts[:attributes][:second]).to eq('value2')
     end
   end
 

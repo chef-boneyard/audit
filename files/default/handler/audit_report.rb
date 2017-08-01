@@ -121,7 +121,7 @@ class Chef
           'format' => format,
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
-          'attributes' => attributes,
+          attributes: attributes,
         }
         opts
       end
