@@ -21,4 +21,4 @@ inspec_gem 'inspec' do
   version node['audit']['inspec_version']
   source node['audit']['inspec_gem_source']
   action :nothing
-end.run_action(:install)
+end.run_action(:upgrade)
