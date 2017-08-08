@@ -42,8 +42,11 @@ action_class do
 
     chef_gem 'inspec' do
       version gem_version if !gem_version.nil? && gem_version != 'latest'
-      clear_sources true unless gem_source.nil?
-      source gem_source unless gem_source.nil?
+      unless gem_source.nil?
+        clear_sources true
+        include_default_source false
+        source gem_source
+      end
       action :install
     end
   end
