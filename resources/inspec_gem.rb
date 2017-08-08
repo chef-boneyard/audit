@@ -44,7 +44,7 @@ action_class do
       version gem_version if !gem_version.nil? && gem_version != 'latest'
       unless gem_source.nil?
         clear_sources true
-        include_default_source false
+        include_default_source false if respond_to?(:include_default_source)
         source gem_source
       end
       action :install
