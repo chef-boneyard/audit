@@ -30,6 +30,7 @@ class Chef
         profiles = node['audit']['profiles']
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
+        attributes = node['audit']['attributes']
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
@@ -53,7 +54,7 @@ class Chef
           create_timestamp_file if interval_enabled
 
           # return hash of opts to be used by runner
-          opts = get_opts('json', quiet)
+          opts = get_opts('json', quiet, attributes)
 
           # instantiate inspec runner with given options and run profiles; return report
           report = call(opts, profiles)
@@ -112,14 +113,15 @@ class Chef
       end
 
       # sets format to json-min when chef-compliance, json when chef-automate
-      def get_opts(format, quiet)
+      def get_opts(format, quiet, attributes)
         output = quiet ? ::File::NULL : $stdout
         Chef::Log.warn "Format is #{format}"
         opts = {
           'report' => true,
           'format' => format,
           'output' => output,
-          'logger' => Chef::Log, # Use chef-client log level for inspec run
+          'logger' => Chef::Log, # Use chef-client log level for inspec run,
+          attributes: attributes,
         }
         opts
       end
