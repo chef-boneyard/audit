@@ -81,8 +81,7 @@ suites:
           - git: https://github.com/dev-sec/tests-ssh-hardening.git
           - name: ssh-baseline
             supermarket: dev-sec/ssh-baseline
-  # default setting does not fail for missing profile
-  - name: attributes-work
+  - name: inspec-attributes
     run_list:
       - recipe[test_helper::setup]
       - recipe[test_helper::create_file]
