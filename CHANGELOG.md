@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.2.0](https://github.com/chef-cookbooks/audit/tree/v4.2.0) (2017-08-10)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.1...v4.2.0)
+
+**Closed issues:**
+
+- Support inspec attributes [\#261](https://github.com/chef-cookbooks/audit/issues/261)
+
+**Merged pull requests:**
+
+- Add test for InSpec Attributes functionality [\#266](https://github.com/chef-cookbooks/audit/pull/266) ([adamleff](https://github.com/adamleff))
+- Disable default source when using user-supplied gem source [\#265](https://github.com/chef-cookbooks/audit/pull/265) ([adamleff](https://github.com/adamleff))
+- Support for attributes within audit cookbook [\#262](https://github.com/chef-cookbooks/audit/pull/262) ([mhedgpeth](https://github.com/mhedgpeth))
+
 ## [v4.1.1](https://github.com/chef-cookbooks/audit/tree/v4.1.1) (2017-07-18)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.0...v4.1.1)
 
@@ -10,6 +23,7 @@
 
 **Merged pull requests:**
 
+- Release 4.1.1 [\#263](https://github.com/chef-cookbooks/audit/pull/263) ([alexpop](https://github.com/alexpop))
 - Fix inspec hosted profile diagram for Chef Supermarket [\#260](https://github.com/chef-cookbooks/audit/pull/260) ([alexpop](https://github.com/alexpop))
 - Non-null header value required for using chef-automate fetcher \(\#258\) [\#259](https://github.com/chef-cookbooks/audit/pull/259) ([ChefRycar](https://github.com/ChefRycar))
 
