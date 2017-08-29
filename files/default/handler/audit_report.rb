@@ -30,7 +30,10 @@ class Chef
         profiles = node['audit']['profiles']
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
-        attributes = node['audit']['attributes']
+        attributes = node['audit']['attributes'].to_h
+
+        # add chef node data as an attribute
+        attributes['chef_node'] = chef_node_attribute_data
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
@@ -259,6 +262,14 @@ class Chef
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end
+      end
+
+      # Gather Chef node attributes, etc. for passing to the InSpec run
+      def chef_node_attribute_data
+        node_data = node.to_h
+        node_data['chef_environment'] = node.chef_environment
+
+        node_data
       end
     end
   end

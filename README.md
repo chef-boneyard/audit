@@ -481,6 +481,31 @@ default['audit']['inspec_gem_source'] = 'http://internal.gem.server.com/gems'
 
 Please note that all dependencies to the `inspec` gem must also be hosted in this location.
 
+## Using Chef node data
+
+While it is recommended that InSpec profiles should be self-contained and not rely on external data unless
+necessary, there are valid use cases where a profile's test may exhibit different behavior depending on
+aspects of the node under test.
+
+To assist with these use cases, the audit cookbook will pass the Chef node object as an InSpec attribute
+named `chef_node`. This will provide the ability to write more flexible profiles:
+
+```ruby
+chef_node = attribute('chef_node', description: 'Chef Node', default: {})
+
+control 'no-password-auth-in-prod' do
+  title 'No Password Authentication in Production'
+  desc 'Password authentication is allowed in all environments except production'
+  impact 1.0
+
+  describe sshd_config do
+    its('PasswordAuthentication') { should cmp 'No' }
+  end
+
+  only_if { chef_node['chef_environment'] == 'production' }
+end
+```
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.

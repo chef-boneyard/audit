@@ -91,6 +91,7 @@ suites:
         reporter: json-file
         profiles:
           - git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
+          - git: https://github.com/adamleff/inspec-profile-chef-node-attributes.git
         attributes:
           file: /opt/kitchen/cache/attribute-file-exists.test
   - name: missing-profile-no-fail
