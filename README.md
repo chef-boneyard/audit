@@ -292,6 +292,14 @@ audit: {
 }
 ```
 
+The resulting file will be written to `<chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json`. The path will also be output to the Chef log:
+
+```
+[2017-08-29T00:22:10+00:00] INFO: Reporting to json-file
+[2017-08-29T00:22:10+00:00] INFO: Writing report to /opt/kitchen/cache/cookbooks/audit/inspec-20170829002210.json
+[2017-08-29T00:22:10+00:00] INFO: Report handlers complete
+```
+
 #### Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information
