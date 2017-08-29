@@ -1,5 +1,18 @@
 # Change Log
 
+## [v4.3.0](https://github.com/chef-cookbooks/audit/tree/v4.3.0) (2017-08-29)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.2.0...v4.3.0)
+
+**Closed issues:**
+
+- Document location of json reports when reporter is `json-file` [\#269](https://github.com/chef-cookbooks/audit/issues/269)
+- Feature enhancement request: Audit cookbook 4.2 to pass node data to Inspec  [\#268](https://github.com/chef-cookbooks/audit/issues/268)
+
+**Merged pull requests:**
+
+- Pass Chef node to InSpec as an attribute [\#271](https://github.com/chef-cookbooks/audit/pull/271) ([adamleff](https://github.com/adamleff))
+- Add json-file location to README [\#270](https://github.com/chef-cookbooks/audit/pull/270) ([adamleff](https://github.com/adamleff))
+
 ## [v4.2.0](https://github.com/chef-cookbooks/audit/tree/v4.2.0) (2017-08-10)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.1...v4.2.0)
 
@@ -9,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Release v4.2.0 [\#267](https://github.com/chef-cookbooks/audit/pull/267) ([adamleff](https://github.com/adamleff))
 - Add test for InSpec Attributes functionality [\#266](https://github.com/chef-cookbooks/audit/pull/266) ([adamleff](https://github.com/adamleff))
 - Disable default source when using user-supplied gem source [\#265](https://github.com/chef-cookbooks/audit/pull/265) ([adamleff](https://github.com/adamleff))
 - Support for attributes within audit cookbook [\#262](https://github.com/chef-cookbooks/audit/pull/262) ([mhedgpeth](https://github.com/mhedgpeth))
