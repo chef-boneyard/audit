@@ -16,7 +16,6 @@ end
 
 command('find /opt/kitchen/cache/cookbooks/audit -type f -a -name inspec\*.json').stdout.split.each do |f|
   describe json(f.to_s) do
-    its('version') { should eq node.value(['audit','inspec_version']) }
     its(['statistics','duration']) { should be < 10 }
   end
 end
