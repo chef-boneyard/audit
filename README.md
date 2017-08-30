@@ -487,8 +487,50 @@ While it is recommended that InSpec profiles should be self-contained and not re
 necessary, there are valid use cases where a profile's test may exhibit different behavior depending on
 aspects of the node under test.
 
-To assist with these use cases, the audit cookbook will pass the Chef node object as an InSpec attribute
-named `chef_node`. This will provide the ability to write more flexible profiles:
+There are two primary ways to pass Chef data to the InSpec run via the audit cookbook.
+
+### Option 1: Explicitly pass necessary data (recommended)
+
+Any data added to the `node['audit']['attributes']` hash will be passed as individual InSpec attributes.
+This provides a clean interface between the Chef run and InSpec profile, allowing for easy assignment
+of sane default values in the InSpec profile. This method is especially recommended if the InSpec profile
+is expected to be used outside of the context of the audit cookbook so it's extra clear to profile
+consumers what attributes are necessary.
+
+In a wrapper cookbook or similar, set your Chef attributes:
+
+```ruby
+node.normal['audit']['attributes']['key1'] = 'value1'
+node.normal['audit']['attributes']['debug_enabled'] = node['my_cookbook']['debug_enabled']
+node.normal['audit']['attributes']['environment'] = node.chef_environment
+```
+
+... and then use them in your InSpec profile:
+
+```ruby
+environment = attribute('environment', description: 'The chef environment for the node', default: 'dev')
+
+control 'debug-disabled-in-production' do
+  title 'Debug logs disabled in production'
+  desc 'Debug logs contain potentially sensitive information and should not be on in prod.'
+  impact 1.0
+
+  describe file('/path/to/my/app/config') do
+    its('content') { should_not include "debug=true" }
+  end
+
+  only_if { environment == 'production' }
+end
+```
+
+### Option 2: Use the chef node object
+
+In the event where it is not practical to opt-in to pass certain attributes and data, the audit cookbook will
+pass the Chef node object as an InSpec attribute named `chef_node`.
+
+While this provides the ability to write more flexible profiles, it makes it more difficult to reuse profiles
+outside of an audit cookbook run, requiring the profile user to know how to pass in a single attribute containing
+Chef-like data. Therefore, it is recommended to use Option 1 whenever possible.
 
 ```ruby
 chef_node = attribute('chef_node', description: 'Chef Node', default: {})
