@@ -1,5 +1,13 @@
 # Change Log
 
+## [v5.0.0](https://github.com/chef-cookbooks/audit/tree/v5.0.0) (2017-08-30)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.3.0...v5.0.0)
+
+**Merged pull requests:**
+
+- Make chef\_node attribute an opt-in feature [\#274](https://github.com/chef-cookbooks/audit/pull/274) ([adamleff](https://github.com/adamleff))
+- Add additional words to README re: using Chef node data [\#273](https://github.com/chef-cookbooks/audit/pull/273) ([adamleff](https://github.com/adamleff))
+
 ## [v4.3.0](https://github.com/chef-cookbooks/audit/tree/v4.3.0) (2017-08-29)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.2.0...v4.3.0)
 
@@ -10,6 +18,7 @@
 
 **Merged pull requests:**
 
+- Release v4.3.0 [\#272](https://github.com/chef-cookbooks/audit/pull/272) ([adamleff](https://github.com/adamleff))
 - Pass Chef node to InSpec as an attribute [\#271](https://github.com/chef-cookbooks/audit/pull/271) ([adamleff](https://github.com/adamleff))
 - Add json-file location to README [\#270](https://github.com/chef-cookbooks/audit/pull/270) ([adamleff](https://github.com/adamleff))
 
