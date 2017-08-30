@@ -532,6 +532,14 @@ While this provides the ability to write more flexible profiles, it makes it mor
 outside of an audit cookbook run, requiring the profile user to know how to pass in a single attribute containing
 Chef-like data. Therefore, it is recommended to use Option 1 whenever possible.
 
+To use this option, first enable it in a wrapper cookbook or similar:
+
+```ruby
+node.override['audit']['chef_node_attribute_enabled'] = true
+```
+
+... and then use it in your profile:
+
 ```ruby
 chef_node = attribute('chef_node', description: 'Chef Node', default: {})
 

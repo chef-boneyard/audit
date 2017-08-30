@@ -32,8 +32,8 @@ class Chef
         fetcher = node['audit']['fetcher']
         attributes = node['audit']['attributes'].to_h
 
-        # add chef node data as an attribute
-        attributes['chef_node'] = chef_node_attribute_data
+        # add chef node data as an attribute if enabled
+        attributes['chef_node'] = chef_node_attribute_data if node['audit']['chef_node_attribute_enabled']
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
