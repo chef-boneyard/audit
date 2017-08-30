@@ -91,9 +91,25 @@ suites:
         reporter: json-file
         profiles:
           - git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
-          - git: https://github.com/adamleff/inspec-profile-chef-node-attributes.git
         attributes:
           file: /opt/kitchen/cache/attribute-file-exists.test
+  - name: chef-node-enabled
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        profiles:
+          - url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
+        chef_node_attribute_enabled: true
+  - name: chef-node-disabled
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        profiles:
+          - url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
   - name: missing-profile-no-fail
     run_list:
       - recipe[test_helper::setup]

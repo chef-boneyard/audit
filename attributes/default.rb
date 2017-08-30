@@ -85,3 +85,7 @@ default['audit']['profiles'] = []
 
 # Attributes used to run the given profiles
 default['audit']['attributes'] = {}
+
+# If enabled, a hash of the Chef "node" object will be sent to InSpec in an attribute
+# named `chef_node`
+default['audit']['chef_node_attribute_enabled'] = false
