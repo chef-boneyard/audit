@@ -118,7 +118,7 @@ class Chef
       # sets format to json-min when chef-compliance, json when chef-automate
       def get_opts(format, quiet, attributes)
         output = quiet ? ::File::NULL : $stdout
-        Chef::Log.warn "Format is #{format}"
+        Chef::Log.debug "Format is #{format}"
         opts = {
           'report' => true,
           'format' => format,
