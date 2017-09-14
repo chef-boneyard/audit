@@ -7,7 +7,7 @@ def load_inspec_libs
     Chef::Log.warn "Wrong version of inspec (#{Inspec::VERSION}), please "\
       'remove old versions (/opt/chef/embedded/bin/gem uninstall inspec).'
   else
-    Chef::Log.warn "Using inspec version: (#{Inspec::VERSION})"
+    Chef::Log.info "Using inspec version: (#{Inspec::VERSION})"
   end
   require 'bundles/inspec-compliance/api'
   require 'bundles/inspec-compliance/http'
