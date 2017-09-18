@@ -59,7 +59,7 @@ module Reporter
         end
 
         begin
-          Chef::Log.warn "Report to Chef Automate: #{@url}"
+          Chef::Log.info "Report to Chef Automate: #{@url}"
           Chef::Log.debug "Audit Report: #{json_report}"
           http = Chef::HTTP.new(@url)
           http.post(nil, json_report, headers)
