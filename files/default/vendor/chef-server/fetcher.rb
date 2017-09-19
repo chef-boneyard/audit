@@ -30,7 +30,12 @@ module ChefServer
 
       return nil if uri.nil?
 
-      profile = uri.host + uri.path
+      if uri.user
+        profile = uri.user + '@' + uri.host + uri.path
+      else
+        profile = uri.host + uri.path
+      end
+
       config = {
         'insecure' => true,
       }
