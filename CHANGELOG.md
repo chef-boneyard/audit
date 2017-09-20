@@ -1,10 +1,24 @@
 # Change Log
 
+## [v5.0.1](https://github.com/chef-cookbooks/audit/tree/v5.0.1) (2017-09-20)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.0...v5.0.1)
+
+**Closed issues:**
+
+- Warning for format [\#277](https://github.com/chef-cookbooks/audit/issues/277)
+- UndefinedConversionError: "\xEF" from ASCII-8BIT to UTF-8 [\#276](https://github.com/chef-cookbooks/audit/issues/276)
+
+**Merged pull requests:**
+
+- Fix Chef deprecation warnings in inspec\_gem resource [\#279](https://github.com/chef-cookbooks/audit/pull/279) ([adamleff](https://github.com/adamleff))
+- The "Format is" log message should debug level [\#278](https://github.com/chef-cookbooks/audit/pull/278) ([xblitz](https://github.com/xblitz))
+
 ## [v5.0.0](https://github.com/chef-cookbooks/audit/tree/v5.0.0) (2017-08-30)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.3.0...v5.0.0)
 
 **Merged pull requests:**
 
+- Release v5.0.0 [\#275](https://github.com/chef-cookbooks/audit/pull/275) ([adamleff](https://github.com/adamleff))
 - Make chef\_node attribute an opt-in feature [\#274](https://github.com/chef-cookbooks/audit/pull/274) ([adamleff](https://github.com/adamleff))
 - Add additional words to README re: using Chef node data [\#273](https://github.com/chef-cookbooks/audit/pull/273) ([adamleff](https://github.com/adamleff))
 
