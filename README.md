@@ -541,7 +541,7 @@ node.override['audit']['chef_node_attribute_enabled'] = true
 ... and then use it in your profile:
 
 ```ruby
-chef_node = attribute('chef_node', description: 'Chef Node', default: {})
+chef_node = attribute('chef_node', description: 'Chef Node')
 
 control 'no-password-auth-in-prod' do
   title 'No Password Authentication in Production'
