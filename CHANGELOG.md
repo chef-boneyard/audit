@@ -1,5 +1,18 @@
 # Change Log
 
+## [v5.0.2](https://github.com/chef-cookbooks/audit/tree/v5.0.2) (2017-09-27)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.1...v5.0.2)
+
+**Fixed bugs:**
+
+- Default chef attributes value may lead to accessing nil. [\#282](https://github.com/chef-cookbooks/audit/issues/282)
+
+**Merged pull requests:**
+
+- simplify profile url code [\#284](https://github.com/chef-cookbooks/audit/pull/284) ([arlimus](https://github.com/arlimus))
+- let inspec set the default attribute for chef node attributes [\#283](https://github.com/chef-cookbooks/audit/pull/283) ([arlimus](https://github.com/arlimus))
+- Handle '@' in username when grabbing compliance profiles [\#280](https://github.com/chef-cookbooks/audit/pull/280) ([kevinreedy](https://github.com/kevinreedy))
+
 ## [v5.0.1](https://github.com/chef-cookbooks/audit/tree/v5.0.1) (2017-09-20)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.0...v5.0.1)
 
@@ -10,6 +23,7 @@
 
 **Merged pull requests:**
 
+- Release v5.0.1 [\#281](https://github.com/chef-cookbooks/audit/pull/281) ([adamleff](https://github.com/adamleff))
 - Fix Chef deprecation warnings in inspec\_gem resource [\#279](https://github.com/chef-cookbooks/audit/pull/279) ([adamleff](https://github.com/adamleff))
 - The "Format is" log message should debug level [\#278](https://github.com/chef-cookbooks/audit/pull/278) ([xblitz](https://github.com/xblitz))
 
