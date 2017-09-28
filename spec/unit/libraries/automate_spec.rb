@@ -66,6 +66,8 @@ describe 'Reporter::ChefAutomate methods' do
       "end_time":"2016-07-19T19:19:19+01:00",
       "node_uuid":"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
       "environment":"My Prod Env",
+      "roles": ["base_linux", "apache_linux"],
+      "recipes": ["some_cookbook::some_recipe","some_cookbook"],
       "report_uuid":"3f0536f7-3361-4bca-ae53-b45118dceb5d"
       }
 

@@ -14,6 +14,8 @@ module Reporter
       @node_name = opts[:node_info][:node]
       @insecure = opts[:insecure]
       @environment = opts[:node_info][:environment]
+      @roles = opts[:node_info][:roles]
+      @recipes = opts[:node_info][:recipes]
       @url = opts[:url]
     end
 

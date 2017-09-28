@@ -168,14 +168,17 @@ class Chef
       # extracts relevant node data
       def gather_nodeinfo
         n = run_context.node
+        runlist_roles = n.run_list.select { |item| item.type == :role }.map(&:name)
+        runlist_recipes = n.run_list.select { |item| item.type == :recipe }.map(&:name)
         {
           node: n.name,
           os: {
-            # arch: n['arch'],
             release: n['platform_version'],
             family: n['platform'],
           },
           environment: n.environment,
+          roles: runlist_roles,
+          recipes: runlist_recipes,
         }
       end
 
