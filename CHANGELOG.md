@@ -1,5 +1,12 @@
 # Change Log
 
+## [v5.0.3](https://github.com/chef-cookbooks/audit/tree/v5.0.3) (2017-10-02)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.2...v5.0.3)
+
+**Merged pull requests:**
+
+- Enrich report with roles and recipes [\#287](https://github.com/chef-cookbooks/audit/pull/287) ([alexpop](https://github.com/alexpop))
+
 ## [v5.0.2](https://github.com/chef-cookbooks/audit/tree/v5.0.2) (2017-09-27)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.1...v5.0.2)
 
@@ -9,6 +16,7 @@
 
 **Merged pull requests:**
 
+- Release v5.0.2 [\#285](https://github.com/chef-cookbooks/audit/pull/285) ([adamleff](https://github.com/adamleff))
 - simplify profile url code [\#284](https://github.com/chef-cookbooks/audit/pull/284) ([arlimus](https://github.com/arlimus))
 - let inspec set the default attribute for chef node attributes [\#283](https://github.com/chef-cookbooks/audit/pull/283) ([arlimus](https://github.com/arlimus))
 - Handle '@' in username when grabbing compliance profiles [\#280](https://github.com/chef-cookbooks/audit/pull/280) ([kevinreedy](https://github.com/kevinreedy))
