@@ -1,7 +1,9 @@
 class MockData
   def self.node_info
-    { node: "chef-client.solo",
-      environment: 'My Prod Env' }
+    { node: 'chef-client.solo',
+      environment: 'My Prod Env',
+      roles: ['base_linux', 'apache_linux'],
+      recipes: ['some_cookbook::some_recipe','some_cookbook'] }
   end
 
   def self.inspec_results

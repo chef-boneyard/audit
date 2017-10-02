@@ -14,6 +14,8 @@ module Reporter
       @run_id = opts[:run_id]
       @node_name = opts[:node_info][:node]
       @environment = opts[:node_info][:environment]
+      @roles = opts[:node_info][:roles]
+      @recipes = opts[:node_info][:recipes]
       @insecure = opts[:insecure]
 
       if defined?(Chef) &&
@@ -96,6 +98,8 @@ module Reporter
       final_report[:end_time]    = DateTime.now.iso8601
       final_report[:node_uuid]   = @entity_uuid
       final_report[:environment] = @environment
+      final_report[:roles]       = @roles
+      final_report[:recipes]     = @recipes
       final_report[:report_uuid] = @run_id
       final_report
     end
