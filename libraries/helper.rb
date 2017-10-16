@@ -121,7 +121,9 @@ module ReportHelpers
     Chef::Log.info("loading handler from #{libpath}")
     $LOAD_PATH.unshift(libpath) unless $LOAD_PATH.include?(libpath)
     require libpath
-    Chef::Config.send('report_handlers') << Chef::Handler::AuditReport.new
+    handler = Chef::Handler::AuditReport.new
+    Chef::Config.send('report_handlers') << handler
+    Chef::Config.send('exception_handlers') << handler
   end
 
   # taking node['audit'] as parameter so that it can be called from the chef-server fetcher as well
