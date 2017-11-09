@@ -18,6 +18,7 @@
 # limitations under the License.
 
 require 'spec_helper'
+require 'time'
 require_relative '../../../libraries/reporters/automate'
 require_relative '../../data/mock.rb'
 
@@ -63,7 +64,7 @@ describe 'Reporter::ChefAutomate methods' do
       "statistics":{"duration":0.032332},
       "type":"inspec_report",
       "node_name":"chef-client.solo",
-      "end_time":"2016-07-19T19:19:19+01:00",
+      "end_time":"2016-07-19T18:19:19Z",
       "node_uuid":"aaaaaaaa-709a-475d-bef5-zzzzzzzzzzzz",
       "environment":"My Prod Env",
       "roles": ["base_linux", "apache_linux"],
@@ -88,12 +89,12 @@ describe 'Reporter::ChefAutomate methods' do
   end
 
   it 'sends report successfully to ChefAutomate' do
-    allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
+    allow(Time).to receive(:now).and_return(Time.parse('2016-07-19T19:19:19+01:00'))
     expect(@automate.send_report(MockData.inspec_results)).to eq(true)
   end
 
   it 'enriches report correctly with the most test coverage' do
-    allow(DateTime).to receive(:now).and_return(DateTime.parse('2016-07-19T19:19:19+01:00'))
+    allow(Time).to receive(:now).and_return(Time.parse('2016-07-19T19:19:19+01:00'))
     expect(@automate.enriched_report(MockData.inspec_results)).to eq(@enriched_report_expected)
   end
 
