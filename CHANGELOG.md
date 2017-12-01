@@ -1,10 +1,24 @@
 # Change Log
 
+## [v5.0.4](https://github.com/chef-cookbooks/audit/tree/v5.0.4) (2017-11-22)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.3...v5.0.4)
+
+**Closed issues:**
+
+- attributes not being pulled into control [\#293](https://github.com/chef-cookbooks/audit/issues/293)
+-  ERROR: Audit report was not generated properly, skipped reporting [\#291](https://github.com/chef-cookbooks/audit/issues/291)
+
+**Merged pull requests:**
+
+- Add CODEOWNERS for audit cookbook [\#294](https://github.com/chef-cookbooks/audit/pull/294) ([adamleff](https://github.com/adamleff))
+- Send end\_time as utc RFC3339 [\#292](https://github.com/chef-cookbooks/audit/pull/292) ([alexpop](https://github.com/alexpop))
+
 ## [v5.0.3](https://github.com/chef-cookbooks/audit/tree/v5.0.3) (2017-10-02)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.2...v5.0.3)
 
 **Merged pull requests:**
 
+- Release v5.0.3 [\#288](https://github.com/chef-cookbooks/audit/pull/288) ([arlimus](https://github.com/arlimus))
 - Enrich report with roles and recipes [\#287](https://github.com/chef-cookbooks/audit/pull/287) ([alexpop](https://github.com/alexpop))
 
 ## [v5.0.2](https://github.com/chef-cookbooks/audit/tree/v5.0.2) (2017-09-27)

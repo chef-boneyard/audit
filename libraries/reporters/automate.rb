@@ -95,7 +95,7 @@ module Reporter
       # addition in InSpec and will be remove in the next inspec major release
       final_report.delete(:controls)
       final_report[:node_name]   = @node_name
-      final_report[:end_time]    = DateTime.now.iso8601
+      final_report[:end_time]    = Time.now.utc.strftime('%FT%TZ')
       final_report[:node_uuid]   = @entity_uuid
       final_report[:environment] = @environment
       final_report[:roles]       = @roles
