@@ -38,10 +38,8 @@ class Chef
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
-        # check if we have a valid version for backend caching
-        if node['audit']['inspec_backend_cache'] && (Gem::Version.new(::Inspec::VERSION) < Gem::Version.new('1.47.0'))
-          Chef::Log.warn 'inspec_backend_cache requires Inspec version >= 1.47.0'
-        end
+        # confirm our inspec version is valid
+        validate_inspec_version
 
         # detect if we run in a chef client with chef server
         load_chef_fetcher if reporters.include?('chef-server') ||
@@ -93,6 +91,16 @@ class Chef
         @run_status = nil
       end
 
+      def validate_inspec_version
+        minimum_ver_msg = "This audit cookbook version requires InSpec #{MIN_INSPEC_VERSION} or newer, aborting compliance scan..."
+        raise minimum_ver_msg if Gem::Version.new(::Inspec::VERSION) < Gem::Version.new(MIN_INSPEC_VERSION)
+
+        # check if we have a valid version for backend caching
+        backend_cache_msg = 'inspec_backend_cache requires InSpec version >= 1.47.0'
+        Chef::Log.warn backend_cache_msg if node['audit']['inspec_backend_cache'] &&
+                                            (Gem::Version.new(::Inspec::VERSION) < Gem::Version.new('1.47.0'))
+      end
+
       def load_needed_dependencies
         require 'inspec'
         # load supermarket plugin, this is part of the inspec gem
@@ -129,7 +137,7 @@ class Chef
           'format' => format,
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
-          :backend_cache => node['audit']['inspec_backend_cache'],
+          backend_cache: node['audit']['inspec_backend_cache'],
           attributes: attributes,
         }
         opts
@@ -138,10 +146,6 @@ class Chef
       # run profiles and return report
       def call(opts, profiles)
         Chef::Log.info "Using InSpec #{::Inspec::VERSION}"
-        if Gem::Version.new(::Inspec::VERSION) < Gem::Version.new(MIN_INSPEC_VERSION)
-          raise "This audit cookbook version requires InSpec #{MIN_INSPEC_VERSION} or newer, aborting compliance scan..."
-        end
-
         Chef::Log.debug "Options are set to: #{opts}"
         runner = ::Inspec::Runner.new(opts)
 
