@@ -38,6 +38,11 @@ class Chef
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
 
+        # check if we have a valid version for backend caching
+        if node['audit']['inspec_backend_cache'] && (Gem::Version.new(::Inspec::VERSION) < Gem::Version.new('1.47.0'))
+          Chef::Log.warn 'inspec_backend_cache requires Inspec version >= 1.47.0'
+        end
+
         # detect if we run in a chef client with chef server
         load_chef_fetcher if reporters.include?('chef-server') ||
                              reporters.include?('chef-server-compliance') ||
@@ -124,6 +129,7 @@ class Chef
           'format' => format,
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
+          :backend_cache => node['audit']['inspec_backend_cache'],
           attributes: attributes,
         }
         opts

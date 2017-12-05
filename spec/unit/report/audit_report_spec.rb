@@ -58,6 +58,13 @@ describe 'Chef::Handler::AuditReport methods' do
   end
 
   describe 'get_opts method' do
+    let(:mynode) { Chef::Node.new }
+
+    before :each do
+      mynode.default['audit']['inspec_backend_cache'] = true
+      allow(@audit_report).to receive(:node).and_return(mynode)
+    end
+
     it 'sets the format to json-min' do
       format = 'json-min'
       quiet = true
@@ -66,6 +73,7 @@ describe 'Chef::Handler::AuditReport methods' do
       expect(opts['format']).to eq('json-min')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:backend_cache]).to be true
       expect(opts[:attributes].empty?).to be true
     end
     it 'sets the format to json-min' do
@@ -76,6 +84,7 @@ describe 'Chef::Handler::AuditReport methods' do
       expect(opts['format']).to eq('json')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:backend_cache]).to be true
       expect(opts[:attributes].empty?).to be true
     end
     it 'sets the attributes' do
