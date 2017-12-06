@@ -24,8 +24,15 @@ require_relative '../../../files/default/handler/audit_report'
 require_relative '../../data/mock.rb'
 
 describe 'Chef::Handler::AuditReport methods' do
+  let(:mynode) { Chef::Node.new }
+
+  def set_inspec_backend_cache(status = false)
+    mynode.default['audit']['inspec_backend_cache'] = status
+    allow(@audit_report).to receive(:node).and_return(mynode)
+  end
+
   before :each do
-    @audit_report = Chef::Handler::AuditReport.new()
+    @audit_report = Chef::Handler::AuditReport.new
   end
 
   describe ReportHelpers do
@@ -57,25 +64,68 @@ describe 'Chef::Handler::AuditReport methods' do
     end
   end
 
+  describe 'validate_inspec_version method' do
+    before :each do
+      require 'inspec'
+    end
+
+    it 'inspec min version fail' do
+      stub_const("Inspec::VERSION", '1.20.0')
+      expect { @audit_report.validate_inspec_version }.
+        to raise_error(RuntimeError).
+        with_message('This audit cookbook version requires InSpec 1.25.1 or newer, aborting compliance scan...')
+    end
+    it 'inspec version warn for backend_cache' do
+      stub_const("Inspec::VERSION", '1.46.0')
+      set_inspec_backend_cache(true)
+      expect(Chef::Log).to receive(:warn).
+        with('inspec_backend_cache requires InSpec version >= 1.47.0').
+        and_return('captured')
+      expect(@audit_report.validate_inspec_version).to eq('captured')
+    end
+    it 'inspec version passes all requirements' do
+      stub_const("Inspec::VERSION", '1.47.0')
+      set_inspec_backend_cache(true)
+      expect(Chef::Log).to_not receive(:warn)
+      expect { @audit_report.validate_inspec_version }.to_not raise_error
+    end
+  end
+
   describe 'get_opts method' do
     it 'sets the format to json-min' do
       format = 'json-min'
       quiet = true
+      set_inspec_backend_cache(true)
       opts = @audit_report.get_opts(format, quiet, {})
       expect(opts['report']).to be true
       expect(opts['format']).to eq('json-min')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:backend_cache]).to be true
       expect(opts[:attributes].empty?).to be true
     end
-    it 'sets the format to json-min' do
+    it 'sets the format to json' do
       format = 'json'
       quiet = true
+      set_inspec_backend_cache(true)
       opts = @audit_report.get_opts(format, quiet, {})
       expect(opts['report']).to be true
       expect(opts['format']).to eq('json')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:backend_cache]).to be true
+      expect(opts[:attributes].empty?).to be true
+    end
+    it 'sets the backend_cache to false' do
+      format = 'json'
+      quiet = true
+      set_inspec_backend_cache(false)
+      opts = @audit_report.get_opts(format, quiet, {})
+      expect(opts['report']).to be true
+      expect(opts['format']).to eq('json')
+      expect(opts['output']).to eq('/dev/null')
+      expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:backend_cache]).to be false
       expect(opts[:attributes].empty?).to be true
     end
     it 'sets the attributes' do
@@ -85,6 +135,7 @@ describe 'Chef::Handler::AuditReport methods' do
         first: 'value1',
         second: 'value2'
       }
+      set_inspec_backend_cache(true)
       opts = @audit_report.get_opts(format, quiet, attributes)
       expect(opts[:attributes][:first]).to eq('value1')
       expect(opts[:attributes][:second]).to eq('value2')

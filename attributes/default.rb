@@ -24,6 +24,10 @@ default['audit']['inspec_version'] = nil
 # notes: the root of the URL must host the *specs.4.8.gz source index
 default['audit']['inspec_gem_source'] = nil
 
+# If enabled, a cache is built for all backend calls. This should only be
+# disabled if you are expecting unique results from the same backend call.
+default['audit']['inspec_backend_cache'] = true
+
 # controls where inspec scan reports are sent
 # possible values: 'chef-server-automate', 'chef-server-compliance', 'chef-compliance', 'chef-automate', 'json-file'
 # notes: 'chef-automate' requires inspec version 0.27.1 or greater
