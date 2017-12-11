@@ -556,6 +556,18 @@ control 'no-password-auth-in-prod' do
 end
 ```
 
+## Using the InSpec Backend Cache
+
+**Introduced in Audit Cookbook v6.0.0 and InSpec v1.47.0**
+
+InSpec v1.47.0 provides the ability to cache the result of commands executed on the node being tested. This drastically improves InSpec performance when slower-running commands are run multiple times during execution.
+
+This feature is **enabled by default** in the audit cookbook. If your profile runs a command multiple times and expects output to be different each time, you may have to disable this feature. To do so, set the `inspec_backend_cache` attribute to `false`:
+
+```ruby
+node.normal['audit']['inspec_backend_cache'] = false
+```
+
 ## Troubleshooting
 
 Please refer to TROUBLESHOOTING.md.
