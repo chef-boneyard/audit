@@ -23,8 +23,12 @@ module Reporter
       req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
 
       min_report = transform(report)
-      json_report = enriched_report(min_report, @source_location)
-      req.body = json_report.to_json
+      json_report = enriched_report(min_report, @source_location).to_json
+      req.body = json_report
+      report_size = json_report.bytesize
+      if report_size > 5*1024*1024
+        Chef::Log.warn "Compliance report size is #{(report_size / (1024*1024.0)).round(2)} MB."
+      end
 
       # TODO: use secure option
       uri = URI(@url)

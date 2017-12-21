@@ -38,6 +38,10 @@ module Reporter
       end
 
       json_report = enriched_report(report).to_json
+      report_size = json_report.bytesize
+      if report_size > 5*1024*1024
+        Chef::Log.warn "Compliance report size is #{(report_size / (1024*1024.0)).round(2)} MB."
+      end
 
       unless json_report
         Chef::Log.warn 'Something went wrong, report can\'t be nil'

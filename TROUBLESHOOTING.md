@@ -2,7 +2,7 @@
 
 ## HTTP Errors
 
-**401, 403 Unauthorized - bad clock**
+### 401, 403 Unauthorized - bad clock
 
 Occasionally, the system date/time will drift between client and server.  If this drift is greater than a couple of minutes, the Chef Server will throw a 401 unauthorized and the request will not be forwarded to the Compliance server.
 
@@ -34,7 +34,7 @@ Additionally, the chef_gate log will contain a similar message:
 2016-08-28_15:01:34.88704 Error #01: Authentication failed. Please check your system's clock.
 ```
 
-**401 Token and Refresh Token Authentication**
+### 401 Token and Refresh Token Authentication
 
 In the event of a malformed or unset token, the Chef Compliance server will log the token error:
 ```
@@ -45,3 +45,45 @@ In the event of a malformed or unset token, the Chef Compliance server will log 
 ==> /var/log/chef-compliance/nginx/compliance.access.log <==
 192.168.200.102 - - [28/Aug/2016:21:23:46 +0000] "GET /api/owners/base/compliance/linux/tar HTTP/1.1" 401 0 "-" "Ruby"
 ```
+
+### 413 Request Entity Too Large
+
+If the `audit` cookbook report handler prints this stacktrace:
+```
+Running handlers:
+[2017-12-21T16:21:15+00:00] WARN: Compliance report size is 1.71 MB.
+[2017-12-21T16:21:15+00:00] ERROR: 413 "Request Entity Too Large" (Net::HTTPServerException)
+/opt/chef/embedded/lib/ruby/2.4.0/net/http/response.rb:122:in `error!'
+/opt/chef/embedded/lib/ruby/gems/2.4.0/gems/chef-13.6.4/lib/chef/http.rb:152:in `request'
+/opt/chef/embedded/lib/ruby/gems/2.4.0/gems/chef-13.6.4/lib/chef/http.rb:131:in `post'
+/var/chef/cache/cookbooks/audit/libraries/reporters/cs_automate.rb:37:in `block in send_report'
+...
+```
+
+and the Chef Server Nginx logs confirm the `413` error:
+```
+==> /var/log/opscode/nginx/access.log <==
+192.168.56.40 - - [21/Dec/2017:11:35:30 +0000]  "POST /organizations/eu_org/data-collector HTTP/1.1" 413 "0.803" 64 "-" "Chef Client/13.6.4 (ruby-2.4.2-p198; ohai-13.6.0; x86_64-linux; +https://chef.io)" "-" "-" "-" "13.6.4" "algorithm=sha1;version=1.1;" "bootstrapped-node" "2017-12-21T11:35:31Z" "GR6RyPvKkZDaGyQDYCPfoQGS8G4=" 1793064
+```
+
+you most likely hit the `erchef` request size in Chef Server that defaults to ~1MB. To double this limit, add the following line in Chef Server's `/etc/opscode/chef-server.rb`:
+```
+opscode_erchef['max_request_size'] = 2000000
+```
+and run `chef-server-ctl reconfigure` to apply this change.
+
+## Chef Automate Backend Errors
+
+If a Compliance report is not becoming available in the Chef Automate UI or API and this error shows up in the `logstash` logs:
+```
+/var/log/delivery/logstash/current
+2017-12-21_13:59:54.69949 DEBUG: Ruby filter is processing an 'inspec_profile' event
+2017-12-21_14:00:16.51553 java.lang.OutOfMemoryError: Java heap space
+2017-12-21_14:00:16.51556 Dumping heap to /opt/delivery/embedded/logstash/heapdump.hprof ...
+2017-12-21_14:00:16.51556 Unable to create /opt/delivery/embedded/logstash/heapdump.hprof: File exists
+2017-12-21_14:00:18.50676 Error: Your application used more memory than the safety cap of 383M.
+2017-12-21_14:00:18.50694 Specify -J-Xmx####m to increase it (#### = cap size in MB).
+2017-12-21_14:00:18.50703 Specify -w for full OutOfMemoryError stack trace
+```
+
+you have reached the java heap size(`-Xmx`) limit of `logstash`. This is automatically set during `automate-ctl reconfigure` to 10% of the system memory.
