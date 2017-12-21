@@ -276,6 +276,16 @@ Version compatibility matrix:
 |   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
 
 
+#### Compliance Report size limitations
+
+The size of the report being generated from running the compliance scan is influenced by a few factors like:
+ * number of controls and tests in a profile
+ * number of profile failures for the node
+ * controls metadata (title, description, tags, etc)
+ * number of resources (users, processes, etc) that are being tested
+
+Depending on your setup, there are some limits you need to be aware of. A common one is Chef Server default (1MB) request size. Exceeding this limit will reject the report with `ERROR: 413 "Request Entity Too Large"`. For more details about these limits, please refer to [TROUBLESHOOTING.md](TROUBLESHOOTING.md#413-request-entity-too-large).
+
 #### Write to file on disk
 
 To write the report to a file on disk, simply set the `reporter` to 'json-file' like so:
@@ -570,7 +580,7 @@ node.normal['audit']['inspec_backend_cache'] = false
 
 ## Troubleshooting
 
-Please refer to TROUBLESHOOTING.md.
+Please refer to [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
 Please let us know if you have any [issues](https://github.com/chef-cookbooks/audit/issues), we are happy to help.
 
