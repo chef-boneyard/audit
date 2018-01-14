@@ -1,5 +1,36 @@
 # Change Log
 
+## [v6.0.1](https://github.com/chef-cookbooks/audit/tree/v6.0.1) (2018-01-13)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.1...v6.0.1)
+
+**Closed issues:**
+
+- Chef inspec giving error during client run [\#300](https://github.com/chef-cookbooks/audit/issues/300)
+
+## [v6.0.1](https://github.com/chef-cookbooks/audit/tree/v6.0.1) (2017-12-21)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.0...v6.0.1)
+
+**Closed issues:**
+
+- Activate inspec cache by default to boost Windows execution [\#296](https://github.com/chef-cookbooks/audit/issues/296)
+
+**Merged pull requests:**
+
+- Update reporters to log report size. Update readme [\#299](https://github.com/chef-cookbooks/audit/pull/299) ([alexpop](https://github.com/alexpop))
+- README update for inspec\_backend\_cache feature [\#298](https://github.com/chef-cookbooks/audit/pull/298) ([adamleff](https://github.com/adamleff))
+
+## [v6.0.0](https://github.com/chef-cookbooks/audit/tree/v6.0.0) (2017-12-06)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.4...v6.0.0)
+
+**Closed issues:**
+
+- Audit doesn't run when CCR fails [\#289](https://github.com/chef-cookbooks/audit/issues/289)
+
+**Merged pull requests:**
+
+- Enable Inspec caching [\#297](https://github.com/chef-cookbooks/audit/pull/297) ([jquick](https://github.com/jquick))
+- Include handler in exception handlers as well as report handlers [\#290](https://github.com/chef-cookbooks/audit/pull/290) ([drrk](https://github.com/drrk))
+
 ## [v5.0.4](https://github.com/chef-cookbooks/audit/tree/v5.0.4) (2017-11-22)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.3...v5.0.4)
 
@@ -10,6 +41,7 @@
 
 **Merged pull requests:**
 
+- 5.0.4 [\#295](https://github.com/chef-cookbooks/audit/pull/295) ([alexpop](https://github.com/alexpop))
 - Add CODEOWNERS for audit cookbook [\#294](https://github.com/chef-cookbooks/audit/pull/294) ([adamleff](https://github.com/adamleff))
 - Send end\_time as utc RFC3339 [\#292](https://github.com/chef-cookbooks/audit/pull/292) ([alexpop](https://github.com/alexpop))
 
