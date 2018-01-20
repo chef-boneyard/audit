@@ -454,6 +454,20 @@ control "blog-1" do
 end
 ```
 
+### Disabling 'audit mode' in  the Chef client
+
+The audit cookbook and Chef's own "Audit Mode" are not compatible due to global state management done by RSpec which is used by both implementations. To prevent unexpected results, the audit cookbook will prevent Chef from continuing if "Audit Mode" is not disabled.
+
+You can use the [chef-client cookbook](https://supermarket.chef.io/cookbooks/chef-client) to disable "Audit Mode" on all of your nodes to permit use of the audit cookbook. As an example, when using the chef-client cookbook you can add this configuration to `default_attributes` section of a role and add the chef-client cookbook to the run list.
+
+```
+"chef_client": {
+  "config": {
+    "audit_mode": ":disabled"
+  }
+},
+```
+
 ## Interval Settings
 
 If you have long running audit profiles that you don't wish to execute on every chef-client run,
