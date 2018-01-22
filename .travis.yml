@@ -10,8 +10,11 @@ dist: trusty
 services:
 - docker
 before_install:
-- gem install bundler
+- gem update --system
 - gem --version
+- rvm @global do gem uninstall bundler -a -x
+- rvm @global do gem install bundler
+- bundle --version
 matrix:
   include:
   - rvm: 2.2
