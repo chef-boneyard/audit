@@ -143,7 +143,12 @@ suites:
         server: <%= ENV['COMPLIANCE_API'] %>
         token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
         owner: admin
-        profiles: *profiles
+        profiles:
+          - name: ssh-hardening
+            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
+          - git: https://github.com/dev-sec/tests-ssh-hardening.git
+          - name: ssh-baseline
+            supermarket: dev-sec/ssh-baseline
   - name: gem-install-version
     run_list:
       - recipe[test_helper::install_inspec]
