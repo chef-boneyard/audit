@@ -12,8 +12,6 @@ services:
 before_install:
 - gem update --system
 - gem --version
-- rvm @global do gem uninstall bundler -a -x
-- rvm @global do gem install bundler
 - bundle --version
 matrix:
   include:
