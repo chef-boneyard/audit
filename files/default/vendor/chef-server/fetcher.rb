@@ -36,7 +36,12 @@ module ChefServer
       config = {
         'insecure' => true,
       }
-      new(target_url(profile, config), config)
+
+      if target.respond_to?(:key?) && target.key?(:version)
+        new(target_url(profile, config, target[:version]), config)
+      else
+        new(target_url(profile, config), config)
+      end
     rescue URI::Error => _e
       nil
     end
@@ -56,9 +61,13 @@ module ChefServer
       ''
     end
 
-    def self.target_url(profile, config)
+    def self.target_url(profile, config, version = nil)
       o, p = profile.split('/')
-      reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/tar"
+      if version
+        reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/version/#{version}/tar"
+      else
+        reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/tar"
+      end
 
       if config['insecure']
         Chef::Config[:verify_api_cert] = false
