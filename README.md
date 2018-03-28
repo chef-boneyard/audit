@@ -102,6 +102,12 @@ Also beginning with version 3.x of the `audit` cookbook, the default version of 
 
 To install a different version of the InSpec gem, or to force installation of the gem, set the `node['audit']['inspec_version']` attribute to the version you wish to be installed.
 
+Note on AIX Support:
+
+ * InSpec is only supported via the bundled InSpec gem shipped with version >= 13 of the chef-client package.
+ * Standalone InSpec gem installation or upgrade is not supported.
+ * The default `nil` value of `node['audit']['inspec_version']` will ensure the above behavior is adhered to.
+
 ### Configure node
 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. A complete list of the possible configuration are documented in [Supported Configurations](docs/supported_configuration.md). For example you can define the attributes in a role or environment file like this:
