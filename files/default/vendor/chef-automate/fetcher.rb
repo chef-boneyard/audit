@@ -23,7 +23,11 @@ module ChefAutomate
         # verifies that the target e.g base/ssh exists
         profile = sanitize_profile_name(uri)
         owner, id = profile.split('/')
-        profile_path = "/compliance/profiles/#{owner}/#{id}/tar"
+        if target.respond_to?(:key?) && target.key?(:version)
+          profile_path = "/compliance/profiles/#{owner}/#{id}/version/#{target[:version]}/tar"
+        else
+          profile_path = "/compliance/profiles/#{owner}/#{id}/tar"
+        end
         dc = Chef::Config[:data_collector]
         url = URI(dc[:server_url])
         url.path = profile_path
