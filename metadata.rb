@@ -14,6 +14,7 @@ chef_version '>= 12.5.1' if respond_to?(:chef_version)
 
 depends 'compat_resource'
 
+supports 'aix'
 supports 'amazon'
 supports 'centos'
 supports 'debian'
