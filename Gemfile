@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'chef', '>= 12.5.1', '<14.0.0'
+gem 'chef', '>= 12.5.1'
 
 if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.2.2')
   gem 'json', '~> 1.8'
