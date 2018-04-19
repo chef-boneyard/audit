@@ -28,7 +28,7 @@ action :install do
 
   if installation_required
     converge_by 'install latest InSpec version' do
-      install_inspec_gem(version: version, source: source)
+      install_inspec_gem(version: new_resource.version, source: new_resource.source)
     end
   else
     Chef::Log.info("inspec_gem: not installing InSpec. It's already installed or an explicit version was not supplied.")
