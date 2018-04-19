@@ -1,11 +1,22 @@
 # Change Log
 
-## [v6.0.1](https://github.com/chef-cookbooks/audit/tree/v6.0.1) (2018-01-13)
-[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.1...v6.0.1)
+## [v6.0.2](https://github.com/chef-cookbooks/audit/tree/v6.0.2) (2018-04-18)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.1...v6.0.2)
 
 **Closed issues:**
 
+- Failing to add nodes: Error:Response from server was : status code 403 [\#307](https://github.com/chef-cookbooks/audit/issues/307)
+- Changelog updates [\#302](https://github.com/chef-cookbooks/audit/issues/302)
 - Chef inspec giving error during client run [\#300](https://github.com/chef-cookbooks/audit/issues/300)
+
+**Merged pull requests:**
+
+- pin to chef 13 [\#311](https://github.com/chef-cookbooks/audit/pull/311) ([chris-rock](https://github.com/chris-rock))
+- AIX support notes [\#309](https://github.com/chef-cookbooks/audit/pull/309) ([jeremymv2](https://github.com/jeremymv2))
+- Add optional version parameter when using Compliance store [\#308](https://github.com/chef-cookbooks/audit/pull/308) ([kevinreedy](https://github.com/kevinreedy))
+- Fix bundler on Travis [\#305](https://github.com/chef-cookbooks/audit/pull/305) ([adamleff](https://github.com/adamleff))
+- Update the readme regarding audit mode [\#304](https://github.com/chef-cookbooks/audit/pull/304) ([btm](https://github.com/btm))
+- Update changelog [\#303](https://github.com/chef-cookbooks/audit/pull/303) ([adamleff](https://github.com/adamleff))
 
 ## [v6.0.1](https://github.com/chef-cookbooks/audit/tree/v6.0.1) (2017-12-21)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.0...v6.0.1)
