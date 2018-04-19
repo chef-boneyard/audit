@@ -1,5 +1,16 @@
 # Change Log
 
+## [v6.1.0](https://github.com/chef-cookbooks/audit/tree/v6.1.0) (2018-04-19)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.2...v6.1.0)
+
+**Closed issues:**
+
+- Support ChefClient 14 [\#312](https://github.com/chef-cookbooks/audit/issues/312)
+
+**Merged pull requests:**
+
+- Update Audit cookbook to support ChefClient 14 [\#313](https://github.com/chef-cookbooks/audit/pull/313) ([jquick](https://github.com/jquick))
+
 ## [v6.0.2](https://github.com/chef-cookbooks/audit/tree/v6.0.2) (2018-04-18)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.1...v6.0.2)
 
@@ -11,6 +22,7 @@
 
 **Merged pull requests:**
 
+- Bump Audit cookbook to 6.0.2 [\#314](https://github.com/chef-cookbooks/audit/pull/314) ([jquick](https://github.com/jquick))
 - pin to chef 13 [\#311](https://github.com/chef-cookbooks/audit/pull/311) ([chris-rock](https://github.com/chris-rock))
 - AIX support notes [\#309](https://github.com/chef-cookbooks/audit/pull/309) ([jeremymv2](https://github.com/jeremymv2))
 - Add optional version parameter when using Compliance store [\#308](https://github.com/chef-cookbooks/audit/pull/308) ([kevinreedy](https://github.com/kevinreedy))
