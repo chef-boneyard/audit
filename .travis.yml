@@ -37,6 +37,9 @@ matrix:
     env: SUITE=test:integration OS='gem-install-version-ubuntu-1404'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='gem-install-core-version-ubuntu-1404'
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='skip-inspec-gem-install-ubuntu-1404'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE

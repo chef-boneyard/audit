@@ -158,6 +158,15 @@ suites:
         reporter: json-file
         inspec_version: 1.29.0
         fail_if_not_present: true
+  - name: gem-install-core-version
+    run_list:
+      - recipe[test_helper::install_inspec]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        inspec_version: 2.1.67
+        fail_if_not_present: true
   - name: skip-inspec-gem-install
     run_list:
       - recipe[test_helper::install_inspec]
