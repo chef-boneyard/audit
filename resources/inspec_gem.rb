@@ -40,14 +40,29 @@ action_class do
     gem_source  = options[:source]
     gem_version = options[:version]
 
-    chef_gem 'inspec' do
-      version gem_version if !gem_version.nil? && gem_version != 'latest'
-      unless gem_source.nil?
-        clear_sources true
-        include_default_source false if respond_to?(:include_default_source)
-        source gem_source
+    gem_version = nil if gem_version == 'latest'
+
+    # use inspec-core for recent inspec versions
+    if gem_version.nil? || (Gem::Version.new(gem_version) >= Gem::Version.new('2.1.67'))
+      chef_gem 'inspec-core' do
+        version gem_version unless gem_version.nil?
+        unless gem_source.nil?
+          clear_sources true
+          include_default_source false if respond_to?(:include_default_source)
+          source gem_source
+        end
+        action :install
       end
-      action :install
+    else
+      chef_gem 'inspec' do
+        version gem_version unless gem_version.nil?
+        unless gem_source.nil?
+          clear_sources true
+          include_default_source false if respond_to?(:include_default_source)
+          source gem_source
+        end
+        action :install
+      end
     end
   end
 
@@ -57,15 +72,25 @@ action_class do
       action :remove
     end
 
+    chef_gem 'remove all inspec-core versions' do
+      package_name 'inspec-core'
+      action :remove
+    end
+
     chef_gem 'remove all train versions' do
       package_name 'train'
+      action :remove
+    end
+
+    chef_gem 'remove all train-core versions' do
+      package_name 'train-core'
       action :remove
     end
   end
 
   def inspec_info
     require 'rubygems'
-    Gem::Specification.find_by_name('inspec')
+    Gem::Specification.find { |s| ['inspec', 'inspec-core'].include?(s.name) }
   rescue LoadError
     nil
   end
