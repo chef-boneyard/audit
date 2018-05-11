@@ -1,5 +1,13 @@
 # Change Log
 
+## [v7.0.0](https://github.com/chef-cookbooks/audit/tree/v7.0.0) (2018-05-11)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.1.0...v7.0.0)
+
+**Merged pull requests:**
+
+- Update audit cookbook to use inspec-core. [\#318](https://github.com/chef-cookbooks/audit/pull/318) ([jquick](https://github.com/jquick))
+- compat\_resource is no longer supported [\#316](https://github.com/chef-cookbooks/audit/pull/316) ([lamont-granquist](https://github.com/lamont-granquist))
+
 ## [v6.1.0](https://github.com/chef-cookbooks/audit/tree/v6.1.0) (2018-04-19)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.2...v6.1.0)
 
@@ -9,6 +17,7 @@
 
 **Merged pull requests:**
 
+- Bump audit to 6.1.0. [\#315](https://github.com/chef-cookbooks/audit/pull/315) ([jquick](https://github.com/jquick))
 - Update Audit cookbook to support ChefClient 14 [\#313](https://github.com/chef-cookbooks/audit/pull/313) ([jquick](https://github.com/jquick))
 
 ## [v6.0.2](https://github.com/chef-cookbooks/audit/tree/v6.0.2) (2018-04-18)
