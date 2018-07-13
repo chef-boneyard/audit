@@ -116,7 +116,7 @@ default['audit']['reporter'] = 'chef-server-compliance'
 # Omit this to use the latest InSpec
 default['audit']['inspec-version'] = '1.29.0'
 
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
     # Profile from Chef Compliance
     {
       'name': 'linux',
@@ -130,7 +130,7 @@ default['audit']['profiles'] = [
     },
     # Profile from Supermarket
     # note: If reporting to Compliance, the Supermarket profile needs to be uploaded to Chef Compliance first
-    # note: Artifactory's Supermarket implementation is not supported at this time
+    # note: Artifactory's Supermarket implementation—"Chef Cookbook repository"—does not support InSpec compliance profiles at this time
     {
       'name': 'ssh',
       'supermarket': 'hardening/ssh-hardening'
@@ -151,7 +151,7 @@ default['audit']['profiles'] = [
       'name': 'ssh',
       'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip'
     }
-]
+)
 ```
 
 #### Attributes
@@ -180,12 +180,12 @@ Attributes example of fetching from Automate, reporting to Automate both via Che
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
 default['audit']['fetcher'] = 'chef-server'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'my-profile',
     'compliance': 'john/my-profile'
   }
-]
+)
 ```
 
 
@@ -205,12 +205,12 @@ default['audit']['reporter'] = 'chef-compliance'
 default['audit']['server'] = 'https://compliance-fqdn/api'
 default['audit']['owner'] = 'my-comp-org'
 default['audit']['refresh_token'] = '5/4T...g=='
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'windows',
     'compliance': 'base/windows',
   }
-]
+)
 ```
 
 Instead of a refresh token, it is also possible to use a `token` that expires in 12h after creation.
@@ -220,12 +220,12 @@ default['audit']['reporter'] = 'chef-compliance'
 default['audit']['server'] = 'https://compliance-fqdn/api'
 default['audit']['owner'] = 'my-comp-org'
 default['audit']['token'] = 'eyJ........................YQ'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'windows',
     'compliance': 'base/windows',
   }
-]
+)
 ```
 
 #### Direct reporting to Chef Automate
@@ -238,12 +238,12 @@ This method is sends the report using the `data_collector.server_url` and `data_
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'brewinc/tmp_compliance_profile',
     'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
   }
-]
+)
 ```
 
 If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/setup_visibility_chef_automate.html#add-chef-automate-certificate-to-trusted-certs-directory)
@@ -272,12 +272,12 @@ To write the report to a file on disk, simply set the `reporter` to 'json-file' 
 
 ```ruby
 default['audit']['reporter'] = 'json-file'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'admin/ssh2',
     'path': '/some/base_ssh.tar.gz'
   }
-]
+)
 ```
 
 The resulting file will be written to `<chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json`. The path will also be output to the Chef log:
@@ -295,12 +295,12 @@ for each one.  For example, to report to chef-compliance and write to json file 
 
 ```ruby
 default['audit']['reporter'] = ['chef-server-automate', 'json-file']
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'windows',
     'compliance': 'base/windows'
   }
-]
+)
 ```
 
 ### Profile Fetcher
@@ -314,12 +314,12 @@ This will allow the audit cookbook to fetch profiles stored in Chef Compliance. 
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
 default['audit']['fetcher'] = 'chef-server'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'ssh',
     'compliance': 'base/ssh'
   }
-]
+)
 ```
 
 #### Fetch profiles directly from Chef Automate
@@ -329,12 +329,12 @@ This method is fetches profiles using the `data_collector.server_url` and `data_
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
 default['audit']['fetcher'] = 'chef-automate'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'ssh',
     'compliance': 'base/ssh'
   }
-]
+)
 ```
 
 ## Profile Upload to Compliance Server
@@ -348,12 +348,12 @@ Simply include the `upload` recipe in the run_list, with attribute overrides for
 default['audit']['server'] = 'https://compliance-server.test/api'
 default['audit']['reporter'] = 'chef-compliance'
 default['audit']['refresh_token'] = '21/XMEK3...'
-default['audit']['profiles'] = [
+default['audit']['profiles'].push(
   {
     'name': 'ssh',
     'compliance': 'base/ssh'
   }
-]
+)
 ```
 
 ## Relationship with Chef Audit Mode
