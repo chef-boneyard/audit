@@ -108,7 +108,7 @@ Note on AIX Support:
 
 ### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected via the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below are some other examples:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected using the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below are some other examples:
 
 ```ruby
 default['audit']['reporter'] = 'chef-server-compliance'
@@ -129,7 +129,7 @@ default['audit']['profiles'].push(
       'version': '2.1.0'
     },
     # Profile from Supermarket
-    # note: If reporting to Compliance, the Supermarket profile needs to be uploaded to Chef Compliance first
+    # note: If reporting to Compliance, first upload the Supermarket profile to Chef Compliance.
     # note: Artifactory's Supermarket implementation—"Chef Cookbook repository"—does not support InSpec compliance profiles at this time
     {
       'name': 'ssh',
@@ -156,7 +156,7 @@ default['audit']['profiles'].push(
 
 #### Attributes
 
-You can also pass in [InSpec Attributes](https://www.inspec.io/docs/reference/profiles/) to your audit run. You do this by defining the attributes like so:
+You can also pass in [InSpec Attributes](https://www.inspec.io/docs/reference/profiles/) to your audit run. Do this by defining the attributes:
 
 ```ruby
 default['audit']['attributes'] = {
@@ -169,7 +169,7 @@ default['audit']['attributes'] = {
 
 #### Reporting to Chef Automate via Chef Server
 
-If you want the audit cookbook to retrieve compliance profiles and report to Chef Automate through Chef Server, set the `reporter` and `profiles` attributes.
+To retrieve compliance profiles and report to Chef Automate through Chef Server, set the `reporter` and `profiles` attributes.
 
 This requires Chef Client >= 12.16.42, Chef Server version 12.11.1, and Chef Automate 0.6.6 or newer, as well as integration between the Chef Server and Chef Automate. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate).
 
@@ -191,7 +191,7 @@ default['audit']['profiles'].push(
 
 #### Direct reporting to Chef Compliance
 
-If you want the audit cookbook to report directly to Chef Compliance, set the `reporter`, `server`, `owner`, `refresh_token` and `profiles` attributes.
+To retrieve compliance profiles and report directly to Chef Compliance, set the `reporter`, `server`, `owner`, `refresh_token` and `profiles` attributes.
 
  * `reporter` - 'chef-compliance' to report to Chef Compliance
  * `server` - url of Chef Compliance server with `/api`
@@ -213,7 +213,7 @@ default['audit']['profiles'].push(
 )
 ```
 
-Instead of a refresh token, it is also possible to use a `token` that expires in 12h after creation.
+Instead of a refresh token, it is also possible to use a `token` that expires in 12h after its creation.
 
 ```ruby
 default['audit']['reporter'] = 'chef-compliance'
@@ -230,11 +230,11 @@ default['audit']['profiles'].push(
 
 #### Direct reporting to Chef Automate
 
-If you want the audit cookbook to report directly to Chef Automate, set the `reporter` attribute to 'chef-automate'. Also specify where to retrieve the `profiles` from.
+To report directly to Chef Automate, set the `reporter` attribute to 'chef-automate' and specify where to fetch the `profiles` from.
 
 * `insecure` - a `true` value will skip the SSL certificate verification. Default value is `false`
 
-This method is sends the report using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
+This method sends the report using the `data_collector.server_url` and `data_collector.token` options, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
@@ -309,7 +309,7 @@ default['audit']['profiles'].push(
 
 To enable reporting to Chef Automate with profiles from Chef Compliance or Chef Automate, you need to have Chef Server integrated with [Chef Compliance or Chef Automate](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate). You can then set the `fetcher` attribute to 'chef-server'.
 
-This will allow the audit cookbook to fetch profiles stored in Chef Compliance. For example:
+This allows the audit cookbook to fetch profiles stored in Chef Compliance. For example:
 
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
@@ -324,7 +324,7 @@ default['audit']['profiles'].push(
 
 #### Fetch profiles directly from Chef Automate
 
-This method is fetches profiles using the `data_collector.server_url` and `data_collector.token`, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
+This method fetches profiles using the `data_collector.server_url` and `data_collector.token` options, in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
