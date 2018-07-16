@@ -33,6 +33,9 @@ describe ChefServer::Fetcher do
   let(:profile_hash_target) {
     '/organizations/org/owners/user/compliance/linux-baseline/version/2.1.0/tar'
   }
+  let(:non_profile_url){
+    'http://127.0.0.1:8889/organizations/org/owners/user/compliance/linux-baseline/version/2.1.0/tar'
+  }
 
   context 'when target is a string' do
     before :each do
@@ -68,6 +71,30 @@ describe ChefServer::Fetcher do
       mynode.default['audit']['fetcher'] = nil
       res = ChefServer::Fetcher.resolve(profile_hash)
       expect(res.target.request_uri).to eq(profile_hash_target)
+    end
+  end
+
+  context 'when profile not found' do
+    before :each do
+      Chef::Config[:verify_api_cert] = false
+      Chef::Config[:ssl_verify_mode] = :verify_none
+      allow(Chef).to receive(:node).and_return(mynode)
+    end
+
+    it 'should raise error' do
+       myproc = proc {
+            config = {
+              'server_type' => 'automate',
+              'automate' => {
+                'ent' => 'my_ent',
+                'token_type' => 'dctoken',
+              },
+              'profile' => ['admin', 'linux-baseline', '2.0']
+            }
+
+           Fetchers::Url.new('non_profile_url', config).send(:http_opts)
+        }
+        expect {myproc.call}.to raise_error(RuntimeError)
     end
   end
 end

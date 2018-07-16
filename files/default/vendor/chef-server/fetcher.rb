@@ -99,6 +99,7 @@ module ChefServer
         rest.streaming_request(@target)
       end
       @archive_type = '.tar.gz'
+      raise "Unable to find requested profile on path: '#{@target.path}' on the Automate system." if archive.nil?
       Inspec::Log.debug("Archive stored at temporary location: #{archive.path}")
       @temp_archive_path = archive.path
     end
