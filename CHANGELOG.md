@@ -1,10 +1,23 @@
 # Change Log
 
+## [v7.0.1](https://github.com/chef-cookbooks/audit/tree/v7.0.1) (2018-07-17)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.0...v7.0.1)
+
+**Closed issues:**
+
+- NoMethodError: undefined method `inspec\_gem' for cookbook: audit, recipe: inspec :Chef::Recipe [\#320](https://github.com/chef-cookbooks/audit/issues/320)
+- Add support for compliance profiles into chef-zero [\#188](https://github.com/chef-cookbooks/audit/issues/188)
+
+**Merged pull requests:**
+
+- \[MSYS-829\] Fix nil class error when profile not found on automate server [\#321](https://github.com/chef-cookbooks/audit/pull/321) ([NAshwini](https://github.com/NAshwini))
+
 ## [v7.0.0](https://github.com/chef-cookbooks/audit/tree/v7.0.0) (2018-05-11)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.1.0...v7.0.0)
 
 **Merged pull requests:**
 
+- Bump audit major version [\#319](https://github.com/chef-cookbooks/audit/pull/319) ([jquick](https://github.com/jquick))
 - Update audit cookbook to use inspec-core. [\#318](https://github.com/chef-cookbooks/audit/pull/318) ([jquick](https://github.com/jquick))
 - compat\_resource is no longer supported [\#316](https://github.com/chef-cookbooks/audit/pull/316) ([lamont-granquist](https://github.com/lamont-granquist))
 
