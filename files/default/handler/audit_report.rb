@@ -267,9 +267,7 @@ class Chef
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end
         elsif reporter == 'json-file'
-          timestamp = Time.now.utc.strftime('%Y%m%d%H%M%S')
-          filename = 'inspec' << '-' << timestamp << '.json'
-          path = File.expand_path("../../../../#{filename}", __FILE__)
+          path = node['audit']['json_file']['location']
           Chef::Log.info "Writing report to #{path}"
           Reporter::JsonFile.new({ file: path }).send_report(report)
         else

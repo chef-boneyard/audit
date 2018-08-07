@@ -93,3 +93,8 @@ default['audit']['attributes'] = {}
 # If enabled, a hash of the Chef "node" object will be sent to InSpec in an attribute
 # named `chef_node`
 default['audit']['chef_node_attribute_enabled'] = false
+
+# The location of the json-file output:
+# <chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json
+default['audit']['json_file']['location'] =
+  File.expand_path(Time.now.utc.strftime('../../inspec-%Y%m%d%H%M%S.json'), __FILE__)
