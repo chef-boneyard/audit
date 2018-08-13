@@ -1,7 +1,7 @@
 # audit cookbook
 [![Cookbook Version](http://img.shields.io/cookbook/v/audit.svg)][cookbook] [![Build Status](http://img.shields.io/travis/chef-cookbooks/audit.svg)][travis]
 
-The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client run. It downloads configured profiles from various sources like Chef Compliance, Chef Supermarket or Git and reports audit runs to Chef Compliance or Chef Automate.
+The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client run. It downloads configured profiles from various sources like Chef Automate, Chef Supermarket or Git and reports audit runs to Chef Automate.
 
 ## Quickstart
 
@@ -116,6 +116,7 @@ default['audit']['reporter'] = 'chef-server-compliance'
 # Omit this to use the latest InSpec
 default['audit']['inspec-version'] = '1.29.0'
 
+# You may use an array of hashes (shown here) or hash of hashes (shown below)
 default['audit']['profiles'].push(
     # Profile from Chef Compliance
     {
@@ -152,6 +153,18 @@ default['audit']['profiles'].push(
       'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip'
     }
 )
+```
+
+You may prefer to use hashes for your `node['audit']['profiles']` when you are merging attributes from multiple sources. Policyfiles do not merge arrays and in the case of Policyfiles with includes you will be able to append additional profiles with each Policyfile.
+
+```ruby
+# Hash of hashes, works with Policyfile includes
+default['audit']['profiles']['linux'] = { 'compliance': 'base/linux' }
+default['audit']['profiles']['linux-baseline'] = { 'compliance': 'user/linux-baseline', 'version': '2.1.0' }
+default['audit']['profiles']['ssh'] = { 'supermarket': 'hardening/ssh-hardening' }
+default['audit']['profiles']['brewinc/win2012_audit'] = { 'path': 'E:/profiles/win2012_audit' }
+default['audit']['profiles']['ssl'] = { 'git': 'https://github.com/dev-sec/ssl-benchmark.git' }
+default['audit']['profiles']['ssh2'] = { 'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip' }
 ```
 
 #### Attributes
