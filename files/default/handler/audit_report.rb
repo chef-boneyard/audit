@@ -6,6 +6,7 @@ class Chef
     # Creates a compliance audit report
     class AuditReport < ::Chef::Handler
       MIN_INSPEC_VERSION = '1.25.1'.freeze
+      MIN_INSPEC_VERSION_AUTOMATE_REPORTER = '2.2.64'.freeze
 
       def report
         # get reporter(s) from attributes as an array
@@ -27,7 +28,17 @@ class Chef
         interval = node['audit']['interval']
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
-        profiles = node['audit']['profiles']
+        if node['audit']['profiles'].class.eql?(Chef::Node::ImmutableMash)
+          profiles = []
+          node['audit']['profiles'].keys.each do |p|
+            h = node['audit']['profiles'][p].to_hash
+            h['name'] = p
+            profiles.push(h)
+          end
+        else
+          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+          profiles = node['audit']['profiles']
+        end
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
         attributes = node['audit']['attributes'].to_h
@@ -58,9 +69,13 @@ class Chef
 
           # create a file with a timestamp to calculate interval timing
           create_timestamp_file if interval_enabled
+          reporter_format = 'json'
+          if Gem::Version.new(::Inspec::VERSION) >= Gem::Version.new(MIN_INSPEC_VERSION_AUTOMATE_REPORTER)
+            reporter_format = 'json-automate'
+          end
 
           # return hash of opts to be used by runner
-          opts = get_opts('json', quiet, attributes)
+          opts = get_opts(reporter_format, quiet, attributes)
 
           # instantiate inspec runner with given options and run profiles; return report
           report = call(opts, profiles)
@@ -128,7 +143,6 @@ class Chef
         require 'chef-automate/fetcher'
       end
 
-      # sets format to json-min when chef-compliance, json when chef-automate
       def get_opts(format, quiet, attributes)
         output = quiet ? ::File::NULL : $stdout
         Chef::Log.debug "Format is #{format}"

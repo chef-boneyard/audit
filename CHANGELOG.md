@@ -1,5 +1,18 @@
 # Change Log
 
+## [v7.1.0](https://github.com/chef-cookbooks/audit/tree/v7.1.0) (2018-08-23)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.1...v7.1.0)
+
+**Closed issues:**
+
+- Audit cookbook removes inspec\_core on new install [\#329](https://github.com/chef-cookbooks/audit/issues/329)
+
+**Merged pull requests:**
+
+- Switch to the new json-automate reporter when inspec version allows it [\#334](https://github.com/chef-cookbooks/audit/pull/334) ([alexpop](https://github.com/alexpop))
+- Add support for node\['audit'\]\['profiles'\] as a hash of hashes  [\#328](https://github.com/chef-cookbooks/audit/pull/328) ([mattray](https://github.com/mattray))
+- Modify examples to not override hash [\#323](https://github.com/chef-cookbooks/audit/pull/323) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
+
 ## [v7.0.1](https://github.com/chef-cookbooks/audit/tree/v7.0.1) (2018-07-17)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.0...v7.0.1)
 
@@ -10,6 +23,7 @@
 
 **Merged pull requests:**
 
+- Release audit 7.0.1 [\#324](https://github.com/chef-cookbooks/audit/pull/324) ([jquick](https://github.com/jquick))
 - \[MSYS-829\] Fix nil class error when profile not found on automate server [\#321](https://github.com/chef-cookbooks/audit/pull/321) ([NAshwini](https://github.com/NAshwini))
 
 ## [v7.0.0](https://github.com/chef-cookbooks/audit/tree/v7.0.0) (2018-05-11)

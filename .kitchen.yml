@@ -78,7 +78,6 @@ suites:
         profiles:
           - name: ssh-hardening
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
-          - git: https://github.com/dev-sec/tests-ssh-hardening.git
           - name: ssh-baseline
             supermarket: dev-sec/ssh-baseline
   - name: inspec-attributes
@@ -184,3 +183,14 @@ suites:
         reporter: json-file
         inspec_version: 1.25.1
         fail_if_not_present: true
+  - name: hash
+    run_list:
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        profiles:
+          ssh-hardening:
+            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
+          ssh-baseline:
+            supermarket: dev-sec/ssh-baseline

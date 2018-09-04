@@ -50,3 +50,9 @@ matrix:
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='chef-node-disabled-ubuntu-1404'
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='hash-centos-7'
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='hash-ubuntu-1404'
