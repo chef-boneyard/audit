@@ -143,12 +143,13 @@ class Chef
         require 'chef-automate/fetcher'
       end
 
-      def get_opts(format, quiet, attributes)
+      def get_opts(reporter, quiet, attributes)
         output = quiet ? ::File::NULL : $stdout
-        Chef::Log.debug "Format is #{format}"
+        Chef::Log.debug "Reporter is [#{reporter}]"
         opts = {
           'report' => true,
-          'format' => format,
+          'format' => reporter,      # For compatibility with older versions of inspec. This line can be removed from Q2 2019
+          'reporter' => [reporter],
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
           backend_cache: node['audit']['inspec_backend_cache'],
