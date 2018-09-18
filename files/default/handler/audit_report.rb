@@ -148,7 +148,7 @@ class Chef
         Chef::Log.debug "Reporter is [#{reporter}]"
         opts = {
           'report' => true,
-          'format' => reporter,      # For compatibility with older versions of inspec. This line can be removed from Q2 2019
+          'format' => reporter, # For compatibility with older versions of inspec. TODO: Remove this line from Q2 2019
           'reporter' => [reporter],
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
