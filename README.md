@@ -293,7 +293,9 @@ default['audit']['profiles'].push(
 )
 ```
 
-The resulting file will be written to `<chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json`. The path will also be output to the Chef log:
+The resulting file will be written to `node['audit']['json_file']['location']` which defaults to
+`<chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json`. The path will also be output to
+the Chef log:
 
 ```
 [2017-08-29T00:22:10+00:00] INFO: Reporting to json-file
