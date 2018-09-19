@@ -1,6 +1,21 @@
 # Change Log
 
-## [v7.1.0](https://github.com/chef-cookbooks/audit/tree/v7.1.0) (2018-08-23)
+## [v7.3.0](https://github.com/chef-cookbooks/audit/tree/v7.3.0) (2018-09-19)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.2.0...v7.3.0)
+
+**Merged pull requests:**
+
+- Allow json-file output location to be configured [\#327](https://github.com/chef-cookbooks/audit/pull/327) ([nvwls](https://github.com/nvwls))
+
+## [v7.2.0](https://github.com/chef-cookbooks/audit/tree/v7.2.0) (2018-09-18)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.1.0...v7.2.0)
+
+**Merged pull requests:**
+
+- Switch format to reporter [\#336](https://github.com/chef-cookbooks/audit/pull/336) ([alexpop](https://github.com/alexpop))
+- add 7.1.0 release changelog [\#335](https://github.com/chef-cookbooks/audit/pull/335) ([alexpop](https://github.com/alexpop))
+
+## [v7.1.0](https://github.com/chef-cookbooks/audit/tree/v7.1.0) (2018-08-20)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.1...v7.1.0)
 
 **Closed issues:**
