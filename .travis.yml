@@ -15,8 +15,6 @@ before_install:
 - bundle --version
 matrix:
   include:
-  - rvm: 2.2
-    script: bundle exec rake
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='default-centos-7'
