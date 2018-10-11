@@ -114,7 +114,7 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 default['audit']['reporter'] = 'chef-server-compliance'
 
 # Omit this to use the latest InSpec
-default['audit']['inspec-version'] = '1.29.0'
+default['audit']['inspec_version'] = '1.29.0'
 
 # You may use an array of hashes (shown here) or hash of hashes (shown below)
 default['audit']['profiles'].push(
