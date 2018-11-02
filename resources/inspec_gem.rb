@@ -51,6 +51,7 @@ action_class do
           include_default_source false if respond_to?(:include_default_source)
           source gem_source
         end
+        compile_time false
         action :install
       end
     else
@@ -61,6 +62,7 @@ action_class do
           include_default_source false if respond_to?(:include_default_source)
           source gem_source
         end
+        compile_time false
         action :install
       end
     end
