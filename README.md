@@ -21,6 +21,7 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |--------------------|------------------|--------------------------|
 |   < 0.8.0          |   ≤ 1.23.0       |   ≤ 3.1.0                |
 |   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
+|   ≥ 2              |   ≥ 2.2.102      |   ≥ 7.1.0                |
 
 #### Chef Compliance
 
