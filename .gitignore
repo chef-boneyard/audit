@@ -40,6 +40,7 @@ Berksfile.lock
 .kitchen.local.yml
 .coverage/
 .zero-knife.rb
+policyfile.lock.json
 
 #vagrant stuff
 .vagrant/

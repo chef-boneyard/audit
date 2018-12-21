@@ -7,6 +7,7 @@ transport:
 
 provisioner:
   name: chef_zero
+  always_update_cookbooks: true
 
 verifier:
   name: inspec
@@ -41,3 +42,6 @@ suites:
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
           ssh-baseline:
             supermarket: dev-sec/ssh-baseline
+  - name: policyfile
+    provisioner:
+      policyfile: policyfile.rb
