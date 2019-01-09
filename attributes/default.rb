@@ -87,6 +87,11 @@ default['audit']['overwrite'] = true
 # See README.md for details
 default['audit']['profiles'] = []
 
+# Extend the object and profile capability to support symbol assignment.
+# @TODO: Please remove these extend methods and change default['audit']['profiles'] = {} once we fully support hash of hashes profiles
+default['audit'].extend(Deprecations::Audit::HashProfile)
+default['audit']['profiles'].extend(Deprecations::Audit::ArrayProfile)
+
 # Attributes used to run the given profiles
 default['audit']['attributes'] = {}
 

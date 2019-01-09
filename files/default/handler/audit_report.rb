@@ -28,17 +28,24 @@ class Chef
         interval = node['audit']['interval']
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
-        if node['audit']['profiles'].class.eql?(Chef::Node::ImmutableMash)
-          profiles = []
-          node['audit']['profiles'].keys.each do |p|
-            h = node['audit']['profiles'][p].to_hash
-            h['name'] = p
-            profiles.push(h)
-          end
-        else
-          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
-          profiles = node['audit']['profiles']
-        end
+
+        # profiles parsing for hash of hashes to array commented
+        # because it already store as array of profiles.
+        # @TODO: uncomment the code and remove direct assignment profiles = node['audit']['profiles']
+        # once when we fully support hash of hashes profiles
+        #
+        profiles = node['audit']['profiles']
+        # if node['audit']['profiles'].class.eql?(Chef::Node::ImmutableMash)
+        #   profiles = []
+        #   node['audit']['profiles'].keys.each do |p|
+        #     h = node['audit']['profiles'][p].to_hash
+        #     h['name'] = p
+        #     profiles.push(h)
+        #   end
+        # else
+        #   Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+        #   profiles = node['audit']['profiles']
+        # end
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
         attributes = node['audit']['attributes'].to_h
