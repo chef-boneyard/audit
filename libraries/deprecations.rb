@@ -24,7 +24,7 @@ module Deprecations
       #
       # @return [Array<Profiles>]
       def []=(*args)
-        self << { name: args.first }.merge(args.last.to_h)
+        self << { name: args.first }.merge(Hash.try_convert(args.last) || {})
       end
 
       # @overload push(*args)
