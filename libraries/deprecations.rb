@@ -2,7 +2,7 @@
 # This module is use to support existing array as well as hash of hashes format
 # that are being assigned by end user.
 #
-# In order to provide backword compativility this module extended by profiles key object
+# In order to provide backward compatibility this module extended by profiles key object
 #
 module Deprecations
   module Audit
@@ -10,9 +10,9 @@ module Deprecations
     # to add warning & format the array assignment.
     module ArrayProfile
       # @overload []=(*args)
-      # This method provide the support to assign item as hash(key as String|Symbole)
+      # This method provide the support to assign item as hash(key as String|Symbol)
       #
-      # @param [String|Symbole] key assigned add as name.
+      # @param [String|Symbol] key assigned add as name.
       # @param [Hash] profile attributes the are being assigned.
       #
       # @example format the profile assignment if it is hash of hashes format.
@@ -43,7 +43,7 @@ module Deprecations
     module HashProfile
       # @overload []=(key, val)
       # WARN msg for the use of array assigment.
-      # @param [String|Symbole] key of audit hash.
+      # @param [String|Symbol] key of audit hash.
       # @param [Array] profiles the are being re-assigned.
       #
       # @return [Hash, #key] return hash for non 'profiles' (key, value) pair assign
