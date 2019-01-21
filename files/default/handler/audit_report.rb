@@ -29,10 +29,9 @@ class Chef
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
 
-        # profiles parsing for hash of hashes to array commented
-        # because it already store as array of profiles.
-        # @TODO: uncomment the code and remove direct assignment profiles = node['audit']['profiles']
-        # once when we fully support hash of hashes profiles
+        # Parsing hash of hashes ('profiles') into Array of hashes has been commented as of now.
+        # As we are already constructing the required array with an extension of (ArrayProfile & HashProfile)
+        # @TODO: uncomment it once when we will fully support hash of hashes (profiles')
         #
         profiles = node['audit']['profiles']
         # if node['audit']['profiles'].class.eql?(Chef::Node::ImmutableMash)

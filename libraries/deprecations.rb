@@ -28,7 +28,7 @@ module Deprecations
       end
 
       # @overload push(*args)
-      # WARN msg for the deprication use of array assigment.
+      # WARN msg for the use of array assigment.
       # @param [Array] Profiles the are being assigned.
       #
       # @return [Array<Profiles>]
@@ -42,7 +42,7 @@ module Deprecations
     # re-assignment of the profiles.
     module HashProfile
       # @overload []=(key, val)
-      # WARN msg for the deprication use of array assigment.
+      # WARN msg for the use of array assigment.
       # @param [String|Symbole] key of audit hash.
       # @param [Array] profiles the are being re-assigned.
       #
