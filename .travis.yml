@@ -1,19 +1,18 @@
-branches:
-  only:
-  - master
-
-language: ruby
+dist: xenial
 
 addons:
   apt:
     sources:
-      - chef-current-trusty
+      - chef-current-xenial
     packages:
       - chefdk
 
-# necessary for docker to work
-sudo: required
-dist: trusty
+# Don't `bundle install` which takes about 1.5 mins
+install: echo "skip bundle install"
+
+branches:
+  only:
+  - master
 
 services:
 - docker
