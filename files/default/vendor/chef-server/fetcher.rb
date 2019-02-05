@@ -99,7 +99,7 @@ module ChefServer
         rest.streaming_request(@target)
       end
       @archive_type = '.tar.gz'
-      raise "Unable to find requested profile on path: '#{@target.path}' on the Automate system." if archive.nil?
+      raise "Unable to find requested profile on path: '#{target_path}' on the Automate system." if archive.nil?
       Inspec::Log.debug("Archive stored at temporary location: #{archive.path}")
       @temp_archive_path = archive.path
     end
@@ -131,6 +131,11 @@ module ChefServer
     def chef_server_url
       m = %r{^#{@config['server']}/owners/(?<owner>[^/]+)/compliance/(?<id>[^/]+)/tar$}.match(@target)
       "#{m[:owner]}/#{m[:id]}"
+    end
+
+    def target_path
+      return @target.path if @target.respond_to?(:path)
+      @target
     end
   end
 end
