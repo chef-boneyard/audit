@@ -12,7 +12,7 @@ action :install do
   installation_required = inspec_info.nil? || !new_resource.version.nil?
 
   # detect if the same version is already installed
-  if !inspec_info.nil?
+  unless inspec_info.nil?
     installed_version = inspec_info.version.to_s
     Chef::Log.debug("Installed InSpec version: #{installed_version}")
     installation_required = false if new_resource.version == installed_version

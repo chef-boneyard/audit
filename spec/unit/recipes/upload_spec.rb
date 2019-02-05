@@ -35,7 +35,7 @@ describe 'audit::upload' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') do |node|
         node.override['audit']['collector'] = 'chef-compliance'
-        node.override['audit']['profiles'] = [ {'name': 'admin/myprofile', 'path': '/some/path.tar.gz' } ]
+        node.override['audit']['profiles'] = [ { 'name': 'admin/myprofile', 'path': '/some/path.tar.gz' } ]
         node.override['audit']['server'] = 'https://my.compliance.test/api'
         node.override['audit']['refresh_token'] = 'abcdefg'
         node.override['audit']['insecure'] = true

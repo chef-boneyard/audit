@@ -8,7 +8,7 @@
 include_recipe 'git::default'
 
 # needed for testing inspec version installed
-output=Chef::JSONCompat.to_json_pretty(node.to_hash).to_s
+output = Chef::JSONCompat.to_json_pretty(node.to_hash).to_s
 file '/tmp/node.json' do
   content output
   sensitive true

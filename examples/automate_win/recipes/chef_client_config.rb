@@ -15,7 +15,7 @@ template 'c:/chef/client.d/automate_ingest.rb' do
   source 'automate_ingest.rb.erb'
   variables(
     server_url: 'https://automateserver.domain.com/data-collector/v0/',
-    auth_token: 'some#databag#value',
+    auth_token: 'some#databag#value'
   )
   notifies :create, 'ruby_block[reload_client_config]'
   action :create

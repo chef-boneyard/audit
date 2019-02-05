@@ -70,21 +70,21 @@ describe 'Chef::Handler::AuditReport methods' do
     end
 
     it 'inspec min version fail' do
-      stub_const("Inspec::VERSION", '1.20.0')
-      expect { @audit_report.validate_inspec_version }.
-        to raise_error(RuntimeError).
-        with_message('This audit cookbook version requires InSpec 1.25.1 or newer, aborting compliance scan...')
+      stub_const('Inspec::VERSION', '1.20.0')
+      expect { @audit_report.validate_inspec_version }
+        .to raise_error(RuntimeError)
+        .with_message('This audit cookbook version requires InSpec 1.25.1 or newer, aborting compliance scan...')
     end
     it 'inspec version warn for backend_cache' do
-      stub_const("Inspec::VERSION", '1.46.0')
+      stub_const('Inspec::VERSION', '1.46.0')
       set_inspec_backend_cache(true)
-      expect(Chef::Log).to receive(:warn).
-        with('inspec_backend_cache requires InSpec version >= 1.47.0').
-        and_return('captured')
+      expect(Chef::Log).to receive(:warn)
+        .with('inspec_backend_cache requires InSpec version >= 1.47.0')
+        .and_return('captured')
       expect(@audit_report.validate_inspec_version).to eq('captured')
     end
     it 'inspec version passes all requirements' do
-      stub_const("Inspec::VERSION", '1.47.0')
+      stub_const('Inspec::VERSION', '1.47.0')
       set_inspec_backend_cache(true)
       expect(Chef::Log).to_not receive(:warn)
       expect { @audit_report.validate_inspec_version }.to_not raise_error
@@ -133,7 +133,7 @@ describe 'Chef::Handler::AuditReport methods' do
       quiet = true
       attributes = {
         first: 'value1',
-        second: 'value2'
+        second: 'value2',
       }
       set_inspec_backend_cache(true)
       opts = @audit_report.get_opts(format, quiet, attributes)
@@ -144,9 +144,9 @@ describe 'Chef::Handler::AuditReport methods' do
 
   describe 'call' do
     it 'given a profile, returns a json report' do
-      opts = {'report' => true, 'format' => 'json', 'output' => '/dev/null'}
+      opts = { 'report' => true, 'format' => 'json', 'output' => '/dev/null' }
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
-      profiles = [{'name': 'example', 'path': path }]
+      profiles = [{ 'name': 'example', 'path': path }]
       # we cirumwent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
       report = @audit_report.call(opts, profiles)
@@ -155,9 +155,9 @@ describe 'Chef::Handler::AuditReport methods' do
     end
     it 'given a profile, returns a json-min report' do
       require 'inspec'
-      opts = {'report' => true, 'format' => 'json-min', 'output' => '/dev/null'}
+      opts = { 'report' => true, 'format' => 'json-min', 'output' => '/dev/null' }
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
-      profiles = [{'name': 'example', 'path': path }]
+      profiles = [{ 'name': 'example', 'path': path }]
       # we cirumwent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
       report = @audit_report.call(opts, profiles)

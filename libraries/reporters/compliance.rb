@@ -20,14 +20,14 @@ module Reporter
 
     def send_report(report)
       Chef::Log.info "Report to Chef Compliance: #{@url} with #{@token}"
-      req = Net::HTTP::Post.new(@url, { 'Authorization' => "Bearer #{@token}" })
+      req = Net::HTTP::Post.new(@url, 'Authorization' => "Bearer #{@token}")
 
       min_report = transform(report)
       json_report = enriched_report(min_report, @source_location).to_json
       req.body = json_report
       report_size = json_report.bytesize
-      if report_size > 5*1024*1024
-        Chef::Log.warn "Compliance report size is #{(report_size / (1024*1024.0)).round(2)} MB."
+      if report_size > 5 * 1024 * 1024
+        Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
       end
 
       # TODO: use secure option
@@ -41,10 +41,10 @@ module Reporter
           http.request(req)
         end
       end
-      return true
+      true
     rescue => e
       Chef::Log.error "send_report: POST to #{@url} returned: #{e.message}"
-      return false
+      false
     end
 
     # TODO: add to docs that all profiles used in Chef Compliance, need to
@@ -54,22 +54,22 @@ module Reporter
       blob = @node_info.dup
 
       # extract profile names
-      profiles = report[:controls].compact.collect { |control|
+      profiles = report[:controls].compact.collect do |control|
         control[:profile_id]
-      }.uniq
+      end.uniq
 
       # build report for chef compliance, it includes node data
       blob[:reports] = {}
       blob[:profiles] = {}
       Chef::Log.info "InSpec Profiles: #{inspec_profiles}"
       Chef::Log.info "Expanded Profiles: #{profiles}"
-      inspec_profiles.each { |inspec_profile|
+      inspec_profiles.each do |inspec_profile|
         blob[:profiles][inspec_profile[:profile_id].to_sym] = inspec_profile[:owner]
         # TODO: we duplicate data here, since we attach the complete profile min
         # but this reduces the complexity of nested searches, we need to
         # fix this in InSpec
         blob[:reports][inspec_profile[:profile_id].to_sym] = report.dup
-      }
+      end
       blob
     end
 
@@ -80,24 +80,23 @@ module Reporter
 
       # iterate over each profile and control
       min_report[:controls] = []
-      full_report[:profiles].each { |profile|
-
+      full_report[:profiles].each do |profile|
         if profile[:controls].nil?
           min_report[:controls] = nil
         else
-          min_report[:controls] += profile[:controls].map { |control|
+          min_report[:controls] += profile[:controls].map do |control|
             next if control[:results].nil?
-            control[:results].map { |result|
+            control[:results].map do |result|
               c = {}
               c[:id] = control[:id]
               c[:profile_id] = profile[:name]
               c[:status] = result[:status]
               c[:code_desc] = result[:code_desc]
               c
-            }
-          }
+            end
+          end
         end
-      }
+      end
       min_report[:controls].flatten!
       min_report[:statistics] = full_report[:statistics]
       min_report
@@ -112,13 +111,13 @@ module Reporter
     # TODO: raise warning when not a compliance-known profile
     def cc_profile_index(profiles)
       cc_profiles = tests_for_runner(profiles).select { |profile| profile[:compliance] }.map { |profile| profile[:compliance] }.uniq.compact
-      cc_profiles.map { |profile|
+      cc_profiles.map do |profile|
         owner, profile_id = profile.split('/')
         {
           owner: owner,
           profile_id: profile_id,
         }
-      }
+      end
     end
   end
 end

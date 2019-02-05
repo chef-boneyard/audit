@@ -1,4 +1,3 @@
-
 describe file '/etc/chef/client.rb' do
   it { should exist }
 end
@@ -32,13 +31,13 @@ curl_elasticsearch = 'curl -X POST http://127.0.0.1:9200/insights-*/_search -d \
   }
 }\''
 
-elastic_response = json({ command: curl_elasticsearch })
+elastic_response = json(command: curl_elasticsearch)
 
 describe elastic_response do
   it { should_not be nil }
 end
 
-elastic_hits = elastic_response['hits','hits']
+elastic_hits = elastic_response['hits', 'hits']
 
 # one for the chef-server-visibility collector
 # one for the chef-visibility collector

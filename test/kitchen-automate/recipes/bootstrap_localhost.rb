@@ -1,4 +1,4 @@
-directory "/root/.chef" do
+directory '/root/.chef' do
   mode 00770
   action :create
 end
@@ -14,7 +14,7 @@ end
 
 # Upload the cookbooks from the location specified in /root/.chef/knife.rb
 # This is the directory where test-kitchen syncs the cookbooks into
-execute "Uploading cookbooks to Chef Server" do
+execute 'Uploading cookbooks to Chef Server' do
   command <<-EOH
     sudo knife cookbook upload -a
     sudo knife cookbook list
@@ -24,11 +24,11 @@ execute "Uploading cookbooks to Chef Server" do
 end
 
 # Ensure the node is in the expected state
-raise "Cannot find /tmp/kitchen/client.pem" unless File.exist?('/tmp/kitchen/client.pem')
-raise "Cannot find /home/ec2-user/.ssh/authorized_keys" unless File.exist?('/home/ec2-user/.ssh/authorized_keys')
+raise 'Cannot find /tmp/kitchen/client.pem' unless File.exist?('/tmp/kitchen/client.pem')
+raise 'Cannot find /home/ec2-user/.ssh/authorized_keys' unless File.exist?('/home/ec2-user/.ssh/authorized_keys')
 
 # Add a public key to be used for SSH bootstrapping
-execute "Add SSH public key to be used by self bootstrapping" do
+execute 'Add SSH public key to be used by self bootstrapping' do
   command <<-EOH
     key=$(ssh-keygen -y -f /tmp/kitchen/client.pem)
     echo "$key kitchen_client.pem" >> /home/ec2-user/.ssh/authorized_keys
@@ -38,7 +38,7 @@ execute "Add SSH public key to be used by self bootstrapping" do
 end
 
 # Bootstraps the node against the local Chef Server. Will run on first converge only as  '/etc/chef/client.pem' is not in place yet
-execute "Bootstrapping the node with local Chef Server" do
+execute 'Bootstrapping the node with local Chef Server' do
   command <<-EOH
     sudo knife bootstrap localhost --sudo \
       --ssh-user "ec2-user" \

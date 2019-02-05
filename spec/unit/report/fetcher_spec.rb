@@ -23,19 +23,19 @@ require_relative '../../../files/default/vendor/chef-server/fetcher'
 describe ChefServer::Fetcher do
   let(:mynode) { Chef::Node.new }
   let(:myprofile) { 'compliance://foobazz' }
-  let(:profile_hash) {
+  let(:profile_hash) do
     {
       name: 'linux-baseline',
       compliance: 'user/linux-baseline',
-      version: '2.1.0'
+      version: '2.1.0',
     }
-  }
-  let(:profile_hash_target) {
+  end
+  let(:profile_hash_target) do
     '/organizations/org/owners/user/compliance/linux-baseline/version/2.1.0/tar'
-  }
-  let(:non_profile_url){
+  end
+  let(:non_profile_url) do
     'http://127.0.0.1:8889/organizations/org/owners/user/compliance/linux-baseline/version/2.1.0/tar'
-  }
+  end
 
   context 'when target is a string' do
     before :each do
@@ -82,19 +82,19 @@ describe ChefServer::Fetcher do
     end
 
     it 'should raise error' do
-       myproc = proc {
-            config = {
-              'server_type' => 'automate',
-              'automate' => {
-                'ent' => 'my_ent',
-                'token_type' => 'dctoken',
-              },
-              'profile' => ['admin', 'linux-baseline', '2.0']
-            }
-
-           Fetchers::Url.new('non_profile_url', config).send(:http_opts)
+      myproc = proc {
+        config = {
+          'server_type' => 'automate',
+          'automate' => {
+            'ent' => 'my_ent',
+            'token_type' => 'dctoken',
+          },
+          'profile' => ['admin', 'linux-baseline', '2.0'],
         }
-        expect {myproc.call}.to raise_error(RuntimeError)
+
+        Fetchers::Url.new('non_profile_url', config).send(:http_opts)
+      }
+      expect { myproc.call }.to raise_error(RuntimeError)
     end
   end
 end

@@ -35,7 +35,6 @@ describe 'audit::default' do
     end
   end
 
-
   context 'When an inspec gem version is specified ' do
     let(:chef_run) do
       ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9') do |node|
@@ -120,11 +119,11 @@ describe 'audit::default' do
         { 'name': 'apache', 'compliance': 'base/apache' },
         { 'name': 'ssh-hardening', 'supermarket': 'hardening/ssh-hardening' },
         { 'name': 'brewinc/tmp_compliance_profile',
-          'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+          'url': 'https://github.com/nathenharvey/tmp_compliance_profile',
         },
         { 'name': 'brewinc/tmp_compliance_profile-master',
-          'path': '/tmp/tmp_compliance_profile-master'
-        }
+          'path': '/tmp/tmp_compliance_profile-master',
+        },
       ]
       runner.converge(described_recipe)
     end
@@ -142,11 +141,11 @@ describe 'audit::default' do
         { 'name': 'apache', 'compliance': 'base/apache' },
         { 'name': 'ssh-hardening', 'supermarket': 'hardening/ssh-hardening' },
         { 'name': 'brewinc/tmp_compliance_profile',
-          'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+          'url': 'https://github.com/nathenharvey/tmp_compliance_profile',
         },
         { 'name': 'brewinc/tmp_compliance_profile-master',
-          'path': '/tmp/tmp_compliance_profile-master'
-        }
+          'path': '/tmp/tmp_compliance_profile-master',
+        },
       ]
       runner.converge(described_recipe)
     end
@@ -164,11 +163,11 @@ describe 'audit::default' do
         { 'name': 'apache', 'compliance': 'base/apache' },
         { 'name': 'ssh-hardening', 'supermarket': 'hardening/ssh-hardening' },
         { 'name': 'brewinc/tmp_compliance_profile',
-          'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+          'url': 'https://github.com/nathenharvey/tmp_compliance_profile',
         },
         { 'name': 'brewinc/tmp_compliance_profile-master',
-          'path': '/tmp/tmp_compliance_profile-master'
-        }
+          'path': '/tmp/tmp_compliance_profile-master',
+        },
       ]
       runner.converge(described_recipe)
     end
