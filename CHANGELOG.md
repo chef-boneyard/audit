@@ -1,7 +1,28 @@
 # Change Log
 
+## [v7.4.0](https://github.com/chef-cookbooks/audit/tree/v7.4.0) (2019-02-05)
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.3.0...v7.4.0)
+
+**Closed issues:**
+
+- Specify compile\_time field on inspec install [\#342](https://github.com/chef-cookbooks/audit/issues/342)
+
+**Merged pull requests:**
+
+- Use standard cookstyle [\#354](https://github.com/chef-cookbooks/audit/pull/354) ([tas50](https://github.com/tas50))
+- Minor updates to kitchen, chefignore, and codeowners files [\#353](https://github.com/chef-cookbooks/audit/pull/353) ([tas50](https://github.com/tas50))
+- Fixes for undefined method 'path' for \<String\> when profile not found… [\#349](https://github.com/chef-cookbooks/audit/pull/349) ([vsingh-msys](https://github.com/vsingh-msys))
+- Update the automate support matrix [\#345](https://github.com/chef-cookbooks/audit/pull/345) ([teknofire](https://github.com/teknofire))
+- Add compile\_time flag to inspec install. [\#344](https://github.com/chef-cookbooks/audit/pull/344) ([jquick](https://github.com/jquick))
+- Remove Ruby 2.2 support [\#341](https://github.com/chef-cookbooks/audit/pull/341) ([btm](https://github.com/btm))
+- Fix errant dash instead of underscore in example of InSpec version  [\#340](https://github.com/chef-cookbooks/audit/pull/340) ([gsreynolds](https://github.com/gsreynolds))
+
 ## [v7.3.0](https://github.com/chef-cookbooks/audit/tree/v7.3.0) (2018-09-19)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.2.0...v7.3.0)
+
+**Implemented enhancements:**
+
+- Add ability to configure json-file output location [\#286](https://github.com/chef-cookbooks/audit/issues/286)
 
 **Merged pull requests:**
 
@@ -31,10 +52,13 @@
 ## [v7.0.1](https://github.com/chef-cookbooks/audit/tree/v7.0.1) (2018-07-17)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.0...v7.0.1)
 
+**Implemented enhancements:**
+
+- Add support for compliance profiles into chef-zero [\#188](https://github.com/chef-cookbooks/audit/issues/188)
+
 **Closed issues:**
 
 - NoMethodError: undefined method `inspec\_gem' for cookbook: audit, recipe: inspec :Chef::Recipe [\#320](https://github.com/chef-cookbooks/audit/issues/320)
-- Add support for compliance profiles into chef-zero [\#188](https://github.com/chef-cookbooks/audit/issues/188)
 
 **Merged pull requests:**
 
@@ -167,10 +191,13 @@
 ## [v4.3.0](https://github.com/chef-cookbooks/audit/tree/v4.3.0) (2017-08-29)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.2.0...v4.3.0)
 
+**Implemented enhancements:**
+
+- Feature enhancement request: Audit cookbook 4.2 to pass node data to Inspec  [\#268](https://github.com/chef-cookbooks/audit/issues/268)
+
 **Closed issues:**
 
 - Document location of json reports when reporter is `json-file` [\#269](https://github.com/chef-cookbooks/audit/issues/269)
-- Feature enhancement request: Audit cookbook 4.2 to pass node data to Inspec  [\#268](https://github.com/chef-cookbooks/audit/issues/268)
 
 **Merged pull requests:**
 
@@ -258,7 +285,12 @@
 
 **Implemented enhancements:**
 
+- JSON output contains "You have X number of issues or packages out of date" [\#207](https://github.com/chef-cookbooks/audit/issues/207)
+- ability to install inspec as a package [\#164](https://github.com/chef-cookbooks/audit/issues/164)
 - Warning from wrong attribute syntax [\#161](https://github.com/chef-cookbooks/audit/issues/161)
+- Cannot report meta-profiles to Chef Compliance [\#155](https://github.com/chef-cookbooks/audit/issues/155)
+- Vendor InSpec gem [\#112](https://github.com/chef-cookbooks/audit/issues/112)
+- Provide gem\_source attribute for fetching any required gems [\#26](https://github.com/chef-cookbooks/audit/issues/26)
 
 **Fixed bugs:**
 
@@ -268,17 +300,12 @@
 
 **Closed issues:**
 
-- JSON output contains "You have X number of issues or packages out of date" [\#207](https://github.com/chef-cookbooks/audit/issues/207)
 - Rename `collector` to `reporter` [\#205](https://github.com/chef-cookbooks/audit/issues/205)
 - Audit cookbook failing to install from internal Ruby gem mirror [\#200](https://github.com/chef-cookbooks/audit/issues/200)
 - Document new `chef-server-compliance` collector in Readme [\#190](https://github.com/chef-cookbooks/audit/issues/190)
 - Missing default attribute `fail\_if\_any\_audits\_failed` [\#182](https://github.com/chef-cookbooks/audit/issues/182)
-- ability to install inspec as a package [\#164](https://github.com/chef-cookbooks/audit/issues/164)
-- Cannot report meta-profiles to Chef Compliance [\#155](https://github.com/chef-cookbooks/audit/issues/155)
 - Support certificates \(insecure\) for reporting to chef-visibility [\#150](https://github.com/chef-cookbooks/audit/issues/150)
 - Missing profile results in misleading error message in chef\_gate log [\#144](https://github.com/chef-cookbooks/audit/issues/144)
-- Vendor InSpec gem [\#112](https://github.com/chef-cookbooks/audit/issues/112)
-- Provide gem\_source attribute for fetching any required gems [\#26](https://github.com/chef-cookbooks/audit/issues/26)
 
 **Merged pull requests:**
 
