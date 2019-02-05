@@ -23,11 +23,11 @@ module ChefAutomate
         # verifies that the target e.g base/ssh exists
         profile = sanitize_profile_name(uri)
         owner, id = profile.split('/')
-        if target.respond_to?(:key?) && target.key?(:version)
-          profile_path = "/compliance/profiles/#{owner}/#{id}/version/#{target[:version]}/tar"
-        else
-          profile_path = "/compliance/profiles/#{owner}/#{id}/tar"
-        end
+        profile_path = if target.respond_to?(:key?) && target.key?(:version)
+                         "/compliance/profiles/#{owner}/#{id}/version/#{target[:version]}/tar"
+                       else
+                         "/compliance/profiles/#{owner}/#{id}/tar"
+                       end
         dc = Chef::Config[:data_collector]
         url = URI(dc[:server_url])
         url.path = profile_path
@@ -51,11 +51,11 @@ module ChefAutomate
     # returns a parsed url for `admin/profile` or `compliance://admin/profile`
     # TODO: remove in future, copied from inspec to support older versions of inspec
     def self.sanitize_profile_name(profile)
-      if URI(profile).scheme == 'compliance'
-        uri = URI(profile)
-      else
-        uri = URI("compliance://#{profile}")
-      end
+      uri = if URI(profile).scheme == 'compliance'
+              URI(profile)
+            else
+              URI("compliance://#{profile}")
+            end
       uri.to_s.sub(%r{^compliance:\/\/}, '')
     end
 

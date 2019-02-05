@@ -17,7 +17,6 @@ def set_hostname(server)
 end
 
 Vagrant.configure(2) do |config|
-
   config.vm.define 'chef-client-node' do |server|
     server.vm.box = 'bento/ubuntu-16.04'
     server.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box'
@@ -35,15 +34,15 @@ Vagrant.configure(2) do |config|
       chef.add_recipe 'audit::default'
       chef.json = {
         audit: {
-          collector: "chef-server-compliance",
+          collector: 'chef-server-compliance',
           insecure: true,
           profiles: [{
-            name: "linux",
-            compliance: "base/linux"
-          },{
-            name: "ssh",
-            compliance: "base/ssh"
-          }]
+            name: 'linux',
+            compliance: 'base/linux',
+          }, {
+            name: 'ssh',
+            compliance: 'base/ssh',
+          }],
         },
       }
     end

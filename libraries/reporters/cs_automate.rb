@@ -22,8 +22,8 @@ module Reporter
     def send_report(report)
       automate_report = enriched_report(report)
       report_size = automate_report.to_json.bytesize
-      if report_size > 900*1024
-        Chef::Log.warn "Compliance report size is #{(report_size / (1024*1024.0)).round(2)} MB."
+      if report_size > 900 * 1024
+        Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
       end
 
       if @insecure

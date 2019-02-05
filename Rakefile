@@ -22,7 +22,7 @@ namespace :style do
     FoodCritic::Rake::LintTask.new(:chef) do |t|
       t.options = {
         fail_tags: ['any'],
-        progress: true
+        progress: true,
       }
     end
   rescue LoadError
@@ -46,15 +46,15 @@ end
 
 namespace :test do
   task :integration do
-    concurrency = ENV["CONCURRENCY"] || 1
-    os = ENV["OS"] || ""
-    sh("sh", "-c", "bundle exec kitchen test -c #{concurrency} #{os}")
+    concurrency = ENV['CONCURRENCY'] || 1
+    os = ENV['OS'] || ''
+    sh('sh', '-c', "bundle exec kitchen test -c #{concurrency} #{os}")
   end
 
   # call it like this: rake test:kitchen_automate[verify]
-  task :kitchen_automate, :action do |t, args|
+  task :kitchen_automate, :action do |_t, args|
     if %w(list create converge verify destroy test).include?(args[:action])
-      sh("sh", "-c", "cd test/kitchen-automate; bundle exec kitchen #{args[:action]}")
+      sh('sh', '-c', "cd test/kitchen-automate; bundle exec kitchen #{args[:action]}")
     else
       puts ">>> Unknown kitchen action: #{args[:action]}"
     end

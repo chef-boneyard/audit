@@ -174,7 +174,7 @@ class Chef
           r = runner.report
 
           # output summary of InSpec Report in Chef Logs
-          if !r.nil? && 'json-min' == opts['format']
+          if !r.nil? && opts['format'] == 'json-min'
             time = 0
             time = r[:statistics][:duration] unless r[:statistics].nil?
             passed_controls = r[:controls].select { |c| c[:status] == 'passed' }.size
@@ -284,7 +284,7 @@ class Chef
         elsif reporter == 'json-file'
           path = node['audit']['json_file']['location']
           Chef::Log.info "Writing report to #{path}"
-          Reporter::JsonFile.new({ file: path }).send_report(report)
+          Reporter::JsonFile.new(file: path).send_report(report)
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end

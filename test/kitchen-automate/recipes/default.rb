@@ -1,4 +1,3 @@
-
 include_recipe 'kitchen-automate::harakiri'
 include_recipe 'kitchen-automate::configure_services'
 include_recipe 'kitchen-automate::upload_profile'

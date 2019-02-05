@@ -63,11 +63,11 @@ module ChefServer
 
     def self.target_url(profile, config, version = nil)
       o, p = profile.split('/')
-      if version
-        reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/version/#{version}/tar"
-      else
-        reqpath ="organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/tar"
-      end
+      reqpath = if version
+                  "organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/version/#{version}/tar"
+                else
+                  "organizations/#{chef_server_org}/owners/#{o}/compliance/#{p}/tar"
+                end
 
       if config['insecure']
         Chef::Config[:verify_api_cert] = false
@@ -89,7 +89,7 @@ module ChefServer
 
     # Downloads archive to temporary file from Chef Compliance via Chef Server
     def download_archive_to_temp
-      return @temp_archive_path if !@temp_archive_path.nil?
+      return @temp_archive_path unless @temp_archive_path.nil?
 
       Chef::Config[:verify_api_cert] = false # FIXME
       Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
@@ -110,7 +110,7 @@ module ChefServer
 
     # internal class methods
     def self.chef_server_reporter?
-      return false if !(defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes))
+      return false unless defined?(Chef) && defined?(Chef.node) && defined?(Chef.node.attributes)
       reporters = get_reporters(Chef.node.attributes['audit'])
       # TODO: harmonize with audit_report.rb load_chef_fetcher
       Chef.node.attributes['audit'] && (

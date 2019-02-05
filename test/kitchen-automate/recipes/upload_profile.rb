@@ -1,4 +1,3 @@
-
 # Download this profile locally and trigger the upload
 remote_file '/root/ssh-hardening.tar.gz' do
   source 'https://github.com/dev-sec/tests-ssh-hardening/archive/2.0.0.tar.gz'
@@ -20,7 +19,7 @@ ruby_block 'upload_profile' do
     req = Net::HTTP::Post.new('/compliance/profiles/admin')
 
     file_path = '/root/ssh-hardening.tar.gz'
-    req.body_stream=File.open(file_path, 'rb')
+    req.body_stream = File.open(file_path, 'rb')
     req.add_field('Content-Length', File.size(file_path))
     req.add_field('Content-Type', 'application/x-gtar')
 
@@ -30,7 +29,7 @@ ruby_block 'upload_profile' do
 
     boundary = 'INSPEC-PROFILE-UPLOAD'
     req.add_field('session', boundary)
-    res=http.request(req)
+    res = http.request(req)
   end
   action :nothing
 end

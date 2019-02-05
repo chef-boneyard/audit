@@ -10,9 +10,9 @@ describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }
 
   it 'tests_for_runner converts all key strings to symbols' do
-    tests = [{'name': 'ssh', 'url': 'https://github.com/dev-sec/tests-ssh-hardening'}]
+    tests = [{ 'name': 'ssh', 'url': 'https://github.com/dev-sec/tests-ssh-hardening' }]
     symbol_tests = @helpers.tests_for_runner(tests)
-    expect(symbol_tests).to eq([{:name=>"ssh", :url=>"https://github.com/dev-sec/tests-ssh-hardening"}])
+    expect(symbol_tests).to eq([{ name: 'ssh', url: 'https://github.com/dev-sec/tests-ssh-hardening' }])
   end
 
   it 'report_timing_file returns where the report timing file is located' do
@@ -32,7 +32,7 @@ describe ReportHelpers do
   it 'create_timestamp_file creates a new file' do
     expected_file_path = @helpers.report_timing_file
     @helpers.create_timestamp_file
-    expect(File).to exist("#{expected_file_path}")
-    File.delete("#{expected_file_path}")
+    expect(File).to exist(expected_file_path.to_s)
+    File.delete(expected_file_path.to_s)
   end
 end
