@@ -260,7 +260,7 @@ default['audit']['profiles'].push(
 )
 ```
 
-If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/setup_visibility_chef_automate.html#add-chef-automate-certificate-to-trusted-certs-directory)
+If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/data_collection_without_server.html#add-chef-automate-certificate-to-trusted-certs-directory)
 
 Version compatibility matrix:
 
