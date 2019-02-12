@@ -85,6 +85,8 @@ default['audit']['overwrite'] = true
 
 # Chef Inspec Compliance profiles to be used for scan of node
 # See README.md for details
+# TODO: Make this `{}` in next major version
+# See: https://github.com/chef-cookbooks/audit/pull/328
 default['audit']['profiles'] = []
 
 # Attributes used to run the given profiles

@@ -109,63 +109,43 @@ Note on AIX Support:
 
 ### Configure node
 
-Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected using the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below are some other examples:
+Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node (or, preferably create a wrapper cookbook). The profiles are selected using the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below is another examples demonstrating the different locations profiles can be "fetched" from:
 
 ```ruby
 default['audit']['reporter'] = 'chef-server-compliance'
 
-# Omit this to use the latest InSpec
-default['audit']['inspec_version'] = '1.29.0'
+# Uncomment this to set an exact InSpec version
+# default['audit']['inspec_version'] = '1.29.0'
 
-# You may use an array of hashes (shown here) or hash of hashes (shown below)
-default['audit']['profiles'].push(
-    # Profile from Chef Compliance
-    {
-      'name': 'linux',
-      'compliance': 'base/linux'
-    },
-    # Profile from Chef Compliance at a particular version
-    {
-      'name': 'linux-baseline',
-      'compliance': 'user/linux-baseline',
-      'version': '2.1.0'
-    },
-    # Profile from Supermarket
-    # note: If reporting to Compliance, first upload the Supermarket profile to Chef Compliance.
-    # note: Artifactory's Supermarket implementation—"Chef Cookbook repository"—does not support InSpec compliance profiles at this time
-    {
-      'name': 'ssh',
-      'supermarket': 'hardening/ssh-hardening'
-    },
-    # Profile from local Windows path
-    {
-      'name': 'brewinc/win2012_audit',
-      # filesystem path
-      'path': 'E:/profiles/win2012_audit'
-    },
-    # Profile from GitHub
-    {
-      'name': 'ssl',
-      'git': 'https://github.com/dev-sec/ssl-benchmark.git'
-    },
-    # Profile from URL
-    {
-      'name': 'ssh',
-      'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip'
-    }
-)
-```
+# THIS IS REQUIRED UNTIL ARRAY OF HASHES IS DEPRECATED
+# BE MINDFUL OF ATTRIBUTE PRECENDENCE IN OTHER COOKBOOKS
+# SEE: https://github.com/chef-cookbooks/audit/pull/328
+default['audit']['profiles'] = {}
 
-You may prefer to use hashes for your `node['audit']['profiles']` when you are merging attributes from multiple sources. Policyfiles do not merge arrays and in the case of Policyfiles with includes you will be able to append additional profiles with each Policyfile.
+default['audit']['profiles']['linux'] = {
+  'compliance': 'base/linux'
+}
 
-```ruby
-# Hash of hashes, works with Policyfile includes
-default['audit']['profiles']['linux'] = { 'compliance': 'base/linux' }
-default['audit']['profiles']['linux-baseline'] = { 'compliance': 'user/linux-baseline', 'version': '2.1.0' }
-default['audit']['profiles']['ssh'] = { 'supermarket': 'hardening/ssh-hardening' }
-default['audit']['profiles']['brewinc/win2012_audit'] = { 'path': 'E:/profiles/win2012_audit' }
-default['audit']['profiles']['ssl'] = { 'git': 'https://github.com/dev-sec/ssl-benchmark.git' }
-default['audit']['profiles']['ssh2'] = { 'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip' }
+default['audit']['profiles']['linux-baseline'] = {
+  'compliance': 'user/linux-baseline',
+  'version': '2.1.0'
+}
+
+default['audit']['profiles']['ssh'] = {
+  'supermarket': 'hardening/ssh-hardening'
+}
+
+default['audit']['profiles']['brewinc/win2012_audit'] = {
+  'path': 'E:/profiles/win2012_audit'
+}
+
+default['audit']['profiles']['ssl'] = {
+  'git': 'https://github.com/dev-sec/ssl-benchmark.git'
+}
+
+default['audit']['profiles']['ssh2'] = {
+  'url': 'https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip'
+}
 ```
 
 #### Attributes
@@ -194,12 +174,9 @@ Attributes example of fetching from Automate, reporting to Automate both via Che
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
 default['audit']['fetcher'] = 'chef-server'
-default['audit']['profiles'].push(
-  {
-    'name': 'my-profile',
-    'compliance': 'john/my-profile'
-  }
-)
+default['audit']['profiles']['my-profile'] = {
+  'compliance': 'john/my-profile'
+}
 ```
 
 
@@ -219,12 +196,9 @@ default['audit']['reporter'] = 'chef-compliance'
 default['audit']['server'] = 'https://compliance-fqdn/api'
 default['audit']['owner'] = 'my-comp-org'
 default['audit']['refresh_token'] = '5/4T...g=='
-default['audit']['profiles'].push(
-  {
-    'name': 'windows',
-    'compliance': 'base/windows',
-  }
-)
+default['audit']['profiles']['windows'] = {
+  'compliance': 'base/windows',
+}
 ```
 
 Instead of a refresh token, it is also possible to use a `token` that expires in 12h after its creation.
@@ -234,12 +208,9 @@ default['audit']['reporter'] = 'chef-compliance'
 default['audit']['server'] = 'https://compliance-fqdn/api'
 default['audit']['owner'] = 'my-comp-org'
 default['audit']['token'] = 'eyJ........................YQ'
-default['audit']['profiles'].push(
-  {
-    'name': 'windows',
-    'compliance': 'base/windows',
-  }
-)
+default['audit']['profiles']['windows'] = {
+  'compliance': 'base/windows',
+}
 ```
 
 #### Direct reporting to Chef Automate
@@ -252,12 +223,9 @@ This method sends the report using the `data_collector.server_url` and `data_col
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
-default['audit']['profiles'].push(
-  {
-    'name': 'brewinc/tmp_compliance_profile',
-    'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
-  }
-)
+default['audit']['profiles']['tmp_compliance_profile'] = {
+  'url': 'https://github.com/nathenharvey/tmp_compliance_profile'
+}
 ```
 
 If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/setup_visibility_chef_automate.html#add-chef-automate-certificate-to-trusted-certs-directory)
@@ -286,12 +254,9 @@ To write the report to a file on disk, simply set the `reporter` to 'json-file' 
 
 ```ruby
 default['audit']['reporter'] = 'json-file'
-default['audit']['profiles'].push(
-  {
-    'name': 'admin/ssh2',
-    'path': '/some/base_ssh.tar.gz'
-  }
-)
+default['audit']['profiles']['ssh2'] = {
+  'path': '/some/base_ssh.tar.gz'
+}
 ```
 
 The resulting file will be written to `node['audit']['json_file']['location']` which defaults to
@@ -311,11 +276,9 @@ for each one.  For example, to report to chef-compliance and write to json file 
 
 ```ruby
 default['audit']['reporter'] = ['chef-server-automate', 'json-file']
-default['audit']['profiles'].push(
-  {
-    'name': 'windows',
-    'compliance': 'base/windows'
-  }
+default['audit']['profiles']['windows'] = {
+  'compliance': 'base/windows'
+}
 )
 ```
 
@@ -330,12 +293,9 @@ This allows the audit cookbook to fetch profiles stored in Chef Compliance. For 
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
 default['audit']['fetcher'] = 'chef-server'
-default['audit']['profiles'].push(
-  {
-    'name': 'ssh',
-    'compliance': 'base/ssh'
-  }
-)
+default['audit']['profiles']['ssh'] = {
+  'compliance': 'base/ssh'
+}
 ```
 
 #### Fetch profiles directly from Chef Automate
@@ -345,12 +305,9 @@ This method fetches profiles using the `data_collector.server_url` and `data_col
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
 default['audit']['fetcher'] = 'chef-automate'
-default['audit']['profiles'].push(
-  {
-    'name': 'ssh',
-    'compliance': 'base/ssh'
-  }
-)
+default['audit']['profiles']['ssh'] = {
+  'name': 'ssh',
+}
 ```
 
 ## Profile Upload to Compliance Server
@@ -364,12 +321,9 @@ Simply include the `upload` recipe in the run_list, with attribute overrides for
 default['audit']['server'] = 'https://compliance-server.test/api'
 default['audit']['reporter'] = 'chef-compliance'
 default['audit']['refresh_token'] = '21/XMEK3...'
-default['audit']['profiles'].push(
-  {
-    'name': 'ssh',
-    'compliance': 'base/ssh'
-  }
-)
+default['audit']['profiles']['ssh'] = {
+  'compliance': 'base/ssh'
+}
 ```
 
 ## Relationship with Chef Audit Mode
