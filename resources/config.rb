@@ -16,9 +16,10 @@ end
 
 action_class do
   # We need to check to see if the profiles is an Hash of Hashes and needs to
-  # be upgraded to an Array of Hashes
-  # The reason this might be a hash is to support `include_policy` in
-  # PolicyFiles setting profiles to run
+  # be upgraded to an Array of Hashes.
+  # The reason we go to the Array format instead of the newer Hash format is
+  # the audit report handler converts the hash back to an array and this
+  # greatly simplifies the code over there needed to handle this.
   def get_profile_list
     return new_resource.profiles.dup if new_resource.profiles.is_a?(Array)
     update_to_array(new_resource.profiles.dup)
