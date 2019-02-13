@@ -29,4 +29,7 @@ end
 
 include_recipe 'audit::inspec'
 
+audit_config 'default' do
+end
+
 load_audit_handler
