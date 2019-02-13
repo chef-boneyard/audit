@@ -37,8 +37,6 @@ action_class do
 
   # store current profile list in the run_state
   def setup_run_state
-    node.run_state['audit'] ||= {}
-    node.run_state['audit']['profiles'] ||= []
-    node.run_state['audit']['profiles'] += get_profile_list
+    node.run_state['audit'] ||= { 'profiles' => get_profile_list }
   end
 end
