@@ -56,6 +56,13 @@ describe 'Reporter::ChefServerAutomate methods' do
                                   "roles": %w(base_linux apache_linux),
                                   "recipes": ['some_cookbook::some_recipe', 'some_cookbook'],
                                   "report_uuid": '3f0536f7-3361-4bca-ae53-b45118dceb5d',
+                                  "source_fqdn": "api.chef.io",
+                                  "organization_name": "test_org",
+                                  "policy_group": "test_policy_group",
+                                  "policy_name": "test_policy_name",
+                                  "chef_tags": ["mylinux", "my.tag", "some=tag"],
+                                  "ipaddress": "192.168.56.33",
+                                  "fqdn": "lb1.prod.example.com",
       }
 
     opts = {
@@ -81,5 +88,10 @@ describe 'Reporter::ChefServerAutomate methods' do
   it 'sends report successfully to ChefServerAutomate' do
     allow(Time).to receive(:now).and_return(Time.parse('2016-07-19T19:19:19+01:00'))
     expect(@automate.send_report(MockData.inspec_results)).to eq(true)
+  end
+
+  it 'enriches report correctly with the most test coverage' do
+    allow(Time).to receive(:now).and_return(Time.parse('2016-07-19T19:19:19+01:00'))
+    expect(@automate.enriched_report(MockData.inspec_results)).to eq(@enriched_report_expected)
   end
 end

@@ -71,6 +71,10 @@ module ReportHelpers
     cs.to_s
   end
 
+  def chef_server_uri
+    URI(Chef::Config[:chef_server_url])
+  end
+
   # used for interval timing
   def create_timestamp_file
     timestamp = Time.now.utc

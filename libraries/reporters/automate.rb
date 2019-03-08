@@ -10,13 +10,20 @@ module Reporter
     include ReportHelpers
 
     def initialize(opts)
-      @entity_uuid = opts[:entity_uuid]
-      @run_id = opts[:run_id]
-      @node_name = opts[:node_info][:node]
-      @environment = opts[:node_info][:environment]
-      @roles = opts[:node_info][:roles]
-      @recipes = opts[:node_info][:recipes]
-      @insecure = opts[:insecure]
+      @entity_uuid       = opts[:entity_uuid]
+      @run_id            = opts[:run_id]
+      @node_name         = opts[:node_info][:node]
+      @environment       = opts[:node_info][:environment]
+      @roles             = opts[:node_info][:roles]
+      @recipes           = opts[:node_info][:recipes]
+      @insecure          = opts[:insecure]
+      @chef_tags         = opts[:node_info][:chef_tags]
+      @policy_group      = opts[:node_info][:policy_group]
+      @policy_name       = opts[:node_info][:policy_name]
+      @source_fqdn       = opts[:node_info][:source_fqdn]
+      @organization_name = opts[:node_info][:organization_name]
+      @ipaddress         = opts[:node_info][:ipaddress]
+      @fqdn              = opts[:node_info][:fqdn]
 
       if defined?(Chef) &&
          defined?(Chef::Config) &&
@@ -98,13 +105,21 @@ module Reporter
       # Ensure controls are never stored or shipped, since this was an accidential
       # addition in InSpec and will be remove in the next inspec major release
       final_report.delete(:controls)
-      final_report[:node_name]   = @node_name
-      final_report[:end_time]    = Time.now.utc.strftime('%FT%TZ')
-      final_report[:node_uuid]   = @entity_uuid
-      final_report[:environment] = @environment
-      final_report[:roles]       = @roles
-      final_report[:recipes]     = @recipes
-      final_report[:report_uuid] = @run_id
+      final_report[:node_name]         = @node_name
+      final_report[:end_time]          = Time.now.utc.strftime('%FT%TZ')
+      final_report[:node_uuid]         = @entity_uuid
+      final_report[:environment]       = @environment
+      final_report[:roles]             = @roles
+      final_report[:recipes]           = @recipes
+      final_report[:report_uuid]       = @run_id
+      final_report[:source_fqdn]       = @source_fqdn
+      final_report[:organization_name] = @organization_name
+      final_report[:policy_group]      = @policy_group
+      final_report[:policy_name]       = @policy_name
+      final_report[:chef_tags]         = @chef_tags
+      final_report[:ipaddress]         = @ipaddress
+      final_report[:fqdn]              = @fqdn
+
       final_report
     end
   end

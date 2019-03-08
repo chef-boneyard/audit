@@ -2,6 +2,7 @@
 driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
+  #chef_version: 13.12.14
 
 transport:
   name: dokken
@@ -148,16 +149,16 @@ suites:
           - git: https://github.com/dev-sec/tests-ssh-hardening.git
           - name: ssh-baseline
             supermarket: dev-sec/ssh-baseline
-  - name: gem-install-version
+  - name: gem-install-core-version3
     run_list:
       - recipe[test_helper::install_inspec]
       - recipe[audit::default]
     attributes:
       audit:
         reporter: json-file
-        inspec_version: 1.29.0
+        inspec_version: 3.0.9
         fail_if_not_present: true
-  - name: gem-install-core-version
+  - name: gem-install-core-version2
     run_list:
       - recipe[test_helper::install_inspec]
       - recipe[audit::default]
@@ -165,23 +166,6 @@ suites:
       audit:
         reporter: json-file
         inspec_version: 2.1.67
-        fail_if_not_present: true
-  - name: skip-inspec-gem-install
-    run_list:
-      - recipe[test_helper::install_inspec]
-      - recipe[audit::default]
-    attributes:
-      audit:
-        reporter: json-file
-        inspec_version: 1.25.1
-        fail_if_not_present: true
-  - name: chef-12-test
-    run_list:
-      - recipe[audit::default]
-    attributes:
-      audit:
-        reporter: json-file
-        inspec_version: 1.25.1
         fail_if_not_present: true
   - name: hash
     run_list:
