@@ -9,6 +9,8 @@ module Deprecations
     # ArrayProfile module extend the hash instance object node['audit']['profiles']
     # to add warning & format the array assignment.
     module ArrayProfile
+      EXCLUDE_METHODS = [:[]=]
+      MUTATOR_METHODS = Chef::Node::Mixin::ImmutablizeArray::DISALLOWED_MUTATOR_METHODS
       # @overload []=(*args)
       # This method provide the support to assign item as hash(key as String|Symbol)
       #
@@ -23,18 +25,25 @@ module Deprecations
       #    { name: linux, 'compalince': 'base/linux' }
       #
       # @return [Array<Profiles>]
-      def []=(*args)
-        self << { name: args.first }.merge(Hash.try_convert(args.last) || {})
+      def []=(key, value)
+        # Assume assignment of profles for array if key is integer
+        index = key
+
+        if key.is_a?(Integer)
+          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+        else
+          index = self.length
+          value = { name: key }.merge(Hash.try_convert(value) || {})
+        end
+        super(index, value)
       end
 
-      # @overload push(*args)
-      # WARN msg for the use of array assigment.
-      # @param [Array] Profiles the are being assigned.
-      #
-      # @return [Array<Profiles>]
-      def push(*args)
-        Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
-        super(*args)
+      # For all methods that may mutate an Array override them and raise warning
+      (MUTATOR_METHODS - EXCLUDE_METHODS).each do |mutator|
+        define_method(mutator) do |*args, &block|
+          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+          super(*args, &block)
+        end
       end
     end
 
@@ -50,7 +59,7 @@ module Deprecations
       #
       def []=(key, val)
         if key.eql?('profiles')
-          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+          Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes." unless val.is_a?(Hash)
           store(key, val)
           self[key].extend(ArrayProfile)
         else
