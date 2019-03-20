@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the audit cookbook.
 
+## 7.4.1 (2019-03-20)
+
+- Fixing broken link to data collection docs (#356) - [@moutons](https://github.com/moutons)
+- Prevent failures when running on Chef 15 (#362) - [@tas50](https://github.com/tas50)
+
 ## [v7.4.0](https://github.com/chef-cookbooks/audit/tree/v7.4.0) (2019-02-05)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.3.0...v7.4.0)
 
