@@ -1,4 +1,6 @@
-# Change Log
+# audit Cookbook CHANGELOG
+
+This file is used to list changes made in each version of the audit cookbook.
 
 ## [v7.4.0](https://github.com/chef-cookbooks/audit/tree/v7.4.0) (2019-02-05)
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.3.0...v7.4.0)

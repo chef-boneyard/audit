@@ -25,6 +25,6 @@ group :integration do
 end
 
 group :release do
-  gem 'github_changelog_generator', '~> 1'
+  gem 'community_cookbook_releaser'
   gem 'stove'
 end
