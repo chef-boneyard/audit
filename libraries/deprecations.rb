@@ -32,7 +32,7 @@ module Deprecations
         if key.is_a?(Integer)
           Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
         else
-          index = self.length
+          index = length
           value = { 'name': key }.merge(Hash.try_convert(value) || {})
         end
         super(index, value)
@@ -62,15 +62,18 @@ module Deprecations
         if key.eql?('profiles')
           unless val.is_a?(Hash)
             Chef::Log.warn "Use of a hash array for the node['audit']['profiles'] is deprecated. Please refer to the README and use a hash of hashes."
+            store(key, val)
             self[key].extend(ArrayProfile)
+          else
+            store(key, val)
           end
-          store(key, val)
         else
           super(key, val)
         end
       end
 
       private
+
       # @param key<Object> The key to convert.
       #
       # @param [Object]
@@ -79,7 +82,7 @@ module Deprecations
       #
       # @api private
       def convert_key(key)
-        key.kind_of?(Symbol) ? key.to_s : key
+        key.is_a?(Symbol) ? key.to_s : key
       end
     end
   end
