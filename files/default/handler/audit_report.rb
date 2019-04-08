@@ -37,7 +37,7 @@ class Chef
           profiles = []
           node['audit']['profiles'].keys.each do |p|
             h = node['audit']['profiles'][p].to_hash
-            h['name'] = p
+            h[:name] = p unless h.key?('name') || h.key?(:name)
             profiles.push(h)
           end
         else
