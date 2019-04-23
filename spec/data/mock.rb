@@ -3,7 +3,15 @@ class MockData
     { node: 'chef-client.solo',
       environment: 'My Prod Env',
       roles: %w(base_linux apache_linux),
-      recipes: ['some_cookbook::some_recipe', 'some_cookbook'] }
+      recipes: ['some_cookbook::some_recipe', 'some_cookbook'],
+      policy_name: 'test_policy_name',
+      policy_group: 'test_policy_group',
+      chef_tags: ['mylinux', 'my.tag', 'some=tag'],
+      organization_name: 'test_org',
+      source_fqdn: 'api.chef.io',
+      ipaddress: '192.168.56.33',
+      fqdn: 'lb1.prod.example.com'
+    }
   end
 
   def self.inspec_results
