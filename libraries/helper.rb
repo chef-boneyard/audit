@@ -66,13 +66,13 @@ module ReportHelpers
   end
 
   def base_chef_server_url
-    cs = URI(Chef::Config[:chef_server_url])
+    cs = chef_server_uri
     cs.path = ''
     cs.to_s
   end
 
   def chef_server_uri
-    URI(Chef::Config[:chef_server_url])
+    URI(Chef::Config.chef_server_url)
   end
 
   # used for interval timing
