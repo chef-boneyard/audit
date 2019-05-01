@@ -43,28 +43,21 @@ action_class do
     gem_version = nil if gem_version == 'latest'
 
     # use inspec-core for recent inspec versions
-    if gem_version.nil? || (Gem::Version.new(gem_version) >= Gem::Version.new('2.1.67'))
-      chef_gem 'inspec-core' do
-        version gem_version unless gem_version.nil?
-        unless gem_source.nil?
-          clear_sources true
-          include_default_source false if respond_to?(:include_default_source)
-          source gem_source
-        end
-        compile_time false
-        action :install
+    gem_name = if gem_version.nil? || (Gem::Version.new(gem_version) >= Gem::Version.new('2.1.67'))
+                 'inspec-core'
+               else
+                 'inspec'
+               end
+
+    chef_gem gem_name do
+      version gem_version unless gem_version.nil?
+      unless gem_source.nil?
+        clear_sources true
+        include_default_source false if respond_to?(:include_default_source)
+        source gem_source
       end
-    else
-      chef_gem 'inspec' do
-        version gem_version unless gem_version.nil?
-        unless gem_source.nil?
-          clear_sources true
-          include_default_source false if respond_to?(:include_default_source)
-          source gem_source
-        end
-        compile_time false
-        action :install
-      end
+      compile_time false
+      action :install
     end
   end
 
