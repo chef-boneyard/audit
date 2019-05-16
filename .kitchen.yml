@@ -3,6 +3,7 @@ driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
   #chef_version: 13.12.14
+  chef_version: 14
 
 transport:
   name: dokken
@@ -19,7 +20,7 @@ verifier:
 platforms:
 - name: ubuntu-14.04
   driver:
-    image: dokken/ubuntu-16.04
+    image: dokken/ubuntu-14.04
     intermediate_instructions:
     - RUN /usr/bin/apt-get update
 - name: ubuntu-16.04
@@ -30,7 +31,7 @@ platforms:
     pid_one_command: /bin/systemd
 - name: ubuntu-18.04
   driver:
-    image: dokken/ubuntu-16.04
+    image: dokken/ubuntu-18.04
     intermediate_instructions:
     - RUN /usr/bin/apt-get update
     pid_one_command: /bin/systemd
