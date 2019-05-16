@@ -17,43 +17,36 @@ verifier:
   sudo: false
 
 platforms:
-- name: ubuntu-12.04
-  driver:
-    image: ubuntu:12.04
-    intermediate_instructions:
-    - RUN /usr/bin/apt-get update
 - name: ubuntu-14.04
   driver:
-    image: ubuntu:14.04
+    image: dokken/ubuntu-16.04
     intermediate_instructions:
     - RUN /usr/bin/apt-get update
-- name: ubuntu-15.10
+- name: ubuntu-16.04
   driver:
-    image: ubuntu:15.10
+    image: dokken/ubuntu-16.04
     intermediate_instructions:
     - RUN /usr/bin/apt-get update
     pid_one_command: /bin/systemd
-- name: centos-6.6
+- name: ubuntu-18.04
   driver:
-    image: centos:6.6
-- name: centos-6.7
-  driver:
-    image: centos:6.7
+    image: dokken/ubuntu-16.04
     intermediate_instructions:
-      - RUN yum install -y initscripts
+    - RUN /usr/bin/apt-get update
+    pid_one_command: /bin/systemd
+- name: centos-6
+  driver:
+    image: dokken/centos-6
 - name: centos-7
   driver:
-    image: centos:7
+    image: dokken/centos-7
     pid_one_command: /usr/lib/systemd/systemd
-- name: oracle-6.6
+- name: oracle-6
   driver:
-    image: oraclelinux:6.6
-- name: oracle-6.7
+    image: oraclelinux:6
+- name: oracle-7
   driver:
-    image: oraclelinux:6.7
-- name: oracle-7.1
-  driver:
-    image: oraclelinux:7.1
+    image: oraclelinux:7
     pid_one_command: /usr/lib/systemd/systemd
 - name: debian-7
   driver:
@@ -121,7 +114,7 @@ suites:
           - name: ssh-hardening
             url: https://github.com/dev-sec/this-is-not-available.zip
     includes:
-      - ubuntu-14.04
+      - ubuntu-18.04
   - name: missing-profile-fail
     run_list:
       - recipe[test_helper::setup]
@@ -134,7 +127,7 @@ suites:
           - name: ssh-hardening
             url: https://github.com/dev-sec/this-is-not-available.zip
     includes:
-      - ubuntu-14.04
+      - ubuntu-18.04
   - name: compliance # compliance direct reporting
     run_list:
       - recipe[audit::default]

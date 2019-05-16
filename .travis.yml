@@ -20,34 +20,43 @@ matrix:
     env: SUITE=test:integration OS='default-centos-7'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='default-ubuntu-1404'
+    env: SUITE=test:integration OS='default-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='missing-profile-no-fail-ubuntu-1404'
+    env: SUITE=test:integration OS='missing-profile-no-fail-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE && exit 1 || echo "OK"
-    env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1404'
+    env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1804'
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'    
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='gem-install-core-version4-centos-7'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='gem-install-core-version3-centos-7'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version3-ubuntu-1404'
+    env: SUITE=test:integration OS='gem-install-core-version4-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version2-ubuntu-1404'
+    env: SUITE=test:integration OS='gem-install-core-version3-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='inspec-attributes-ubuntu-1404'
+    env: SUITE=test:integration OS='gem-install-core-version2-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='chef-node-enabled-ubuntu-1404'
+    env: SUITE=test:integration OS='inspec-attributes-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='chef-node-disabled-ubuntu-1404'
+    env: SUITE=test:integration OS='chef-node-enabled-ubuntu-1804'
+  - rvm: 2.3.3
+    script: bundle exec rake $SUITE
+    env: SUITE=test:integration OS='chef-node-disabled-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='hash-centos-7'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='hash-ubuntu-1404'
+    env: SUITE=test:integration OS='hash-ubuntu-1804'
