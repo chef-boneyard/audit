@@ -149,6 +149,28 @@ suites:
           - git: https://github.com/dev-sec/tests-ssh-hardening.git
           - name: ssh-baseline
             supermarket: dev-sec/ssh-baseline
+  - name: chef15-compatible-inspec
+    run_list:
+      - recipe[test_helper::force_inspec_core]
+      - recipe[audit::default]
+    driver:
+      chef_version: 15
+    provisioner:
+      chef_options: ' -z --chef-license accept-no-persist'
+    attributes:
+      audit:
+        reporter: json-file
+        inspec_version: 3.0.9
+        fail_if_not_present: true
+  - name: gem-install-core-version4
+    run_list:
+      - recipe[test_helper::install_inspec]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        inspec_version: 4.3.2
+        fail_if_not_present: true
   - name: gem-install-core-version3
     run_list:
       - recipe[test_helper::install_inspec]
