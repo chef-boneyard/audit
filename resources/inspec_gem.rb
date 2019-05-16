@@ -116,7 +116,7 @@ action_class do
       action :remove
     end
 
-    chef_gem 'remove all inspec-core versions' do
+    chef_gem 'remove all inspec-core-bin versions' do
       package_name 'inspec-core-bin'
       action :remove
     end
