@@ -13,6 +13,8 @@ before_install:
 - gem update --system
 - gem --version
 - bundle --version
+env:
+  - CHEF_LICENSE="accept-no-persist"
 matrix:
   include:
   - rvm: 2.3.3
@@ -29,7 +31,7 @@ matrix:
     env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
-    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'    
+    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'
   - rvm: 2.3.3
     script: bundle exec rake $SUITE
     env: SUITE=test:integration OS='gem-install-core-version4-centos-7'

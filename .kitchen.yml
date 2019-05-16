@@ -168,6 +168,8 @@ suites:
     run_list:
       - recipe[test_helper::install_inspec]
       - recipe[audit::default]
+    driver:
+      chef_version: 14
     attributes:
       audit:
         reporter: json-file
@@ -177,6 +179,8 @@ suites:
     run_list:
       - recipe[test_helper::install_inspec]
       - recipe[audit::default]
+    driver:
+      chef_version: 14
     attributes:
       audit:
         reporter: json-file
