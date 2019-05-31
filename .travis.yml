@@ -41,7 +41,7 @@ matrix:
     env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1804'
   - rvm: 2.6.3
     script: rake $SUITE
-    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'
+    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804' CHEF_LICENSE="accept-no-persist"
   - rvm: 2.6.3
     script: rake $SUITE
     env: SUITE=test:integration OS='gem-install-core-version4-centos-7'
