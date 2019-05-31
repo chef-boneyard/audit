@@ -229,6 +229,7 @@ class Chef
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-visibility' || reporter == 'chef-automate'
+          # `run_status.entity_uuid` is calling the `entity_uuid` method in libraries/helper.rb
           opts = {
             entity_uuid: run_status.entity_uuid,
             run_id: run_status.run_id,
@@ -242,6 +243,7 @@ class Chef
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
             url = construct_url(chef_url, File.join('organizations', chef_org, 'data-collector'))
+            # `run_status.entity_uuid` is calling the `entity_uuid` method in libraries/helper.rb
             opts = {
               entity_uuid: run_status.entity_uuid,
               run_id: run_status.run_id,
