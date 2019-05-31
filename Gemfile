@@ -19,7 +19,7 @@ end
 
 group :integration do
   gem 'test-kitchen', '~> 1.16'
-  gem 'kitchen-dokken', '= 2.6.0'
+  gem 'kitchen-dokken', '~> 2.7.0'
   gem 'kitchen-ec2', '~> 1.2'
   gem 'kitchen-inspec', '~> 0.18'
 end
