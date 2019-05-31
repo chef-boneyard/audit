@@ -1,5 +1,5 @@
 # get most recent json-file output
-json_file = command('ls -t /opt/kitchen/cache/cookbooks/audit/inspec-*.json').stdout.lines.first.chomp
+json_file = command('ls -t /tmp/inspec-*.json').stdout.lines.first.chomp
 
 # ensure the control we expect is present and passed
 controls = json(json_file).profiles.first['controls']
