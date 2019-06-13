@@ -31,6 +31,22 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
 |   ≥ 1.6.8                  |   ≥ 1.2.0         |   > 1.0.2                 |
 
+#### Chef Client
+
+| Chef Client                | Audit Cookbook version    |
+|----------------------------|---------------------------|
+|   >= 15.0.293              |   >= 7.7.0                |
+
+Note:
+When used with Chef Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure.
+```
+Recipe Compile Error in /var/chef/cache/cookbooks/audit/recipes/default.rb
+================================================================================
+
+RuntimeError
+------------
+Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the same time. Please disable Audit Mode in your client configuration.
+```
 
 ## Deprecation Note:
 
