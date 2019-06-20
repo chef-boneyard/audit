@@ -11,7 +11,7 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 
 ### Chef
 
-- Chef Client >=12.5.1
+- Chef Client >=12.20
 
 ### Support Matrix
 
