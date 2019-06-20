@@ -116,6 +116,13 @@ module ReportHelpers
     File.expand_path('../../files/default/handler', __FILE__)
   end
 
+  # Copies ['audit']['attributes'] into run_state for the audit_handler to read them later
+  # Deletes ['audit']['attributes'] if instructed by ['audit']['attributes_save']
+  def copy_audit_attributes
+    node.run_state['audit_attributes'] = node['audit']['attributes']
+    node.rm('audit','attributes') unless node['audit']['attributes_save']
+  end
+
   def load_audit_handler
     libpath = ::File.join(cookbook_handler_path, 'audit_report')
     Chef::Log.info("loading handler from #{libpath}")

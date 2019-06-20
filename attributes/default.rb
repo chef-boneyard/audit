@@ -90,6 +90,9 @@ default['audit']['profiles'] = []
 # Attributes used to run the given profiles
 default['audit']['attributes'] = {}
 
+# Set this to false if you don't want ['audit']['attributes'] to be saved in the node object and stored in Chef Server or Automate. Useful if you are passing sensitive data to the inspec profile via the attributes.
+default['audit']['attributes_save'] = true
+
 # If enabled, a hash of the Chef "node" object will be sent to InSpec in an attribute
 # named `chef_node`
 default['audit']['chef_node_attribute_enabled'] = false
