@@ -175,20 +175,4 @@ describe 'audit::default' do
       expect { chef_run }.to_not raise_error
     end
   end
-
-  context 'when audit_mode is enabled' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
-      runner.node.override['audit']['collector'] = 'json-file'
-      runner.node.override['audit']['profiles'] = [
-        { 'name': 'linux', 'compliance': 'base/linux' },
-      ]
-      Chef::Config[:audit_mode] = :enabled
-      runner.converge(described_recipe)
-    end
-
-    it 'raises an exception' do
-      expect { chef_run }.to raise_error(RuntimeError)
-    end
-  end
 end

@@ -17,7 +17,7 @@ module ReportHelpers
   # Returns the node's uuid
   def entity_uuid
     # the Chef::DataCollector::Messages API here is Chef < 15.0 backcompat and can be removed when Chef 14.x is no longer supported
-    node[:chef_guid] || defined?(Chef::DataCollector::Messages) && Chef::DataCollector::Messages.node_uuid
+    node['chef_guid'] || defined?(Chef::DataCollector::Messages) && Chef::DataCollector::Messages.node_uuid
   end
 
   # Convert the strings in the profile definitions into symbols for handling

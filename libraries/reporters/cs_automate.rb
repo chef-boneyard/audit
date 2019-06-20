@@ -21,7 +21,7 @@ module Reporter
       @policy_group      = opts[:node_info][:policy_group]
       @policy_name       = opts[:node_info][:policy_name]
       @source_fqdn       = opts[:node_info][:source_fqdn]
-      @organization_name  = opts[:node_info][:organization_name]
+      @organization_name = opts[:node_info][:organization_name]
       @ipaddress         = opts[:node_info][:ipaddress]
       @fqdn              = opts[:node_info][:fqdn]
     end

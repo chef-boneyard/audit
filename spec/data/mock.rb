@@ -10,7 +10,7 @@ class MockData
       organization_name: 'test_org',
       source_fqdn: 'api.chef.io',
       ipaddress: '192.168.56.33',
-      fqdn: 'lb1.prod.example.com'
+      fqdn: 'lb1.prod.example.com',
     }
   end
 
