@@ -54,12 +54,11 @@ platforms:
   driver:
     image: oraclelinux:6
     pid_one_command: /sbin/init
-    
+
 - name: oracle-7
   driver:
     image: oraclelinux:7
     pid_one_command: /usr/lib/systemd/systemd
-
 
 - name: ubuntu-14.04
   driver:
