@@ -120,7 +120,7 @@ module ReportHelpers
   # Deletes ['audit']['attributes'] if instructed by ['audit']['attributes_save']
   def copy_audit_attributes
     node.run_state['audit_attributes'] = node['audit']['attributes']
-    node.rm('audit','attributes') unless node['audit']['attributes_save']
+    node.rm('audit', 'attributes') unless node['audit']['attributes_save']
   end
 
   def load_audit_handler
