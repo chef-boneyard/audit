@@ -20,6 +20,7 @@ services:
 
 before_install:
 - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+- CHEF_LICENSE="accept-no-persist" sudo chef gem install webmock
 - eval "$(chef shell-init bash)"
 - chef --version
 - cookstyle --version
@@ -27,6 +28,10 @@ before_install:
 
 matrix:
   include:
+  # Run the style, unit and chefspec tests
+  - rvm: 2.6.3
+    script: rake
+  # Run integration tests with test-kitchen
   - rvm: 2.6.3
     script: rake $SUITE
     env: SUITE=test:integration OS='default-centos-7'

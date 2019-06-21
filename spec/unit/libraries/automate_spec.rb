@@ -70,13 +70,13 @@ describe 'Reporter::ChefAutomate methods' do
                                   "roles": %w(base_linux apache_linux),
                                   "recipes": ['some_cookbook::some_recipe', 'some_cookbook'],
                                   "report_uuid": '3f0536f7-3361-4bca-ae53-b45118dceb5d',
-                                  "source_fqdn": "api.chef.io",
-                                  "organization_name": "test_org",
-                                  "policy_group": "test_policy_group",
-                                  "policy_name": "test_policy_name",
-                                  "chef_tags": ["mylinux", "my.tag", "some=tag"],
-                                  "ipaddress": "192.168.56.33",
-                                  "fqdn": "lb1.prod.example.com",
+                                  "source_fqdn": 'api.chef.io',
+                                  "organization_name": 'test_org',
+                                  "policy_group": 'test_policy_group',
+                                  "policy_name": 'test_policy_name',
+                                  "chef_tags": ['mylinux', 'my.tag', 'some=tag'],
+                                  "ipaddress": '192.168.56.33',
+                                  "fqdn": 'lb1.prod.example.com',
       }
 
     opts = {

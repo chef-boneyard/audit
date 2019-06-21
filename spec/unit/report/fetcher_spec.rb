@@ -47,7 +47,7 @@ describe ChefServer::Fetcher do
     it 'should resolve a target' do
       mynode.default['audit']['fetcher'] = nil
       res = ChefServer::Fetcher.resolve(myprofile)
-      expect(res.target).to eq(URI(myprofile))
+      expect(res.target).to eq(myprofile)
     end
 
     it 'should add /compliance URL prefix if needed' do
@@ -70,7 +70,7 @@ describe ChefServer::Fetcher do
     it 'should resolve a target with a version' do
       mynode.default['audit']['fetcher'] = nil
       res = ChefServer::Fetcher.resolve(profile_hash)
-      expect(res.target.request_uri).to eq(profile_hash_target)
+      expect(res.target).to eq("http://127.0.0.1:8889#{profile_hash_target}")
     end
   end
 

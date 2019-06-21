@@ -150,7 +150,7 @@ describe 'Chef::Handler::AuditReport methods' do
       # we cirumwent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
       report = @audit_report.call(opts, profiles)
-      expected_report = /^.*version.*profiles.*controls.*statistics.*duration.*/
+      expected_report = /^.*profiles.*controls.*version.*statistics.*duration.*controls.*/
       expect(report.to_json).to match(expected_report)
     end
     it 'given a profile, returns a json-min report' do
