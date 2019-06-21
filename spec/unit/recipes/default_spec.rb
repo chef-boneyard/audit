@@ -175,4 +175,39 @@ describe 'audit::default' do
       expect { chef_run }.to_not raise_error
     end
   end
+
+  context 'when audit attributes are not removed' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
+      runner.node.override['audit']['attributes']['my-inspec-attribute'] = 'ok'
+      runner.converge(described_recipe)
+    end
+    it 'still contains the audit attributes after converge' do
+      expect(chef_run.node.attributes['audit']['attributes']).to eq({"my-inspec-attribute"=>"ok"})
+    end
+    it "should contain the inspec attributes in the run_state" do
+      expect(chef_run.node.run_state['audit_attributes']).to eq({"my-inspec-attribute"=>"ok"})
+    end
+    it 'should not raise an exception' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
+
+  context 'when audit attributes are removed' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
+      runner.node.override['audit']['attributes']['my-inspec-attribute'] = 'ok'
+      runner.node.override['audit']['attributes_save'] = false
+      runner.converge(described_recipe)
+    end
+    it 'should not contain the audit attributes after converge' do
+      expect(chef_run.node.attributes['audit']['attributes']).to eq(nil)
+    end
+    it "should contain the inspec attributes in the run_state" do
+      expect(chef_run.node.run_state['audit_attributes']).to eq({"my-inspec-attribute"=>"ok"})
+    end
+    it 'should not raise an exception' do
+      expect { chef_run }.to_not raise_error
+    end
+  end
 end
