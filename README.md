@@ -597,13 +597,20 @@ Please let us know if you have any [issues](https://github.com/chef-cookbooks/au
 
 ## Run the tests for this cookbook:
 
+Install [Chef Development Kit](https://downloads.chef.io/chefdk) on your machine.
+
 ```bash
-bundle install
-bundle exec rake style
-# run all ChefSpec tests
-bundle exec rspec
-# run a specific test
-bundle exec rspec ./spec/unit/libraries/automate_spec.rb
+# Install webmock gem needed by rspec
+chef gem install webmock
+
+# Run style checks
+rake style
+
+# Run all unit and ChefSpec tests
+rspec
+
+# Run a specific test
+rspec ./spec/unit/libraries/automate_spec.rb
 ```
 
 ## How to release the `audit` cookbook

@@ -41,7 +41,8 @@ class Chef
         end
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
-        attributes = node['audit']['attributes'].to_h
+
+        attributes = node.run_state['audit_attributes'].to_h
 
         # add chef node data as an attribute if enabled
         attributes['chef_node'] = chef_node_attribute_data if node['audit']['chef_node_attribute_enabled']

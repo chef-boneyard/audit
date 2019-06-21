@@ -29,4 +29,6 @@ end
 
 include_recipe 'audit::inspec'
 
+# Call helper methods located in libraries/helper.rb
+copy_audit_attributes
 load_audit_handler
