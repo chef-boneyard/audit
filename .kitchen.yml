@@ -202,3 +202,13 @@ suites:
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
           ssh-baseline:
             supermarket: dev-sec/ssh-baseline
+  - name: custom_resource
+    run_list:
+      - recipe[audit::default]
+      - recipe[test_helper::custom_resources]
+    attributes:
+      audit:
+        reporter: json-file
+        profiles:
+          ssh-hardening:
+            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
