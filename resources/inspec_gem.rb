@@ -19,6 +19,7 @@ action :install do
     if new_resource.version == installed_version
       installation_required = false
       Chef::Log.info("inspec_gem: not installing Chef-InSpec. Requested version #{new_resource.version} already installed")
+      return
     end
   end
 
@@ -37,7 +38,7 @@ action :install do
   elsif new_resource.version.nil?
     Chef::Log.info('inspec_gem: not installing Chef-InSpec. No Chef-Inspec version specified')
   elsif !compatible_version
-    Chef::Log.info("inspec_gem: not installing Chef-InSpec. Requested version #{new_resource.version} is not compatible with chef-client #{Chef::VERSION}")
+    Chef::Log.warn("inspec_gem: not installing Chef-InSpec. Requested version #{new_resource.version} is not compatible with chef-client #{Chef::VERSION}")
   end
 end
 
@@ -79,18 +80,18 @@ action_class do
     # No version specified so they will get the latest
     return true if gem_version.nil?
 
-    requirement = if chef_15?
-                    # Chef-15 requires train 2.0 which was added in Inspec 4
-                    Gem::Requirement.new('>= 4')
-                  else
-                    # min version required to run the audit handler
-                    Gem::Requirement.new(['>= 1.25.1'])
-                  end
-
-    requirement.satisfied_by?(Gem::Version.new(gem_version))
+    if chef_gte_15?
+      # Chef-15 can only run with the version of inspec-core and train-core that's being bundled with
+      # It's pinned here: grep "inspec-" /opt/chef/bin/chef-client
+      Chef::Log.warn('inspec_gem: Chef Infra Client >= 15 detected, can only use the embedded InSpec gem!!!')
+      false
+    else
+      # min version required to run the audit handler
+      Gem::Requirement.new(['>= 1.25.1']).satisfied_by?(Gem::Version.new(gem_version))
+    end
   end
 
-  def chef_15?
+  def chef_gte_15?
     Gem::Requirement.new('>= 15').satisfied_by?(Gem::Version.new(Chef::VERSION))
   end
 
