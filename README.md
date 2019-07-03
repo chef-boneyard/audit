@@ -31,11 +31,11 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
 |   ≥ 1.6.8                  |   ≥ 1.2.0         |   > 1.0.2                 |
 
-#### Chef Client
+#### Chef Infra Client
 
 | Chef Client                | Audit Cookbook version    |
 |----------------------------|---------------------------|
-|   >= 15.0.293              |   >= 7.7.0                |
+|   >= 15                    |   >= 8.0.0                |
 
 Note:
 When used with Chef Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure.
