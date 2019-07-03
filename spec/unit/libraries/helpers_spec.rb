@@ -5,6 +5,7 @@
 
 require 'spec_helper'
 require_relative '../../../libraries/helper'
+require_relative '../../../files/default/handler/audit_report'
 
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }

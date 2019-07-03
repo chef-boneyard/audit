@@ -15,8 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# controls inspec gem version to install
-# example values: '1.1.0', 'latest'
+# Controls the inspec gem version to install and execution. Example values: '1.1.0', 'latest'
+# Starting with Chef Infra Client 15, only the embedded InSpec gem can be used and this attribute will be ignored
 default['audit']['inspec_version'] = nil
 
 # sets URI to alternate gem source
