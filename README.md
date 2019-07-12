@@ -31,11 +31,11 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
 |   ≥ 1.6.8                  |   ≥ 1.2.0         |   > 1.0.2                 |
 
-#### Chef Client
+#### Chef Infra Client
 
 | Chef Client                | Audit Cookbook version    |
 |----------------------------|---------------------------|
-|   >= 15.0.293              |   >= 7.7.0                |
+|   >= 15                    |   >= 8.0.0                |
 
 Note:
 When used with Chef Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure.
@@ -117,6 +117,8 @@ Also beginning with version 3.x of the `audit` cookbook, the default version of 
 
 To install a different version of the InSpec gem, or to force installation of the gem, set the `node['audit']['inspec_version']` attribute to the version you wish to be installed.
 
+**Starting with Chef Infra Client 15, only the embedded InSpec gem can be used and the `inspec_version` attribute will be ignored.**
+
 Note on AIX Support:
 
  * InSpec is only supported via the bundled InSpec gem shipped with version >= 13 of the chef-client package.
@@ -129,9 +131,6 @@ Once the cookbook is available in Chef Server, you need to add the `audit::defau
 
 ```ruby
 default['audit']['reporter'] = 'chef-server-compliance'
-
-# Omit this to use the latest InSpec
-default['audit']['inspec_version'] = '1.29.0'
 
 # You may use an array of hashes (shown here) or hash of hashes (shown below)
 default['audit']['profiles'].push(
@@ -630,14 +629,15 @@ rspec ./spec/unit/libraries/automate_spec.rb
 
 Releasing a new cookbook version:
 
-1. version bump the metadata.rb and updated changelog (`bundle exec rake changelog`)
-2. Get your changes merged into master
-3. Go to the `audit` cookbook directory and pull from master
-4. Run `bundle install`
-5. Use stove to publish the cookbook(including git version tag). You must point to the private key of your hosted chef user. For example:
+1. Install changelog gem: `chef gem install github_changelog_generator`
+2. version bump the metadata.rb and updated changelog (`rake changelog`)
+3. Get your changes merged into master
+4. Go to the `audit` cookbook directory and pull from master
+5. Run `bundle install`
+6. Use stove to publish the cookbook(including git version tag). You must point to the private key of your hosted chef user. For example:
 
   ```
-  bundle exec stove --username apop --key ~/git/chef-repo/.chef/apop.pem
+  stove --username apop --key ~/git/chef-repo/.chef/apop.pem
   ```
 
 ## License
