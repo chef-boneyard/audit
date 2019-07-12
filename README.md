@@ -328,7 +328,7 @@ The `audit-enforcer` enables you to enforce compliance with executed profiles. I
 default['audit']['reporter'] = 'audit-enforcer'
 ```
 
-Note that detection of non-compliance will immediately terminate the Chef Client run. If you specify [multiple reporters](#multiple-reporters), place the `audit-enforcer` at the end of the list to 
+Note that detection of non-compliance will immediately terminate the Chef Client run. If you specify [multiple reporters](#multiple-reporters), place the `audit-enforcer` at the end of the list, allowing the other reporters to generate their output prior to run termination.
 
 #### Multiple Reporters
 
