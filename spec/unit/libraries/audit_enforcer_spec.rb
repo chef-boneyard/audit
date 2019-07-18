@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Cookbook Name:: audit
 # Spec:: automate_spec
@@ -26,13 +25,13 @@ describe 'Reporter::ChefAutomate methods' do
       "profiles": [
         {
           "controls": [
-            { "id": "c1", "results": [{ "status": 'passed' }] },
-            { "id": "c2", "results": [{ "status": 'passed' }] },
+            { "id": 'c1', "results": [{ "status": 'passed' }] },
+            { "id": 'c2', "results": [{ "status": 'passed' }] },
           ],
         },
       ],
     }
-    @automate = Reporter::AuditEnforcer.new()
+    @automate = Reporter::AuditEnforcer.new
   end
 
   it 'is not raising error for a successful InSpec report' do
@@ -40,15 +39,15 @@ describe 'Reporter::ChefAutomate methods' do
   end
 
   it 'is not raising error for an InSpec report with no controls' do
-    expect(@automate.send_report({"profiles": [{"name": "empty"}]})).to eq(true)
+    expect(@automate.send_report({ "profiles": [{ "name": 'empty' }] })).to eq(true)
   end
 
   it 'is not raising error for an InSpec report with controls but no results' do
-    expect(@automate.send_report({"profiles": [{ "controls": [{"id": "empty"}]}]})).to eq(true)
+    expect(@automate.send_report({ "profiles": [{ "controls": [{ "id": 'empty' }] }] })).to eq(true)
   end
 
   it 'raises an error for a failed InSpec report' do
     @min_report[:profiles][0][:controls][1][:results][0][:status] = 'failed'
-    expect{ @automate.send_report(@min_report) }.to raise_error('Audit c2 has failed. Aborting chef-client run.')
+    expect { @automate.send_report(@min_report) }.to raise_error('Audit c2 has failed. Aborting chef-client run.')
   end
 end
