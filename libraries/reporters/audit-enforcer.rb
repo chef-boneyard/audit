@@ -5,10 +5,10 @@ module Reporter
   # Used to raise an error on conformance failure
   #
   class AuditEnforcer
-  
+
     class AuditControlFailure < StandardError
     end
-    
+
     def send_report(report)
       # iterate over each profile and control
       report[:profiles].each do |profile|
