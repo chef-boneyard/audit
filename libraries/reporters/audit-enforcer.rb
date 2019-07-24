@@ -5,7 +5,6 @@ module Reporter
   # Used to raise an error on conformance failure
   #
   class AuditEnforcer
-
     class AuditControlFailure < StandardError
     end
 
