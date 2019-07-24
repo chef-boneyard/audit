@@ -6,7 +6,8 @@ module Reporter
   #
   class AuditEnforcer
   
-    class AuditControlFailure < StandardError end
+    class AuditControlFailure < StandardError
+    end
     
     def send_report(report)
       # iterate over each profile and control
