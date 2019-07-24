@@ -319,6 +319,16 @@ the Chef log:
 [2017-08-29T00:22:10+00:00] INFO: Report handlers complete
 ```
 
+#### Enforce compliance with executed profiles
+
+The `audit-enforcer` enables you to enforce compliance with executed profiles. If the system under test is determined to be non-compliant, this reporter will raise an error and fail the Chef Client run. To activate compliance enforcement, set the `reporter` attribute to 'audit-enforcer':
+
+```ruby
+default['audit']['reporter'] = 'audit-enforcer'
+```
+
+Note that detection of non-compliance will immediately terminate the Chef Client run. If you specify [multiple reporters](#multiple-reporters), place the `audit-enforcer` at the end of the list, allowing the other reporters to generate their output prior to run termination.
+
 #### Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information

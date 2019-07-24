@@ -295,6 +295,8 @@ class Chef
           path = node['audit']['json_file']['location']
           Chef::Log.info "Writing report to #{path}"
           Reporter::JsonFile.new(file: path).send_report(report)
+        elsif reporter == 'audit-enforcer'
+          Reporter::AuditEnforcer.new.send_report(report)
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end
