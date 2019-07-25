@@ -102,7 +102,7 @@ class Chef
         Chef::Log.error("Report handler #{self.class.name} raised #{e.inspect}")
         Array(e.backtrace).each { |line| Chef::Log.error(line) }
         # force a chef-client exception if user requested it
-        throw e if node['audit']['fail_if_not_present']
+        throw e if e.is_a?(AuditEnforcer::ControlFailure) || node['audit']['fail_if_not_present']
       ensure
         @run_status = nil
       end

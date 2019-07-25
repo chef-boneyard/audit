@@ -5,8 +5,7 @@ module Reporter
   # Used to raise an error on conformance failure
   #
   class AuditEnforcer
-    class AuditControlFailure < StandardError
-    end
+    class ControlFailure < StandardError; end
 
     def send_report(report)
       # iterate over each profile and control
@@ -15,7 +14,7 @@ module Reporter
         profile[:controls].each do |control|
           next if control[:results].nil?
           control[:results].each do |result|
-            raise AuditControlFailure, "Audit #{control[:id]} has failed. Aborting chef-client run." if result[:status] == 'failed'
+            raise ControlFailure, "Audit #{control[:id]} has failed. Aborting chef-client run." if result[:status] == 'failed'
           end
         end
       end

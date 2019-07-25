@@ -48,6 +48,6 @@ describe 'Reporter::ChefAutomate methods' do
 
   it 'raises an error for a failed InSpec report' do
     @min_report[:profiles][0][:controls][1][:results][0][:status] = 'failed'
-    expect { @automate.send_report(@min_report) }.to raise_error(AuditControlFailure, 'Audit c2 has failed. Aborting chef-client run.')
+    expect { @automate.send_report(@min_report) }.to raise_error(AuditEnforcer::ControlFailure, 'Audit c2 has failed. Aborting chef-client run.')
   end
 end
