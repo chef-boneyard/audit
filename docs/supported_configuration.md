@@ -31,8 +31,7 @@ data_collector['token'] = '..'
 <p><b>Report to Automate via Chef Server</b>
 <pre lang="ruby"><code>
 ['audit']['reporter'] = 'chef-server-automate'
-['audit']['server'] = 'https://compliance-server.test/api'
-['audit']['refresh_token' OR 'token'] = '..'
+['audit']['fetcher'] = 'chef-server'
 ['audit']['owner'] = 'User/Org'
 &#35;
 &#35; chef-server.rb:
