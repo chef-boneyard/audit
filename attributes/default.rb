@@ -1,7 +1,7 @@
 # encoding: utf-8
 #
 # Author:: Stephan Renatus <srenatus@chef.io>
-# Copyright (c) 2016, Chef Software, Inc. <legal@chef.io>
+# Copyright (c) 2016-2019, Chef Software Inc. <legal@chef.io>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ default['audit']['overwrite'] = true
 
 # Chef Inspec Compliance profiles to be used for scan of node
 # See README.md for details
-default['audit']['profiles'] = []
+default['audit']['profiles'] = {}
 
 # Attributes used to run the given profiles
 default['audit']['attributes'] = {}
