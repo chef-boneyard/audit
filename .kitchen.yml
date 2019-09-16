@@ -135,20 +135,6 @@ suites:
             url: https://github.com/dev-sec/this-is-not-available.zip
     includes:
       - ubuntu-18.04
-  - name: compliance # compliance direct reporting
-    run_list:
-      - recipe[audit::default]
-    attributes:
-      audit:
-        server: <%= ENV['COMPLIANCE_API'] %>
-        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
-        owner: admin
-        profiles:
-          - name: ssh-hardening
-            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
-          - git: https://github.com/dev-sec/tests-ssh-hardening.git
-          - name: ssh-baseline
-            supermarket: dev-sec/ssh-baseline
   - name: chef15-compatible-inspec
     run_list:
       - recipe[test_helper::force_inspec_core]
@@ -158,7 +144,7 @@ suites:
     attributes:
       audit:
         reporter: json-file
-        inspec_version: 3.0.9
+        inspec_version: 3.9.3
         fail_if_not_present: true
   - name: gem-install-core-version4
     run_list:
