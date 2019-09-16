@@ -137,7 +137,6 @@ suites:
       - ubuntu-18.04
   - name: chef15-compatible-inspec
     run_list:
-      - recipe[test_helper::force_inspec_core]
       - recipe[audit::default]
     driver:
       chef_version: 15
