@@ -23,14 +23,6 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   ≥ 0.8.0          |   ≥ 1.24.0       |   ≥ 4.0.0                |
 |   ≥ 2              |   ≥ 2.2.102      |   ≥ 7.1.0                |
 
-#### Chef Compliance
-
-| Chef Compliance version    | InSpec version    | Audit Cookbook version    |
-|----------------------------|-------------------|---------------------------|
-|   ≤ 1.1.23                 |   = 0.20.1        |   = 0.7.0                 |
-|   > 1.1.23                 |   ≥ 0.22.1        |   = 0.8.0                 |
-|   ≥ 1.6.8                  |   ≥ 1.2.0         |   > 1.0.2                 |
-
 #### Chef Infra Client
 
 | Chef Client                | Audit Cookbook version    |
@@ -48,39 +40,13 @@ RuntimeError
 Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the same time. Please disable Audit Mode in your client configuration.
 ```
 
-## Deprecation Note:
-
-### Please use `reporter` instead of `collector` attribute
-
-With version 3.1.0 the use of the `collector` attribute is deprecated. Please use `reporter` instead. The `collector` attribute will be removed in the next major version.
-
-```
-default['audit']['collector'] = 'chef-server-compliance'
-```
-
-becomes:
-
-```
-default['audit']['reporter'] = 'chef-server-compliance'
-```
-
-### Use `chef-server-automate` and `chef-automate` instead of `chef-server-visibility` and `chef-visibility`
-
-With version 3.1.0 the reporter attribute deprecates the values `chef-server-visibility` and `chef-visibility`. They have been renamed:
-
- * `chef-server-visibility` => `chef-server-automate`
- * `chef-visibility` => `chef-automate`
-
-The support for values `chef-server-visibility` and `chef-visibility` will be removed in the next major version.
-
-
 ## Overview
 
 ### Component Architecture
 ```
  ┌──────────────────────┐    ┌──────────────────────┐    ┌─────────────────────┐
- │     Chef Client      │    │   Chef Server Proxy  │    │   Chef Compliance   │
- │                      │    │      (optional)      │    │   or Chef Automate  │
+ │     Chef Client      │    │   Chef Server Proxy  │    │    Chef Automate    │
+ │                      │    │      (optional)      │    │                     │
  │ ┌──────────────────┐ │    │                      │    │                     │
  │ │                  │◀┼────┼──────────────────────┼────│  Profiles           │
  │ │  audit cookbook  │ │    │                      │    │                     │
@@ -94,8 +60,8 @@ InSpec Profiles can be hosted from a variety of locations:
 
 ```
  ┌──────────────────────┐                                ┌─────────────────────┐
- │     Chef Client      │     ┌───────────────────────┐  │   Chef Compliance   │
- │                      │  ┌──│ Profiles(Supermarket, │  │   or Chef Automate  │
+ │     Chef Client      │     ┌───────────────────────┐  │    Chef Automate    │
+ │                      │  ┌──│ Profiles(Supermarket, │  │                     │
  │ ┌──────────────────┐ │  │  │ Github, local, etc)   │  │                     │
  │ │                  │◀┼──┘  └───────────────────────┘  │                     │
  │ │  audit cookbook  │◀┼────────────────────────────────│  Profiles           │
@@ -130,23 +96,23 @@ Note on AIX Support:
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node. The profiles are selected using the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below are some other examples:
 
 ```ruby
-default['audit']['reporter'] = 'chef-server-compliance'
+default['audit']['reporter'] = 'chef-server-automate'
+default['audit']['fetcher'] = 'chef-server'
 
 # You may use an array of hashes (shown here) or hash of hashes (shown below)
 default['audit']['profiles'].push(
-    # Profile from Chef Compliance
+    # Profile from Chef Automate
     {
       'name': 'linux',
       'compliance': 'base/linux'
     },
-    # Profile from Chef Compliance at a particular version
+    # Profile from Chef Automate at a particular version
     {
       'name': 'linux-baseline',
       'compliance': 'user/linux-baseline',
       'version': '2.1.0'
     },
     # Profile from Supermarket
-    # note: If reporting to Compliance, first upload the Supermarket profile to Chef Compliance.
     # note: Artifactory's Supermarket implementation—"Chef Cookbook repository"—does not support InSpec compliance profiles at this time
     {
       'name': 'ssh',
@@ -213,46 +179,6 @@ default['audit']['profiles'].push(
   {
     'name': 'my-profile',
     'compliance': 'john/my-profile'
-  }
-)
-```
-
-
-#### Direct reporting to Chef Compliance
-
-To retrieve compliance profiles and report directly to Chef Compliance, set the `reporter`, `server`, `owner`, `refresh_token` and `profiles` attributes.
-
- * `reporter` - 'chef-compliance' to report to Chef Compliance
- * `server` - url of Chef Compliance server with `/api`
- * `owner` - Chef Compliance user or organization that will receive this scan report
- * `refresh_token` - refresh token for Chef Compliance API (https://github.com/chef/inspec/issues/690)
-   * note: A UI logout revokes the refresh_token. Workaround by logging in once in a private browser session, grab the token and then close the browser without logging out
- * `insecure` - a `true` value will skip the SSL certificate verification when retrieving access token. Default value is `false`
-
-```ruby
-default['audit']['reporter'] = 'chef-compliance'
-default['audit']['server'] = 'https://compliance-fqdn/api'
-default['audit']['owner'] = 'my-comp-org'
-default['audit']['refresh_token'] = '5/4T...g=='
-default['audit']['profiles'].push(
-  {
-    'name': 'windows',
-    'compliance': 'base/windows',
-  }
-)
-```
-
-Instead of a refresh token, it is also possible to use a `token` that expires in 12h after its creation.
-
-```ruby
-default['audit']['reporter'] = 'chef-compliance'
-default['audit']['server'] = 'https://compliance-fqdn/api'
-default['audit']['owner'] = 'my-comp-org'
-default['audit']['token'] = 'eyJ........................YQ'
-default['audit']['profiles'].push(
-  {
-    'name': 'windows',
-    'compliance': 'base/windows',
   }
 )
 ```
@@ -332,7 +258,7 @@ Note that detection of non-compliance will immediately terminate the Chef Client
 #### Multiple Reporters
 
 To enable multiple reporters, simply define multiple reporters with all the necessary information
-for each one.  For example, to report to chef-compliance and write to json file on disk:
+for each one.  For example, to report to Chef Automate and write to json file on disk:
 
 ```ruby
 default['audit']['reporter'] = ['chef-server-automate', 'json-file']
@@ -346,11 +272,11 @@ default['audit']['profiles'].push(
 
 ### Profile Fetcher
 
-#### Fetch profiles from Chef Automate/Chef Compliance via Chef Server
+#### Fetch profiles from Chef Automate via Chef Server
 
-To enable reporting to Chef Automate with profiles from Chef Compliance or Chef Automate, you need to have Chef Server integrated with [Chef Compliance or Chef Automate](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate). You can then set the `fetcher` attribute to 'chef-server'.
+To enable reporting to Chef Automate with profiles from Chef Automate, you need to have Chef Server integrated with [Chef Automate](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate). You can then set the `fetcher` attribute to 'chef-server'.
 
-This allows the audit cookbook to fetch profiles stored in Chef Compliance. For example:
+This allows the audit cookbook to fetch profiles stored in Chef Automate. For example:
 
 ```ruby
 default['audit']['reporter'] = 'chef-server-automate'
@@ -378,37 +304,17 @@ default['audit']['profiles'].push(
 )
 ```
 
-## Profile Upload to Compliance Server
-
-In order to support build cookbook mode, the `compliance_profile` resource has an `upload` action that allows uploading a compressed
-InSpec compliance profile to the Compliance Server.
-
-Simply include the `upload` recipe in the run_list, with attribute overrides for the `audit` hash like so:
-
-```ruby
-default['audit']['server'] = 'https://compliance-server.test/api'
-default['audit']['reporter'] = 'chef-compliance'
-default['audit']['refresh_token'] = '21/XMEK3...'
-default['audit']['profiles'].push(
-  {
-    'name': 'ssh',
-    'compliance': 'base/ssh'
-  }
-)
-```
-
 ## Relationship with Chef Audit Mode
 
 The following tables compares the [Chef Client audit mode](https://docs.chef.io/ctl_chef_client.html#run-in-audit-mode) with this `audit` cookbook.
 
 |                                          | audit mode | audit cookbook |
 |------------------------------------------|------------|----------------|
-| Works with Chef Compliance               | No         | Yes            |
 | Execution Engine                         | [Serverspec](http://serverspec.org/) | [InSpec](https://github.com/chef/inspec) |
-| Execute InSpec Compliance Profiles       | No         | Yes            |
+| Execute InSpec Profiles                  | No         | Yes            |
 | Execute tests embedded in Chef recipes   | Yes        | No             |
 
-Eventually the `audit` cookbook will replace audit mode. The only drawback is that you will not be able to execute tests in Chef recipes, but since you will be running these tests in production, you will want to have a straightforward, consistent process by which you include these tests throughout your development lifecycle. Within Chef Compliance, this is a profile.
+Eventually the `audit` cookbook will replace audit mode. The only drawback is that you will not be able to execute tests in Chef recipes, but since you will be running these tests in production, you will want to have a straightforward, consistent process by which you include these tests throughout your development lifecycle. Within Chef Automate, this is a profile.
 
 ### Migrating from audit mode to audit cookbook:
 
