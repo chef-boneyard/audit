@@ -20,11 +20,16 @@ class Chef
           Chef::Log.warn 'reporter `chef-server-visibility`is deprecated and removed in audit cookbook 4.0. Please use `chef-server-automate`.'
         end
 
+        if reporters.include?('chef-compliance')
+          Chef::Log.warn 'reporter `chef-compliance` is deprecated and removed in audit cookbook 9.0. Please use `chef-automate`.'
+        end
+
+        if reporters.include?('chef-server-compliance')
+          Chef::Log.warn 'reporter `chef-server-compliance` is deprecated and removed in audit cookbook 9.0. Please use `chef-automate`.'
+        end
+
         # collect attribute values
         server = node['audit']['server']
-        user = node['audit']['owner']
-        token = node['audit']['token']
-        refresh_token = node['audit']['refresh_token']
         interval = node['audit']['interval']
         interval_enabled = node['audit']['interval']['enabled']
         interval_time = node['audit']['interval']['time']
@@ -55,15 +60,10 @@ class Chef
 
         # detect if we run in a chef client with chef server
         load_chef_fetcher if reporters.include?('chef-server') ||
-                             reporters.include?('chef-server-compliance') ||
-                             reporters.include?('chef-server-visibility') ||
                              reporters.include?('chef-server-automate') ||
-                             %w{chef-server chef-server-compliance chef-server-visibility chef-server-automate}.include?(fetcher)
+                             %w{chef-server chef-server-automate}.include?(fetcher)
 
         load_automate_fetcher if fetcher == 'chef-automate'
-
-        # ensure authentication for Chef Compliance is in place, see libraries/compliance.rb
-        login_to_compliance(server, user, token, refresh_token) if reporters.include?('chef-compliance')
 
         # true if profile is due to run (see libraries/helper.rb)
         if check_interval_settings(interval, interval_enabled, interval_time)
@@ -81,11 +81,11 @@ class Chef
           # instantiate inspec runner with given options and run profiles; return report
           report = call(opts, profiles)
 
-          # send report to the correct reporter (automate, compliance, chef-server)
+          # send report to the correct reporter (automate, chef-server)
           if !report.empty?
             # iterate through reporters
             reporters.each do |reporter|
-              send_report(reporter, server, user, profiles, report)
+              send_report(reporter, server, profiles, report)
             end
           else
             Chef::Log.error 'Audit report was not generated properly, skipped reporting'
@@ -221,7 +221,7 @@ class Chef
       end
 
       # send InSpec report to the reporter (see libraries/reporters.rb)
-      def send_report(reporter, server, user, source_location, report)
+      def send_report(reporter, server, source_location, report)
         Chef::Log.info "Reporting to #{reporter}"
 
         # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
@@ -229,7 +229,7 @@ class Chef
         insecure = node['audit']['insecure']
 
         # TODO: harmonize reporter interface
-        if reporter == 'chef-visibility' || reporter == 'chef-automate'
+        if reporter == 'chef-automate'
           # `run_status.entity_uuid` is calling the `entity_uuid` method in libraries/helper.rb
           opts = {
             entity_uuid: run_status.entity_uuid,
@@ -239,7 +239,7 @@ class Chef
             source_location: source_location,
           }
           Reporter::ChefAutomate.new(opts).send_report(report)
-        elsif reporter == 'chef-server-visibility' || reporter == 'chef-server-automate'
+        elsif reporter == 'chef-server-automate'
           chef_url = server || base_chef_server_url
           chef_org = Chef::Config[:chef_server_url].split('/').last
           if chef_url
@@ -254,40 +254,6 @@ class Chef
               source_location: source_location,
             }
             Reporter::ChefServerAutomate.new(opts).send_report(report)
-          else
-            Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
-          end
-        elsif reporter == 'chef-compliance'
-          if server
-            raise_if_unreachable = node['audit']['raise_if_unreachable']
-            url = construct_url(server, File.join('/owners', user, 'inspec'))
-
-            config = Compliance::Configuration.new
-            token = config['token']
-
-            opts = {
-              url: url,
-              node_info: gather_nodeinfo,
-              raise_if_unreachable: raise_if_unreachable,
-              token: token,
-              source_location: source_location,
-            }
-            Reporter::ChefCompliance.new(opts).send_report(report)
-          else
-            Chef::Log.warn "'server' and 'token' properties required by inspec report collector #{reporter}. Skipping..."
-          end
-        elsif reporter == 'chef-server-compliance' || reporter == 'chef-server'
-          chef_url = server || base_chef_server_url
-          chef_org = Chef::Config[:chef_server_url].split('/').last
-          if chef_url
-            url = construct_url(chef_url + '/compliance/', File.join('organizations', chef_org, 'inspec'))
-            opts = {
-              url: url,
-              node_info: gather_nodeinfo,
-              raise_if_unreachable: raise_if_unreachable,
-              source_location: source_location,
-            }
-            Reporter::ChefServerCompliance.new(opts).send_report(report)
           else
             Chef::Log.warn "unable to determine chef-server url required by inspec report collector '#{reporter}'. Skipping..."
           end

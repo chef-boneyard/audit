@@ -29,40 +29,26 @@ default['audit']['inspec_gem_source'] = nil
 default['audit']['inspec_backend_cache'] = true
 
 # controls where inspec scan reports are sent
-# possible values: 'chef-server-automate', 'chef-server-compliance', 'chef-compliance', 'chef-automate', 'json-file'
+# possible values: 'chef-server-automate', 'chef-automate', 'json-file'
 # notes: 'chef-automate' requires inspec version 0.27.1 or greater
 # deprecated: 'chef-visibility' is replaced with 'chef-automate'
+# deprecated: 'chef-compliance' is replaced with 'chef-automate'
 # deprecated: 'chef-server-visibility' is replaced with 'chef-server-automate'
-default['audit']['reporter'] = 'chef-server-compliance'
+default['audit']['reporter'] = 'json-file'
 
-# controls reporting to Chef Automate with profiles from Chef Compliance or Chef Automate
+# controls where inspec profiles are fetched from, Chef Automate or via Chef Server
 # possible values: nil, 'chef-server', 'chef-automate'
-# notes: requires Chef Server ingtegrated with Chef Compliance
 default['audit']['fetcher'] = nil
-
-# url of Chef Compliance server API endpoint
-# example values: nil, 'https://comp-server.example.com/api'
-# notes: only required for 'chef-compliance' reporter
-default['audit']['server'] = nil
-
-# refresh token from the "About" dialogue in Chef Compliance UI
-# notes: used only for the 'chef-compliance' reporter
-default['audit']['refresh_token'] = nil
-
-# token from the "About" dialogue in Chef Compliance UI
-# notes: used only for the 'chef-compliance' reporter. This token expires 12h after creation
-default['audit']['token'] = nil
 
 # allow for connections to HTTPS endpoints using self-signed ssl certificates
 default['audit']['insecure'] = nil
 
-# Chef Compliance organization to post the report to
-# notes: only needed for the 'chef-compliance' reporter, optional for 'chef-server-compliance' and 'chef-server-automate'
+# Optional for 'chef-server-automate' reporter
 # defaults to Chef Server org if not defined
 default['audit']['owner'] = nil
 
-# raise exception if Compliance API endpoint is unreachable
-# while fetching profiles or posting report
+# raise exception if Automate API endpoint is unreachable
+# while fetching profiles or posting a report
 default['audit']['raise_if_unreachable'] = true
 
 # fail converge if downloaded profile is not present
@@ -79,9 +65,6 @@ default['audit']['interval']['time'] = 1440
 
 # controls verbosity of inspec runner
 default['audit']['quiet'] = true
-
-# controls whether or not existing profile is overwritten when using upload recipe
-default['audit']['overwrite'] = true
 
 # Chef Inspec Compliance profiles to be used for scan of node
 # See README.md for details

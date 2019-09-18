@@ -4,7 +4,7 @@ Integration testing for the `audit` cookbook.
 
 ## Purpose of this cookbook
 
-Tests the audit cookbook for the `chef-visibility` and `chef-server-visibility` collectors with a node managed by a Chef Server that is integrated with Chef Automate.
+Tests the audit cookbook for the `chef-automate` and `chef-server-automate` collectors with a node managed by a Chef Server that is integrated with Chef Automate.
 
 **Note:** This cookbook has been designed only for testing purposes, trying to minimize the external dependencies and test time. Don't use it for production.
 
@@ -29,12 +29,12 @@ Let's look a bit closer and the recipes used during the converge step:
 1. `harakiri` - If the converge fails and the instance is not terminated, the `harakiri` recipe configures the instance to self terminate after 4 hours of operation.
 2. `configure_services` - Idempotently configures the Chef Server and Chef Automate in order to enable the compliance profiles asset store and proxying.
 3. `upload_profile` - Downloads a remote profile and uploads it to the Automate Asset Store via the API and the data collector token
-4. `bootstrap_localhost` - In order to test the `audit` cookbook with the `chef-server-visibility` collector, we need a node that is managed by a Chef Server. This recipe:
+4. `bootstrap_localhost` - In order to test the `audit` cookbook with the `chef-server-automate` collector, we need a node that is managed by a Chef Server. This recipe:
   a) Configures `knife.rb` to talk to the local Chef Server
   b) Uploads to the Chef Server all the cookbook synced by `test-kitchen` to `/tmp/kitchen/cookbooks`
   c) Sets up SSH so we can bootstrap localhost via SSH. We are using `/tmp/kitchen/client.pem` as a private key as kitchen creates it for us already.
   d) Bootstraps localhost as a node for the local Chef Server with an empty runlist
-5. `converge_localhost` - Creates attribute files and converges the `audit::default` recipe once for each of the two collectors: `chef-server-visibility` and `chef-visibility`. The `chef-server-visibility` converge uses the compliance profile stored in Automate (uploaded by the `upload_profile` recipe).
+5. `converge_localhost` - Creates attribute files and converges the `audit::default` recipe once for each of the two collectors: `chef-server-automate` and `chef-automate`. The `chef-server-automate` converge uses the compliance profile stored in Automate (uploaded by the `upload_profile` recipe).
 
 
 ## Creating a starting ami for your account

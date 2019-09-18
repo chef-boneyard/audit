@@ -86,7 +86,8 @@ suites:
         json_file:
           location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
         profiles:
-          - git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
+          attribute-file-exists-profile:
+            git: https://github.com/mhedgpeth/attribute-file-exists-profile.git
         attributes:
           file: /opt/kitchen/cache/attribute-file-exists.test
   - name: chef-node-enabled
@@ -98,7 +99,8 @@ suites:
         json_file:
           location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
         profiles:
-          - url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
+          demo:
+            url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
         chef_node_attribute_enabled: true
   - name: chef-node-disabled
     run_list:
@@ -109,7 +111,8 @@ suites:
         json_file:
           location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
         profiles:
-          - url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
+          demo:
+            url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
   - name: missing-profile-no-fail
     run_list:
       - recipe[test_helper::setup]
@@ -118,7 +121,7 @@ suites:
       audit:
         reporter: json-file
         profiles:
-          - name: ssh-hardening
+          ssh-hardening:
             url: https://github.com/dev-sec/this-is-not-available.zip
     includes:
       - ubuntu-18.04
@@ -131,34 +134,18 @@ suites:
         reporter: json-file
         fail_if_not_present: true
         profiles:
-          - name: ssh-hardening
-            url: https://github.com/dev-sec/this-is-not-available.zip
+          ssh-hardening: https://github.com/dev-sec/this-is-not-available.zip
     includes:
       - ubuntu-18.04
-  - name: compliance # compliance direct reporting
-    run_list:
-      - recipe[audit::default]
-    attributes:
-      audit:
-        server: <%= ENV['COMPLIANCE_API'] %>
-        token: <%= ENV['COMPLIANCE_ACCESSTOKEN'] %>
-        owner: admin
-        profiles:
-          - name: ssh-hardening
-            url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
-          - git: https://github.com/dev-sec/tests-ssh-hardening.git
-          - name: ssh-baseline
-            supermarket: dev-sec/ssh-baseline
   - name: chef15-compatible-inspec
     run_list:
-      - recipe[test_helper::force_inspec_core]
       - recipe[audit::default]
     driver:
       chef_version: 15
     attributes:
       audit:
         reporter: json-file
-        inspec_version: 3.0.9
+        inspec_version: 3.9.3
         fail_if_not_present: true
   - name: gem-install-core-version4
     run_list:
