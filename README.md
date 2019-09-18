@@ -95,10 +95,7 @@ Note on AIX Support:
 
 Once the cookbook is available in Chef Server, you need to add the `audit::default` recipe to the run-list of each node (or, preferably create a wrapper cookbook). The profiles are selected using the `node['audit']['profiles']` attribute. A list of example configurations are documented in [Supported Configurations](docs/supported_configuration.md). Below is another example demonstrating the different locations profiles can be "fetched" from:
 
-```rubydefault['audit']['profiles']['linux'] = {
-  'compliance': 'base/linux'
-}
-
+```ruby
 default['audit']['profiles']['linux-baseline'] = {
   'compliance': 'user/linux-baseline',
   'version': '2.1.0'
