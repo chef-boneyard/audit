@@ -87,6 +87,25 @@ module ChefServer
       { compliance: chef_server_url }
     end
 
+    # Downloads archive to temporary file using a Chef::ServerAPI
+    # client so that Chef Server's header-based authentication can be
+    # used.
+    def download_archive_to_temp
+      return @temp_archive_path unless @temp_archive_path.nil?
+
+      Chef::Config[:verify_api_cert] = false # FIXME
+      Chef::Config[:ssl_verify_mode] = :verify_none # FIXME
+
+      rest = Chef::ServerAPI.new(@target, Chef::Config)
+      archive = with_http_rescue do
+        rest.streaming_request(@target)
+      end
+      @archive_type = '.tar.gz'
+      raise "Unable to find requested profile on path: '#{target_path}' on the Automate system." if archive.nil?
+      Inspec::Log.debug("Archive stored at temporary location: #{archive.path}")
+      @temp_archive_path = archive.path
+    end
+
     def to_s
       'Chef Server/Compliance Profile Loader'
     end
