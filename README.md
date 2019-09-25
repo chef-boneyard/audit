@@ -30,6 +30,9 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   >= 15                    |   >= 8.0.0                |
 
 Note:
+
+Windows Chef Client 15.1.36 ships with a version of Train that is unusable on Windows 2012r2 when combined with the audit cookbook/Inspec runs. The bug is shown here https://github.com/inspec/train/issues/475#issue-466365386 We recommend upgrading to 15.2.20 to get a working version of train, or a fixed version will be shipped in Chef Client versions >= 15.3.14
+
 When used with Chef Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure.
 ```
 Recipe Compile Error in /var/chef/cache/cookbooks/audit/recipes/default.rb
