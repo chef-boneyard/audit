@@ -1,0 +1,6 @@
+name: waivers-fixture
+license: Apache-2.0
+summary: A simple profile to verify waiver functionality under audit cookbook
+version: 0.1.0
+supports:
+  platform: os
