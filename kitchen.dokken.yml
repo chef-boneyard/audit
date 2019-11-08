@@ -1,9 +1,7 @@
----
 driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  #chef_version: 13.12.14
-  chef_version: 14
+  chef_version: <%= ENV['CHEF_VERSION'] || 14 %>
 
 transport:
   name: dokken
@@ -18,49 +16,70 @@ verifier:
   sudo: false
 
 platforms:
-- name: ubuntu-14.04
+- name: amazonlinux
   driver:
-    image: dokken/ubuntu-14.04
-    intermediate_instructions:
-    - RUN /usr/bin/apt-get update
-- name: ubuntu-16.04
+    image: dokken/amazonlinux
+    pid_one_command: /sbin/init
+
+- name: amazonlinux-2
   driver:
-    image: dokken/ubuntu-16.04
-    intermediate_instructions:
-    - RUN /usr/bin/apt-get update
+    image: dokken/amazonlinux-2
+    pid_one_command: /usr/lib/systemd/systemd
+
+- name: debian-8
+  driver:
+    image: dokken/debian-8
     pid_one_command: /bin/systemd
-- name: ubuntu-18.04
-  driver:
-    image: dokken/ubuntu-18.04
     intermediate_instructions:
-    - RUN /usr/bin/apt-get update
+      - RUN /usr/bin/apt-get update
+
+- name: debian-9
+  driver:
+    image: dokken/debian-9
     pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
 - name: centos-6
   driver:
     image: dokken/centos-6
+    pid_one_command: /sbin/init
+
 - name: centos-7
   driver:
     image: dokken/centos-7
     pid_one_command: /usr/lib/systemd/systemd
+
 - name: oracle-6
   driver:
     image: oraclelinux:6
+    pid_one_command: /sbin/init
+
 - name: oracle-7
   driver:
     image: oraclelinux:7
     pid_one_command: /usr/lib/systemd/systemd
-- name: debian-7
+
+- name: ubuntu-14.04
   driver:
-    image: debian:7
+    image: dokken/ubuntu-14.04
+    pid_one_command: /sbin/init
     intermediate_instructions:
-    - RUN /usr/bin/apt-get update
-    - RUN /usr/bin/apt-get install -y procps
-- name: debian-8
+      - RUN /usr/bin/apt-get update
+
+- name: ubuntu-16.04
   driver:
-    image: debian:8
-    intermediate_instructions:
-    - RUN /usr/bin/apt-get update
+    image: dokken/ubuntu-16.04
     pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
+
+- name: ubuntu-18.04
+  driver:
+    image: dokken/ubuntu-18.04
+    pid_one_command: /bin/systemd
+    intermediate_instructions:
+      - RUN /usr/bin/apt-get update
 
 suites:
   - name: default # run inspec locally
