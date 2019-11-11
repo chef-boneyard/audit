@@ -125,7 +125,7 @@ module ChefServer
 
     def self.chef_server_fetcher?
       # TODO: harmonize with audit_report.rb load_chef_fetcher
-      %w{chef-server chef-server-compliance chef-server-visibility chef-server-automate}.include?(Chef.node.attributes['audit']['fetcher'])
+      %w(chef-server chef-server-compliance chef-server-visibility chef-server-automate).include?(Chef.node.attributes['audit']['fetcher'])
     end
 
     private
