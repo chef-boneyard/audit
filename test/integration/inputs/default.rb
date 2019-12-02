@@ -9,11 +9,11 @@ controls.each do |c|
     results << r
   end
 end
-attribute_control = results.find { |x| x['code_desc'] == 'File /opt/kitchen/cache/attribute-file-exists.test should exist' }
-attribute_control = {} if attribute_control.nil?
+input_control = results.find { |x| x['code_desc'] == 'File /opt/kitchen/cache/file-exists.test is expected to exist' }
+input_control = {} if input_control.nil?
 
-describe 'attribute control' do
+describe 'input control' do
   it 'status should be passed' do
-    expect(attribute_control['status']).to eq('passed')
+    expect(input_control['status']).to eq('passed')
   end
 end
