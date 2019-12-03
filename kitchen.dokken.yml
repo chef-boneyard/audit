@@ -118,9 +118,9 @@ suites:
         json_file:
           location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
         profiles:
-          demo:
-            url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
-        chef_node_attribute_enabled: true
+          inspec-test-profile-chef-node-input:
+            url: https://github.com/inspec/inspec-test-profile-chef-node-input/archive/1.0.0.tar.gz
+        chef_node_input_enabled: true
   - name: chef-node-disabled
     run_list:
       - recipe[audit::default]
@@ -130,8 +130,8 @@ suites:
         json_file:
           location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
         profiles:
-          demo:
-            url: https://github.com/adamleff/inspec-profile-chef-node-attributes/archive/master.tar.gz
+          inspec-test-profile-chef-node-input:
+            url: https://github.com/inspec/inspec-test-profile-chef-node-input/archive/1.0.0.tar.gz
   - name: missing-profile-no-fail
     run_list:
       - recipe[test_helper::setup]
