@@ -119,7 +119,14 @@ module ReportHelpers
   # Copies ['audit']['inputs'] into run_state for the audit_handler to read them later
   # Deletes ['audit']['inputs'] if instructed by ['audit']['inputs_save']
   def copy_audit_inputs
-    node.run_state['audit_inputs'] = node['audit']['inputs']  # TODO legacy option
+    # Handle legacy option name
+    unless node['audit']['attributes'].empty?
+      Chef::Log.warn("node['audit']['attributes'] is deprecated - please use node['audit']['inputs']. Merging...")
+      node.default['audit']['inputs'].merge!(node['audit']['attributes'])
+      node.default['audit']['attributes'].clear
+    end
+
+    node.run_state['audit_inputs'] = node['audit']['inputs']
     node.rm('audit', 'inputs') unless node['audit']['inputs_save'] # TODO legacy option
   end
 

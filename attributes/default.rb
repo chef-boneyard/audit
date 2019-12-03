@@ -71,7 +71,11 @@ default['audit']['quiet'] = true
 default['audit']['profiles'] = {}
 
 # Inputs used to run the given profiles
-default['audit']['inputs'] = {} # TODO: legacy attribute support
+default['audit']['inputs'] = {}
+# Inputs were formerly called attributes; this is provided for backwards
+# compatibility but will be merged into default['audit']['inputs'].
+# To be removed in a major version change.
+default['audit']['attributes'] = {}
 
 # Set this to false if you don't want ['audit']['inputs'] to be saved in the node object and stored in Chef Server or Automate. Useful if you are passing sensitive data to the inspec profile via the attributes.
 default['audit']['inputs_save'] = true # TODO: legacy attribute support?
