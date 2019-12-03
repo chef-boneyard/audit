@@ -47,10 +47,10 @@ class Chef
         quiet = node['audit']['quiet']
         fetcher = node['audit']['fetcher']
 
-        attributes = node.run_state['audit_attributes'].to_h
+        inputs = node.run_state['audit_inputs'].to_h
 
-        # add chef node data as an attribute if enabled
-        attributes['chef_node'] = chef_node_attribute_data if node['audit']['chef_node_attribute_enabled']
+        # add chef node data as an input if enabled
+        inputs['chef_node'] = chef_node_attribute_data if node['audit']['chef_node_input_enabled'] # TODO legacy option support
 
         # load inspec, supermarket bundle and compliance bundle
         load_needed_dependencies
@@ -76,7 +76,7 @@ class Chef
           end
 
           # return hash of opts to be used by runner
-          opts = get_opts(reporter_format, quiet, attributes)
+          opts = get_opts(reporter_format, quiet, inputs)
 
           # instantiate inspec runner with given options and run profiles; return report
           report = call(opts, profiles)
@@ -144,7 +144,7 @@ class Chef
         require 'chef-automate/fetcher'
       end
 
-      def get_opts(reporter, quiet, attributes)
+      def get_opts(reporter, quiet, inputs)
         output = quiet ? ::File::NULL : $stdout
         Chef::Log.debug "Reporter is [#{reporter}]"
         opts = {
@@ -154,7 +154,7 @@ class Chef
           'output' => output,
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
           backend_cache: node['audit']['inspec_backend_cache'],
-          attributes: attributes,
+          inputs: inputs,
         }
         opts
       end

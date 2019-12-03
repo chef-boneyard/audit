@@ -70,15 +70,15 @@ default['audit']['quiet'] = true
 # See README.md for details
 default['audit']['profiles'] = {}
 
-# Attributes used to run the given profiles
-default['audit']['attributes'] = {}
+# Inputs used to run the given profiles
+default['audit']['inputs'] = {} # TODO: legacy attribute support
 
-# Set this to false if you don't want ['audit']['attributes'] to be saved in the node object and stored in Chef Server or Automate. Useful if you are passing sensitive data to the inspec profile via the attributes.
-default['audit']['attributes_save'] = true
+# Set this to false if you don't want ['audit']['inputs'] to be saved in the node object and stored in Chef Server or Automate. Useful if you are passing sensitive data to the inspec profile via the attributes.
+default['audit']['inputs_save'] = true # TODO: legacy attribute support?
 
-# If enabled, a hash of the Chef "node" object will be sent to InSpec in an attribute
+# If enabled, a hash of the Chef "node" object will be sent to InSpec in an input
 # named `chef_node`
-default['audit']['chef_node_attribute_enabled'] = false
+default['audit']['chef_node_input_enabled'] = false # TODO: legacy attribute support?
 
 # The location of the json-file output:
 # <chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json
