@@ -118,14 +118,14 @@ default['audit']['profiles']['ssh2'] = {
 }
 ```
 
-#### Attributes
+#### Inputs
 
-You can also pass in [InSpec Attributes](https://www.inspec.io/docs/reference/profiles/) to your audit run. Do this by defining the attributes:
+You can also pass in [InSpec Inputs](https://www.inspec.io/docs/reference/inputs/) to your audit run. Do this by defining the attributes:
 
 ```ruby
-default['audit']['attributes'] = {
-  first_attribute: 'some value',
-  second_attribute: 'another value',
+default['audit']['inputs'] = {
+  first_input: 'some value',
+  second_input: 'another value',
 }
 ```
 
