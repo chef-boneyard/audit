@@ -24,7 +24,7 @@ before_install:
 - chef --version
 - cookstyle --version
 - foodcritic --version
-- cd /tmp && curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_linux_amd64.zip && unzip vagrant_2.2.6_linux_amd64.zip && mv vagrant /usr/bin/ && vagrant --version
+- cd /tmp && curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_linux_amd64.zip && unzip vagrant_2.2.6_linux_amd64.zip && sudo mv vagrant /usr/bin/ && cd $TRAVIS_BUILD_DIR && vagrant --version
 
 matrix:
   include:
