@@ -8,7 +8,8 @@ addons:
       - chefdk
 
 # Don't `bundle install` which takes about 1.5 mins
-install: echo "skip bundle install"
+# install: echo "skip bundle install"
+install: bundle install
 
 branches:
   only:
