@@ -21,6 +21,7 @@ env:
   global:
     - CHEF_VERSION=15
     - KITCHEN_YAML=kitchen.dokken.yml
+    - CHEF_LICENSE="accept-no-persist"
 
 before_install:
 - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
