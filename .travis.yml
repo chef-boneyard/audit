@@ -17,6 +17,11 @@ branches:
 services:
 - docker
 
+env:
+  global:
+    - CHEF_VERSION=15
+    - KITCHEN_YAML=kitchen.dokken.yml
+
 before_install:
 - sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
 - CHEF_LICENSE="accept-no-persist" sudo chef gem install webmock
@@ -24,6 +29,8 @@ before_install:
 - chef --version
 - cookstyle --version
 - foodcritic --version
+- kitchen --version
+- kitchen list
 
 matrix:
   include:
