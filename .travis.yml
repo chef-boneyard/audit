@@ -51,23 +51,26 @@ matrix:
   - rvm: 2.6.3
     script: rake $SUITE && exit 1 || echo "OK"
     env: SUITE=test:integration OS='missing-profile-fail-ubuntu-1804'
-  - rvm: 2.6.3
-    script: rake $SUITE
-    env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'
 
+  # Next 5 suites are disabled due to an issue with the gem() inspec resource
+  # see https://github.com/chef-cookbooks/audit/issues/406
+  #
+  # - rvm: 2.6.3
+  #   script: rake $SUITE
+  #   env: SUITE=test:integration OS='chef15-compatible-inspec-ubuntu-1804'
   # Next 4 suites test running inspec 3 or 4 on audit cookbook. This is only permitted on chef 14 or older.
-  - rvm: 2.6.3
-    script: rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version4-centos-7' CHEF_VERSION=14
-  - rvm: 2.6.3
-    script: rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version3-centos-7' CHEF_VERSION=14
-  - rvm: 2.6.3
-    script: rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version4-ubuntu-1804' CHEF_VERSION=14
-  - rvm: 2.6.3
-    script: rake $SUITE
-    env: SUITE=test:integration OS='gem-install-core-version3-ubuntu-1804' CHEF_VERSION=14
+  # - rvm: 2.6.3
+  #   script: rake $SUITE
+  #   env: SUITE=test:integration OS='gem-install-core-version4-centos-7' CHEF_VERSION=14
+  # - rvm: 2.6.3
+  #   script: rake $SUITE
+  #   env: SUITE=test:integration OS='gem-install-core-version3-centos-7' CHEF_VERSION=14
+  # - rvm: 2.6.3
+  #   script: rake $SUITE
+  #   env: SUITE=test:integration OS='gem-install-core-version4-ubuntu-1804' CHEF_VERSION=14
+  # - rvm: 2.6.3
+  #   script: rake $SUITE
+  #   env: SUITE=test:integration OS='gem-install-core-version3-ubuntu-1804' CHEF_VERSION=14
 
   - rvm: 2.6.3
     script: rake $SUITE
