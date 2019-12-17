@@ -1,5 +1,5 @@
 directory '/root/.chef' do
-  mode 00770
+  mode '770'
   action :create
 end
 

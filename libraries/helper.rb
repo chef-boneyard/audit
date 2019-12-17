@@ -144,4 +144,4 @@ module ReportHelpers
   end
 end
 
-::Chef::Recipe.send(:include, ReportHelpers)
+::Chef::DSL::Recipe.send(:include, ReportHelpers)

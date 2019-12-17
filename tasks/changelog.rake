@@ -45,8 +45,8 @@ begin
     config.future_release = "v#{metadata.version}"
     config.user = 'chef-cookbooks'
     config.project = 'audit'
-    config.bug_labels = %w{bug Bug Type:\ Bug  }
-    config.enhancement_labels = %w{enhancement Enhancement Type:\ Enhancement  }
+    config.bug_labels = %w(bug Bug Type:\ Bug  )
+    config.enhancement_labels = %w(enhancement Enhancement Type:\ Enhancement  )
   end
 rescue LoadError
   puts 'Problem loading gems please install chef and github_changelog_generator'

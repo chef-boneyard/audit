@@ -135,7 +135,7 @@ action_class do
 
   def inspec_info
     require 'rubygems'
-    Gem::Specification.find { |s| ['inspec', 'inspec-core'].include?(s.name) }
+    Gem::Specification.find { |s| %w(inspec inspec-core).include?(s.name) }
   rescue LoadError
     nil
   end

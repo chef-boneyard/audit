@@ -1,9 +1,8 @@
 name 'test_helper'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
-license 'all_rights'
+maintainer 'The InSpec Team'
+maintainer_email 'inspec@chef.io'
+license 'all rights reserved'
 description 'Installs/Configures test_helper'
-long_description 'Installs/Configures test_helper'
 version '0.1.0'
 
 # If you upload to Supermarket you should set this so your cookbook

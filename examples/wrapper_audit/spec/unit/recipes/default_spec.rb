@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: wrapper_audit
+# Cookbook:: wrapper_audit
 # Spec:: default
 
 require 'spec_helper'

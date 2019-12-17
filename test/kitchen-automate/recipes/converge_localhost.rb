@@ -14,7 +14,7 @@ file '/root/attrs_chef-server-visibility.json' do
     }
   }
   EOH
-  mode 00600
+  mode '600'
 end
 
 # Not needed for 'chef-server-visibility' collector converge
@@ -61,7 +61,7 @@ file '/root/attrs_chef-visibility.json' do
     }
   }
   EOH
-  mode 00600
+  mode '600'
 end
 
 # Collector 'chef-visibility' needs these client.rb settings:

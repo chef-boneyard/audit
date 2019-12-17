@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: wrapper_audit
+# Cookbook:: wrapper_audit
 # Recipe:: default
 
 # This includes statement is to include the chef_client_config recipe in the

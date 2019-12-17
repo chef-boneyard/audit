@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: automate_ingest
+# Cookbook:: automate_ingest
 # Spec:: chef_client_config
 
 # THIS IS NOT A WORKING EXAMPLE.

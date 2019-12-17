@@ -1,9 +1,9 @@
 # encoding: utf-8
 #
-# Cookbook Name:: compliance
+# Cookbook:: compliance
 # Spec:: default
 #
-# Copyright 2016 Chef Software, Inc.
+# Copyright:: 2016 Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -157,7 +157,7 @@ describe 'audit::default' do
   context 'When specifying multiple reporters' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '6.9')
-      runner.node.override['audit']['collector'] = ['chef-compliance', 'json-file']
+      runner.node.override['audit']['collector'] = %w(chef-compliance json-file)
       runner.node.override['audit']['profiles'] = [
         { 'name': 'linux', 'compliance': 'base/linux' },
         { 'name': 'apache', 'compliance': 'base/apache' },
