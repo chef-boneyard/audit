@@ -147,6 +147,8 @@ class Chef
       def get_opts(reporter, quiet, attributes)
         output = quiet ? ::File::NULL : $stdout
         Chef::Log.debug "Reporter is [#{reporter}]"
+        # You can pass nil (no waiver files), one file, or an array. InSpec expects an Array regardless.
+        waivers = Array(node['audit']['waiver_file'])
         opts = {
           'report' => true,
           'format' => reporter, # For compatibility with older versions of inspec. TODO: Remove this line from Q2 2019
@@ -155,6 +157,7 @@ class Chef
           'logger' => Chef::Log, # Use chef-client log level for inspec run,
           backend_cache: node['audit']['inspec_backend_cache'],
           attributes: attributes,
+          waiver_file: waivers,
         }
         opts
       end

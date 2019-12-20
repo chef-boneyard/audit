@@ -129,6 +129,10 @@ default['audit']['attributes'] = {
 }
 ```
 
+#### Waivers
+
+You can use Chef InSpec's [Waiver Feature](https://www.inspec.io/docs/reference/waivers/) to mark individual failing controls as being administratively accepted, either on a temporary or permanent basis. Prepare a waiver YAML file, and use your Chef Infra cookbooks to deliver the file to your converging node (for example, using [cookbook_file](https://docs.chef.io/resource_cookbook_file.html) or [remote_file](https://docs.chef.io/resource_remote_file.html)). Then set the attribute `default['audit']['waiver_file']` to the location of the waiver file on the local node, and Chef InSpec will apply the waivers.
+
 ### Reporting
 
 #### Reporting to Chef Automate via Chef Server
