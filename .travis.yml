@@ -1,9 +1,9 @@
-dist: xenial
+dist: bionic
 
 addons:
   apt:
     sources:
-      - chef-current-xenial
+      - chef-current-bionic
     packages:
       - chefdk
 
