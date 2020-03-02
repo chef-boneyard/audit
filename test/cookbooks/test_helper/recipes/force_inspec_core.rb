@@ -1,16 +1,20 @@
 chef_gem 'inspec-core' do
-  action :nothing
-end.run_action(:remove)
+  compile_time true
+  action :remove
+end
 
 chef_gem 'inspec-core-bin' do
-  action :nothing
-end.run_action(:remove)
+  compile_time true
+  action :remove
+end
 
 chef_gem 'inspec' do
-  action :nothing
-end.run_action(:remove)
+  compile_time true
+  action :remove
+end
 
 chef_gem 'inspec-core' do
+  compile_time true
   version '4.3.2'
-  action :nothing
-end.run_action(:install)
+  action :install
+end

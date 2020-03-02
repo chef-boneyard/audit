@@ -136,6 +136,10 @@ module ReportHelpers
   # taking node['audit'] as parameter so that it can be called from the chef-server fetcher as well
   # audit['collector'] is the legacy reporter,
   def get_reporters(audit)
+    if audit.nil?
+      Chef::Log.warn("node ['audit'] is not defined")
+      return []
+    end
     if audit['collector']
       Chef::Log.warn("node ['audit']['collector'] is deprecated and will be removed from the next major version of the cookbook. Please use node ['audit']['reporter']")
       return handle_reporters(audit['collector'])
@@ -144,4 +148,4 @@ module ReportHelpers
   end
 end
 
-::Chef::Recipe.send(:include, ReportHelpers)
+::Chef::DSL::Recipe.send(:include, ReportHelpers)

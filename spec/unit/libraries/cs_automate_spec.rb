@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: audit
+# Cookbook:: audit
 # Spec:: cs_automate_spec
 
 require 'spec_helper'

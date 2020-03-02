@@ -9,7 +9,7 @@ controls.each do |c|
     results << r
   end
 end
-attribute_control = results.find { |x| x['code_desc'] == 'File /opt/kitchen/cache/attribute-file-exists.test should exist' }
+attribute_control = results.find { |x| x['code_desc'] == 'File /opt/kitchen/cache/attribute-file-exists.test is expected to exist' }
 attribute_control = {} if attribute_control.nil?
 
 describe 'attribute control' do

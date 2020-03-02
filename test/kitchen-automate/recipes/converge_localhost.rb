@@ -14,7 +14,7 @@ file '/root/attrs_chef-server-visibility.json' do
     }
   }
   EOH
-  mode 00600
+  mode '600'
 end
 
 # Not needed for 'chef-server-visibility' collector converge
@@ -42,7 +42,7 @@ execute '### Run chef-client w/ collector chef-server-visibility' do
   EOH
   live_stream true
   action :run
-  only_if { File.exist?('/etc/chef/client.pem') }
+  only_if { ::File.exist?('/etc/chef/client.pem') }
 end
 
 # Create the attributes file to test the 'chef-visibility' collector
@@ -61,7 +61,7 @@ file '/root/attrs_chef-visibility.json' do
     }
   }
   EOH
-  mode 00600
+  mode '600'
 end
 
 # Collector 'chef-visibility' needs these client.rb settings:
@@ -91,5 +91,5 @@ execute '### Run chef-client w/ collector chef-visibility' do
   EOH
   live_stream true
   action :run
-  only_if { File.exist?('/etc/chef/client.pem') }
+  only_if { ::File.exist?('/etc/chef/client.pem') }
 end
