@@ -42,7 +42,7 @@ execute '### Run chef-client w/ collector chef-server-visibility' do
   EOH
   live_stream true
   action :run
-  only_if { File.exist?('/etc/chef/client.pem') }
+  only_if { ::File.exist?('/etc/chef/client.pem') }
 end
 
 # Create the attributes file to test the 'chef-visibility' collector
@@ -91,5 +91,5 @@ execute '### Run chef-client w/ collector chef-visibility' do
   EOH
   live_stream true
   action :run
-  only_if { File.exist?('/etc/chef/client.pem') }
+  only_if { ::File.exist?('/etc/chef/client.pem') }
 end

@@ -91,10 +91,10 @@ describe ChefServer::Fetcher do
           },
           'profile' => ['admin', 'linux-baseline', '2.0'],
         }
-
-        Fetchers::Url.new('non_profile_url', config).send(:http_opts)
+        mynode.default['audit']['reporter'] = 'chef-server'
+        ChefServer::Fetcher.target_url('non_profile_url', config).read
       }
-      expect { myproc.call }.to raise_error(RuntimeError)
+      expect { myproc.call }.to raise_error(Errno::ECONNREFUSED)
     end
   end
 end

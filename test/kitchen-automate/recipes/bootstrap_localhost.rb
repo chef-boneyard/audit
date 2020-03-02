@@ -24,8 +24,8 @@ execute 'Uploading cookbooks to Chef Server' do
 end
 
 # Ensure the node is in the expected state
-raise 'Cannot find /tmp/kitchen/client.pem' unless File.exist?('/tmp/kitchen/client.pem')
-raise 'Cannot find /home/ec2-user/.ssh/authorized_keys' unless File.exist?('/home/ec2-user/.ssh/authorized_keys')
+raise 'Cannot find /tmp/kitchen/client.pem' unless ::File.exist?('/tmp/kitchen/client.pem')
+raise 'Cannot find /home/ec2-user/.ssh/authorized_keys' unless ::File.exist?('/home/ec2-user/.ssh/authorized_keys')
 
 # Add a public key to be used for SSH bootstrapping
 execute 'Add SSH public key to be used by self bootstrapping' do
@@ -49,5 +49,5 @@ execute 'Bootstrapping the node with local Chef Server' do
   EOH
   live_stream true
   action :run
-  not_if { File.exist?('/etc/chef/client.pem') }
+  not_if { ::File.exist?('/etc/chef/client.pem') }
 end
