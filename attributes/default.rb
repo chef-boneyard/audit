@@ -80,6 +80,10 @@ default['audit']['attributes_save'] = true
 # named `chef_node`
 default['audit']['chef_node_attribute_enabled'] = false
 
+# Set this to the path of a YAML waiver file you wish to apply
+# See https://www.inspec.io/docs/reference/waivers/
+default['audit']['waiver_file'] = nil
+
 # The location of the json-file output:
 # <chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json
 default['audit']['json_file']['location'] =

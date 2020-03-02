@@ -208,3 +208,17 @@ suites:
             url: https://github.com/dev-sec/tests-ssh-hardening/archive/master.zip
           ssh-baseline:
             supermarket: dev-sec/ssh-baseline
+  - name: waivers
+    run_list:
+      - recipe[test_helper::setup]
+      - recipe[test_helper::setup_waiver_fixture]
+      - recipe[audit::default]
+    attributes:
+      audit:
+        reporter: json-file
+        json_file:
+          location: <%= File.join('/tmp', Time.now.utc.strftime('inspec-%Y%m%d%H%M%S.json')) %>
+        waiver_file: <%= File.join('/tmp', 'waivers-fixture', 'waivers', 'waivers.yaml') %>
+        profiles:
+          waiver-test-profile:
+            path: <%= File.join('/tmp', 'waivers-fixture') %>
