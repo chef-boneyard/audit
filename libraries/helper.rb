@@ -55,6 +55,10 @@ module ReportHelpers
       Chef::Log.error 'Auth issue: see audit cookbook TROUBLESHOOTING.md'
     when /404/
       Chef::Log.error 'Object does not exist on remote server.'
+    when /413/
+      Chef::Log.error 'You most likely hit the erchef request size in Chef Server that defaults to ~2MB. To increase this limit see audit cookbook TROUBLESHOOTING.md OR https://docs.chef.io/config_rb_server.html'
+    when /429/
+      Chef::Log.error "This error typically means the data sent was larger than Automate's limit (4 MB). Run InSpec locally to identify any controls producing large diffs."
     end
     msg = "Received HTTP error #{code}"
     Chef::Log.error msg
