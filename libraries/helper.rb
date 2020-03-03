@@ -40,11 +40,11 @@ module ReportHelpers
   def with_http_rescue(*)
     response = yield
     if response.respond_to?(:code)
-      # handle non 200 error codes, they are not raised as Net::HTTPServerException
+      # handle non 200 error codes, they are not raised as Net::HTTPClientException
       handle_http_error_code(response.code) if response.code.to_i >= 300
     end
     response
-  rescue Net::HTTPServerException => e
+  rescue Net::HTTPClientException => e
     Chef::Log.error e
     handle_http_error_code(e.response.code)
   end
