@@ -1,6 +1,37 @@
-# Change Log
+# Changelog
+
+## [v9.1.0](https://github.com/chef-cookbooks/audit/tree/v9.1.0) (2020-03-03)
+
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.0.1...v9.1.0)
+
+**Implemented enhancements:**
+
+- Implement waiver file support [\#397](https://github.com/chef-cookbooks/audit/issues/397)
+- Add waiver-file support [\#398](https://github.com/chef-cookbooks/audit/pull/398) ([clintoncwolfe](https://github.com/clintoncwolfe))
+
+**Fixed bugs:**
+
+- Send Report returned: 429 "Too Many Requests" from Automate Server [\#384](https://github.com/chef-cookbooks/audit/issues/384)
+- Audit 5.0.0 - NoMethodError: undefined method `path' for nil:NilClass when profile not found [\#301](https://github.com/chef-cookbooks/audit/issues/301)
+
+**Closed issues:**
+
+- Apply current cookstyle [\#407](https://github.com/chef-cookbooks/audit/issues/407)
+- Use Net::HTTPClientException instead of Net::HTTPServerException [\#394](https://github.com/chef-cookbooks/audit/issues/394)
+- Add Filter Button for Disconnected Services in the Applications View [\#392](https://github.com/chef-cookbooks/audit/issues/392)
+- Deprecate current scheduling features [\#333](https://github.com/chef-cookbooks/audit/issues/333)
+
+**Merged pull requests:**
+
+- Bump version and change travis os [\#410](https://github.com/chef-cookbooks/audit/pull/410) ([alexpop](https://github.com/alexpop))
+- Get most test kitchen tests passing in Travis [\#405](https://github.com/chef-cookbooks/audit/pull/405) ([clintoncwolfe](https://github.com/clintoncwolfe))
+- Update deprecated Net::HTTPServerException with Net::HTTPClientException [\#395](https://github.com/chef-cookbooks/audit/pull/395) ([vsingh-msys](https://github.com/vsingh-msys))
+- Detect 429 & 413 and append an additional message [\#393](https://github.com/chef-cookbooks/audit/pull/393) ([vsingh-msys](https://github.com/vsingh-msys))
+- Bump cookbook to version 9.0.1 [\#389](https://github.com/chef-cookbooks/audit/pull/389) ([alexpop](https://github.com/alexpop))
+- Update test deps and the kitchen dokken config [\#355](https://github.com/chef-cookbooks/audit/pull/355) ([tas50](https://github.com/tas50))
 
 ## [v9.0.1](https://github.com/chef-cookbooks/audit/tree/v9.0.1) (2019-09-19)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.0.0...v9.0.1)
 
 **Fixed bugs:**
@@ -17,6 +48,7 @@
 - Update changelog for v9 [\#387](https://github.com/chef-cookbooks/audit/pull/387) ([alexpop](https://github.com/alexpop))
 
 ## [v9.0.0](https://github.com/chef-cookbooks/audit/tree/v9.0.0) (2019-09-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v8.1.1...v9.0.0)
 
 **Implemented enhancements:**
@@ -41,6 +73,7 @@
 - Remove compliance and visibility reporters [\#383](https://github.com/chef-cookbooks/audit/pull/383) ([alexpop](https://github.com/alexpop))
 
 ## [v8.1.1](https://github.com/chef-cookbooks/audit/tree/v8.1.1) (2019-07-25)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v8.0.0...v8.1.1)
 
 **Implemented enhancements:**
@@ -53,6 +86,7 @@
 - Add and check for custom exception to propagate audit failures [\#381](https://github.com/chef-cookbooks/audit/pull/381) ([sbabcoc](https://github.com/sbabcoc))
 
 ## [v8.0.0](https://github.com/chef-cookbooks/audit/tree/v8.0.0) (2019-07-03)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.8.0...v8.0.0)
 
 **Fixed bugs:**
@@ -68,6 +102,7 @@
 - Update changelog after 8.0.0 release [\#379](https://github.com/chef-cookbooks/audit/pull/379) ([alexpop](https://github.com/alexpop))
 
 ## [v7.8.0](https://github.com/chef-cookbooks/audit/tree/v7.8.0) (2019-06-21)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.7.0...v7.8.0)
 
 **Implemented enhancements:**
@@ -91,6 +126,7 @@
 - Add additional audit cookbook matrix conditions around chef-client 15.x [\#373](https://github.com/chef-cookbooks/audit/pull/373) ([sean-horn](https://github.com/sean-horn))
 
 ## [v7.7.0](https://github.com/chef-cookbooks/audit/tree/v7.7.0) (2019-05-31)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.6.0...v7.7.0)
 
 **Closed issues:**
@@ -104,6 +140,7 @@
 - Update to kitchen-dokken ~\> 2.7.0 [\#370](https://github.com/chef-cookbooks/audit/pull/370) ([teknofire](https://github.com/teknofire))
 
 ## [v7.6.0](https://github.com/chef-cookbooks/audit/tree/v7.6.0) (2019-05-17)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.5.0...v7.6.0)
 
 **Implemented enhancements:**
@@ -121,6 +158,7 @@
 - Prevent downgrading to Chef-InSpec \< 4 when using Chef 15 [\#367](https://github.com/chef-cookbooks/audit/pull/367) ([teknofire](https://github.com/teknofire))
 
 ## [v7.5.0](https://github.com/chef-cookbooks/audit/tree/v7.5.0) (2019-04-23)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.4.1...v7.5.0)
 
 **Merged pull requests:**
@@ -128,6 +166,7 @@
 - Export extra fields needed for rbac project tagging [\#363](https://github.com/chef-cookbooks/audit/pull/363) ([alexpop](https://github.com/alexpop))
 
 ## [v7.4.1](https://github.com/chef-cookbooks/audit/tree/v7.4.1) (2019-03-20)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.4.0...v7.4.1)
 
 **Fixed bugs:**
@@ -140,6 +179,7 @@
 - Fixing broken link to data collection docs [\#356](https://github.com/chef-cookbooks/audit/pull/356) ([moutons](https://github.com/moutons))
 
 ## [v7.4.0](https://github.com/chef-cookbooks/audit/tree/v7.4.0) (2019-02-05)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.3.0...v7.4.0)
 
 **Closed issues:**
@@ -157,6 +197,7 @@
 - Fix errant dash instead of underscore in example of InSpec version  [\#340](https://github.com/chef-cookbooks/audit/pull/340) ([gsreynolds](https://github.com/gsreynolds))
 
 ## [v7.3.0](https://github.com/chef-cookbooks/audit/tree/v7.3.0) (2018-09-19)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.2.0...v7.3.0)
 
 **Implemented enhancements:**
@@ -169,6 +210,7 @@
 - Allow json-file output location to be configured [\#327](https://github.com/chef-cookbooks/audit/pull/327) ([nvwls](https://github.com/nvwls))
 
 ## [v7.2.0](https://github.com/chef-cookbooks/audit/tree/v7.2.0) (2018-09-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.1.0...v7.2.0)
 
 **Merged pull requests:**
@@ -177,6 +219,7 @@
 - add 7.1.0 release changelog [\#335](https://github.com/chef-cookbooks/audit/pull/335) ([alexpop](https://github.com/alexpop))
 
 ## [v7.1.0](https://github.com/chef-cookbooks/audit/tree/v7.1.0) (2018-08-20)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.1...v7.1.0)
 
 **Closed issues:**
@@ -188,8 +231,10 @@
 - Switch to the new json-automate reporter when inspec version allows it [\#334](https://github.com/chef-cookbooks/audit/pull/334) ([alexpop](https://github.com/alexpop))
 - Add support for node\['audit'\]\['profiles'\] as a hash of hashes  [\#328](https://github.com/chef-cookbooks/audit/pull/328) ([mattray](https://github.com/mattray))
 - Modify examples to not override hash [\#323](https://github.com/chef-cookbooks/audit/pull/323) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
+- \[MSYS-829\] Fix nil class error when profile not found on automate server [\#321](https://github.com/chef-cookbooks/audit/pull/321) ([NAshwini](https://github.com/NAshwini))
 
 ## [v7.0.1](https://github.com/chef-cookbooks/audit/tree/v7.0.1) (2018-07-17)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v7.0.0...v7.0.1)
 
 **Implemented enhancements:**
@@ -203,9 +248,9 @@
 **Merged pull requests:**
 
 - Release audit 7.0.1 [\#324](https://github.com/chef-cookbooks/audit/pull/324) ([jquick](https://github.com/jquick))
-- \[MSYS-829\] Fix nil class error when profile not found on automate server [\#321](https://github.com/chef-cookbooks/audit/pull/321) ([NAshwini](https://github.com/NAshwini))
 
 ## [v7.0.0](https://github.com/chef-cookbooks/audit/tree/v7.0.0) (2018-05-11)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.1.0...v7.0.0)
 
 **Merged pull requests:**
@@ -215,6 +260,7 @@
 - compat\_resource is no longer supported [\#316](https://github.com/chef-cookbooks/audit/pull/316) ([lamont-granquist](https://github.com/lamont-granquist))
 
 ## [v6.1.0](https://github.com/chef-cookbooks/audit/tree/v6.1.0) (2018-04-19)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.2...v6.1.0)
 
 **Closed issues:**
@@ -227,6 +273,7 @@
 - Update Audit cookbook to support ChefClient 14 [\#313](https://github.com/chef-cookbooks/audit/pull/313) ([jquick](https://github.com/jquick))
 
 ## [v6.0.2](https://github.com/chef-cookbooks/audit/tree/v6.0.2) (2018-04-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.1...v6.0.2)
 
 **Closed issues:**
@@ -246,6 +293,7 @@
 - Update changelog [\#303](https://github.com/chef-cookbooks/audit/pull/303) ([adamleff](https://github.com/adamleff))
 
 ## [v6.0.1](https://github.com/chef-cookbooks/audit/tree/v6.0.1) (2017-12-21)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v6.0.0...v6.0.1)
 
 **Closed issues:**
@@ -258,6 +306,7 @@
 - README update for inspec\_backend\_cache feature [\#298](https://github.com/chef-cookbooks/audit/pull/298) ([adamleff](https://github.com/adamleff))
 
 ## [v6.0.0](https://github.com/chef-cookbooks/audit/tree/v6.0.0) (2017-12-06)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.4...v6.0.0)
 
 **Closed issues:**
@@ -270,6 +319,7 @@
 - Include handler in exception handlers as well as report handlers [\#290](https://github.com/chef-cookbooks/audit/pull/290) ([drrk](https://github.com/drrk))
 
 ## [v5.0.4](https://github.com/chef-cookbooks/audit/tree/v5.0.4) (2017-11-22)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.3...v5.0.4)
 
 **Closed issues:**
@@ -284,6 +334,7 @@
 - Send end\_time as utc RFC3339 [\#292](https://github.com/chef-cookbooks/audit/pull/292) ([alexpop](https://github.com/alexpop))
 
 ## [v5.0.3](https://github.com/chef-cookbooks/audit/tree/v5.0.3) (2017-10-02)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.2...v5.0.3)
 
 **Merged pull requests:**
@@ -292,6 +343,7 @@
 - Enrich report with roles and recipes [\#287](https://github.com/chef-cookbooks/audit/pull/287) ([alexpop](https://github.com/alexpop))
 
 ## [v5.0.2](https://github.com/chef-cookbooks/audit/tree/v5.0.2) (2017-09-27)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.1...v5.0.2)
 
 **Fixed bugs:**
@@ -306,6 +358,7 @@
 - Handle '@' in username when grabbing compliance profiles [\#280](https://github.com/chef-cookbooks/audit/pull/280) ([kevinreedy](https://github.com/kevinreedy))
 
 ## [v5.0.1](https://github.com/chef-cookbooks/audit/tree/v5.0.1) (2017-09-20)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v5.0.0...v5.0.1)
 
 **Closed issues:**
@@ -320,6 +373,7 @@
 - The "Format is" log message should debug level [\#278](https://github.com/chef-cookbooks/audit/pull/278) ([xblitz](https://github.com/xblitz))
 
 ## [v5.0.0](https://github.com/chef-cookbooks/audit/tree/v5.0.0) (2017-08-30)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.3.0...v5.0.0)
 
 **Merged pull requests:**
@@ -329,6 +383,7 @@
 - Add additional words to README re: using Chef node data [\#273](https://github.com/chef-cookbooks/audit/pull/273) ([adamleff](https://github.com/adamleff))
 
 ## [v4.3.0](https://github.com/chef-cookbooks/audit/tree/v4.3.0) (2017-08-29)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.2.0...v4.3.0)
 
 **Implemented enhancements:**
@@ -346,6 +401,7 @@
 - Add json-file location to README [\#270](https://github.com/chef-cookbooks/audit/pull/270) ([adamleff](https://github.com/adamleff))
 
 ## [v4.2.0](https://github.com/chef-cookbooks/audit/tree/v4.2.0) (2017-08-10)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.1...v4.2.0)
 
 **Closed issues:**
@@ -360,6 +416,7 @@
 - Support for attributes within audit cookbook [\#262](https://github.com/chef-cookbooks/audit/pull/262) ([mhedgpeth](https://github.com/mhedgpeth))
 
 ## [v4.1.1](https://github.com/chef-cookbooks/audit/tree/v4.1.1) (2017-07-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.1.0...v4.1.1)
 
 **Closed issues:**
@@ -374,6 +431,7 @@
 - Non-null header value required for using chef-automate fetcher \(\#258\) [\#259](https://github.com/chef-cookbooks/audit/pull/259) ([ChefRycar](https://github.com/ChefRycar))
 
 ## [v4.1.0](https://github.com/chef-cookbooks/audit/tree/v4.1.0) (2017-07-05)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v4.0.0...v4.1.0)
 
 **Implemented enhancements:**
@@ -406,6 +464,7 @@
 - Update comments in attributes file. [\#230](https://github.com/chef-cookbooks/audit/pull/230) ([alexpop](https://github.com/alexpop))
 
 ## [v4.0.0](https://github.com/chef-cookbooks/audit/tree/v4.0.0) (2017-05-22)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v3.1.0...v4.0.0)
 
 **Closed issues:**
@@ -421,6 +480,7 @@
 - readme updates [\#223](https://github.com/chef-cookbooks/audit/pull/223) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v3.1.0](https://github.com/chef-cookbooks/audit/tree/v3.1.0) (2017-05-04)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v3.0.0...v3.1.0)
 
 **Implemented enhancements:**
@@ -463,6 +523,7 @@
 - better error output [\#208](https://github.com/chef-cookbooks/audit/pull/208) ([chris-rock](https://github.com/chris-rock))
 
 ## [v3.0.0](https://github.com/chef-cookbooks/audit/tree/v3.0.0) (2017-04-03)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.4.0...v3.0.0)
 
 **Implemented enhancements:**
@@ -480,6 +541,7 @@
 - Use `chef-server-compliance` vs `chef-server` [\#202](https://github.com/chef-cookbooks/audit/pull/202) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
 
 ## [v2.4.0](https://github.com/chef-cookbooks/audit/tree/v2.4.0) (2017-03-01)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.5...v2.4.0)
 
 **Merged pull requests:**
@@ -487,6 +549,7 @@
 - Bump cookbook version with new inspec release [\#198](https://github.com/chef-cookbooks/audit/pull/198) ([alexpop](https://github.com/alexpop))
 
 ## [v2.3.5](https://github.com/chef-cookbooks/audit/tree/v2.3.5) (2017-02-16)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.4...v2.3.5)
 
 **Closed issues:**
@@ -497,8 +560,10 @@
 **Merged pull requests:**
 
 - Release 2.3.5 [\#197](https://github.com/chef-cookbooks/audit/pull/197) ([alexpop](https://github.com/alexpop))
+- Type the inspec profile attributes [\#196](https://github.com/chef-cookbooks/audit/pull/196) ([alexpop](https://github.com/alexpop))
 
 ## [v2.3.4](https://github.com/chef-cookbooks/audit/tree/v2.3.4) (2017-01-05)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.3...v2.3.4)
 
 **Closed issues:**
@@ -511,6 +576,7 @@
 - Fix issue with interval being removed because of chef-client cookbook cleanup [\#191](https://github.com/chef-cookbooks/audit/pull/191) ([brentm5](https://github.com/brentm5))
 
 ## [v2.3.3](https://github.com/chef-cookbooks/audit/tree/v2.3.3) (2017-01-04)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.2...v2.3.3)
 
 **Implemented enhancements:**
@@ -523,13 +589,13 @@
 
 **Merged pull requests:**
 
-- Type the inspec profile attributes [\#196](https://github.com/chef-cookbooks/audit/pull/196) ([alexpop](https://github.com/alexpop))
 - Releasing audit 2.3.3 defaulting to inspec 1.8.0 [\#189](https://github.com/chef-cookbooks/audit/pull/189) ([alexpop](https://github.com/alexpop))
 - fixing \#184 [\#186](https://github.com/chef-cookbooks/audit/pull/186) ([jeremymv2](https://github.com/jeremymv2))
 - Mention uploading profiles to Automate [\#183](https://github.com/chef-cookbooks/audit/pull/183) ([alexpop](https://github.com/alexpop))
 - Travis and kitchen-ec2 testing [\#181](https://github.com/chef-cookbooks/audit/pull/181) ([alexpop](https://github.com/alexpop))
 
 ## [v2.3.2](https://github.com/chef-cookbooks/audit/tree/v2.3.2) (2016-12-08)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.1...v2.3.2)
 
 **Fixed bugs:**
@@ -542,6 +608,7 @@
 - min chef-client version for chef-server-visibility [\#179](https://github.com/chef-cookbooks/audit/pull/179) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v2.3.1](https://github.com/chef-cookbooks/audit/tree/v2.3.1) (2016-12-06)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.0...v2.3.1)
 
 **Implemented enhancements:**
@@ -557,12 +624,12 @@
 
 **Merged pull requests:**
 
-- change json-file filename [\#177](https://github.com/chef-cookbooks/audit/pull/177) ([jeremymv2](https://github.com/jeremymv2))
 - Attributes file clarifications [\#176](https://github.com/chef-cookbooks/audit/pull/176) ([jeremymv2](https://github.com/jeremymv2))
 - Fix \#170, update changelog, add release instructions [\#171](https://github.com/chef-cookbooks/audit/pull/171) ([chris-rock](https://github.com/chris-rock))
 - minimum integration tests [\#162](https://github.com/chef-cookbooks/audit/pull/162) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v2.3.0](https://github.com/chef-cookbooks/audit/tree/v2.3.0) (2016-11-23)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.2.0...v2.3.0)
 
 **Implemented enhancements:**
@@ -575,11 +642,8 @@
 
 - Update chef web docs [\#159](https://github.com/chef-cookbooks/audit/issues/159)
 
-**Merged pull requests:**
-
-- Install inspec from source [\#168](https://github.com/chef-cookbooks/audit/pull/168) ([stephenlauck](https://github.com/stephenlauck))
-
 ## [v2.2.0](https://github.com/chef-cookbooks/audit/tree/v2.2.0) (2016-11-16)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.1.0...v2.2.0)
 
 **Implemented enhancements:**
@@ -588,6 +652,7 @@
 - Add chef-server-visibility collector [\#157](https://github.com/chef-cookbooks/audit/pull/157) ([alexpop](https://github.com/alexpop))
 
 ## [v2.1.0](https://github.com/chef-cookbooks/audit/tree/v2.1.0) (2016-11-11)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.0.0...v2.1.0)
 
 **Closed issues:**
@@ -603,6 +668,7 @@
 - dry up chef\_gem inspec resource declarations [\#147](https://github.com/chef-cookbooks/audit/pull/147) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v2.0.0](https://github.com/chef-cookbooks/audit/tree/v2.0.0) (2016-11-04)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.1.0...v2.0.0)
 
 **Implemented enhancements:**
@@ -656,8 +722,10 @@
 - add reference to 1.x documentation [\#117](https://github.com/chef-cookbooks/audit/pull/117) ([chris-rock](https://github.com/chris-rock))
 - Activate test-kitchen in travis [\#114](https://github.com/chef-cookbooks/audit/pull/114) ([chris-rock](https://github.com/chris-rock))
 - use chef handler to run inspec tests [\#113](https://github.com/chef-cookbooks/audit/pull/113) ([vjeffrey](https://github.com/vjeffrey))
+- convert library resources to proper custom resources [\#107](https://github.com/chef-cookbooks/audit/pull/107) ([lamont-granquist](https://github.com/lamont-granquist))
 
 ## [v1.1.0](https://github.com/chef-cookbooks/audit/tree/v1.1.0) (2016-10-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.2...v1.1.0)
 
 **Fixed bugs:**
@@ -671,10 +739,11 @@
 **Merged pull requests:**
 
 - Fix resource\_collection profiles selector.  [\#109](https://github.com/chef-cookbooks/audit/pull/109) ([alexpop](https://github.com/alexpop))
-- convert library resources to proper custom resources [\#107](https://github.com/chef-cookbooks/audit/pull/107) ([lamont-granquist](https://github.com/lamont-granquist))
 - described refresh\_token behavior when logging out of UI [\#105](https://github.com/chef-cookbooks/audit/pull/105) ([jeremymv2](https://github.com/jeremymv2))
+- fixing interval issues [\#104](https://github.com/chef-cookbooks/audit/pull/104) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v1.0.2](https://github.com/chef-cookbooks/audit/tree/v1.0.2) (2016-10-12)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.1...v1.0.2)
 
 **Fixed bugs:**
@@ -682,6 +751,7 @@
 - Fix bug when counting total failed controls in json format [\#106](https://github.com/chef-cookbooks/audit/pull/106) ([alexpop](https://github.com/alexpop))
 
 ## [v1.0.1](https://github.com/chef-cookbooks/audit/tree/v1.0.1) (2016-10-06)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v1.0.0...v1.0.1)
 
 **Merged pull requests:**
@@ -689,6 +759,7 @@
 - Use the new method to retrieve access tokens and fix total\_failed bug [\#103](https://github.com/chef-cookbooks/audit/pull/103) ([alexpop](https://github.com/alexpop))
 
 ## [v1.0.0](https://github.com/chef-cookbooks/audit/tree/v1.0.0) (2016-09-28)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.4...v1.0.0)
 
 **Implemented enhancements:**
@@ -707,7 +778,6 @@
 
 **Merged pull requests:**
 
-- fixing interval issues [\#104](https://github.com/chef-cookbooks/audit/pull/104) ([jeremymv2](https://github.com/jeremymv2))
 - update to work with inspec 1.0 json format [\#99](https://github.com/chef-cookbooks/audit/pull/99) ([vjeffrey](https://github.com/vjeffrey))
 - Compliance profile upload [\#96](https://github.com/chef-cookbooks/audit/pull/96) ([jeremymv2](https://github.com/jeremymv2))
 - bump inspec version to 0.34.1 to fix issue \#94 [\#95](https://github.com/chef-cookbooks/audit/pull/95) ([thomascate](https://github.com/thomascate))
@@ -715,6 +785,7 @@
 - Updated examples [\#83](https://github.com/chef-cookbooks/audit/pull/83) ([jwmathe](https://github.com/jwmathe))
 
 ## [v0.14.4](https://github.com/chef-cookbooks/audit/tree/v0.14.4) (2016-09-06)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.3...v0.14.4)
 
 **Implemented enhancements:**
@@ -729,6 +800,7 @@
 - adding clarifications [\#86](https://github.com/chef-cookbooks/audit/pull/86) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.14.3](https://github.com/chef-cookbooks/audit/tree/v0.14.3) (2016-08-25)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.2...v0.14.3)
 
 **Implemented enhancements:**
@@ -740,6 +812,7 @@
 - Minor fixes and changes [\#84](https://github.com/chef-cookbooks/audit/pull/84) ([tas50](https://github.com/tas50))
 
 ## [v0.14.2](https://github.com/chef-cookbooks/audit/tree/v0.14.2) (2016-08-16)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.1...v0.14.2)
 
 **Implemented enhancements:**
@@ -762,6 +835,7 @@
 - update metadata.rb [\#76](https://github.com/chef-cookbooks/audit/pull/76) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.14.1](https://github.com/chef-cookbooks/audit/tree/v0.14.1) (2016-08-15)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.14.0...v0.14.1)
 
 **Merged pull requests:**
@@ -770,6 +844,7 @@
 - Update changelog generator task to be native rake task [\#74](https://github.com/chef-cookbooks/audit/pull/74) ([brentm5](https://github.com/brentm5))
 
 ## [v0.14.0](https://github.com/chef-cookbooks/audit/tree/v0.14.0) (2016-08-12)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.13.1...v0.14.0)
 
 **Merged pull requests:**
@@ -778,6 +853,7 @@
 - Add collector attribute and visibility reporting [\#72](https://github.com/chef-cookbooks/audit/pull/72) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.13.1](https://github.com/chef-cookbooks/audit/tree/v0.13.1) (2016-06-27)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.13.0...v0.13.1)
 
 **Merged pull requests:**
@@ -786,6 +862,7 @@
 - Standardized node access to classic way [\#68](https://github.com/chef-cookbooks/audit/pull/68) ([mhedgpeth](https://github.com/mhedgpeth))
 
 ## [v0.13.0](https://github.com/chef-cookbooks/audit/tree/v0.13.0) (2016-06-22)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.12.0...v0.13.0)
 
 **Closed issues:**
@@ -797,6 +874,7 @@
 - Merged interval functionality into default.rb recipe, updated documentation, gave quiet default [\#64](https://github.com/chef-cookbooks/audit/pull/64) ([mhedgpeth](https://github.com/mhedgpeth))
 
 ## [v0.12.0](https://github.com/chef-cookbooks/audit/tree/v0.12.0) (2016-06-09)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.11.0...v0.12.0)
 
 **Merged pull requests:**
@@ -805,6 +883,7 @@
 - adding with\_http\_rescue method call back in [\#61](https://github.com/chef-cookbooks/audit/pull/61) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.11.0](https://github.com/chef-cookbooks/audit/tree/v0.11.0) (2016-06-09)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.10.0...v0.11.0)
 
 **Merged pull requests:**
@@ -813,6 +892,7 @@
 - http\_rescue not required with tempfile [\#59](https://github.com/chef-cookbooks/audit/pull/59) ([Anirudh-Gupta](https://github.com/Anirudh-Gupta))
 
 ## [v0.10.0](https://github.com/chef-cookbooks/audit/tree/v0.10.0) (2016-06-01)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.1...v0.10.0)
 
 **Merged pull requests:**
@@ -820,6 +900,7 @@
 - handle auth error [\#58](https://github.com/chef-cookbooks/audit/pull/58) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.9.1](https://github.com/chef-cookbooks/audit/tree/v0.9.1) (2016-05-26)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.9.0...v0.9.1)
 
 **Closed issues:**
@@ -835,6 +916,7 @@
 - add changelog [\#55](https://github.com/chef-cookbooks/audit/pull/55) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.9.0](https://github.com/chef-cookbooks/audit/tree/v0.9.0) (2016-05-25)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.8.0...v0.9.0)
 
 **Closed issues:**
@@ -850,6 +932,7 @@
 - quiet mode for inspec scans [\#47](https://github.com/chef-cookbooks/audit/pull/47) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.8.0](https://github.com/chef-cookbooks/audit/tree/v0.8.0) (2016-05-18)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.7.0...v0.8.0)
 
 **Closed issues:**
@@ -862,6 +945,7 @@
 - Update readme and bump patch version [\#43](https://github.com/chef-cookbooks/audit/pull/43) ([alexpop](https://github.com/alexpop))
 
 ## [v0.7.0](https://github.com/chef-cookbooks/audit/tree/v0.7.0) (2016-05-13)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.6.0...v0.7.0)
 
 **Closed issues:**
@@ -876,6 +960,7 @@
 - pin inspec to 0.20.1 [\#42](https://github.com/chef-cookbooks/audit/pull/42) ([chris-rock](https://github.com/chris-rock))
 
 ## [v0.6.0](https://github.com/chef-cookbooks/audit/tree/v0.6.0) (2016-05-03)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.5.1...v0.6.0)
 
 **Merged pull requests:**
@@ -885,6 +970,7 @@
 - Adding an interval check, if you don't want to run every time [\#17](https://github.com/chef-cookbooks/audit/pull/17) ([spuranam](https://github.com/spuranam))
 
 ## [v0.5.1](https://github.com/chef-cookbooks/audit/tree/v0.5.1) (2016-04-27)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.5.0...v0.5.1)
 
 **Merged pull requests:**
@@ -892,6 +978,7 @@
 - Prevent null pointer when profile cannot be downloaded [\#35](https://github.com/chef-cookbooks/audit/pull/35) ([alexpop](https://github.com/alexpop))
 
 ## [v0.5.0](https://github.com/chef-cookbooks/audit/tree/v0.5.0) (2016-04-25)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.4.4...v0.5.0)
 
 **Closed issues:**
@@ -905,6 +992,7 @@
 - update README.md with client version requirement [\#29](https://github.com/chef-cookbooks/audit/pull/29) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.4.4](https://github.com/chef-cookbooks/audit/tree/v0.4.4) (2016-04-22)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.4.3...v0.4.4)
 
 **Merged pull requests:**
@@ -913,6 +1001,7 @@
 - work with token and direct compliance server API [\#20](https://github.com/chef-cookbooks/audit/pull/20) ([srenatus](https://github.com/srenatus))
 
 ## [v0.4.3](https://github.com/chef-cookbooks/audit/tree/v0.4.3) (2016-04-20)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.3.3...v0.4.3)
 
 **Merged pull requests:**
@@ -924,6 +1013,7 @@
 - adding ability to handle offline compliance server [\#22](https://github.com/chef-cookbooks/audit/pull/22) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.3.3](https://github.com/chef-cookbooks/audit/tree/v0.3.3) (2016-04-05)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.3.2...v0.3.3)
 
 **Merged pull requests:**
@@ -931,6 +1021,7 @@
 - Use move to avoid cross-device error [\#19](https://github.com/chef-cookbooks/audit/pull/19) ([alexpop](https://github.com/alexpop))
 
 ## [v0.3.2](https://github.com/chef-cookbooks/audit/tree/v0.3.2) (2016-04-04)
+
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v0.3.1...v0.3.2)
 
 **Merged pull requests:**
@@ -938,6 +1029,9 @@
 - Bump to 0.3.2, testing cookbook release [\#18](https://github.com/chef-cookbooks/audit/pull/18) ([alexpop](https://github.com/alexpop))
 
 ## [v0.3.1](https://github.com/chef-cookbooks/audit/tree/v0.3.1) (2016-04-01)
+
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/5d2dca98d19a1b0516ba3ce5f077a083028ff11d...v0.3.1)
+
 **Closed issues:**
 
 - Do not crash default recipe, if node\['audit'\] is not defined [\#4](https://github.com/chef-cookbooks/audit/issues/4)
@@ -956,4 +1050,4 @@
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/github-changelog-generator/github-changelog-generator)*
