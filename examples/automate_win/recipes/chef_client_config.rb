@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: automate_win
+# Cookbook:: automate_win
 # Recipe:: chef_client_config
 
 # Create client.d directory in the chef client folder

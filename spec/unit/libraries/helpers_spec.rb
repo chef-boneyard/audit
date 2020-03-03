@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: audit
+# Cookbook:: audit
 # Spec:: helpers
 
 require 'spec_helper'
@@ -21,8 +21,8 @@ describe ReportHelpers do
   end
 
   it 'handle_reporters returns array of reporters when given array' do
-    reporters = ['chef-compliance', 'json-file']
-    expect(@helpers.handle_reporters(reporters)).to eq(['chef-compliance', 'json-file'])
+    reporters = %w(chef-compliance json-file)
+    expect(@helpers.handle_reporters(reporters)).to eq(%w(chef-compliance json-file))
   end
 
   it 'handle_reporters returns array of reporters when given string' do

@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: audit
+# Cookbook:: audit
 # Spec:: json-file
 
 require 'spec_helper'

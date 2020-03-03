@@ -33,5 +33,5 @@ execute 'chef_reconfigure' do
     touch /etc/opscode/chef-server-reconfigured.txt
   EOH
   action :run
-  not_if { File.exist?('/etc/opscode/chef-server-reconfigured.txt') }
+  not_if { ::File.exist?('/etc/opscode/chef-server-reconfigured.txt') }
 end

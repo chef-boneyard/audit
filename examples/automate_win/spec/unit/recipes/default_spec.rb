@@ -1,6 +1,6 @@
 # encoding: utf-8
 #
-# Cookbook Name:: automate_win
+# Cookbook:: automate_win
 # Spec:: default
 
 require 'spec_helper'

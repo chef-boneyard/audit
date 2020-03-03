@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: test_helper
+# Cookbook:: test_helper
 # Recipe:: setup
 #
-# Copyright (c) 2016 The Authors, All Rights Reserved.
+# Copyright:: (c) 2016 The Authors, All Rights Reserved.
 
 # needed to fetch github profiles
 include_recipe 'git::default'
