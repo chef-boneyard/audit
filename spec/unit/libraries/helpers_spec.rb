@@ -6,6 +6,7 @@
 require 'spec_helper'
 require_relative '../../../libraries/helper'
 require_relative '../../../files/default/handler/audit_report'
+require_relative '../../data/mock.rb'
 
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }
@@ -35,5 +36,65 @@ describe ReportHelpers do
     @helpers.create_timestamp_file
     expect(File).to exist(expected_file_path.to_s)
     File.delete(expected_file_path.to_s)
+  end
+
+  it 'report_profile_sha256s returns array of profile ids found in the report' do
+    expect(@helpers.report_profile_sha256s(MockData.inspec_results)).to eq(['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'])
+  end
+
+  it 'strip_profiles_meta removes the metadata from the profiles' do
+    expected_stripped_report = {
+      other_checks: [],
+      profiles: [
+        {
+          attributes: [
+            {
+              name: 'syslog_pkg',
+              options: {
+                default: 'rsyslog',
+                description: 'syslog package...',
+              },
+            },
+          ],
+          controls: [
+            {
+              id: 'tmp-1.0',
+              results: [
+                {
+                  code_desc: 'File /tmp should be directory',
+                  status: 'passed',
+                },
+              ],
+            },
+            {
+              id: 'tmp-1.1',
+              results: [
+                {
+                  code_desc: 'File /tmp should be owned by "root"',
+                  run_time: 1.228845,
+                  start_time: '2016-10-19 110943 -0400',
+                  status: 'passed',
+                },
+              ],
+            },
+          ],
+          sha256: '7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd',
+          title: '/tmp Compliance Profile',
+          version: '0.1.1',
+        },
+      ],
+      run_time_limit: 1.1,
+      statistics: {
+        duration: 0.032332,
+      },
+      version: '1.2.1',
+    }
+    expect(@helpers.strip_profiles_meta(MockData.inspec_results, [], 1.1)).to eq(expected_stripped_report)
+  end
+
+  it 'strip_profiles_meta is not removing the metadata from the missing profiles' do
+    expected_stripped_report = MockData.inspec_results
+    expected_stripped_report[:run_time_limit] = 1.1
+    expect(@helpers.strip_profiles_meta(MockData.inspec_results, ['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'], 1.1)).to eq(expected_stripped_report)
   end
 end

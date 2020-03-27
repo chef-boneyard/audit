@@ -24,6 +24,7 @@ module Reporter
       @organization_name = opts[:node_info][:organization_name]
       @ipaddress         = opts[:node_info][:ipaddress]
       @fqdn              = opts[:node_info][:fqdn]
+      @run_time_limit    = opts[:run_time_limit]
 
       if defined?(Chef) &&
          defined?(Chef::Config) &&
@@ -44,23 +45,7 @@ module Reporter
         return false
       end
 
-      json_report = enriched_report(report).to_json
-      report_size = json_report.bytesize
-      # Automate GRPC currently has a message limit of ~4MB
-      # https://github.com/chef/automate/issues/1417#issuecomment-541908157
-      if report_size > 4 * 1024 * 1024
-        Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
-        Chef::Log.warn 'Automate has an internal 4MB limit that is not currently configurable.'
-      end
-
-      unless json_report
-        Chef::Log.warn 'Something went wrong, report can\'t be nil'
-        return false
-      end
-
-      if defined?(Chef) &&
-         defined?(Chef::Config)
-
+      if defined?(Chef) && defined?(Chef::Config)
         headers = { 'Content-Type' => 'application/json' }
         unless @token.nil?
           headers['x-data-collector-token'] = @token
@@ -72,6 +57,28 @@ module Reporter
         if @insecure
           Chef::Config[:verify_api_cert] = false
           Chef::Config[:ssl_verify_mode] = :verify_none
+        end
+
+        all_report_shas = report_profile_sha256s(report)
+        missing_report_shas = missing_automate_profiles(@url, headers, all_report_shas)
+
+        full_report = enriched_report(report)
+
+        # If the Automate backend has the profile metadata for at least one profile, proceed with metadata stripping
+        full_report = strip_profiles_meta(full_report, missing_report_shas, 1) if missing_report_shas.length < all_report_shas.length
+        json_report = full_report.to_json
+
+        report_size = json_report.bytesize
+        # Automate GRPC currently has a message limit of ~4MB
+        # https://github.com/chef/automate/issues/1417#issuecomment-541908157
+        if report_size > 4 * 1024 * 1024
+          Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
+          Chef::Log.warn 'Automate has an internal 4MB limit that is not currently configurable.'
+        end
+
+        unless json_report
+          Chef::Log.warn 'Something went wrong, report can\'t be nil'
+          return false
         end
 
         begin

@@ -150,6 +150,72 @@ module ReportHelpers
     end
     handle_reporters(audit['reporter'])
   end
+
+  # Extracts all the profile sha256 IDs from an inspec report
+  def report_profile_sha256s(report)
+    return [] unless report.is_a?(Hash) && report[:profiles].is_a?(Array)
+    report[:profiles].map { |p| p[:sha256] }
+  end
+
+  # Strips profile metadata (title, copyright, controls title, code block, descriptions, etc)
+  # from the `report` profiles that are not in the `missing_report_shas` array.
+  # Control results are also stripped of the `start_time` and `run_time` if they don't reach the `run_time_limit` threshold (seconds)
+  def strip_profiles_meta(report, missing_report_shas, run_time_limit)
+    return report unless report.is_a?(Hash) && report[:profiles].is_a?(Array)
+    report[:profiles].each do |p|
+      next if missing_report_shas.include?(p[:sha256])
+      # Profile 'name' is a required property. By not sending it in the report, we make it clear to the ingestion backend that the profile metadata has been stripped from this profile in the report.
+      # Profile 'title' and 'version' are still kept for troubleshooting purposes in the backend.
+      p.delete(:name)
+      p.delete(:groups)
+      p.delete(:copyright_email)
+      p.delete(:copyright)
+      p.delete(:summary)
+      p.delete(:supports)
+      p.delete(:license)
+      p.delete(:maintainer)
+      next unless p[:controls].is_a?(Array)
+      p[:controls].each do |c|
+        c.delete(:code)
+        c.delete(:desc)
+        c.delete(:descriptions)
+        c.delete(:impact)
+        c.delete(:refs)
+        c.delete(:tags)
+        c.delete(:title)
+        c.delete(:source_location)
+        c.delete(:waiver_data) if c[:waiver_data] == {}
+        next unless c[:results].is_a?(Array)
+        c[:results].each do |r|
+          if r[:run_time].is_a?(Float) && r[:run_time] < run_time_limit
+            r.delete(:start_time)
+            r.delete(:run_time)
+          end
+        end
+      end
+    end
+    report[:run_time_limit] = run_time_limit
+    report
+  end
+
+  # Contacts the metasearch Automate API to check which of the inspec profile sha256 ids
+  # passed in via `report_shas` are missing from the Automate profiles metadata database.
+  def missing_automate_profiles(automate_url, headers, report_shas)
+    Chef::Log.debug "Checking the Automate profiles metadata for: #{report_shas}"
+    meta_url = URI(automate_url)
+    meta_url.path = '/compliance/profiles/metasearch'
+    http = Chef::HTTP.new(meta_url.to_s)
+    response_str = http.post(nil, "{\"sha256\": #{report_shas}}", headers)
+    missing_shas = JSON.parse(response_str)['missing_sha256']
+    unless missing_shas.empty?
+      Chef::Log.info "Automate is missing metadata for the following profile ids: #{missing_shas}"
+    end
+    missing_shas
+  rescue => e
+    Chef::Log.error "missing_automate_profiles error: #{e.message}"
+    # If we get an error it's safer to assume none of the profile shas exist in Automate
+    report_shas
+  end
 end
 
 ::Chef::DSL::Recipe.include ReportHelpers
