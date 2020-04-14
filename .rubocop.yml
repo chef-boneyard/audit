@@ -8,6 +8,3 @@ Naming/AccessorMethodName:
   Exclude:
     - 'examples/chef-server/Vagrantfile'
     - 'spec/unit/report/audit_report_spec.rb'
-
-Style/BracesAroundHashParameters:
-  Enabled: false
