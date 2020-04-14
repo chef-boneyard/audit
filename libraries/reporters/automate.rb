@@ -76,15 +76,15 @@ module Reporter
           Chef::Log.debug "Audit Report: #{json_report}"
           http = Chef::HTTP.new(@url)
           http.post(nil, json_report, headers)
-          return true
+          true
         rescue => e
           Chef::Log.error "send_report: POST to #{@url} returned: #{e.message}"
-          return false
+          false
         end
       else
         Chef::Log.warn 'data_collector.token and data_collector.server_url must be defined in client.rb!'
         Chef::Log.warn 'Further information: https://github.com/chef-cookbooks/audit#direct-reporting-to-chef-automate'
-        return false
+        false
       end
     end
 

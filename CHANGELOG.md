@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- resolved cookstyle error: libraries/helper.rb:155:21 warning: `Lint/SendWithMixinArgument`
+- resolved cookstyle error: libraries/reporters/automate.rb:79:11 convention: `Style/RedundantReturn`
+- resolved cookstyle error: libraries/reporters/automate.rb:82:11 convention: `Style/RedundantReturn`
+- resolved cookstyle error: libraries/reporters/automate.rb:87:9 convention: `Style/RedundantReturn`
+
 ## [v9.1.0](https://github.com/chef-cookbooks/audit/tree/v9.1.0) (2020-03-03)
 
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.0.1...v9.1.0)
