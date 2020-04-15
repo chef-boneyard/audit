@@ -34,15 +34,15 @@ _yardoc
 doc/
 .idea
 
-#chef stuff
+# chef stuff
 Berksfile.lock
 .kitchen
-.kitchen.local.yml
+kitchen.local.yml
+vendor/
 .coverage/
 .zero-knife.rb
+Policyfile.lock.json
 
-#vagrant stuff
+# vagrant stuff
 .vagrant/
 .vagrant.d/
-.kitchen/
-brewinc-validator.pem
