@@ -27,10 +27,17 @@ module Reporter
     end
 
     def send_report(report)
+      unless @entity_uuid && @run_id
+        Chef::Log.error "entity_uuid(#{@entity_uuid}) or run_id(#{@run_id}) can't be nil, not sending report to Chef Automate"
+        return false
+      end
+
       automate_report = enriched_report(report)
       report_size = automate_report.to_json.bytesize
+      # this is set to slightly less than the oc_erchef limit
       if report_size > 900 * 1024
         Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
+        Chef::Log.warn 'Infra Server < 13.0 defaults to a limit of ~1MB, 13.0+ defaults to a limit of ~2MB.'
       end
 
       if @insecure

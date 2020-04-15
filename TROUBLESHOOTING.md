@@ -48,7 +48,7 @@ In the event of a malformed or unset token, the Chef Compliance server will log 
 
 ### 413 Request Entity Too Large
 
-If the `audit` cookbook report handler prints this stacktrace:
+If the `audit` cookbook report handler prints this stacktrace and you are using the `chef-server-automate` reporter:
 ```
 Running handlers:
 [2017-12-21T16:21:15+00:00] WARN: Compliance report size is 1.71 MB.
@@ -60,15 +60,17 @@ Running handlers:
 ...
 ```
 
-and the Chef Server Nginx logs confirm the `413` error:
+and the Chef Infra Server Nginx logs confirm the `413` error:
 ```
 ==> /var/log/opscode/nginx/access.log <==
 192.168.56.40 - - [21/Dec/2017:11:35:30 +0000]  "POST /organizations/eu_org/data-collector HTTP/1.1" 413 "0.803" 64 "-" "Chef Client/13.6.4 (ruby-2.4.2-p198; ohai-13.6.0; x86_64-linux; +https://chef.io)" "-" "-" "-" "13.6.4" "algorithm=sha1;version=1.1;" "bootstrapped-node" "2017-12-21T11:35:31Z" "GR6RyPvKkZDaGyQDYCPfoQGS8G4=" 1793064
 ```
 
-you most likely hit the `erchef` request size in Chef Server that defaults to ~1MB. To double this limit, add the following line in Chef Server's `/etc/opscode/chef-server.rb`:
+you most likely hit the `erchef` request size in Chef Infra Server. Prior to Infra Server 13.0, the default was ~1MB. Infra Server 13.0 and later default to ~2MB.
+
+As an example, to set the limit to ~3MB, add the following line in Chef Server's `/etc/opscode/chef-server.rb`:
 ```
-opscode_erchef['max_request_size'] = 2000000
+opscode_erchef['max_request_size'] = 3000000
 ```
 and run `chef-server-ctl reconfigure` to apply this change.
 
