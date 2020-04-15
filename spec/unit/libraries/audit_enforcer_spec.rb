@@ -39,11 +39,11 @@ describe 'Reporter::ChefAutomate methods' do
   end
 
   it 'is not raising error for an InSpec report with no controls' do
-    expect(@automate.send_report({ "profiles": [{ "name": 'empty' }] })).to eq(true)
+    expect(@automate.send_report("profiles": [{ "name": 'empty' }])).to eq(true)
   end
 
   it 'is not raising error for an InSpec report with controls but no results' do
-    expect(@automate.send_report({ "profiles": [{ "controls": [{ "id": 'empty' }] }] })).to eq(true)
+    expect(@automate.send_report("profiles": [{ "controls": [{ "id": 'empty' }] }])).to eq(true)
   end
 
   it 'raises an error for a failed InSpec report' do

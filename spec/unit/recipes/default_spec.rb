@@ -183,10 +183,10 @@ describe 'audit::default' do
       runner.converge(described_recipe)
     end
     it 'still contains the audit attributes after converge' do
-      expect(chef_run.node.attributes['audit']['attributes']).to eq({ 'my-inspec-attribute' => 'ok' })
+      expect(chef_run.node.attributes['audit']['attributes']).to eq('my-inspec-attribute' => 'ok')
     end
     it 'should contain the inspec attributes in the run_state' do
-      expect(chef_run.node.run_state['audit_attributes']).to eq({ 'my-inspec-attribute' => 'ok' })
+      expect(chef_run.node.run_state['audit_attributes']).to eq('my-inspec-attribute' => 'ok')
     end
     it 'should not raise an exception' do
       expect { chef_run }.to_not raise_error
@@ -204,7 +204,7 @@ describe 'audit::default' do
       expect(chef_run.node.attributes['audit']['attributes']).to eq(nil)
     end
     it 'should contain the inspec attributes in the run_state' do
-      expect(chef_run.node.run_state['audit_attributes']).to eq({ 'my-inspec-attribute' => 'ok' })
+      expect(chef_run.node.run_state['audit_attributes']).to eq('my-inspec-attribute' => 'ok')
     end
     it 'should not raise an exception' do
       expect { chef_run }.to_not raise_error
