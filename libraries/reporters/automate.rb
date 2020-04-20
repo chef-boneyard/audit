@@ -46,8 +46,11 @@ module Reporter
 
       json_report = enriched_report(report).to_json
       report_size = json_report.bytesize
-      if report_size > 5 * 1024 * 1024
+      # Automate GRPC currently has a message limit of ~4MB
+      # https://github.com/chef/automate/issues/1417#issuecomment-541908157
+      if report_size > 4 * 1024 * 1024
         Chef::Log.warn "Compliance report size is #{(report_size / (1024 * 1024.0)).round(2)} MB."
+        Chef::Log.warn 'Automate has an internal 4MB limit that is not currently configurable.'
       end
 
       unless json_report

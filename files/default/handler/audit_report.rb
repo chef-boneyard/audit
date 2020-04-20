@@ -61,7 +61,7 @@ class Chef
         # detect if we run in a chef client with chef server
         load_chef_fetcher if reporters.include?('chef-server') ||
                              reporters.include?('chef-server-automate') ||
-                             %w{chef-server chef-server-automate}.include?(fetcher)
+                             %w(chef-server chef-server-automate).include?(fetcher)
 
         load_automate_fetcher if fetcher == 'chef-automate'
 
