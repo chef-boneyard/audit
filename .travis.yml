@@ -19,7 +19,7 @@ services:
 
 env:
   global:
-    - CHEF_VERSION=15
+    - CHEF_VERSION=15.8.23
     - KITCHEN_YAML=kitchen.dokken.yml
     - CHEF_LICENSE="accept-no-persist"
 
