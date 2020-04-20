@@ -72,7 +72,7 @@ describe ReportHelpers do
                 {
                   code_desc: 'File /tmp should be owned by "root"',
                   run_time: 1.228845,
-                  start_time: '2016-10-19 110943 -0400',
+                  start_time: '2016-10-19 11:09:43 -0400',
                   status: 'passed',
                 },
               ],
