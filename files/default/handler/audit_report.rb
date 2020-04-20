@@ -230,6 +230,7 @@ class Chef
         # Set `insecure` here to avoid passing 6 aruguments to `AuditReport#send_report`
         # See `cookstyle` Metrics/ParameterLists
         insecure = node['audit']['insecure']
+        run_time_limit = node['audit']['run_time_limit']
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-automate'
@@ -240,6 +241,7 @@ class Chef
             node_info: gather_nodeinfo,
             insecure: insecure,
             source_location: source_location,
+            run_time_limit: run_time_limit,
           }
           Reporter::ChefAutomate.new(opts).send_report(report)
         elsif reporter == 'chef-server-automate'
@@ -255,6 +257,7 @@ class Chef
               insecure: insecure,
               url: url,
               source_location: source_location,
+              run_time_limit: run_time_limit,
             }
             Reporter::ChefServerAutomate.new(opts).send_report(report)
           else

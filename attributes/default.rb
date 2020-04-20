@@ -88,3 +88,8 @@ default['audit']['waiver_file'] = nil
 # <chef_cache_path>/cookbooks/audit/inspec-<YYYYMMDDHHMMSS>.json
 default['audit']['json_file']['location'] =
   File.expand_path(Time.now.utc.strftime('../../inspec-%Y%m%d%H%M%S.json'), __FILE__)
+
+# Control results that have a `run_time` below this limit will
+# be stripped of the `start_time` and `run_time` fields to
+# reduce the size of the reports being sent to Automate
+default['audit']['run_time_limit'] = 1.0
