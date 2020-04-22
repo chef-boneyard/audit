@@ -101,18 +101,23 @@ describe 'Chef::Handler::AuditReport methods' do
       expect(opts['format']).to eq('json-min')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:waiver_file]).to eq([])
       expect(opts[:backend_cache]).to be true
       expect(opts[:attributes].empty?).to be true
     end
     it 'sets the format to json' do
+      allow(File).to receive(:exist?).with('/tmp/exists.yaml').and_return(true)
+      allow(File).to receive(:exist?).with('/tmp/missing.yaml').and_return(false)
       format = 'json'
       quiet = true
       set_inspec_backend_cache(true)
+      mynode.default['audit']['waiver_file'] = ['/tmp/exists.yaml', '/tmp/missing.yaml']
       opts = @audit_report.get_opts(format, quiet, {})
       expect(opts['report']).to be true
       expect(opts['format']).to eq('json')
       expect(opts['output']).to eq('/dev/null')
       expect(opts['logger']).to eq(Chef::Log)
+      expect(opts[:waiver_file]).to eq(['/tmp/exists.yaml'])
       expect(opts[:backend_cache]).to be true
       expect(opts[:attributes].empty?).to be true
     end

@@ -148,7 +148,13 @@ class Chef
         output = quiet ? ::File::NULL : $stdout
         Chef::Log.debug "Reporter is [#{reporter}]"
         # You can pass nil (no waiver files), one file, or an array. InSpec expects an Array regardless.
-        waivers = Array(node['audit']['waiver_file'])
+        waivers = Array(node['audit']['waiver_file']).to_a
+        waivers.delete_if do |file|
+          unless File.exist?(file)
+            Chef::Log.error "The specified InSpec waiver file #{file} is missing, skipping it..."
+            true
+          end
+        end
         opts = {
           'report' => true,
           'format' => reporter, # For compatibility with older versions of inspec. TODO: Remove this line from Q2 2019
