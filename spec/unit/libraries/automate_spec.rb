@@ -66,8 +66,10 @@ describe 'Reporter::ChefAutomate methods' do
               "source_location": { "ref": '/Users/vjeffrey/code/delivery/insights/data_generator/chef-client/cache/cookbooks/test-cookbook/recipes/../files/default/compliance_profiles/tmp_compliance_profile/controls/tmp.rb', "line": 12 },
               "id": 'tmp-1.1',
               "results": [
-                { "status": 'passed', "code_desc": 'File /tmp should be owned by "root"', "run_time": 1.228845, "start_time": '2016-10-19 11:09:43 -0400' },
+                { "status": 'failed', "code_desc": 'File /etc/hosts is expected to be directory', "run_time": 1.228845, "start_time": '2016-10-19 11:09:43 -0400', "message": 'expected `File /etc/hosts.directory?` to return true, got false' },
+                { "status": 'skipped', "code_desc": 'File /tmp should be owned by "root"', "run_time": 1.228845, "start_time": '2016-10-19 11:09:43 -0400' },
               ],
+              "removed_results_counts": {"failed": 0, "skipped": 0, "passed": 1}
             },
           ],
           "groups": [
@@ -97,12 +99,13 @@ describe 'Reporter::ChefAutomate methods' do
       "fqdn": 'lb1.prod.example.com',
     }
 
-    opts = {
+    @opts = {
       entity_uuid: entity_uuid,
       run_id: run_id,
       node_info: MockData.node_info,
       insecure: insecure,
       run_time_limit: 1.0,
+      control_results_limit: 2,
     }
     # set data_collector
     Chef::Config[:data_collector] = { token: 'dctoken', server_url: 'https://automate.test/data_collector' }
@@ -117,7 +120,7 @@ describe 'Reporter::ChefAutomate methods' do
             headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'identity', 'Content-Length' => /.+/, 'Content-Type' => 'application/json', 'Host' => 'automate.test', 'User-Agent' => /.+/, 'X-Chef-Version' => /.+/, 'X-Data-Collector-Auth' => 'version=1.0', 'X-Data-Collector-Token' => 'dctoken' })
       .to_return(status: 200, body: '', headers: {})
 
-    @automate = Reporter::ChefAutomate.new(opts)
+    @automate = Reporter::ChefAutomate.new(@opts)
   end
 
   it 'sends report successfully to ChefAutomate' do
@@ -127,17 +130,17 @@ describe 'Reporter::ChefAutomate methods' do
 
   it 'enriches report correctly with the most test coverage' do
     allow(Time).to receive(:now).and_return(Time.parse('2016-07-19T19:19:19+01:00'))
-    expect(@automate.enriched_report(MockData.inspec_results)).to eq(@enriched_report_expected)
+    expect(@automate.truncate_controls_results(@automate.enriched_report(MockData.inspec_results), @opts[:control_results_limit])).to eq(@enriched_report_expected)
   end
 
   it 'is not sending report when entity_uuid is missing' do
-    opts = {
+    opts2 = {
       entity_uuid: nil,
       run_id: '3f0536f7-3361-4bca-ae53-b45118dceb5d',
       node_info: MockData.node_info,
       insecure: false,
     }
-    viz2 = Reporter::ChefAutomate.new(opts)
+    viz2 = Reporter::ChefAutomate.new(opts2)
     expect(viz2.send_report(MockData.inspec_results)).to eq(false)
   end
 end

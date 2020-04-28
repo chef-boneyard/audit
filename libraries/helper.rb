@@ -198,6 +198,45 @@ module ReportHelpers
     report
   end
 
+  # Truncates the number of results per control in the report when they exceed max_results.
+  # The truncation prioritizes failed and skipped results over passed ones.
+  # Controls where results have been truncated will get a new object 'removed_results_counts'
+  # with the status counts of the truncated results
+  def truncate_controls_results(report, max_results)
+    return report unless max_results.is_a?(Integer) && max_results > 0
+    return report unless report.is_a?(Hash) && report[:profiles].is_a?(Array)
+    report[:profiles].each do |profile|
+      next unless profile[:controls].is_a?(Array)
+      profile[:controls].each do |control|
+        next unless control[:results].is_a?(Array)
+        # Only bother with truncation if the number of results exceed max_results
+        next unless control[:results].length > max_results
+        res = control[:results]
+        truncated = { failed: 0, skipped: 0, passed: 0 }
+        res.sort_by! do |r|
+          # Replacing "skipped" with "kipped" for the sort logic so that
+          # the results are sorted in this order: failed, skipped, passed
+          r[:status] == 'skipped' ? 'kipped' : r[:status]
+        end
+        # Count the results that will be truncated
+        (max_results..res.length - 1).each do |i|
+          case res[i][:status]
+          when 'failed'
+            truncated[:failed] += 1
+          when 'skipped'
+            truncated[:skipped] += 1
+          when 'passed'
+            truncated[:passed] += 1
+          end
+        end
+        # Truncate the results array now
+        control[:results] = res[0..max_results - 1]
+        control[:removed_results_counts] = truncated
+      end
+    end
+    report
+  end
+
   # Contacts the metasearch Automate API to check which of the inspec profile sha256 ids
   # passed in via `report_shas` are missing from the Automate profiles metadata database.
   def missing_automate_profiles(automate_url, headers, report_shas)
