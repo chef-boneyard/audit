@@ -93,3 +93,14 @@ default['audit']['json_file']['location'] =
 # be stripped of the `start_time` and `run_time` fields to
 # reduce the size of the reports being sent to Automate
 default['audit']['run_time_limit'] = 1.0
+
+# A control result message that exceeds this character limit will be truncated.
+# This helps keep reports to a reasonable size. On rare occasions, we've seen messages exceeding 9 MB in size,
+# causing the report to not be ingested in the backend because of the 4 MB report size rpc limitation.
+# InSpec will append this text at the end of any truncated messages: `[Truncated to 10000 characters]`
+default['audit']['result_message_limit'] = 10000
+
+# When an InSpec resource throws an exception (e.g. permission denied), results will contain a short error message and a
+# detailed ruby stacktrace of the error. This attribute instructs InSpec not to include the detailed stacktrace in order
+# to keep the overall report to a manageable size.
+default['audit']['result_include_backtrace'] = false

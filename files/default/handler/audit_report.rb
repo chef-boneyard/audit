@@ -164,6 +164,8 @@ class Chef
           backend_cache: node['audit']['inspec_backend_cache'],
           attributes: attributes,
           waiver_file: waivers,
+          reporter_message_truncation: node['audit']['result_message_limit'],
+          reporter_backtrace_inclusion: node['audit']['result_include_backtrace'],
         }
         opts
       end
