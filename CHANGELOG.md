@@ -1,5 +1,18 @@
 # Changelog
 
+## [v9.3.0](https://github.com/chef-cookbooks/audit/tree/v9.3.0) (2020-05-15)
+
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.2.1...v9.3.0)
+
+**Closed issues:**
+
+- Audit cookbook is not upgrading in production mode [\#412](https://github.com/chef-cookbooks/audit/issues/412)
+- Request: Update the Changelog [\#377](https://github.com/chef-cookbooks/audit/issues/377)
+
+**Merged pull requests:**
+
+- Add audit cookbook attributes support for the new InSpec options [\#424](https://github.com/chef-cookbooks/audit/pull/424) ([alexpop](https://github.com/alexpop))
+
 ## [v9.2.1](https://github.com/chef-cookbooks/audit/tree/v9.2.1) (2020-04-22)
 
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.2.0...v9.2.1)
@@ -10,6 +23,7 @@
 
 **Merged pull requests:**
 
+- Release version 7.2.1 [\#421](https://github.com/chef-cookbooks/audit/pull/421) ([alexpop](https://github.com/alexpop))
 - Ignore missing waiver files [\#420](https://github.com/chef-cookbooks/audit/pull/420) ([alexpop](https://github.com/alexpop))
 
 ## [v9.2.0](https://github.com/chef-cookbooks/audit/tree/v9.2.0) (2020-04-21)
@@ -411,7 +425,6 @@
 - Release v5.0.0 [\#275](https://github.com/chef-cookbooks/audit/pull/275) ([adamleff](https://github.com/adamleff))
 - Make chef\_node attribute an opt-in feature [\#274](https://github.com/chef-cookbooks/audit/pull/274) ([adamleff](https://github.com/adamleff))
 - Add additional words to README re: using Chef node data [\#273](https://github.com/chef-cookbooks/audit/pull/273) ([adamleff](https://github.com/adamleff))
-- Pass Chef node to InSpec as an attribute [\#271](https://github.com/chef-cookbooks/audit/pull/271) ([adamleff](https://github.com/adamleff))
 
 ## [v4.3.0](https://github.com/chef-cookbooks/audit/tree/v4.3.0) (2017-08-29)
 
@@ -428,6 +441,7 @@
 **Merged pull requests:**
 
 - Release v4.3.0 [\#272](https://github.com/chef-cookbooks/audit/pull/272) ([adamleff](https://github.com/adamleff))
+- Pass Chef node to InSpec as an attribute [\#271](https://github.com/chef-cookbooks/audit/pull/271) ([adamleff](https://github.com/adamleff))
 - Add json-file location to README [\#270](https://github.com/chef-cookbooks/audit/pull/270) ([adamleff](https://github.com/adamleff))
 
 ## [v4.2.0](https://github.com/chef-cookbooks/audit/tree/v4.2.0) (2017-08-10)
@@ -506,6 +520,7 @@
 - update readme [\#229](https://github.com/chef-cookbooks/audit/pull/229) ([chris-rock](https://github.com/chris-rock))
 - add automate fetcher for chef solo [\#227](https://github.com/chef-cookbooks/audit/pull/227) ([chris-rock](https://github.com/chris-rock))
 - Remove typed\_attributes and leave the backend handle attributes [\#225](https://github.com/chef-cookbooks/audit/pull/225) ([alexpop](https://github.com/alexpop))
+- Reduce report enrichment, bump cookbook to version 4.0.0 [\#224](https://github.com/chef-cookbooks/audit/pull/224) ([alexpop](https://github.com/alexpop))
 - readme updates [\#223](https://github.com/chef-cookbooks/audit/pull/223) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v3.1.0](https://github.com/chef-cookbooks/audit/tree/v3.1.0) (2017-05-04)
@@ -538,7 +553,6 @@
 
 **Merged pull requests:**
 
-- Reduce report enrichment, bump cookbook to version 4.0.0 [\#224](https://github.com/chef-cookbooks/audit/pull/224) ([alexpop](https://github.com/alexpop))
 - 3.1.0 [\#221](https://github.com/chef-cookbooks/audit/pull/221) ([chris-rock](https://github.com/chris-rock))
 - fix cc token and ensure we create a new string for a url [\#220](https://github.com/chef-cookbooks/audit/pull/220) ([chris-rock](https://github.com/chris-rock))
 - stick to plain ruby hash [\#219](https://github.com/chef-cookbooks/audit/pull/219) ([chris-rock](https://github.com/chris-rock))
@@ -596,6 +610,10 @@
 
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v2.3.3...v2.3.4)
 
+**Closed issues:**
+
+- audit 2.3.2 no longer supports `chef-server` fetcher + `chef-server-visibility` collector [\#184](https://github.com/chef-cookbooks/audit/issues/184)
+
 **Merged pull requests:**
 
 - make automate integration tests optional [\#192](https://github.com/chef-cookbooks/audit/pull/192) ([chris-rock](https://github.com/chris-rock))
@@ -644,7 +662,6 @@
 
 **Closed issues:**
 
-- audit 2.3.2 no longer supports `chef-server` fetcher + `chef-server-visibility` collector [\#184](https://github.com/chef-cookbooks/audit/issues/184)
 - json-file, unable to save file on a windows system [\#173](https://github.com/chef-cookbooks/audit/issues/173)
 - Update Changelog [\#170](https://github.com/chef-cookbooks/audit/issues/170)
 - Integration testing with Chef Automate via test-kitchen [\#169](https://github.com/chef-cookbooks/audit/issues/169)
@@ -907,7 +924,6 @@
 
 **Merged pull requests:**
 
-- Release 0.12.0 [\#62](https://github.com/chef-cookbooks/audit/pull/62) ([smurawski](https://github.com/smurawski))
 - adding with\_http\_rescue method call back in [\#61](https://github.com/chef-cookbooks/audit/pull/61) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.11.0](https://github.com/chef-cookbooks/audit/tree/v0.11.0) (2016-06-09)
@@ -939,6 +955,7 @@
 
 **Merged pull requests:**
 
+- Release 0.12.0 [\#62](https://github.com/chef-cookbooks/audit/pull/62) ([smurawski](https://github.com/smurawski))
 - test-kitchen example for Chef Compliance direct reporting [\#57](https://github.com/chef-cookbooks/audit/pull/57) ([chris-rock](https://github.com/chris-rock))
 - changed access token handling [\#56](https://github.com/chef-cookbooks/audit/pull/56) ([cjohannsen81](https://github.com/cjohannsen81))
 - add changelog [\#55](https://github.com/chef-cookbooks/audit/pull/55) ([chris-rock](https://github.com/chris-rock))
