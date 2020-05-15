@@ -116,7 +116,7 @@ describe ReportHelpers do
     expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(5)
     statuses = truncated_report[:profiles][0][:controls][0][:results].map { |r| r[:status] }
     expect(statuses).to eq(%w(failed failed failed skipped skipped))
-    expect(truncated_report[:profiles][0][:controls][0][:removed_results_counts]).to eq({ failed: 0, skipped: 1, passed: 3 })
+    expect(truncated_report[:profiles][0][:controls][0][:removed_results_counts]).to eq(failed: 0, skipped: 1, passed: 3)
 
     expect(truncated_report[:profiles][0][:controls][1][:results].length).to eq(2)
     statuses = truncated_report[:profiles][0][:controls][1][:results].map { |r| r[:status] }
