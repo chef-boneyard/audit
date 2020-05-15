@@ -69,7 +69,7 @@ describe 'Reporter::ChefAutomate methods' do
                 { "status": 'failed', "code_desc": 'File /etc/hosts is expected to be directory', "run_time": 1.228845, "start_time": '2016-10-19 11:09:43 -0400', "message": 'expected `File /etc/hosts.directory?` to return true, got false' },
                 { "status": 'skipped', "code_desc": 'File /tmp should be owned by "root"', "run_time": 1.228845, "start_time": '2016-10-19 11:09:43 -0400' },
               ],
-              "removed_results_counts": {"failed": 0, "skipped": 0, "passed": 1}
+              "removed_results_counts": { "failed": 0, "skipped": 0, "passed": 1 },
             },
           ],
           "groups": [

@@ -79,14 +79,14 @@ describe ReportHelpers do
                   code_desc: 'File /tmp should be owned by "root"',
                   run_time: 1.228845,
                   start_time: '2016-10-19 11:09:43 -0400',
-                  status: 'skipped'
+                  status: 'skipped',
                 },
                 {
                   code_desc: 'File /etc/hosts is expected to be directory',
                   message: 'expected `File /etc/hosts.directory?` to return true, got false',
                   run_time: 1.228845,
                   start_time: '2016-10-19 11:09:43 -0400',
-                  status: 'failed'
+                  status: 'failed',
                 },
               ],
             },
