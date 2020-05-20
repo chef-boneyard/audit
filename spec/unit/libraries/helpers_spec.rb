@@ -75,6 +75,19 @@ describe ReportHelpers do
                   start_time: '2016-10-19 11:09:43 -0400',
                   status: 'passed',
                 },
+                {
+                  code_desc: 'File /tmp should be owned by "root"',
+                  run_time: 1.228845,
+                  start_time: '2016-10-19 11:09:43 -0400',
+                  status: 'skipped',
+                },
+                {
+                  code_desc: 'File /etc/hosts is expected to be directory',
+                  message: 'expected `File /etc/hosts.directory?` to return true, got false',
+                  run_time: 1.228845,
+                  start_time: '2016-10-19 11:09:43 -0400',
+                  status: 'failed',
+                },
               ],
             },
           ],
@@ -96,5 +109,24 @@ describe ReportHelpers do
     expected_stripped_report = MockData.inspec_results
     expected_stripped_report[:run_time_limit] = 1.1
     expect(@helpers.strip_profiles_meta(MockData.inspec_results, ['7bd598e369970002fc6f2d16d5b988027d58b044ac3fa30ae5fc1b8492e215cd'], 1.1)).to eq(expected_stripped_report)
+  end
+
+  it 'truncate_controls_results truncates controls results' do
+    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 5)
+    expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(5)
+    statuses = truncated_report[:profiles][0][:controls][0][:results].map { |r| r[:status] }
+    expect(statuses).to eq(%w(failed failed failed skipped skipped))
+    expect(truncated_report[:profiles][0][:controls][0][:removed_results_counts]).to eq(failed: 0, skipped: 1, passed: 3)
+
+    expect(truncated_report[:profiles][0][:controls][1][:results].length).to eq(2)
+    statuses = truncated_report[:profiles][0][:controls][1][:results].map { |r| r[:status] }
+    expect(statuses).to eq(%w(passed passed))
+    expect(truncated_report[:profiles][0][:controls][1][:removed_results_counts]).to eq(nil)
+
+    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 0)
+    expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(9)
+
+    truncated_report = @helpers.truncate_controls_results(MockData.inspec_results2, 1)
+    expect(truncated_report[:profiles][0][:controls][0][:results].length).to eq(1)
   end
 end

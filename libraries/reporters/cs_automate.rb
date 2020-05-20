@@ -9,21 +9,22 @@ module Reporter
   #
   class ChefServerAutomate < ChefAutomate
     def initialize(opts)
-      @entity_uuid       = opts[:entity_uuid]
-      @run_id            = opts[:run_id]
-      @node_name         = opts[:node_info][:node]
-      @insecure          = opts[:insecure]
-      @environment       = opts[:node_info][:environment]
-      @roles             = opts[:node_info][:roles]
-      @recipes           = opts[:node_info][:recipes]
-      @url               = opts[:url]
-      @chef_tags         = opts[:node_info][:chef_tags]
-      @policy_group      = opts[:node_info][:policy_group]
-      @policy_name       = opts[:node_info][:policy_name]
-      @source_fqdn       = opts[:node_info][:source_fqdn]
-      @organization_name = opts[:node_info][:organization_name]
-      @ipaddress         = opts[:node_info][:ipaddress]
-      @fqdn              = opts[:node_info][:fqdn]
+      @entity_uuid           = opts[:entity_uuid]
+      @run_id                = opts[:run_id]
+      @node_name             = opts[:node_info][:node]
+      @insecure              = opts[:insecure]
+      @environment           = opts[:node_info][:environment]
+      @roles                 = opts[:node_info][:roles]
+      @recipes               = opts[:node_info][:recipes]
+      @url                   = opts[:url]
+      @chef_tags             = opts[:node_info][:chef_tags]
+      @policy_group          = opts[:node_info][:policy_group]
+      @policy_name           = opts[:node_info][:policy_name]
+      @source_fqdn           = opts[:node_info][:source_fqdn]
+      @organization_name     = opts[:node_info][:organization_name]
+      @ipaddress             = opts[:node_info][:ipaddress]
+      @fqdn                  = opts[:node_info][:fqdn]
+      @control_results_limit = opts[:control_results_limit]
     end
 
     def send_report(report)
@@ -32,7 +33,8 @@ module Reporter
         return false
       end
 
-      automate_report = enriched_report(report)
+      automate_report = truncate_controls_results(enriched_report(report), @control_results_limit)
+
       report_size = automate_report.to_json.bytesize
       # this is set to slightly less than the oc_erchef limit
       if report_size > 900 * 1024

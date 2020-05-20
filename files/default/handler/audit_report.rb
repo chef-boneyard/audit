@@ -239,6 +239,7 @@ class Chef
         # See `cookstyle` Metrics/ParameterLists
         insecure = node['audit']['insecure']
         run_time_limit = node['audit']['run_time_limit']
+        control_results_limit = node['audit']['control_results_limit']
 
         # TODO: harmonize reporter interface
         if reporter == 'chef-automate'
@@ -250,6 +251,7 @@ class Chef
             insecure: insecure,
             source_location: source_location,
             run_time_limit: run_time_limit,
+            control_results_limit: control_results_limit,
           }
           Reporter::ChefAutomate.new(opts).send_report(report)
         elsif reporter == 'chef-server-automate'
@@ -266,6 +268,7 @@ class Chef
               url: url,
               source_location: source_location,
               run_time_limit: run_time_limit,
+              control_results_limit: control_results_limit,
             }
             Reporter::ChefServerAutomate.new(opts).send_report(report)
           else

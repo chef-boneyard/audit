@@ -106,3 +106,7 @@ default['audit']['result_message_limit'] = 10000
 # to keep the overall report to a manageable size.
 # Requires InSpec 4.18.114 or newer (bundled with Chef Infra Client starting with version 16.0.303)
 default['audit']['result_include_backtrace'] = false
+
+# The array of results per control will be truncated at this limit to avoid large reports that cannot be
+# processed by Automate. A summary of removed results will be sent with each impacted control.
+default['audit']['control_results_limit'] = 50

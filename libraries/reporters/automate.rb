@@ -10,21 +10,22 @@ module Reporter
     include ReportHelpers
 
     def initialize(opts)
-      @entity_uuid       = opts[:entity_uuid]
-      @run_id            = opts[:run_id]
-      @node_name         = opts[:node_info][:node]
-      @environment       = opts[:node_info][:environment]
-      @roles             = opts[:node_info][:roles]
-      @recipes           = opts[:node_info][:recipes]
-      @insecure          = opts[:insecure]
-      @chef_tags         = opts[:node_info][:chef_tags]
-      @policy_group      = opts[:node_info][:policy_group]
-      @policy_name       = opts[:node_info][:policy_name]
-      @source_fqdn       = opts[:node_info][:source_fqdn]
-      @organization_name = opts[:node_info][:organization_name]
-      @ipaddress         = opts[:node_info][:ipaddress]
-      @fqdn              = opts[:node_info][:fqdn]
-      @run_time_limit    = opts[:run_time_limit]
+      @entity_uuid           = opts[:entity_uuid]
+      @run_id                = opts[:run_id]
+      @node_name             = opts[:node_info][:node]
+      @environment           = opts[:node_info][:environment]
+      @roles                 = opts[:node_info][:roles]
+      @recipes               = opts[:node_info][:recipes]
+      @insecure              = opts[:insecure]
+      @chef_tags             = opts[:node_info][:chef_tags]
+      @policy_group          = opts[:node_info][:policy_group]
+      @policy_name           = opts[:node_info][:policy_name]
+      @source_fqdn           = opts[:node_info][:source_fqdn]
+      @organization_name     = opts[:node_info][:organization_name]
+      @ipaddress             = opts[:node_info][:ipaddress]
+      @fqdn                  = opts[:node_info][:fqdn]
+      @run_time_limit        = opts[:run_time_limit]
+      @control_results_limit = opts[:control_results_limit]
 
       if defined?(Chef) &&
          defined?(Chef::Config) &&
@@ -62,7 +63,7 @@ module Reporter
         all_report_shas = report_profile_sha256s(report)
         missing_report_shas = missing_automate_profiles(@url, headers, all_report_shas)
 
-        full_report = enriched_report(report)
+        full_report = truncate_controls_results(enriched_report(report), @control_results_limit)
 
         # If the Automate backend has the profile metadata for at least one profile, proceed with metadata stripping
         full_report = strip_profiles_meta(full_report, missing_report_shas, 1) if missing_report_shas.length < all_report_shas.length
