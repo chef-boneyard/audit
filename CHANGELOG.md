@@ -1,5 +1,13 @@
 # Changelog
 
+## [v9.4.0](https://github.com/chef-cookbooks/audit/tree/v9.4.0) (2020-05-20)
+
+[Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.3.0...v9.4.0)
+
+**Merged pull requests:**
+
+- Truncate control results to max 50 by default [\#426](https://github.com/chef-cookbooks/audit/pull/426) ([alexpop](https://github.com/alexpop))
+
 ## [v9.3.0](https://github.com/chef-cookbooks/audit/tree/v9.3.0) (2020-05-15)
 
 [Full Changelog](https://github.com/chef-cookbooks/audit/compare/v9.2.1...v9.3.0)
@@ -11,6 +19,7 @@
 
 **Merged pull requests:**
 
+- Release version 9.3.0 [\#425](https://github.com/chef-cookbooks/audit/pull/425) ([alexpop](https://github.com/alexpop))
 - Add audit cookbook attributes support for the new InSpec options [\#424](https://github.com/chef-cookbooks/audit/pull/424) ([alexpop](https://github.com/alexpop))
 
 ## [v9.2.1](https://github.com/chef-cookbooks/audit/tree/v9.2.1) (2020-04-22)
@@ -274,7 +283,6 @@
 
 - Switch to the new json-automate reporter when inspec version allows it [\#334](https://github.com/chef-cookbooks/audit/pull/334) ([alexpop](https://github.com/alexpop))
 - Add support for node\['audit'\]\['profiles'\] as a hash of hashes  [\#328](https://github.com/chef-cookbooks/audit/pull/328) ([mattray](https://github.com/mattray))
-- Modify examples to not override hash [\#323](https://github.com/chef-cookbooks/audit/pull/323) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
 
 ## [v7.0.1](https://github.com/chef-cookbooks/audit/tree/v7.0.1) (2018-07-17)
 
@@ -299,6 +307,7 @@
 
 **Merged pull requests:**
 
+- Modify examples to not override hash [\#323](https://github.com/chef-cookbooks/audit/pull/323) ([jerryaldrichiii](https://github.com/jerryaldrichiii))
 - Bump audit major version [\#319](https://github.com/chef-cookbooks/audit/pull/319) ([jquick](https://github.com/jquick))
 - Update audit cookbook to use inspec-core. [\#318](https://github.com/chef-cookbooks/audit/pull/318) ([jquick](https://github.com/jquick))
 - compat\_resource is no longer supported [\#316](https://github.com/chef-cookbooks/audit/pull/316) ([lamont-granquist](https://github.com/lamont-granquist))
@@ -924,6 +933,7 @@
 
 **Merged pull requests:**
 
+- Release 0.12.0 [\#62](https://github.com/chef-cookbooks/audit/pull/62) ([smurawski](https://github.com/smurawski))
 - adding with\_http\_rescue method call back in [\#61](https://github.com/chef-cookbooks/audit/pull/61) ([jeremymv2](https://github.com/jeremymv2))
 
 ## [v0.11.0](https://github.com/chef-cookbooks/audit/tree/v0.11.0) (2016-06-09)
@@ -955,7 +965,6 @@
 
 **Merged pull requests:**
 
-- Release 0.12.0 [\#62](https://github.com/chef-cookbooks/audit/pull/62) ([smurawski](https://github.com/smurawski))
 - test-kitchen example for Chef Compliance direct reporting [\#57](https://github.com/chef-cookbooks/audit/pull/57) ([chris-rock](https://github.com/chris-rock))
 - changed access token handling [\#56](https://github.com/chef-cookbooks/audit/pull/56) ([cjohannsen81](https://github.com/cjohannsen81))
 - add changelog [\#55](https://github.com/chef-cookbooks/audit/pull/55) ([chris-rock](https://github.com/chris-rock))
