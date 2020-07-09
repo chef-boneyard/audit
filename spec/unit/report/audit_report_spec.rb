@@ -179,7 +179,7 @@ describe 'Chef::Handler::AuditReport methods' do
       report = @audit_report.call(opts, profiles)
       expect(report[:profiles].length).to eq(0)
       expect(report[:status]).to eq('failed')
-      expect(report[:platform]).to eq({:name=>"unknown", :release=>"unknown"})
+      expect(report[:platform]).to eq({ 'name': 'unknown', 'release': 'unknown' })
       expected_status_message = /^Cannot fetch all profiles.*does not exist$/
       expect(report[:status_message]).to match(expected_status_message)
     end
@@ -194,7 +194,7 @@ describe 'Chef::Handler::AuditReport methods' do
       report = @audit_report.call(opts, profiles)
       expect(report[:profiles].length).to eq(0)
       expect(report[:status]).to eq('failed')
-      expect(report[:platform]).to eq({:name=>"unknown", :release=>"unknown"})
+      expect(report[:platform]).to eq({ 'name': 'unknown', 'release': 'unknown' })
       expected_status_message = /^Client error. can't connect.*/
       expect(report[:status_message]).to match(expected_status_message)
     end
