@@ -152,21 +152,51 @@ describe 'Chef::Handler::AuditReport methods' do
       opts = { 'report' => true, 'format' => 'json', 'output' => '/dev/null' }
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
       profiles = [{ 'name': 'example', 'path': path }]
-      # we cirumwent the default load mechanisms, therefore we have to require inspec
+      # we circumvent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
       report = @audit_report.call(opts, profiles)
       expected_report = /^.*profiles.*controls.*version.*statistics.*duration.*controls.*/
       expect(report.to_json).to match(expected_report)
     end
+
     it 'given a profile, returns a json-min report' do
       require 'inspec'
       opts = { 'report' => true, 'format' => 'json-min', 'output' => '/dev/null' }
       path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
       profiles = [{ 'name': 'example', 'path': path }]
-      # we cirumwent the default load mechanisms, therefore we have to require inspec
+      # we circumvent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
       report = @audit_report.call(opts, profiles)
       expect(report[:controls].length).to eq(2)
+    end
+
+    it 'given an unfetchable profile, returns a min failed report' do
+      require 'inspec'
+      opts = { 'report' => true, 'format' => 'json-automate', 'output' => '/dev/null' }
+      profiles = [{ 'name': 'example', 'path': '/tmp/missing-in-action-profile' }]
+      # we circumvent the default load mechanisms, therefore we have to require inspec
+      require 'inspec'
+      report = @audit_report.call(opts, profiles)
+      expect(report[:profiles].length).to eq(0)
+      expect(report[:status]).to eq('failed')
+      expect(report[:platform]).to eq({:name=>"unknown", :release=>"unknown"})
+      expected_status_message = /^Cannot fetch all profiles.*does not exist$/
+      expect(report[:status_message]).to match(expected_status_message)
+    end
+
+    it 'given a bad InSpec config, returns a min failed report' do
+      require 'inspec'
+      opts = { 'backend' => 'ssh', 'report' => true, 'format' => 'json-automate', 'output' => '/dev/null' }
+      path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
+      profiles = [{ 'name': 'example', 'path': path }]
+      # we circumvent the default load mechanisms, therefore we have to require inspec
+      require 'inspec'
+      report = @audit_report.call(opts, profiles)
+      expect(report[:profiles].length).to eq(0)
+      expect(report[:status]).to eq('failed')
+      expect(report[:platform]).to eq({:name=>"unknown", :release=>"unknown"})
+      expected_status_message = /^Client error. can't connect.*/
+      expect(report[:status_message]).to match(expected_status_message)
     end
   end
 end
