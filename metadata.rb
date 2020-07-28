@@ -4,7 +4,7 @@ maintainer 'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license 'Apache-2.0'
 description 'Allows for fetching and executing compliance profiles, and reporting their results'
-version '9.4.0'
+version '9.5.0'
 
 source_url 'https://github.com/chef-cookbooks/audit'
 issues_url 'https://github.com/chef-cookbooks/audit/issues'

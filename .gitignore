@@ -15,6 +15,7 @@ _Store
 *.tmp
 *.bk
 *.bkup
+.DS_Store
 
 # editor temp files
 .idea
