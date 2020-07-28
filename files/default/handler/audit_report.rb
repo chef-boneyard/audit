@@ -198,13 +198,33 @@ class Chef
           Chef::Log.debug "Audit Report #{r}"
           r
         else
-          Chef::Log.warn 'No audit tests are defined.'
-          {}
+          failed_report('No audit tests are defined.')
         end
       rescue Inspec::FetcherFailure => e
-        Chef::Log.error e.message
-        Chef::Log.error "We cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable."
-        {}
+        err = "Cannot fetch all profiles: #{tests}. Please make sure you're authenticated and the server is reachable. #{e.message}"
+        failed_report(err)
+      rescue => e
+        failed_report(e.message)
+      end
+
+      # In case InSpec raises a runtime exception without providing a valid report,
+      # we make one up and add two new fields to it: `status` and `status_message`
+      def failed_report(err)
+        Chef::Log.error "InSpec has raised a runtime exception. Generating a minimal failed report."
+        Chef::Log.error err
+        {
+          "platform": {
+            "name": "unknown",
+            "release": "unknown"
+          },
+          "profiles": [],
+          "statistics": {
+            "duration": 0.0000001
+          },
+          "version": "4.22.0",
+          "status": "failed",
+          "status_message": err
+        }
       end
 
       # extracts relevant node data

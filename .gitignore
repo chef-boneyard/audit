@@ -44,6 +44,8 @@ vendor/
 .coverage/
 .zero-knife.rb
 Policyfile.lock.json
+chef_guid
+local-mode-cache/
 
 # vagrant stuff
 .vagrant/
