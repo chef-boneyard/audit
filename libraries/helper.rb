@@ -22,8 +22,7 @@ module ReportHelpers
 
   # Convert the strings in the profile definitions into symbols for handling
   def tests_for_runner(profiles)
-    tests_for_runner = profiles.map { |profile| Hash[profile.map { |k, v| [k.to_sym, v] }] }
-    tests_for_runner
+    profiles.map { |profile| Hash[profile.map { |k, v| [k.to_sym, v] }] }
   end
 
   def construct_url(server, path)
