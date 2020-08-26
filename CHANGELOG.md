@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:40:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:56:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:72:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:88:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:116:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:137:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:159:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:181:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
+- resolved cookstyle error: spec/unit/recipes/default_spec.rb:198:16 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
 - resolved cookstyle error: libraries/helper.rb:25:5 convention: `Style/RedundantAssignment`
 - resolved cookstyle error: libraries/helper.rb:26:1 convention: `Layout/EmptyLinesAroundMethodBody`
 - resolved cookstyle error: libraries/helper.rb:26:1 convention: `Layout/TrailingWhitespace`
