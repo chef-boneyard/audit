@@ -15,7 +15,6 @@ _Store
 *.tmp
 *.bk
 *.bkup
-.DS_Store
 
 # editor temp files
 .idea
@@ -45,8 +44,6 @@ vendor/
 .coverage/
 .zero-knife.rb
 Policyfile.lock.json
-chef_guid
-local-mode-cache/
 
 # vagrant stuff
 .vagrant/
