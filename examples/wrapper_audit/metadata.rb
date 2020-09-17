@@ -1,4 +1,3 @@
-# encoding: utf-8
 name 'wrapper_audit'
 maintainer 'Chef Software, Inc'
 maintainer_email 'support@chef.io'

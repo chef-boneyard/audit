@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Author:: Stephan Renatus <srenatus@chef.io>
 # Copyright:: (c) 2016-2019, Chef Software Inc. <legal@chef.io>

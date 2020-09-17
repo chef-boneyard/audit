@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module ReportHelpers
   # Returns the uuid for the current converge
   def run_id
@@ -112,11 +110,11 @@ module ReportHelpers
   end
 
   def cookbook_vendor_path
-    File.expand_path('../../files/default/vendor', __FILE__)
+    File.expand_path('../files/default/vendor', __dir__)
   end
 
   def cookbook_handler_path
-    File.expand_path('../../files/default/handler', __FILE__)
+    File.expand_path('../files/default/handler', __dir__)
   end
 
   # Copies ['audit']['attributes'] into run_state for the audit_handler to read them later
