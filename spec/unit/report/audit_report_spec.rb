@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Cookbook:: audit
 # Spec:: default
@@ -21,7 +20,7 @@ require 'spec_helper'
 require 'json'
 require_relative '../../../libraries/helper'
 require_relative '../../../files/default/handler/audit_report'
-require_relative '../../data/mock.rb'
+require_relative '../../data/mock'
 
 describe 'Chef::Handler::AuditReport methods' do
   let(:mynode) { Chef::Node.new }
@@ -150,7 +149,7 @@ describe 'Chef::Handler::AuditReport methods' do
   describe 'call' do
     it 'given a profile, returns a json report' do
       opts = { 'report' => true, 'format' => 'json', 'output' => '/dev/null' }
-      path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
+      path = File.expand_path('../../data/mock_profile.rb', __dir__)
       profiles = [{ 'name': 'example', 'path': path }]
       # we circumvent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
@@ -162,7 +161,7 @@ describe 'Chef::Handler::AuditReport methods' do
     it 'given a profile, returns a json-min report' do
       require 'inspec'
       opts = { 'report' => true, 'format' => 'json-min', 'output' => '/dev/null' }
-      path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
+      path = File.expand_path('../../data/mock_profile.rb', __dir__)
       profiles = [{ 'name': 'example', 'path': path }]
       # we circumvent the default load mechanisms, therefore we have to require inspec
       require 'inspec'
@@ -187,7 +186,7 @@ describe 'Chef::Handler::AuditReport methods' do
     it 'given a bad InSpec config, returns a min failed report' do
       require 'inspec'
       opts = { 'backend' => 'ssh', 'report' => true, 'format' => 'json-automate', 'output' => '/dev/null' }
-      path = File.expand_path('../../../data/mock_profile.rb', __FILE__)
+      path = File.expand_path('../../data/mock_profile.rb', __dir__)
       profiles = [{ 'name': 'example', 'path': path }]
       # we circumvent the default load mechanisms, therefore we have to require inspec
       require 'inspec'

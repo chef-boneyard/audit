@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'json'
 require_relative '../helper'
 require_relative './automate'

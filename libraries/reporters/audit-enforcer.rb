@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module Reporter
   #
   # Used to raise an error on conformance failure
