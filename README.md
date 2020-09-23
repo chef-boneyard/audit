@@ -30,7 +30,7 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 |   >= 15                    |   >= 8.0.0                |
 
 Note:
-When used with Chef Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure.
+When used with Chef Infra Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure. Of course, we recommend using the latest available Chef Infra Client and audit cookbook after testing in your non-production environments. Remove the `inspec_version` setting. See more detail in the [Inspec Gem Installation](#inspec-gem-installation) section
 ```
 Recipe Compile Error in /var/chef/cache/cookbooks/audit/recipes/default.rb
 ================================================================================
@@ -77,17 +77,25 @@ The audit cookbook needs to be configured for each node where the `chef-client` 
 
 ### InSpec Gem Installation
 
-Beginning with version 3.x of the `audit` cookbook, the cookbook will first check to see if InSpec is already installed. If it is, it will not attempt to install it. Future releases of the Chef omnibus package are expected to include InSpec so this will reduce audit run times and also ensure that Chef users in air-gapped or firewalled environments can still use the `audit` cookbook without requiring gem mirrors, etc.
+**This section refers to EOL configuration. Starting with Chef Infra Client 15.x, only the embedded InSpec gem can be used and the `inspec_version` attribute will be ignored. Additionally, attempting to continue installing another version of the gem outside the Chef Infra Client inspec-core installation using the `inspec_gem()` resource can result in errors like the following. If you are running a Chef Infra Client release earlier than 15.x, we recommend testing an upgrade to Chef Infra Client 16.x, using the latest available audit cookbook version, and removing any `inspec_version` setting you may have done in your wrapper cookbook**
 
-Also beginning with version 3.x of the `audit` cookbook, the default version of the InSpec gem to be installed (if it isn't already installed) is the latest version. Prior versions of the `audit` cookbook were version-locked to `inspec` version 1.15.0.
+```
+[2020-09-22T10:43:51-04:00] ERROR: Report handler Chef::Handler::AuditReport raised #<LoadError: cannot load such file -- chef-server/fetcher>
+[2020-09-22T10:43:51-04:00] ERROR: /opt/chef/embedded/lib/ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+[2020-09-22T10:43:51-04:00] ERROR: /opt/chef/embedded/lib/ruby/2.6.0/rubygems/core_ext/kernel_require.rb:54:in `require'
+[2020-09-22T10:43:51-04:00] ERROR: /var/chef/cache/cookbooks/audit/files/default/handler/audit_report.rb:138:in `load_chef_fetcher'
+[2020-09-22T10:43:51-04:00] ERROR: /var/chef/cache/cookbooks/audit/files/default/handler/audit_report.rb:62:in `report'
+```
+
+Beginning with version 3.x of the `audit` cookbook, the cookbook will first check to see if an InSpec gem is already installed. If it is, it will not attempt to install it. With the release of Chef Infra Client 14.2.x, the Chef omnibus package includes InSpec as a gem `inspec-core`. Recent releases of the audit cookbook use of this bundled component will reduce audit run times and also ensure that Chef users in air-gapped or firewalled environments can still use the `audit` cookbook without requiring gem mirrors, etc.
 
 To install a different version of the InSpec gem, or to force installation of the gem, set the `node['audit']['inspec_version']` attribute to the version you wish to be installed.
 
-**Starting with Chef Infra Client 15, only the embedded InSpec gem can be used and the `inspec_version` attribute will be ignored.**
+Beginning with version 3.x of the `audit` cookbook, the default version of the InSpec gem to be installed (if it isn't already installed) is the latest version. Prior versions of the `audit` cookbook were version-locked to `inspec` version 1.15.0. **The use of Chef Infra Client versions 14.x and earlier was EOL as of April 30, 2020**
 
 Note on AIX Support:
 
- * InSpec is only supported via the bundled InSpec gem shipped with version >= 13 of the chef-client package.
+ * InSpec is only supported via the bundled InSpec gem shipped with version >= 14.2.x of the chef-client package.
  * Standalone InSpec gem installation or upgrade is not supported.
  * The default `nil` value of `node['audit']['inspec_version']` will ensure the above behavior is adhered to.
 
