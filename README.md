@@ -129,9 +129,64 @@ default['audit']['attributes'] = {
 }
 ```
 
-#### Waivers
+### Waivers
 
 You can use Chef InSpec's [Waiver Feature](https://www.inspec.io/docs/reference/waivers/) to mark individual failing controls as being administratively accepted, either on a temporary or permanent basis. Prepare a waiver YAML file, and use your Chef Infra cookbooks to deliver the file to your converging node (for example, using [cookbook_file](https://docs.chef.io/resource_cookbook_file.html) or [remote_file](https://docs.chef.io/resource_remote_file.html)). Then set the attribute `default['audit']['waiver_file']` to the location of the waiver file on the local node, and Chef InSpec will apply the waivers.
+
+### `inspec_waiver_file` resource
+
+Added in 9.6.0
+
+Use the **inspec_waiver_file** resource to add or remove entries from an inspec waiver file. This can be used in conjunction with the audit cookbook
+
+#### Actions
+
+- `:add` - adds a control to the inspec waiver file.
+- `:remove` - removes a control from the inspec waiver file.
+
+#### Properties
+
+- `control` - the name of the control to be waived when utilizing the inspec waiver file
+- `file` - the path to the inspec waiver file
+- `expiration` - The expiration date of a given waiver, provided in YYY-MM-DD format.
+- `run_test` - If set to true, the control will still run and be reported on, though it won't count as a negative or positive result of the inspec scan
+- `justification` - Text to add to the waiver for a control to explain why a waiver was added.
+- `backup` - By default, set to false, but if you supply an integer, this will ensure that that number of backups are retained in your chef backup location (`/var/chef/backup` on Unix and Linux platforms, `C:\chef\backup` on Windows platforms).
+
+#### Examples
+
+**Add an InSpec waiver entry to a given waiver file**:
+
+```ruby
+  inspec_waiver_file 'Add waiver entry for control' do
+    file 'C:\\chef\\inspec_waiver.yml'
+    control 'my_inspec_control_01'
+    run_test false
+    justification "The subject of this control is not managed by Chef on the systems in policy group \#{node['policy_group']}"
+    expiration '2021-01-01'
+    action :add
+  end
+```
+
+**Add an InSpec waiver entry to a given waiver file using the 'name' property to identify the control**:
+
+```ruby
+  inspec_waiver_file 'my_inspec_control_01' do
+    file 'C:\\chef\\inspec_waiver.yml'
+    justification "The subject of this control is not managed by Chef on the systems in policy group \#{node['policy_group']}"
+    action :add
+  end
+```
+
+**Remove an InSpec waiver entry to a given waiver file**:
+
+```ruby
+  inspec_waiver_file "my_inspec_control_01" do
+    file '/etc/chef/inspec_waiver.yml'
+    action :remove
+  end
+```
+
 
 ### Reporting
 

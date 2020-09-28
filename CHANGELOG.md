@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `inspec_waiver_file` resource for adding and removing controls in a waiver file.
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:40:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:56:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:72:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
