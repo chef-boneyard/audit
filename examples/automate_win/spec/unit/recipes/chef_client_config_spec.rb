@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Cookbook:: automate_ingest
 # Spec:: chef_client_config

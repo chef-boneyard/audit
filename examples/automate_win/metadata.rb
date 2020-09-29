@@ -1,4 +1,3 @@
-# encoding: utf-8
 name 'automate_win'
 maintainer 'Chef Software, Inc'
 maintainer_email 'support@chef.io'
