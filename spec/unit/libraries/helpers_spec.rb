@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Cookbook:: audit
 # Spec:: helpers
@@ -6,7 +5,7 @@
 require 'spec_helper'
 require_relative '../../../libraries/helper'
 require_relative '../../../files/default/handler/audit_report'
-require_relative '../../data/mock.rb'
+require_relative '../../data/mock'
 
 describe ReportHelpers do
   let(:helpers) { Class.new { extend ReportHelpers } }
