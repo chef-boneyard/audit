@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'json'
 require_relative '../helper'
 
@@ -105,7 +104,7 @@ module Reporter
     # ***************************************************************************************
 
     def enriched_report(final_report)
-      return nil unless final_report.is_a?(Hash)
+      return unless final_report.is_a?(Hash)
 
       # Remove nil profiles if any
       final_report[:profiles].select! { |p| p }
