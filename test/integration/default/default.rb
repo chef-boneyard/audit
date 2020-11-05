@@ -1,9 +1,8 @@
-# encoding: utf-8
 # copyright: 2015, Chef Software, Inc.
 # license: Apache-2.0
 
 unless os.linux?
-  STDERR.puts "\033[1;33mTODO: Not running #{__FILE__} because we are not on Linux.\033[0m"
+  warn "\033[1;33mTODO: Not running #{__FILE__} because we are not on Linux.\033[0m"
   return
 end
 
