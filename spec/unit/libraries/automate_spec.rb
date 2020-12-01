@@ -1,4 +1,3 @@
-# encoding: utf-8
 #
 # Cookbook:: audit
 # Spec:: automate_spec
@@ -20,7 +19,7 @@
 require 'spec_helper'
 require 'time'
 require_relative '../../../libraries/reporters/automate'
-require_relative '../../data/mock.rb'
+require_relative '../../data/mock'
 
 describe 'Reporter::ChefAutomate methods' do
   before :each do
