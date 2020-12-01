@@ -40,7 +40,7 @@ RuntimeError
 Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the same time. Please disable Audit Mode in your client configuration.
 ```
 
-### Pre-modern Chef Infra Client and Inspec between 13.x - 14.x
+### Legacy Chef Infra Client Releases (pre-15.x) and Inspec
 
 Newer Chef Infra Clients, in the 15.x and 16.x ranges ship with an
 inspec-core gem that the audit cookbook in the proper version range
