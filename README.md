@@ -44,7 +44,7 @@ Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the s
 
 Newer Chef Infra Clients, in the 15.x and 16.x ranges ship with an
 inspec-core gem that the audit cookbook in the proper version range
-listed in the matrix above knows to use.  It will not attempt to
+listed in the matrix above knows to use. It will not attempt to
 download a gem in this case.
 
 We find that 14.12 has the inspec-core 3.9.0 gem embedded which should
