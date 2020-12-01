@@ -40,6 +40,23 @@ RuntimeError
 Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the same time. Please disable Audit Mode in your client configuration.
 ```
 
+### Legacy Chef Infra Client Releases (pre-15.x) and Inspec
+
+Newer Chef Infra Clients, in the 15.x and 16.x ranges ship with an
+inspec-core gem that the audit cookbook in the proper version range
+listed in the matrix above knows to use. It will not attempt to
+download a gem in this case.
+
+We find that 14.12 has the inspec-core 3.9.0 gem embedded which should
+generate reports compatible with A2, but anything before that uses
+InSpec gem v2.x which is NOT compatible with A2. To explain further,
+Inspec 2.x will send reports to A2, but they will false positive, as
+this report format is incompatible with A2
+
+Chef Infra Client 14.x + plain, non inspec-core InSpec 3.9.3 installed by
+the audit cookbook gem installer definitely works.  So in Chef Infra
+Client 14.x before 14.12, we recommend this usage.
+
 ## Overview
 
 ### Component Architecture
