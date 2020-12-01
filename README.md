@@ -53,7 +53,7 @@ InSpec gem v2.x which is NOT compatible with A2. To explain further,
 Inspec 2.x will send reports to A2, but they will false positive, as
 this report format is incompatible with A2
 
-Chef Client 14.x + plain, non inspec-core Inspec 3.9.3 installed by
+Chef Infra Client 14.x + plain, non inspec-core InSpec 3.9.3 installed by
 the audit cookbook gem installer definitely works.  So in Chef Infra
 Client 14.x before 14.12, we recommend this usage.
 
