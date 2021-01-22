@@ -62,7 +62,7 @@ Client 14.x before 14.12, we recommend this usage.
 ### Component Architecture
 ```
  ┌──────────────────────┐    ┌──────────────────────┐    ┌─────────────────────┐
- │     Chef Client      │    │   Chef Server Proxy  │    │    Chef Automate    │
+ │   Chef Infra Client  │    │   Chef Server Proxy  │    │    Chef Automate    │
  │                      │    │      (optional)      │    │                     │
  │ ┌──────────────────┐ │    │                      │    │                     │
  │ │                  │◀┼────┼──────────────────────┼────│  Profiles           │
@@ -77,9 +77,9 @@ InSpec Profiles can be hosted from a variety of locations:
 
 ```
  ┌──────────────────────┐                                ┌─────────────────────┐
- │     Chef Client      │     ┌───────────────────────┐  │    Chef Automate    │
+ │   Chef Infra Client  │     ┌───────────────────────┐  │    Chef Automate    │
  │                      │  ┌──│ Profiles(Supermarket, │  │                     │
- │ ┌──────────────────┐ │  │  │ Github, local, etc)   │  │                     │
+ │ ┌──────────────────┐ │  │  │ GitHub, local, etc)   │  │                     │
  │ │                  │◀┼──┘  └───────────────────────┘  │                     │
  │ │  audit cookbook  │◀┼────────────────────────────────│  Profiles           │
  │ │                  │─┼───────────────────────────────▶│  Reports            │
