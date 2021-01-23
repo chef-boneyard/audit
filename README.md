@@ -31,14 +31,6 @@ The `audit` cookbook supports a number of different reporters and fetchers which
 
 Note:
 When used with Chef Infra Client 15 and above, the Audit cookbook _must_ be >= 7.7.0. Otherwise, you will see the following failure. Of course, we recommend using the latest available Chef Infra Client and audit cookbook after testing in your non-production environments. Remove the `inspec_version` setting. See more detail in the [Inspec Gem Installation](#inspec-gem-installation) section
-```
-Recipe Compile Error in /var/chef/cache/cookbooks/audit/recipes/default.rb
-================================================================================
-
-RuntimeError
-------------
-Audit Mode is enabled. The audit cookbook and Audit Mode cannot be used at the same time. Please disable Audit Mode in your client configuration.
-```
 
 ### Legacy Chef Infra Client Releases (pre-15.x) and Inspec
 
