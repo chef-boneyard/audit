@@ -300,6 +300,8 @@ class Chef
           Reporter::JsonFile.new(file: path).send_report(report)
         elsif reporter == 'audit-enforcer'
           Reporter::AuditEnforcer.new.send_report(report)
+        elsif reporter == 'cli'
+          Reporter::Cli.new.send_report(report)
         else
           Chef::Log.warn "#{reporter} is not a supported InSpec report collector"
         end

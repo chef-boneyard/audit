@@ -28,7 +28,7 @@ default['audit']['inspec_gem_source'] = nil
 default['audit']['inspec_backend_cache'] = true
 
 # controls where inspec scan reports are sent
-# possible values: 'chef-server-automate', 'chef-automate', 'json-file'
+# possible values: 'chef-server-automate', 'chef-automate', 'json-file', 'cli'
 # notes: 'chef-automate' requires inspec version 0.27.1 or greater
 # deprecated: 'chef-visibility' is replaced with 'chef-automate'
 # deprecated: 'chef-compliance' is replaced with 'chef-automate'
