@@ -20,7 +20,7 @@ module Reporter
 
           output << "\t#{control[:title]}"
           control[:results].each do |result|
-            format_result(result)
+            output << format_result(result)
           end
         end
       end
