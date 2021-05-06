@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- resolved cookstyle error: Rakefile:65:1 convention: `Layout/EmptyLinesAroundBlockBody`
+- resolved cookstyle error: Rakefile:65:1 convention: `Layout/TrailingWhitespace`
+- resolved cookstyle error: Rakefile:65:3 convention: `Style/RedundantBegin`
+- resolved cookstyle error: Rakefile:66:1 convention: `Layout/IndentationWidth`
+- resolved cookstyle error: Rakefile:70:3 convention: `Layout/RescueEnsureAlignment`
+- resolved cookstyle error: Rakefile:72:1 convention: `Layout/EmptyLinesAroundBlockBody`
+- resolved cookstyle error: Rakefile:72:1 convention: `Layout/TrailingWhitespace`
 - resolved cookstyle error: Berksfile:1:1 convention: `Style/Encoding`
 - resolved cookstyle error: attributes/default.rb:1:1 convention: `Style/Encoding`
 - resolved cookstyle error: examples/automate_win/Berksfile:1:1 convention: `Style/Encoding`

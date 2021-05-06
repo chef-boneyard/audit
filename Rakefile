@@ -62,14 +62,12 @@ namespace :test do
 end
 
 namespace :supermarket do
-  begin
-    require 'stove/rake_task'
+  require 'stove/rake_task'
 
-    desc 'Publish cookbook to Supermarket with Stove'
-    Stove::RakeTask.new
-  rescue LoadError => e
-    puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
-  end
+  desc 'Publish cookbook to Supermarket with Stove'
+  Stove::RakeTask.new
+rescue LoadError => e
+  puts ">>> Gem load error: #{e}, omitting #{task.name}" unless ENV['CI']
 end
 
 # Default
