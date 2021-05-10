@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- resolved cookstyle error: resources/inspec_gem.rb:1:1 refactor: `Chef/Deprecations/ResourceWithoutUnifiedTrue`
 - resolved cookstyle error: Rakefile:65:1 convention: `Layout/EmptyLinesAroundBlockBody`
 - resolved cookstyle error: Rakefile:65:1 convention: `Layout/TrailingWhitespace`
 - resolved cookstyle error: Rakefile:65:3 convention: `Style/RedundantBegin`
