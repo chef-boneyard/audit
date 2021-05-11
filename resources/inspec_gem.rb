@@ -1,4 +1,5 @@
 provides :inspec_gem
+unified_mode true
 resource_name :inspec_gem
 
 property :gem_name, String, name_property: true

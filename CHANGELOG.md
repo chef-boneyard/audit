@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- resolved cookstyle error: resources/inspec_gem.rb:1:1 refactor: `Chef/Deprecations/ResourceWithoutUnifiedTrue`
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:40:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:56:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
 - resolved cookstyle error: spec/unit/recipes/default_spec.rb:72:7 warning: `ChefDeprecations/DeprecatedChefSpecPlatform`
