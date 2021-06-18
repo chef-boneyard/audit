@@ -155,7 +155,7 @@ class Chef
             true
           end
         end
-        opts = {
+        {
           'report' => true,
           'format' => reporter, # For compatibility with older versions of inspec. TODO: Remove this line from Q2 2019
           'reporter' => [reporter],
@@ -167,7 +167,6 @@ class Chef
           reporter_message_truncation: node['audit']['result_message_limit'],
           reporter_backtrace_inclusion: node['audit']['result_include_backtrace'],
         }
-        opts
       end
 
       # run profiles and return report
@@ -210,20 +209,20 @@ class Chef
       # In case InSpec raises a runtime exception without providing a valid report,
       # we make one up and add two new fields to it: `status` and `status_message`
       def failed_report(err)
-        Chef::Log.error "InSpec has raised a runtime exception. Generating a minimal failed report."
+        Chef::Log.error 'InSpec has raised a runtime exception. Generating a minimal failed report.'
         Chef::Log.error err
         {
           "platform": {
-            "name": "unknown",
-            "release": "unknown"
+            "name": 'unknown',
+            "release": 'unknown',
           },
           "profiles": [],
           "statistics": {
-            "duration": 0.0000001
+            "duration": 0.0000001,
           },
-          "version": "4.22.0",
-          "status": "failed",
-          "status_message": err
+          "version": '4.22.0',
+          "status": 'failed',
+          "status_message": err,
         }
       end
 
