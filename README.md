@@ -148,7 +148,7 @@ default['audit']['attributes'] = {
 
 #### Waivers
 
-You can use Chef InSpec's [Waiver Feature](https://www.inspec.io/docs/reference/waivers/) to mark individual failing controls as being administratively accepted, either on a temporary or permanent basis. Prepare a waiver YAML file, and use your Chef Infra cookbooks to deliver the file to your converging node (for example, using [cookbook_file](https://docs.chef.io/resource_cookbook_file.html) or [remote_file](https://docs.chef.io/resource_remote_file.html)). Then set the attribute `default['audit']['waiver_file']` to the location of the waiver file on the local node, and Chef InSpec will apply the waivers.
+You can use Chef InSpec's [Waiver Feature](https://www.inspec.io/docs/reference/waivers/) to mark individual failing controls as being administratively accepted, either on a temporary or permanent basis. Prepare a waiver YAML file, and use your Chef Infra cookbooks to deliver the file to your converging node (for example, using [cookbook_file](https://docs.chef.io/resources/cookbook_file/) or [remote_file](https://docs.chef.io/resources/remote_file/)). Then set the attribute `default['audit']['waiver_file']` to the location of the waiver file on the local node, and Chef InSpec will apply the waivers.
 
 ### Reporting
 
@@ -156,9 +156,9 @@ You can use Chef InSpec's [Waiver Feature](https://www.inspec.io/docs/reference/
 
 To retrieve compliance profiles and report to Chef Automate through Chef Server, set the `reporter` and `profiles` attributes.
 
-This requires Chef Client >= 12.16.42, Chef Server version 12.11.1, and Chef Automate 0.6.6 or newer, as well as integration between the Chef Server and Chef Automate. More details [here](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate).
+This requires Chef Client >= 12.16.42, Chef Server version 12.11.1, and Chef Automate 0.6.6 or newer, as well as integration between the Chef Server and Chef Automate. More details [here](https://docs.chef.io/automate/chef_infra_server/#connect-chef-infra-servers-to-chef-automate).
 
-To upload profiles, you can use the [Automate API](https://docs.chef.io/api_automate.html) or the `inspec compliance` subcommands (requires InSpec 1.7.2 or newer).
+To upload profiles, you can use the [Automate API](https://docs.chef.io/automate/api/) or the `inspec compliance` subcommands (requires InSpec 1.7.2 or newer).
 
 Attributes example of fetching from Automate, reporting to Automate both via Chef Server:
 
@@ -176,7 +176,7 @@ To report directly to Chef Automate, set the `reporter` attribute to 'chef-autom
 
 * `insecure` - a `true` value will skip the SSL certificate verification. Default value is `false`
 
-This method sends the report using the `data_collector.server_url` and `data_collector.token` options, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
+This method sends the report using the `data_collector.server_url` and `data_collector.token` options, defined in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/automate/data_collection/)
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
@@ -185,7 +185,7 @@ default['audit']['profiles']['tmp_compliance_profile'] = {
 }
 ```
 
-If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/data_collection_without_server.html#add-chef-automate-certificate-to-trusted-certs-directory)
+If you are using a self-signed certificate, please also read [how to add the Chef Automate certificate to the trusted_certs directory](https://docs.chef.io/automate/data_collection/#add-chef-automate-certificate-to-trusted_certs-directory)
 
 Version compatibility matrix:
 
@@ -253,7 +253,7 @@ default['audit']['profiles']['windows'] = {
 
 #### Fetch profiles from Chef Automate via Chef Server
 
-To enable reporting to Chef Automate with profiles from Chef Automate, you need to have Chef Server integrated with [Chef Automate](https://docs.chef.io/integrate_compliance_chef_automate.html#collector-chef-server-automate). You can then set the `fetcher` attribute to 'chef-server'.
+To enable reporting to Chef Automate with profiles from Chef Automate, you need to have Chef Server integrated with [Chef Automate](https://docs.chef.io/automate/data_collection/#configure-your-chef-infra-server-to-send-data-to-chef-automate). You can then set the `fetcher` attribute to 'chef-server'.
 
 This allows the audit cookbook to fetch profiles stored in Chef Automate. For example:
 
@@ -267,7 +267,7 @@ default['audit']['profiles']['ssh'] = {
 
 #### Fetch profiles directly from Chef Automate
 
-This method fetches profiles using the `data_collector.server_url` and `data_collector.token` options, in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/ingest_data_chef_automate.html)
+This method fetches profiles using the `data_collector.server_url` and `data_collector.token` options, in `client.rb`. It requires `inspec` version `0.27.1` or greater. Further information is available at Chef Docs: [Configure a Data Collector token in Chef Automate](https://docs.chef.io/automate/data_collection/#setting-up-chef-infra-client-to-send-compliance-scan-data-directly-to-chef-automate)
 
 ```ruby
 default['audit']['reporter'] = 'chef-automate'
@@ -475,4 +475,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 [cookbook]: https://supermarket.chef.io/cookbooks/audit
-[travis]: http://travis-ci.org/chef-cookbooks/audit
+[travis]: http://travis-ci.org/chef-cookbooks/audiit
