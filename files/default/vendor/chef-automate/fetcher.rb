@@ -13,7 +13,7 @@ module ChefAutomate
               URI("compliance://#{target[:compliance]}")
             end
 
-      return nil if uri.nil?
+      return if uri.nil?
 
       # we have detailed information available in our lockfile, no need to ask the server
       if target.respond_to?(:key?) && target.key?(:url)

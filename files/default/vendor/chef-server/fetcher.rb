@@ -1,4 +1,3 @@
-# encoding: utf-8
 # author: Christoph Hartmann
 
 require 'uri'
@@ -28,7 +27,7 @@ module ChefServer
               URI("compliance://#{target[:compliance]}")
             end
 
-      return nil if uri.nil?
+      return if uri.nil?
 
       profile = uri.host + uri.path
       profile = uri.user + '@' + profile if uri.user
