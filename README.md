@@ -3,6 +3,13 @@
 
 The `audit` cookbook allows you to run InSpec profiles as part of a Chef Client run. It downloads configured profiles from various sources like Chef Automate, Chef Supermarket or Git and reports audit runs to Chef Automate.
 
+
+## DEPRECATION
+
+The audit cookbook has been replaced by the Chef Infra Compliance phase which shipped in Chef Infra Client 17. This new phase of execution within the Chef Infra Client includes the functionality of the audit cookbook (plus a lot more) without the need for an external cookbook. This cookbook will continue to work for existing users, but will no longer receive updates. Consider migrating the Compliance Phase for enhanced functionality:
+
+https://docs.chef.io/chef_compliance_phase/
+
 ## Quickstart
 
 The `audit` cookbook supports a number of different reporters and fetchers which can be confusing. Please see the [supported configurations documentation](https://github.com/chef-cookbooks/audit/blob/master/docs/supported_configuration.md) which has a few copy/paste examples to get you started quickly.
